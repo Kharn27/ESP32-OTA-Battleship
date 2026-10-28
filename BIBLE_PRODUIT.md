@@ -1,6 +1,6 @@
 # I-009 — Bible produit : Bataille navale ESP32 CYD
 
-**Version documentaire :** 0.5 — consolidation des règles métier V1.0 (revanche, palmarès, abandon, flottes tactiques, ciblage), 28 octobre 2026  
+**Version documentaire :** 0.6 — arbitrages d'expérience LOT 1 / interface V1.0, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -162,6 +162,29 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 **À ARBITRER :** ordre et animation de révélation des impacts ; définition exhaustive de victoire/égalité selon les variantes ; comportement de l'écran quand la liaison est interrompue après FEU.
 
+### Présentation du combat — DÉCIDÉ pour la V1.0
+
+**LOT1-UX-001 — Une grande grille à la fois :**
+- Le joueur consulte la grille **ATTAQUE** ou la grille **DÉFENSE**, jamais deux grilles réduites simultanément.
+- La bascule entre les deux vues doit être **immédiate**, sans navigation complexe ; les informations et impacts déjà acquis restent conservés.
+- **ATTAQUE** est interactive pour le choix des tirs ; **DÉFENSE** présente les navires du joueur et les impacts reçus. Il n'y a pas de sélection de tir sur la grille DÉFENSE pendant le combat.
+- Pas de réglage utilisateur proposant plusieurs dispositions de grilles en V1.0.
+
+**LOT1-UX-002 — Pas de bascule automatique après un tir :**
+- Les tirs du joueur et du CPU sont résolus selon la règle de simultanéité retenue.
+- Le résultat du tir du joueur apparaît sur **ATTAQUE**, tandis qu'un indicateur informe des tirs ennemis.
+- Le jeu **ne force jamais le passage sur DÉFENSE** : le joueur choisit quand consulter ses propres dégâts.
+
+**LOT1-UX-003 — Indicateur intelligent sur la commande DÉFENSE :**
+- **Tir ennemi manqué :** information discrète permettant de poursuivre immédiatement sur ATTAQUE.
+- **Navire touché :** alerte bien visible, sans changement automatique d'écran.
+- **Navire coulé :** alerte **plus marquée** qu'un simple touché.
+- Si le joueur n'a pas consulté DÉFENSE après un impact important, **l'alerte reste visible jusqu'à cette consultation**.
+- **À ARBITRER :** hiérarchie exacte de plusieurs événements non consultés, extinction ou remise à zéro de l'indicateur en cas de tirs successifs, libellés et codes visuels.
+- **À VÉRIFIER :** confort réel des cibles au stylet sur grille 10 × 10, lisibilité des indicateurs sur 320 × 240 ; une grille tactique 15 × 15 reste non validée.
+
+Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implantation visuelle, la charte artistique et les maquettes définitives ne sont pas encore validées.
+
 ### Fin de partie — confidentialité des flottes
 
 ![Esquisse de fin de partie : révélation facultative de la flotte](assets/maquettes/fin-partie-secret-320x240.svg)
@@ -320,6 +343,12 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 | SOLO-003 | Noms Mousse / Capitaine / Amiral pour les niveaux et palmarès ; comportements et équité CPU à préciser | **DÉCIDÉ (noms) / PROPOSÉ (comportements et équité)** |
 | V1-001 | Trois familles de jeu comme cible de V1.0 ; MVP à préciser | **DÉCIDÉ sur le principe** |
 | V1-002 | Catalogue V1.0 jugé assez riche ; priorité désormais à détailler règles et parcours | **DÉCIDÉ comme orientation de travail** |
+| LOT1-001 | Première expérience à livrer : une partie classique complète VS Mousse sur une seule CYD | **DÉCIDÉ (orientation du lot)** |
+| LOT1-PL-001 | Déploiement par AUTO répétable puis PRÊT ; pas de retouche manuelle dans le LOT 1 | **DÉCIDÉ (lot 1)** |
+| LOT1-CPU-001 | Mousse explore au hasard et recherche autour des impacts, tout en commettant des erreurs | **DÉCIDÉ (principe LOT 1)** |
+| LOT1-UX-001 | Une seule grande grille visible à la fois, bascule immédiate ATTAQUE/DÉFENSE | **DÉCIDÉ (V1.0)** |
+| LOT1-UX-002 | Après FEU, aucune bascule automatique ; résultat joueur sur ATTAQUE, défense consultable à volonté | **DÉCIDÉ (V1.0)** |
+| LOT1-UX-003 | Indicateur DÉFENSE : raté discret, touché visible, coulé renforcé, alerte persistante jusqu'à consultation | **DÉCIDÉ (principe V1.0)** |
 
 ## 12. Traçabilité et sources
 
@@ -335,6 +364,15 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - **Historique :** case déjà attaquée définitivement non ciblable dans la partie, résultat visible ; applicable à tous les modes.
 - **Non décidé :** révéler ou non à l'adversaire qu'une formation a été conservée ; comportement précis des trois difficultés CPU ; grille 15 × 15 ; détails des victoires/égalités, des sessions interrompues définitivement et de l'UX de plusieurs écrans.
 - **Traçabilité :** modifications apportées directement à la bible existante ; aucune modification du dépôt d'idées historique, pas de création de backlog ou de mission technique.
+
+**Consolidation LOT 1 et UX V1.0 (29 octobre 2026, version 0.6) :**
+- Premier lot ciblé sur une **partie classique jouable jusqu'au résultat contre Mousse sur une seule CYD**.
+- Pour le LOT 1, placement **AUTO uniquement**, répétable, suivi de **PRÊT** ; le placement manuel reste une exigence V1.0 pour un lot suivant.
+- Mousse débutant explore au hasard, exploite un impact pour tenter les cases voisines, et peut commettre des erreurs. Règles détaillées du CPU à formaliser.
+- Pour la **V1.0**, le combat montre **une seule grande grille à la fois** (ATTAQUE ou DÉFENSE), sans disposition au choix.
+- **Aucune bascule automatique** après les tirs ; un **indicateur intelligent** sur DÉFENSE distingue manqué, touché, coulé et conserve une alerte de dégât tant que la défense n'a pas été consultée.
+- Les maquettes historiques du combat peuvent contredire cette disposition ; la décision fonctionnelle de la bible prévaut sur les anciens visuels non normatifs.
+- Les éléments de charte graphique, maquettes nouvelles, détails d'affichage des alertes et décomposition complète en lots **ne sont pas encore validés**.
 
 **Synthèse des échanges PO (28 octobre 2026) :**
 - Le **mono-tir simultané** a remplacé le tour par tour comme **mode standard** ; l'alternance traditionnelle est **conservée comme variante** (elle n'a pas été supprimée).
@@ -367,4 +405,56 @@ Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idé
 
 ### Prochain chantier de réflexion produit (sans mission de développement)
 
-Préparer, avec accord du PO, le **découpage fonctionnel en lots** à partir du besoin consolidé, sans le confondre avec une planification technique ou un backlog déjà validé. Avant de figer le périmètre d'un lot, lever les ambiguïtés de règles qui le bloquent (notamment victoire/égalité, gestion de session, ergonomie et dimension des grilles).
+Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de périmètre fonctionnel et ses critères d'acceptation**, sans confondre ce travail PO avec un planning technique ou un backlog. En parallèle, explorer une **charte graphique cohérente**, des parcours et les besoins exprimables en **user stories pour le graphiste** (sans engager ni assigner une mission).
+
+## 14. Pré-cadrage du LOT 1 — Première bataille contre Mousse
+
+**Statut : orientation fonctionnelle et arbitrages partiels décidés par le PO ; fiche de LOT 1 complète et US non encore formalisées.**
+
+### Objectif joueur — DÉCIDÉ (LOT1-001)
+
+Sur **une seule ESP32 CYD classique 320 × 240**, le joueur doit pouvoir engager une **bataille classique complète contre Mousse**, de la préparation de sa flotte jusqu'au résultat final. Ce premier lot sert à éprouver en conditions réelles le plaisir du duel, la lisibilité de l'écran et l'ergonomie tactile, **sans liaison ESP-NOW**.
+
+**Base de jeu retenue :**
+- **Classique 10 × 10**, les cinq navires traditionnels de 17 cases au total.
+- **Mono-tir simultané** (un tir par camp, choix secret, résolution commune), mode standard de la V1.0.
+- Respect des règles transversales déjà décidées : **FEU irrévocable**, cases déjà jouées verrouillées, résultat des tirs visible, abandon confirmé et palmarès propre à la CYD.
+- L'objectif est une **partie réelle et terminable**, pas une démonstration qui s'arrête après quelques tirs.
+
+### Déploiement — DÉCIDÉ (LOT1-PL-001)
+
+- Flotte intégralement **prépositionnée au hasard** lors de l'ouverture du placement.
+- **AUTO** renouvelle toute la disposition autant de fois que le joueur le désire.
+- **PRÊT** confirme le placement ; AUTO ne lance pas la partie tout seul.
+- **Hors LOT 1, mais maintenu dans le périmètre V1.0 :** déplacement individuel, rotation, contrôle d'invalidité, ✓ / ✕ et placement manuel (livraison dans un lot ultérieur).
+
+### Adversaire Mousse — DÉCIDÉ sur le principe (LOT1-CPU-001)
+
+- Lors de son exploration, Mousse choisit une **case inconnue au hasard**.
+- Après avoir touché un bâtiment, il peut **rechercher autour de cet impact** pour essayer d'en retrouver les autres cases.
+- Il reste un **débutant imparfait**, autorisé à faire de mauvais choix : ses décisions ne sont pas systématiquement optimales.
+- Il n'accède **jamais à la disposition secrète** de la flotte du joueur ; seules les informations qu'un adversaire aurait normalement obtenues peuvent guider ses choix.
+- **À PRÉCISER dans la fiche fonctionnelle :** comportement face à plusieurs navires touchés, arbitrage de plusieurs cases voisines, abandon d'une piste, et comportement après un coulé. Ne pas définir ici un algorithme technique.
+
+### Affichage de la bataille — DÉCIDÉ (LOT1-UX-001 à 003)
+
+- **Une seule grande grille à la fois**, avec bascule ATTAQUE / DÉFENSE disponible sans menu intermédiaire ; principe retenu pour toute la **V1.0**.
+- Après FEU, les résultats sont résolus normalement, et la vue ne change **pas automatiquement**.
+- L'indicateur lié à **DÉFENSE** distingue **tir manqué (sobre)**, **navire touché (visible)** et **navire coulé (alerte renforcée)**.
+- Une alerte de dégât reste **visible jusqu'à la consultation de la grille DÉFENSE** ; le joueur peut poursuivre les attaques sans vérifier chaque coup.
+- L'habillage visuel, les couleurs, la taille des boutons et le détail de cumul des alertes restent à concevoir et à évaluer sur l'écran physique.
+
+### Périmètre à confirmer / ne pas anticiper
+
+**PROPOSÉ pour compléter le LOT 1 :** accès simple VS CPU > Mousse, annonce claire de victoire/défaite/égalité, possibilité de **rejouer** une bataille solo, affichage des statistiques VS Mousse et du compteur global de forfaits. Ces besoins existent dans la cible V1.0 ; leur **inclusion exacte et présentation dans le LOT 1** seront arbitrées dans la prochaine discussion de périmètre.
+
+**Hors LOT 1 à ce stade :** multijoueur ESP-NOW, difficultés CPU Capitaine/Amiral, familles Escadre tactique et Flotte libre, variante classique alternée, grilles tactiques 15 × 15, placement manuel. Ils **ne sont pas abandonnés en V1.0**.
+
+**À ARBITRER avant validation du périmètre et des critères d'acceptation :**
+- Conditions précises de victoire/défaite/égalité en classique simultané (notamment destruction mutuelle).
+- Conception du parcours solo avant/après combat et du bouton de revanche/rejouer.
+- Comportement de Mousse assez précis pour que les résultats soient observables, sans prescrire d'implémentation.
+- Cas d'usage et messages de l'indicateur lorsque plusieurs tirs ennemis importants ne sont pas encore consultés.
+- Vérification de la lisibilité et du confort tactile sur la **CYD réelle**.
+
+**Traçabilité :** le LOT 1 n'est **pas encore une mission technique ni un backlog**, et aucun travail n'est attribué au graphiste ou au développeur par ce document.
