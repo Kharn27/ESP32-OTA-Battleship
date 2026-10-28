@@ -16,8 +16,10 @@ La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **
 - Mode standard : un tir secret par joueur, résolution simultanée.
 - Variante classique alternée et variantes tactiques avec salves et composition de flotte.
 - Palmarès persistant propre à chaque CYD et consultable à la demande par l'adversaire.
-- Liaison directe ESP-NOW prévue ; parcours CRÉER / REJOINDRE décidé sur le plan produit, faisabilité détaillée en étude avec l'architecte.
-- Mode solo contre CPU : **nouvelle proposition à étudier**, pas encore validée.
+- Liaison directe ESP-NOW : avis de faisabilité favorable de l'architecte ; CRÉER / REJOINDRE retenu, découverte et reconnexion à vérifier sur matériel.
+- Mode solo contre CPU **décidé pour la cible V1.0 dans tous les modes**, avec trois difficultés et compositions tactiques adaptées.
+- Coupures radio temporaires : suspension et reprise cohérente **visées en V1.0** ; reprise après redémarrage **reportée**.
+- Réserve d'idées futures conservée dans la bible, sans élargir tacitement le périmètre V1.0.
 
 ## Origine
 
