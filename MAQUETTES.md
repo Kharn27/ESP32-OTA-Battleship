@@ -13,13 +13,13 @@ Ces **trois fichiers** proviennent du [dossier I-009 dans Le Grenier Geek](https
 
 ![Maquette classique historique — 320×240](assets/maquettes/mode-classique-320x240.svg)
 
-**Attention, règle devenue historique :** l'image suggère le tour par tour traditionnel. Depuis, le **mono-tir simultané est le standard décidé**, et l'alternance n'est plus qu'une variante facultative. Le dessin reste utile pour les deux grilles et l'identité graphique.
+**Attention, règle devenue historique :** l'image suggère le tour par tour traditionnel. Depuis, le **mono-tir simultané est le standard décidé**, et l'alternance n'est plus qu'une variante facultative. Le dessin reste une **référence historique d'identité graphique**, mais **sa présentation simultanée de deux grilles est désormais écartée pour la V1.0** : une seule grande grille est visible à la fois.
 
 ### Simultané — concept d'origine
 
 ![Maquette historique du duel simultané — 320×240](assets/maquettes/mode-simultane-320x240.svg)
 
-**Intention toujours pertinente :** deux cibles secrètes et résolution commune après validation des deux joueurs. Les commandes, dimensions des cases et couleurs ne sont pas figées.
+**Intention toujours pertinente :** deux cibles secrètes et résolution commune après validation des deux joueurs. **Attention : la disposition de deux océans à l'écran n'est plus la règle d'interface V1.0.** Les commandes, dimensions des cases et couleurs ne sont pas figées.
 
 ### Salves — concept d'origine
 
@@ -41,13 +41,13 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 
 ![Esquisse de placement sur grille — 320×240](assets/maquettes/placement-flotte-320x240.svg)
 
-**Décidé côté fonctionnel :** flotte préremplie, AUTO répétable, déplacement par sélection puis destination, rotation même invalide, rouge si invalide, ✓ / ✕ et PRÊT indisponible tant qu'une édition est en cours ou invalide. **Proposé côté interface :** tailles et positionnement des boutons.
+**Décidé côté fonctionnel pour la V1.0 :** flotte préremplie, AUTO répétable, déplacement par sélection puis destination, rotation même invalide, rouge si invalide, ✓ / ✕ et PRÊT indisponible tant qu'une édition est en cours ou invalide. **Attention LOT 1 : seul AUTO + PRÊT est retenu**, sans déplacement ni rotation manuels. **Proposé côté interface :** tailles et positionnement des boutons.
 
 ### Fiche adverse — palmarès de la CYD
 
 ![Esquisse de palmarès adverse — 320×240](assets/maquettes/fiche-adversaire-320x240.svg)
 
-**Décidé côté fonctionnel :** palmarès local propre à la CYD et consultation **à la demande**, jamais imposée. **Fictif :** chiffres et nom affichés ; navigation exacte et titres honorifiques non décidés.
+**Décidé côté fonctionnel :** palmarès local propre à la CYD et consultation **à la demande**, jamais imposée ; **quatre catégories** Humain / Mousse / Capitaine / Amiral et **un compteur global** de forfaits volontaires. **Fictif :** chiffres et nom affichés ; la maquette antérieure ne représente pas encore cette ventilation ; navigation exacte et titres honorifiques non décidés.
 
 ### Victoire — révélation facultative de la flotte
 
@@ -55,13 +55,23 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 
 **Décidé :** la disposition complète de la flotte victorieuse **reste secrète par défaut** ; le vainqueur peut la révéler volontairement après le combat. En cas de destruction réciproque complète, toutes les cases des deux flottes sont déjà connues ; proposer une option analogue ne révélerait donc rien de neuf. L'écran et ses libellés restent proposés.
 
-## C. À ne pas confondre
+## C. Décisions UX nouvelles à illustrer — 29 octobre 2026
+
+**DÉCIDÉ pour la V1.0 (LOT1-UX-001/002/003) :**
+- En combat, **une seule grande grille à la fois** : ATTAQUE (pour cibler) ou DÉFENSE (pour inspecter les navires et impacts). Bascule volontaire, immédiate.
+- La résolution simultanée des tirs **ne provoque aucune bascule automatique**.
+- Un **indicateur intelligent DÉFENSE** montre le tir manqué de façon discrète, un touché de façon visible et un coulé de façon renforcée. Les dégâts non consultés maintiennent une alerte jusqu'à l'ouverture de DÉFENSE.
+- Le **LOT 1** cible une bataille classique contre **Mousse sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
+
+**Statut graphique : À CONCEVOIR.** Les anciens SVG et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de cette nouvelle disposition. La création de nouveaux visuels **320 × 240** et d'une charte graphique fera l'objet d'une discussion dédiée avec le PO avant toute mission au graphiste. Voir [bible produit v0.6](BIBLE_PRODUIT.md).
+
+## D. À ne pas confondre
 
 Certaines **illustrations d'ambiance affichées dans la conversation** provenaient de recherches visuelles temporaires. Les éléments interactifs présentés dans le chat (simulateurs, petits schémas) ne sont pas automatiquement enregistrés comme des images exportables.
 
 Cette galerie conserve les **trois vrais SVG historiques** et **quatre reconstitutions UX**. Elle ne prétend pas archiver à l'identique toutes les images externes ou tous les composants interactifs de la conversation.
 
-## D. Suite de la conception
+## E. Suite de la conception
 
 Les maquettes futures devront être **créées comme fichiers conservables** (SVG/PNG selon le besoin), clairement étiquetées **PROPOSÉ** ou **DÉCIDÉ**, et référencées ici et dans la [bible produit](BIBLE_PRODUIT.md).
 
