@@ -1,6 +1,6 @@
 # I-009 — Bible produit : Bataille navale ESP32 CYD
 
-**Version documentaire :** 0.2 — synthèse d'exploration du 28 octobre 2026  
+**Version documentaire :** 0.3 — consolidation des décisions PO et du retour architecte, 28 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -139,34 +139,64 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 ## 8. Créer / rejoindre : multijoueur humain
 
-**DÉCIDÉ — besoin fonctionnel :**
+**DÉCIDÉ — expérience fonctionnelle :**
 - L'accueil propose une action volontaire **CRÉER** ou **REJOINDRE** plutôt qu'un appairage automatique imposé.
-- Chaque bataille oppose **deux consoles**.
-- Plusieurs CYD peuvent se trouver à proximité ; pouvoir choisir son adversaire et en changer facilement fait partie de l'expérience attendue.
-- Les écrans doivent garder secrets le déploiement et les intentions adverses jusqu'aux moments de révélation prévus.
+- Chaque partie humaine oppose **deux CYD**, même si plusieurs consoles et plusieurs duos sont présents à proximité.
+- Les joueurs doivent pouvoir changer d'adversaire sans opération technique pénible.
+- Positions des navires et cibles secrètes restent confidentielles jusqu'aux révélations prévues par les règles.
 
-**PROPOSÉ, non encore décidé :** liste de parties disponibles avec noms de consoles, salon d'attente, acceptation du mode proposé, accès facultatif au dossier adverse.
+**PROPOSÉ sur la base du retour architecte (non encore arbitré par le PO) :**
+- L'hôte rend sa partie visible ; l'invité la choisit parmi les annonces disponibles.
+- L'hôte **accepte ou refuse** explicitement l'invitation ; confirmation claire sur les deux écrans.
+- Une partie occupée n'admet pas de troisième joueur ; invitation expirée ou ancienne rejetée ; changement d'adversaire après fermeture propre de la session.
+- Un signe visuel commun peut aider deux enfants à vérifier qu'ils rejoignent le bon adversaire.
+- Aucun canal radio, adresse MAC ou autre paramètre technique ne doit être saisi par le joueur.
 
-**À VÉRIFIER — étude architecte demandée, réponse EN ATTENTE :** découverte des parties ESP-NOW, coexistence de plusieurs parties, association et prévention des connexions involontaires, changement d'adversaire, reprises après coupure, limitations matérielles et radio. **Aucune solution de protocole ou résultat de faisabilité n'est présumé validé.**
+### Interruption de liaison — DÉCIDÉ pour la V1.0
 
-**À ARBITRER :** parcours de proposition et d'acceptation d'une partie, rôle de l'hôte, gestion du départ volontaire, abandon, reprise et revanche.
+- Une **coupure radio temporaire suspend** la partie et doit être indiquée clairement aux joueurs.
+- La partie **reprend lorsqu'une reconnexion cohérente est obtenue** ; aucun tir ne doit être perdu ou appliqué deux fois à cause de la coupure.
+- Une simple coupure radio **ne constitue pas automatiquement une défaite**.
+- **REPORTÉ après V1.0 :** sauvegarde/restauration complète de partie après extinction ou redémarrage de la CYD. Cela pourra être reconsidéré ultérieurement.
+- **À ARBITRER :** comportement si l'adversaire ne revient pas, abandon volontaire, délai d'attente, retour au menu et statistiques associées.
 
-## 9. Nouvelle piste : VS CPU — PROPOSÉ, NON VALIDÉ
+### Résultats de la consultation de l'architecte (28/10/2026)
 
-Un **adversaire contrôlé par le jeu** permettrait à une personne de jouer lorsqu'aucun autre joueur ou aucune autre console n'est disponible, de s'entraîner et de découvrir les règles.
+**Avis reçu : FAISABILITÉ TECHNIQUE FAVORABLE**, sans vérification sur les deux CYD physiques. Le parcours CRÉER / REJOINDRE et la coexistence de duos indépendants sont considérés réalisables sur ESP32 classique via ESP-NOW. La découverte des annonces, la synchronisation des associations et la reprise après rupture restent les sujets délicats.
 
-**Questions ouvertes, sans préjuger de la faisabilité :**
-- Le **solo sur une seule CYD** doit-il faire partie de la V1.0 ou d'une évolution ultérieure ?
-- Le CPU doit-il prendre en charge d'abord le classique, ou aussi les flottes personnalisées et les salves simultanées ?
-- Quel comportement recherché : facile pour apprendre, tactique sans tricher, niveaux de difficulté ?
-- Les parties contre CPU comptent-elles dans le palmarès de la CYD, et si oui séparément ?
+**À VÉRIFIER sur matériel :** fiabilité de la découverte, présence de plusieurs parties, radio en environnement chargé, cohérence des sessions et reprises, consommation de mémoire, confidentialité des échanges. Aucun nombre maximal de parties simultanées n'est garanti.
 
-Aucune mécanique, difficulté, méthode de calcul ou implémentation IA n'est imposée.
+**Recommandations d'architecture, NON validées comme décisions PO :** canal Wi-Fi commun prédéfini (sous réserve d'essais) ; annonces de découverte avec contrôle d'obsolescence ; confirmations applicatives et protection contre doublons ; distinction entre consentement visuel et sécurité cryptographique. Les annonces broadcast ne sont pas automatiquement chiffrées ; la sécurité des échanges privés requiert une étude adaptée.
+
+**À ARBITRER :** parcours de proposition et d'acceptation d'une partie, rôle de l'hôte, règles de session, confidentialité et comportements de refus, expiration, départ, reprise et revanche.
+
+## 9. Mode solo VS CPU — DÉCIDÉ pour la V1.0
+
+**DÉCIDÉ :**
+- Un joueur peut affronter le **CPU sur une seule CYD**, sans deuxième console.
+- Le **VS CPU est inclus dans la cible V1.0** et disponible dans **toutes les familles de jeu V1.0** : classique simultané, classique alterné, escadre tactique, flotte libre.
+- **Trois niveaux de difficulté** sont prévus.
+- Dans les variantes tactiques, la difficulté influence **aussi le choix stratégique de la composition de flotte du CPU**, pas seulement le choix de ses tirs.
+- Le CPU doit respecter les mêmes contraintes de flotte et de résolution que l'adversaire humain.
+
+**PROPOSÉ — noms et orientations, pas encore figés :**
+- **Mousse** : débutant, comportement simple, compositions plutôt aléatoires.
+- **Capitaine** : intermédiaire, recherche méthodique, flotte raisonnablement équilibrée.
+- **Amiral** : expérimenté, exploitation plus poussée des indices et composition stratégiquement optimisée.
+- **Principe d'équité souhaitable :** le CPU ne doit jamais accéder aux positions secrètes des navires humains ; sa difficulté provient de ses décisions, pas de tricherie.
+
+**À ARBITRER :**
+- Logique de décision exacte, différenciation observable des trois niveaux et équilibre des flottes tactiques.
+- Présentation des adversaires, éventuels délais d'animation, tutoriel ou aide.
+- Le palmarès doit-il compter les parties VS CPU ? Si oui, les distinguer des duels humains ?
+- Conditions de victoire et comportement d'un CPU dans les différentes combinaisons de combat.
+
+**Attention :** le solo facilite l'étude et les essais du gameplay, mais **ne remplace pas** les vérifications propres au multijoueur ESP-NOW.
 
 ## 10. Expérience à finaliser / questions transverses
 
 - **Fin de manche et de partie :** conditions exactes de victoire et d'égalité, annonce des résultats, revanche.
-- **Cas d'erreur :** tir invalide, double sélection, action répétée, appareil qui se coupe, perte de liaison, écrans en désaccord.
+- **Cas d'erreur :** tir invalide, double sélection, action répétée, perte de liaison, écrans en désaccord ; abandon et expiration d'une session restent à définir.
 - **Lisibilité :** propre flotte versus eaux adverses ; possibilité d'une grande grille unique et d'une bascule immédiate, surtout en 15 × 15.
 - **Audio :** vérifier le matériel réel avant d'exiger des effets sonores.
 - **Ergonomie :** évaluer chaque maquette sur une CYD physique, sans déduire la faisabilité d'une image.
@@ -188,10 +218,14 @@ Aucune mécanique, difficulté, méthode de calcul ou implémentation IA n'est i
 | FT-002 | Escadre : max 5 navires ; flotte libre : sans plafond de nombre distinct | **DÉCIDÉ** |
 | FT-003 | Salves secrètes simultanées ; puissance de tir liée aux navires encore à flot | **DÉCIDÉ** |
 | CN-001 | Choix volontaire CRÉER / REJOINDRE | **DÉCIDÉ** |
-| CN-002 | Détails ESP-NOW multi-CYD, étude architecte | **À VÉRIFIER** |
+| CN-002 | Étude ESP-NOW favorable sur le papier ; découverte, sécurité et multipaires à vérifier physiquement | **À VÉRIFIER** |
+| CN-003 | Reconnexion d'une partie après coupure radio temporaire en V1.0 ; reprise après reboot reportée | **DÉCIDÉ / REPORTÉ** |
 | FT-004 | Grille tactique 15 × 15 | **À ARBITRER / tester** |
-| SOLO-001 | Jeu contre CPU sur une CYD | **PROPOSÉ** |
+| SOLO-001 | VS CPU sur une seule CYD, dans tous les modes V1.0 | **DÉCIDÉ** |
+| SOLO-002 | Trois difficultés CPU, dont la composition de flotte tactique dépend du niveau | **DÉCIDÉ sur le principe** |
+| SOLO-003 | Noms Mousse / Capitaine / Amiral ; CPU ne triche pas | **PROPOSÉ** |
 | V1-001 | Trois familles de jeu comme cible de V1.0 ; MVP à préciser | **DÉCIDÉ sur le principe** |
+| V1-002 | Catalogue V1.0 jugé assez riche ; priorité désormais à détailler règles et parcours | **DÉCIDÉ comme orientation de travail** |
 
 ## 12. Traçabilité et sources
 
@@ -201,7 +235,29 @@ Aucune mécanique, difficulté, méthode de calcul ou implémentation IA n'est i
 - Le **mono-tir simultané** a remplacé le tour par tour comme **mode standard** ; l'alternance traditionnelle est **conservée comme variante** (elle n'a pas été supprimée).
 - Le déploiement est devenu **prérempli avec AUTO**, retouche au stylet et validation explicite.
 - La « flotte tactique » initiale a été distinguée en **escadre à nombre limité** et **flotte libre**, toutes deux sous plafond de 17 cases.
-- CRÉER / REJOINDRE est le choix UX retenu, mais la **faisabilité multi-CYD reste en étude**.
-- L'idée **VS CPU** est nouvellement soulevée : **aucune décision d'inclusion V1.0**.
+- CRÉER / REJOINDRE est le choix UX retenu ; l'architecte a rendu un **avis favorable de faisabilité**, mais la **validation sur matériel** et les détails de la découverte restent ouverts.
+- Le **VS CPU est validé pour la V1.0 et tous ses modes**, avec trois niveaux de difficulté et des compositions stratégiques adaptées au niveau.
+- La **reconnexion après perte radio temporaire** est un objectif V1.0 ; la reprise d'une partie après extinction/redémarrage est **reportée**.
+- Le PO veut désormais **détailler les règles et les parcours** plutôt qu'ajouter des modes à la cible V1.0, tout en conservant la trace des bonnes idées.
 
 **Aucune modification n'est apportée au dépôt historique Le Grenier Geek.** Ce document est une référence fonctionnelle vivante, destinée à être amendée avec les décisions du PO et le retour de l'architecte. Il n'autorise aucun développement.
+
+
+## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
+
+Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idée pourra être réexaminée sans devenir une exigence tacite.
+
+| Piste | État | Commentaire |
+| --- | --- | --- |
+| **Mode « Amiral » enrichi** avec ordres ou capacités tactiques spéciales | **REPORTÉ** | Évoqué dès l'idée I-009 ; aucun pouvoir défini |
+| **Combinaisons libres de paramètres de combat et de flotte** | **PROPOSÉ** | Les deux axes mono-tir/salve et alterné/simultané sont décidés, mais pas un éditeur de parties personnalisées V1.0 |
+| **Mécanique de coût de construction distinct du nombre de cases** | **PROPOSÉ / en réserve** | Alternative envisagée au budget de 17 cases ; pas retenue pour les règles actuelles |
+| **Statistiques détaillées** (par mode, ratio, série de victoires, grades, nom de commandant) | **PROPOSÉ** | La fiche minimale par CYD reste décidée ; comptage VS CPU à arbitrer |
+| **Tournois entre plusieurs CYD** | **PROPOSÉ / en réserve** | Idée induite par les rencontres entre plusieurs duos ; non exigée en V1.0 |
+| **Sauvegarde/reprise après extinction** | **REPORTÉ** | Envisageable après V1.0 ; complexe du fait de la cohérence des deux états |
+| **Améliorations graphiques et audiovisuelles** (radar, explosions, son) | **PROPOSÉ / à vérifier** | Toujours au service de la fluidité et des contraintes CYD |
+| **Console multijeux** (Puissance 4, etc.) et boîtier commercial | **REPORTÉ / horizon distinct** | Ne pas mélanger avec le prototype bataille navale |
+
+### Prochain chantier de réflexion produit (sans mission de développement)
+
+Préciser progressivement les **parcours joueurs**, les **règles de fin de manche et fin de partie**, les **égalités**, les **situations exceptionnelles** et les **règles de score**. Conserver une question principale à la fois et distinguer proposition, décision et faisabilité.
