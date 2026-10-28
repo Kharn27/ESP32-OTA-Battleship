@@ -1,6 +1,6 @@
 # I-009 — Bible produit : Bataille navale ESP32 CYD
 
-**Version documentaire :** 0.4 — galerie visuelle et fin de partie, 28 octobre 2026  
+**Version documentaire :** 0.5 — consolidation des règles métier V1.0 (revanche, palmarès, abandon, flottes tactiques, ciblage), 28 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -82,6 +82,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - **Tactique : DÉCIDÉ** — plafond **absolu de 17 cases occupées**, sans obligation de les remplir ; les cases inutilisées ne confèrent pas de bonus.
 - **Escadre : DÉCIDÉ** — 5 navires maximum et 17 cases maximum.
 - **Flotte libre : DÉCIDÉ** — nombre de navires non plafonné séparément ; seul le budget de cases fixe une borne matérielle.
+- **BN-FT-006 — DÉCIDÉ :** chaque flotte tactique doit comporter **au moins un navire** ; une flotte vide est interdite. Une flotte d'un seul patrouilleur de deux cases reste autorisée.
 - **DÉCIDÉ pour les compositions tactiques :** plusieurs exemplaires d'un même type sont autorisés.
 - **À ARBITRER :** éventuelles restrictions d'équilibrage si une composition domine systématiquement les autres. Aucun « coût de construction » distinct de la taille n'est retenu pour l'instant.
 
@@ -93,7 +94,9 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - Un navire coulé **retire sa contribution des manches suivantes**.
 - En résolution simultanée, les tirs déjà verrouillés sont exécutés même si leur navire d'origine est coulé au cours de la manche ; aucune suppression rétroactive.
 
-**À ARBITRER :** effets des tirs multiples sur la même case, éventuelles cibles déjà explorées, gestion détaillée des navires partiellement touchés et règles de fin des affrontements tactiques.
+**DÉCIDÉ :** une cible ne peut recevoir qu'un tir au cours d'une salve et une case attaquée lors d'une manche précédente ne peut plus être ciblée (§ 6, BN-FT-008 et BN-FT-009).
+
+**À ARBITRER :** règles détaillées de fin d'affrontement, présentation de l'état des navires partiellement touchés et équilibrage réel des compositions tactiques.
 
 ## 5. Déploiement tactile — DÉCIDÉ
 
@@ -111,6 +114,15 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 6. La modification d'un navire est **provisoire** jusqu'à **✓** (confirmer, seulement si position valide) ou **✕** (annuler et retrouver la position/orientation précédentes).
 7. Le bouton général **PRÊT** est indisponible **si une position est invalide ou si un navire attend encore ✓ / ✕**.
 8. AUTO n'équivaut pas à PRÊT : seul le joueur confirme que son déploiement est terminé.
+9. **BN-FT-006 — DÉCIDÉ :** en mode tactique, **PRÊT** reste indisponible si la flotte est vide.
+
+### Déploiement lors d'une revanche — BN-REV-001, DÉCIDÉ
+
+- Chaque joueur choisit librement, pour lui-même, de **conserver les positions précédentes**, de **relancer AUTO** pour obtenir un nouveau placement ou de **personnaliser** son déploiement.
+- Conserver une disposition risquée est un choix stratégique autorisé : le jeu ne force pas un placement inédit lors d'une revanche.
+- Les mêmes contrôles de validité et la confirmation **PRÊT** s'appliquent.
+- **PROPOSÉ :** ne pas révéler à l'adversaire si la disposition précédente a été conservée.
+- **À ARBITRER :** traitement de la composition d'une flotte tactique lorsqu'on change de mode, et possibilité de conserver aussi sa composition à l'identique.
 
 **À ARBITRER :** comportement exact d'AUTO pendant une modification en cours, point d'ancrage du navire à la sélection de destination, messages tactiles et placement sur grille 15 × 15.
 
@@ -137,9 +149,18 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - Les salves des deux joueurs sont résolues simultanément après les deux validations.
 - La perte d'un bâtiment réduit la puissance de feu des manches **ultérieures**.
 
-**PROPOSÉ :** compteur « X/Y tirs » lisible, appui sur une cible pour la sélectionner/désélectionner, indicateur sobre « Ordres transmis — en attente de l'adversaire », animations courtes et non bloquantes.
+### Sélection, salves partielles et historique des tirs — DÉCIDÉ pour la V1.0
 
-**À ARBITRER :** le nombre de tirs doit-il être intégralement utilisé ou peut-on renoncer à certains ? ordre/animation d'affichage des multiples impacts ; modalités de l'égalité et de la victoire ; comportement en cas de déconnexion après FEU.
+- **BN-FT-007 — Salves partielles autorisées :** un joueur peut déclencher **FEU** avec **au moins une cible** et **au plus** le nombre de tirs disponibles. Les tirs non utilisés sont perdus pour la manche, sans cumul ultérieur. Le plafond disponible reste calculé à partir des navires encore à flot.
+- **BN-FT-008 — Un tir par cible et par salve :** premier appui tactile = sélection ; deuxième appui = désélection. Une case ne peut figurer qu'une fois dans la salve. Le compteur de sélection est actualisé ; une fois le plafond atteint, il faut retirer une sélection avant d'en ajouter une autre.
+- **BN-FT-009 — Une case déjà attaquée est verrouillée :** toute case tirée lors d'une manche précédente reste affichée comme **touchée** ou **manquée**, mais devient définitivement **non sélectionnable** pour cette partie. Appuyer dessus ne consomme aucun tir et ne provoque pas de nouvelle attaque.
+- Ces protections de ciblage s'appliquent **au classique et aux modes tactiques**, en **VS humain et VS CPU**. Elles n'annulent pas le caractère irrévocable du bouton **FEU** : seul le pointage *avant* FEU est modifiable.
+
+**PROPOSÉ :** compteur « X/Y tirs » bien lisible, indicateur sobre « Ordres transmis — en attente de l'adversaire », animations courtes et non bloquantes.
+
+**À VÉRIFIER sur CYD réel :** lisibilité des cases déjà attaquées et ergonomie de la sélection/désélection au stylet.
+
+**À ARBITRER :** ordre et animation de révélation des impacts ; définition exhaustive de victoire/égalité selon les variantes ; comportement de l'écran quand la liaison est interrompue après FEU.
 
 ### Fin de partie — confidentialité des flottes
 
@@ -149,7 +170,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 **Cas de l'égalité par destruction réciproque :** les deux flottes sont alors entièrement touchées et leurs positions déjà connues : un bouton de « révélation » symétrique reste envisageable **par analogie**, mais ne fournirait aucun nouveau renseignement. La présentation précise de cette option est **PROPOSÉE** et non encore fixée.
 
-**À ARBITRER :** définition exhaustive de victoire/égalité selon les variantes, cas particulier VS CPU, résultat abandonné, et interface de fin de partie.
+**À ARBITRER :** définition exhaustive de victoire/égalité selon les variantes, cas particulier VS CPU et interface de fin de partie. L'**abandon volontaire**, lui, est traité sans résultat comptabilisé (§ 7).
 
 ## 7. Identité et palmarès de chaque CYD
 
@@ -157,15 +178,30 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 *Données fictives — esquisse UX, pas une interface validée.*
 
-**DÉCIDÉ :**
+**DÉCIDÉ — BN-STAT-001 :**
 - Chaque console conserve un **palmarès persistant propre à la CYD**, et non un compte joueur.
-- Données minimales : **parties jouées, victoires, défaites, matchs nuls**.
-- L'adversaire peut consulter cette fiche **à la demande**.
-- **Aucune présentation obligatoire** du palmarès ne doit ralentir l'accès au jeu.
+- Quatre catégories **indépendantes** sont conservées : **VS HUMAIN**, **VS MOUSSE** (CPU débutant), **VS CAPITAINE** (CPU intermédiaire) et **VS AMIRAL** (CPU expérimenté).
+- Pour **chacune** de ces catégories : **parties jouées, victoires, défaites et matchs nuls**.
+- L'adversaire peut consulter la fiche d'une CYD **à la demande** ; le palmarès n'est jamais un écran obligatoire avant de jouer.
 
-**PROPOSÉ :** accès « Dossier adverse » dans le salon de jeu, éventuel nom de console/commandant, ratio de victoires, grades ou séries.
+**DÉCIDÉ — BN-STAT-002 : abandon volontaire et partie non comptabilisée**
+- Une bataille abandonnée **avant un résultat définitif** est **ignorée** dans le palmarès des **deux participants** : ni victoire, ni défaite, ni nul, ni partie jouée. En solo VS CPU, les compteurs de la CYD restent également inchangés.
+- Aucun malus de victoire/défaite n'est attribué à celui qui abandonne. Une coupure radio temporaire **suspend** d'abord la bataille (§ 8) et ne constitue pas un forfait.
 
-**À ARBITRER :** comptabilisation des abandons, déconnexions et égalités ; partage du palmarès quand plusieurs humains se servent de la même CYD ; statistiques par mode ; effet futur des parties VS CPU sur les statistiques.
+**DÉCIDÉ — BN-UX-003 : confirmation d'un abandon volontaire**
+- Une commande **QUITTER / ABANDONNER** lancée pendant une partie affiche une confirmation explicite : le joueur peut **CONTINUER** ou **ABANDONNER**.
+- Annuler la confirmation ne modifie ni la partie ni les statistiques.
+- La formulation et la disposition des boutons sur 320 × 240 restent à concevoir et tester.
+
+**DÉCIDÉ — BN-STAT-003 : un seul compteur global de forfaits**
+- Chaque CYD mémorise **un unique compteur global** de forfaits volontaires, sans ventilation par adversaire, difficulté ou mode.
+- Ce compteur augmente de **1 uniquement lorsque le joueur confirme lui-même son abandon** ; les compteurs de parties/victoires/défaites/nuls restent inchangés.
+- **Aucune déconnexion radio, extinction imprévue ou erreur technique n'augmente automatiquement ce compteur.** Le forfait est une information humoristique, non un classement.
+- **Libellé humoristique PROPOSÉ :** « Canots de sauvetage empruntés ».
+
+**PROPOSÉ :** accès « Dossier adverse » dans le salon de jeu, éventuel nom de console/commandant, taux de victoire, grades ou séries ; consultation des quatre catégories par onglets et éventuel total de parties.
+
+**À ARBITRER :** éventuelles statistiques supplémentaires **par mode**, partage du palmarès lorsque plusieurs humains utilisent la même CYD, cas d'une session interrompue définitivement sans abandon confirmé, présentation exacte du compteur et de la fiche.
 
 ## 8. Créer / rejoindre : multijoueur humain
 
@@ -202,7 +238,15 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 **Recommandations d'architecture, NON validées comme décisions PO :** canal Wi-Fi commun prédéfini (sous réserve d'essais) ; annonces de découverte avec contrôle d'obsolescence ; confirmations applicatives et protection contre doublons ; distinction entre consentement visuel et sécurité cryptographique. Les annonces broadcast ne sont pas automatiquement chiffrées ; la sécurité des échanges privés requiert une étude adaptée.
 
-**À ARBITRER :** parcours de proposition et d'acceptation d'une partie, rôle de l'hôte, règles de session, confidentialité et comportements de refus, expiration, départ, reprise et revanche.
+**DÉCIDÉ — BN-REV-002 / BN-REV-003 / BN-REV-004 : parcours de revanche V1.0**
+- Le joueur qui a choisi **CRÉER** est l'**hôte** de la session (pas un serveur central).
+- Après le résultat, l'hôte est celui qui **propose la REVANCHE** ; **CHANGER DE MODE** n'est pas une option de même niveau que REVANCHE, mais un choix *dans* ce parcours.
+- L'hôte choisit soit **REJOUER** (mêmes règles), soit **CHANGER DE MODE** (nouvelles règles et paramètres sélectionnés par l'hôte).
+- L'invité voit la proposition et peut **ACCEPTER** ou **QUITTER** ; il ne peut pas modifier les paramètres choisis par l'hôte. **Aucune nouvelle partie n'est imposée.**
+- Si la proposition est acceptée, les deux consoles **conservent leur association** ; chaque joueur revient au déploiement et dispose de la liberté prévue par BN-REV-001.
+- La logique de revanche vise à enchaîner les batailles sans refaire le parcours CRÉER / REJOINDRE.
+
+**À ARBITRER :** détails d'affichage et de fermeture de session, abandon ou absence durable de l'adversaire, refus initial d'une invitation, expiration et départ propre. L'accès QUITTER depuis la fin de partie reste à mettre en forme ; la règle d'accord de l'invité pour la revanche est décidée.
 
 ## 9. Mode solo VS CPU — DÉCIDÉ pour la V1.0
 
@@ -213,7 +257,9 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - Dans les variantes tactiques, la difficulté influence **aussi le choix stratégique de la composition de flotte du CPU**, pas seulement le choix de ses tirs.
 - Le CPU doit respecter les mêmes contraintes de flotte et de résolution que l'adversaire humain.
 
-**PROPOSÉ — noms et orientations, pas encore figés :**
+**DÉCIDÉ comme intitulés des trois niveaux utilisés dans le palmarès : Mousse, Capitaine, Amiral.**
+
+**PROPOSÉ — comportement précis des niveaux, non encore arbitré :**
 - **Mousse** : débutant, comportement simple, compositions plutôt aléatoires.
 - **Capitaine** : intermédiaire, recherche méthodique, flotte raisonnablement équilibrée.
 - **Amiral** : expérimenté, exploitation plus poussée des indices et composition stratégiquement optimisée.
@@ -222,15 +268,15 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 **À ARBITRER :**
 - Logique de décision exacte, différenciation observable des trois niveaux et équilibre des flottes tactiques.
 - Présentation des adversaires, éventuels délais d'animation, tutoriel ou aide.
-- Le palmarès doit-il compter les parties VS CPU ? Si oui, les distinguer des duels humains ?
+- La présentation et la vérification de la difficulté réelle des trois CPU ; le **palmarès séparé VS humain et par difficulté CPU est décidé** (§ 7).
 - Conditions de victoire et comportement d'un CPU dans les différentes combinaisons de combat.
 
 **Attention :** le solo facilite l'étude et les essais du gameplay, mais **ne remplace pas** les vérifications propres au multijoueur ESP-NOW.
 
 ## 10. Expérience à finaliser / questions transverses
 
-- **Fin de manche et de partie :** annonce du résultat et secret optionnel du vainqueur décidés ; conditions exactes de victoire et d'égalité selon les variantes, cas VS CPU et revanche à préciser.
-- **Cas d'erreur :** tir invalide, double sélection, action répétée, perte de liaison, écrans en désaccord ; abandon et expiration d'une session restent à définir.
+- **Fin de manche et de partie :** annonce du résultat, secret optionnel du vainqueur et revanche pilotée par l'hôte décidés ; conditions exactes de victoire/égalité selon les variantes et présentation des états restent à préciser.
+- **Cas d'erreur :** la double sélection d'une cible et les tirs sur case déjà jouée sont traités ; restent notamment les écrans en désaccord, expiration des sessions et absence prolongée d'un adversaire. L'abandon **volontaire confirmé** est décidé, mais une interruption définitive non confirmée reste à définir.
 - **Lisibilité :** propre flotte versus eaux adverses ; possibilité d'une grande grille unique et d'une bascule immédiate, surtout en 15 × 15.
 - **Audio :** vérifier le matériel réel avant d'exiger des effets sonores.
 - **Ergonomie :** évaluer chaque maquette sur une CYD physique, sans déduire la faisabilité d'une image.
@@ -251,7 +297,19 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 | FT-001 | Flottes tactiques : 17 cases au maximum, non obligatoires, doublons autorisés | **DÉCIDÉ** |
 | FT-002 | Escadre : max 5 navires ; flotte libre : sans plafond de nombre distinct | **DÉCIDÉ** |
 | FT-003 | Salves secrètes simultanées ; puissance de tir liée aux navires encore à flot | **DÉCIDÉ** |
+| BN-FT-006 | Au moins 1 navire en flotte tactique ; flotte vide refusée, PRÊT bloqué | **DÉCIDÉ** |
+| BN-FT-007 | Salves partielles dès 1 tir ; tirs non employés perdus, sans cumul | **DÉCIDÉ** |
+| BN-FT-008 | Sélection/désélection par appuis successifs ; une cible au plus par salve | **DÉCIDÉ** |
+| BN-FT-009 | Case déjà attaquée non sélectionnable dans tous les modes, résultat conservé | **DÉCIDÉ / ergonomie À VÉRIFIER** |
 | FIN-001 | Flotte du vainqueur secrète par défaut ; révélation volontaire après le résultat | **DÉCIDÉ** |
+| BN-REV-001 | À la revanche, chaque joueur peut garder, randomiser ou personnaliser le placement | **DÉCIDÉ** |
+| BN-REV-002 | REVANCHE : rejouer les mêmes règles ou choisir « Changer de mode » en sous-étape | **DÉCIDÉ** |
+| BN-REV-003 | L'hôte CRÉER décide les règles de la revanche ; association conservée | **DÉCIDÉ** |
+| BN-REV-004 | Invité : accepter ou quitter la revanche, sans négocier les paramètres | **DÉCIDÉ** |
+| BN-STAT-001 | 4 palmarès : VS Humain, VS Mousse, VS Capitaine, VS Amiral | **DÉCIDÉ** |
+| BN-STAT-002 | Partie abandonnée ignorée pour les deux joueurs ; aucune victoire/défaite/nul/partie jouée | **DÉCIDÉ** |
+| BN-STAT-003 | Un unique compteur global de forfaits volontaires sur chaque CYD | **DÉCIDÉ** |
+| BN-UX-003 | Confirmation obligatoire CONTINUER / ABANDONNER | **DÉCIDÉ** |
 | CN-001 | Choix volontaire CRÉER / REJOINDRE | **DÉCIDÉ** |
 | CN-002 | Étude ESP-NOW favorable sur le papier ; découverte, sécurité et multipaires à vérifier physiquement | **À VÉRIFIER** |
 | CN-003 | Reconnexion d'une partie après coupure radio temporaire en V1.0 ; reprise après reboot reportée | **DÉCIDÉ / REPORTÉ** |
@@ -267,6 +325,15 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 **Visuels sauvegardés :** [MAQUETTES.md](MAQUETTES.md) : 3 SVG historiques recopiés à l'identique depuis le Grenier Geek et 4 esquisses UX reconstituées, en assets locaux. Les images d'ambiance externes et anciens composants interactifs du chat ne sont pas archivés à l'identique.
 
 **Source de départ (27 octobre 2026) :** [IDEE.md du Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md). Les anciennes illustrations sont disponibles dans le dossier [assets](https://github.com/Kharn27/Le-Grenier-Geek/tree/main/plans/I-009-bataille-navale-cyd/assets).
+
+**Consolidation des règles métier (28 octobre 2026, version 0.5) :**
+- **Revanche :** conservation libre de la formation par chaque joueur ; REVANCHE comprend REJOUER ou CHANGER DE MODE ; l'hôte choisit les règles et l'invité accepte ou quitte ; association conservée si accepté.
+- **Palmarès :** quatre catégories séparées (humain, Mousse, Capitaine, Amiral), quatre indicateurs par catégorie ; un compteur global de forfaits volontaires.
+- **Abandon :** confirmation CONTINUER / ABANDONNER ; aucun résultat ni partie jouée comptabilisé pour les deux participants ; seule la CYD ayant volontairement confirmé incrémente son forfait ; coupures radio et incidents exclus.
+- **Flottes et salves :** au moins un navire tactique ; salves partielles autorisées à partir d'un tir ; tirs non utilisés perdus ; sélection/désélection au toucher et pas de double cible.
+- **Historique :** case déjà attaquée définitivement non ciblable dans la partie, résultat visible ; applicable à tous les modes.
+- **Non décidé :** révéler ou non à l'adversaire qu'une formation a été conservée ; comportement précis des trois difficultés CPU ; grille 15 × 15 ; détails des victoires/égalités, des sessions interrompues définitivement et de l'UX de plusieurs écrans.
+- **Traçabilité :** modifications apportées directement à la bible existante ; aucune modification du dépôt d'idées historique, pas de création de backlog ou de mission technique.
 
 **Synthèse des échanges PO (28 octobre 2026) :**
 - Le **mono-tir simultané** a remplacé le tour par tour comme **mode standard** ; l'alternance traditionnelle est **conservée comme variante** (elle n'a pas été supprimée).
@@ -291,7 +358,7 @@ Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idé
 | **Mode « Amiral » enrichi** avec ordres ou capacités tactiques spéciales | **REPORTÉ** | Évoqué dès l'idée I-009 ; aucun pouvoir défini |
 | **Combinaisons libres de paramètres de combat et de flotte** | **PROPOSÉ** | Les deux axes mono-tir/salve et alterné/simultané sont décidés, mais pas un éditeur de parties personnalisées V1.0 |
 | **Mécanique de coût de construction distinct du nombre de cases** | **PROPOSÉ / en réserve** | Alternative envisagée au budget de 17 cases ; pas retenue pour les règles actuelles |
-| **Statistiques détaillées** (par mode, ratio, série de victoires, grades, nom de commandant) | **PROPOSÉ** | La fiche minimale par CYD reste décidée ; comptage VS CPU à arbitrer |
+| **Statistiques supplémentaires** (par mode de jeu, taux de victoire, série, grades, nom de commandant) | **PROPOSÉ** | Les quatre catégories humain/difficulté CPU et le compteur global de forfaits sont déjà décidés ; seules ces extensions restent ouvertes |
 | **Tournois entre plusieurs CYD** | **PROPOSÉ / en réserve** | Idée induite par les rencontres entre plusieurs duos ; non exigée en V1.0 |
 | **Sauvegarde/reprise après extinction** | **REPORTÉ** | Envisageable après V1.0 ; complexe du fait de la cohérence des deux états |
 | **Améliorations graphiques et audiovisuelles** (radar, explosions, son) | **PROPOSÉ / à vérifier** | Toujours au service de la fluidité et des contraintes CYD |
@@ -299,4 +366,4 @@ Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idé
 
 ### Prochain chantier de réflexion produit (sans mission de développement)
 
-Préciser progressivement les **parcours joueurs**, les **règles de fin de manche et fin de partie**, les **égalités**, les **situations exceptionnelles** et les **règles de score**. Conserver une question principale à la fois et distinguer proposition, décision et faisabilité.
+Préparer, avec accord du PO, le **découpage fonctionnel en lots** à partir du besoin consolidé, sans le confondre avec une planification technique ou un backlog déjà validé. Avant de figer le périmètre d'un lot, lever les ambiguïtés de règles qui le bloquent (notamment victoire/égalité, gestion de session, ergonomie et dimension des grilles).
