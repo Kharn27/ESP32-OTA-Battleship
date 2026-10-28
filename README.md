@@ -8,6 +8,8 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 ➡️ [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) — vision, contraintes, règles décidées, variantes de jeu, parcours, décisions et questions ouvertes.
 
+🎨 [MAQUETTES.md](MAQUETTES.md) — **galerie illustrée** : trois maquettes historiques conservées et quatre esquisses UX reconstituées, toutes en SVG 320 × 240 avec leur statut.
+
 La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **À ARBITRER**, **À VÉRIFIER** et **REPORTÉS**. Elle constitue une synthèse de travail, pas un cahier des charges validé dans son ensemble.
 
 ## Direction du jeu
@@ -16,6 +18,7 @@ La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **
 - Mode standard : un tir secret par joueur, résolution simultanée.
 - Variante classique alternée et variantes tactiques avec salves et composition de flotte.
 - Palmarès persistant propre à chaque CYD et consultable à la demande par l'adversaire.
+- Fin de partie : la flotte du vainqueur reste secrète, sauf s'il choisit lui-même de la révéler.
 - Liaison directe ESP-NOW : avis de faisabilité favorable de l'architecte ; CRÉER / REJOINDRE retenu, découverte et reconnexion à vérifier sur matériel.
 - Mode solo contre CPU **décidé pour la cible V1.0 dans tous les modes**, avec trois difficultés et compositions tactiques adaptées.
 - Coupures radio temporaires : suspension et reprise cohérente **visées en V1.0** ; reprise après redémarrage **reportée**.
