@@ -228,7 +228,8 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - La partie **reprend lorsqu'une reconnexion cohérente est obtenue** ; aucun tir ne doit être perdu ou appliqué deux fois à cause de la coupure.
 - Une simple coupure radio **ne constitue pas automatiquement une défaite**.
 - **REPORTÉ après V1.0 :** sauvegarde/restauration complète de partie après extinction ou redémarrage de la CYD. Cela pourra être reconsidéré ultérieurement.
-- **À ARBITRER :** comportement si l'adversaire ne revient pas, abandon volontaire, délai d'attente, retour au menu et statistiques associées.
+- **DÉCIDÉ :** l'abandon volontaire confirmé et son effet statistique sont traités au § 7.
+- **À ARBITRER :** comportement si l'adversaire ne revient pas, délai d'attente, retour au menu et sort d'une partie interrompue définitivement sans abandon explicite.
 
 ### Résultats de la consultation de l'architecte (28/10/2026)
 
@@ -316,7 +317,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 | FT-004 | Grille tactique 15 × 15 | **À ARBITRER / tester** |
 | SOLO-001 | VS CPU sur une seule CYD, dans tous les modes V1.0 | **DÉCIDÉ** |
 | SOLO-002 | Trois difficultés CPU, dont la composition de flotte tactique dépend du niveau | **DÉCIDÉ sur le principe** |
-| SOLO-003 | Noms Mousse / Capitaine / Amiral ; CPU ne triche pas | **PROPOSÉ** |
+| SOLO-003 | Noms Mousse / Capitaine / Amiral pour les niveaux et palmarès ; comportements et équité CPU à préciser | **DÉCIDÉ (noms) / PROPOSÉ (comportements et équité)** |
 | V1-001 | Trois familles de jeu comme cible de V1.0 ; MVP à préciser | **DÉCIDÉ sur le principe** |
 | V1-002 | Catalogue V1.0 jugé assez riche ; priorité désormais à détailler règles et parcours | **DÉCIDÉ comme orientation de travail** |
 
