@@ -1,6 +1,6 @@
 # I-009 — Bible produit : Bataille navale ESP32 CYD
 
-**Version documentaire :** 0.3 — consolidation des décisions PO et du retour architecte, 28 octobre 2026  
+**Version documentaire :** 0.4 — galerie visuelle et fin de partie, 28 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -18,6 +18,8 @@ Créer un jeu de bataille navale familial, tactique et rétro, d'abord sur **deu
 - Le jeu doit rester agréable à deux enfants comme à des joueurs qui souhaitent approfondir la stratégie.
 
 **PROPOSÉ :** retour visuel immédiat à la sélection, à la validation et à la révélation ; animations courtes et discrètes plutôt que séquences imposées.
+
+**Références graphiques :** [galerie des sept maquettes SVG 320 × 240](MAQUETTES.md), avec statut et provenance de chacune. Les visuels ne sont ni des captures de firmware ni des spécifications graphiques approuvées.
 
 ## 2. Cadre matériel et frontières
 
@@ -42,6 +44,16 @@ Créer un jeu de bataille navale familial, tactique et rétro, d'abord sur **deu
 | **Classique** | Grille **10 × 10**, flotte traditionnelle fixe de 5 navires, 17 cases | **Mono-tir simultané par défaut** ; **mono-tir alterné** comme variante facultative |
 | **Escadre tactique** | Composition personnalisable, **5 navires maximum** ET **17 cases maximum** | Salves préparées et simultanées |
 | **Flotte libre** | Composition personnalisable, **17 cases maximum**, sans plafond supplémentaire de nombre de navires | Salves préparées et simultanées |
+
+### Trois maquettes historiques des expériences de combat
+
+**Références d'intention, non normatives** : la maquette « classique » ci-dessous représente le tour par tour d'origine ; le **simultané est désormais le mode standard**. Le nombre de tirs visible dans l'ancienne maquette des salves peut également différer de nos règles tactiques actuelles.
+
+![Maquette du mode classique historique](assets/maquettes/mode-classique-320x240.svg)
+
+![Maquette du duel simultané](assets/maquettes/mode-simultane-320x240.svg)
+
+![Maquette des salves historique](assets/maquettes/mode-salves-320x240.svg)
 
 **À ARBITRER :** grille **15 × 15 envisagée**, non encore actée pour les deux familles tactiques ; arbitrage ergonomique réel sur CYD ; noms commerciaux ; place exacte des trois familles dans le premier MVP.
 
@@ -85,6 +97,10 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 ## 5. Déploiement tactile — DÉCIDÉ
 
+![Esquisse de placement tactile, état invalide](assets/maquettes/placement-flotte-320x240.svg)
+
+*Reconstitution conceptuelle 320 × 240 : commandes et positions à évaluer sur matériel, non validées graphiquement.*
+
 **Objectif :** une flotte immédiatement jouable, avec la liberté de peaufiner son placement sur l'écran résistif.
 
 1. L'écran de placement s'ouvre avec **toute la flotte déjà placée aléatoirement**.
@@ -125,7 +141,21 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 **À ARBITRER :** le nombre de tirs doit-il être intégralement utilisé ou peut-on renoncer à certains ? ordre/animation d'affichage des multiples impacts ; modalités de l'égalité et de la victoire ; comportement en cas de déconnexion après FEU.
 
+### Fin de partie — confidentialité des flottes
+
+![Esquisse de fin de partie : révélation facultative de la flotte](assets/maquettes/fin-partie-secret-320x240.svg)
+
+**DÉCIDÉ — FIN-001 :** résultat connu des deux joueurs ; les tirs et impacts déjà révélés restent visibles. **La disposition complète de la flotte victorieuse demeure secrète par défaut**, et **le vainqueur choisit s'il souhaite la révéler** à son adversaire. Refuser ou ne pas choisir ne déclenche aucune révélation.
+
+**Cas de l'égalité par destruction réciproque :** les deux flottes sont alors entièrement touchées et leurs positions déjà connues : un bouton de « révélation » symétrique reste envisageable **par analogie**, mais ne fournirait aucun nouveau renseignement. La présentation précise de cette option est **PROPOSÉE** et non encore fixée.
+
+**À ARBITRER :** définition exhaustive de victoire/égalité selon les variantes, cas particulier VS CPU, résultat abandonné, et interface de fin de partie.
+
 ## 7. Identité et palmarès de chaque CYD
+
+![Esquisse de la fiche adverse consultable à la demande](assets/maquettes/fiche-adversaire-320x240.svg)
+
+*Données fictives — esquisse UX, pas une interface validée.*
 
 **DÉCIDÉ :**
 - Chaque console conserve un **palmarès persistant propre à la CYD**, et non un compte joueur.
@@ -138,6 +168,10 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 **À ARBITRER :** comptabilisation des abandons, déconnexions et égalités ; partage du palmarès quand plusieurs humains se servent de la même CYD ; statistiques par mode ; effet futur des parties VS CPU sur les statistiques.
 
 ## 8. Créer / rejoindre : multijoueur humain
+
+![Esquisse de l'écran d'accueil avec création, rejoindre et VS CPU](assets/maquettes/accueil-creer-rejoindre-320x240.svg)
+
+*Disposition graphique encore PROPOSÉE ; les trois accès fonctionnels sont retenus pour la cible V1.0.*
 
 **DÉCIDÉ — expérience fonctionnelle :**
 - L'accueil propose une action volontaire **CRÉER** ou **REJOINDRE** plutôt qu'un appairage automatique imposé.
@@ -195,7 +229,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 ## 10. Expérience à finaliser / questions transverses
 
-- **Fin de manche et de partie :** conditions exactes de victoire et d'égalité, annonce des résultats, revanche.
+- **Fin de manche et de partie :** annonce du résultat et secret optionnel du vainqueur décidés ; conditions exactes de victoire et d'égalité selon les variantes, cas VS CPU et revanche à préciser.
 - **Cas d'erreur :** tir invalide, double sélection, action répétée, perte de liaison, écrans en désaccord ; abandon et expiration d'une session restent à définir.
 - **Lisibilité :** propre flotte versus eaux adverses ; possibilité d'une grande grille unique et d'une bascule immédiate, surtout en 15 × 15.
 - **Audio :** vérifier le matériel réel avant d'exiger des effets sonores.
@@ -217,6 +251,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 | FT-001 | Flottes tactiques : 17 cases au maximum, non obligatoires, doublons autorisés | **DÉCIDÉ** |
 | FT-002 | Escadre : max 5 navires ; flotte libre : sans plafond de nombre distinct | **DÉCIDÉ** |
 | FT-003 | Salves secrètes simultanées ; puissance de tir liée aux navires encore à flot | **DÉCIDÉ** |
+| FIN-001 | Flotte du vainqueur secrète par défaut ; révélation volontaire après le résultat | **DÉCIDÉ** |
 | CN-001 | Choix volontaire CRÉER / REJOINDRE | **DÉCIDÉ** |
 | CN-002 | Étude ESP-NOW favorable sur le papier ; découverte, sécurité et multipaires à vérifier physiquement | **À VÉRIFIER** |
 | CN-003 | Reconnexion d'une partie après coupure radio temporaire en V1.0 ; reprise après reboot reportée | **DÉCIDÉ / REPORTÉ** |
@@ -229,6 +264,8 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 ## 12. Traçabilité et sources
 
+**Visuels sauvegardés :** [MAQUETTES.md](MAQUETTES.md) : 3 SVG historiques recopiés à l'identique depuis le Grenier Geek et 4 esquisses UX reconstituées, en assets locaux. Les images d'ambiance externes et anciens composants interactifs du chat ne sont pas archivés à l'identique.
+
 **Source de départ (27 octobre 2026) :** [IDEE.md du Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md). Les anciennes illustrations sont disponibles dans le dossier [assets](https://github.com/Kharn27/Le-Grenier-Geek/tree/main/plans/I-009-bataille-navale-cyd/assets).
 
 **Synthèse des échanges PO (28 octobre 2026) :**
@@ -239,6 +276,8 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 - Le **VS CPU est validé pour la V1.0 et tous ses modes**, avec trois niveaux de difficulté et des compositions stratégiques adaptées au niveau.
 - La **reconnexion après perte radio temporaire** est un objectif V1.0 ; la reprise d'une partie après extinction/redémarrage est **reportée**.
 - Le PO veut désormais **détailler les règles et les parcours** plutôt qu'ajouter des modes à la cible V1.0, tout en conservant la trace des bonnes idées.
+- **Fin de partie :** le vainqueur décide seul de révéler ou non sa flotte ; les dispositions non découvertes restent secrètes. En cas de destruction réciproque, toutes les cases sont déjà connues.
+- **Conservation visuelle :** les trois maquettes d'origine et quatre reconstitutions UX sont désormais archivées dans le dépôt et référencées depuis la bible.
 
 **Aucune modification n'est apportée au dépôt historique Le Grenier Geek.** Ce document est une référence fonctionnelle vivante, destinée à être amendée avec les décisions du PO et le retour de l'architecte. Il n'autorise aucun développement.
 
