@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.15 — verrouillage ATTAQUE/DÉFENSE pendant l'animation de FEU (LOT1-UX-010) ; décisions antérieures conservées, 29 octobre 2026  
+**Version documentaire :** 0.16 — actualisation documentaire de l'accueil (LOT1-ACC-001/008) et errata rédactionnels de cohérence de la v0.15 (ERR-DOC-001 à 003) ; toutes les décisions antérieures conservées, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -379,7 +379,8 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-UX-010 | Navigation ATTAQUE/DÉFENSE verrouillée pendant l'animation après FEU, demandes ignorées sans mise en attente ; réactivée après révélation simultanée | **DÉCIDÉ (PO, v0.15)** |
 | LOT1-FIN-004 | Verdict sur le champ de bataille puis format compact, sans écran intermédiaire obligatoire | **DÉCIDÉ (PO) / rendu À VÉRIFIER** |
 | V1-UX-010 | Futures salves : commande DÉFENSE de taille fixe ; liste des touches de la dernière salve, naufrage près de sa coordonnée et débordement « +N impacts » | **DÉCIDÉ (PO) / hors LOT 1** |
-| LOT1-ACC-001 | Accueil : JOUER CONTRE CAPITAINE et PALMARÈS | **DÉCIDÉ (PO, v0.12)** |
+| LOT1-ACC-001 | Accueil : JOUER et PALMARÈS, sans accès factice ; choix d'adversaire sous JOUER | **DÉCIDÉ (PO, complété après v0.15)** |
+| LOT1-ACC-008 | Dès le LOT 1, JOUER ouvre la sélection d'adversaire ; seul Capitaine est jouable | **DÉCIDÉ (PO, après v0.15)** |
 | LOT1-ACC-002 | Titre officiel affiché : CYD WARSHIP ; nom du dépôt GitHub inchangé | **DÉCIDÉ (PO)** |
 | LOT1-ACC-003 | Accueil V1.0 fondé sur une scène maritime **fixe**, sans animation obligatoire | **DÉCIDÉ (PO)** |
 | LOT1-ACC-004 | Titre en haut : identifiable, lisible mais discret, sans masquer la scène | **DÉCIDÉ (intention PO) / implantation À CONCEVOIR** |
@@ -465,7 +466,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 **Changement explicite du LOT 1 — v0.12, décision du PO (29 octobre 2026) :**
 - **DÉCIDÉ :** Capitaine remplace Mousse comme adversaire du LOT 1. **Mousse et Amiral sont REPORTÉS** à des lots ultérieurs, sans annulation des principes déjà validés.
 - **Conservé :** partie classique 10 × 10 / cinq navires / 17 cases, mono-tir simultané, parcours combat, revanche, palmarès et règles UX ; les dix principes Capitaine du § 16 sont ceux du premier lot.
-- **Conséquences :** accueil **JOUER CONTRE CAPITAINE**, palmarès actif **VS CAPITAINE**, combats et revanche contre Capitaine.
+- **Conséquences historiques de la v0.12 :** accueil alors libellé **JOUER CONTRE CAPITAINE** (remplacé ultérieurement par **JOUER**, décision LOT1-ACC-001/008) ; palmarès actif **VS CAPITAINE**, combats et revanche contre Capitaine.
 - **Conservé pour lot futur :** Mousse et ses décisions historiques LOT1-CPU-001 à 006 (§ 17). Le préfixe ancien n'implique plus une réalisation dans le LOT 1.
 - **Historique des questions ouvertes en v0.12, désormais résolues :** l'autorisation systématique de révélation a été décidée en v0.13 et le renouvellement aléatoire de la flotte de Capitaine à chaque partie/revanche en v0.14.
 - **Impact documentaire externe :** l'issue graphique #6 et les maquettes anciennes peuvent mentionner Mousse ; leur statut historique est conservé. Le Pilotage devra actualiser le brief d'accueil avant réalisation/validation, sans mission silencieuse.
@@ -491,6 +492,12 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - Navigation de nouveau libre immédiatement après la révélation, sans bascule automatique ni action différée.
 - Cette règle précise LOT1-UX-006/007/008/009 ; la durée et le confort tactile restent à vérifier sur matériel réel.
 - Aucun backlog, mission, développement ou planning engagé par cette mise à jour documentaire.
+
+**Complément documentaire à la v0.15 — DOC-ACC-001 / issue #9 (décisions PO du 29 octobre 2026) :**
+- **DÉCIDÉ — LOT1-ACC-001/008 :** l'accueil comporte **JOUER** et **PALMARÈS** (plaques de même taille dans la maquette retenue). JOUER ouvre dès le LOT 1 un **écran de sélection d'adversaire** où **Capitaine est le seul adversaire jouable** ; Mousse, Amiral et VS CYD sont reportés. La composition et le retour du sous-menu restent **À CONCEVOIR / À ARBITRER** sans accès factice.
+- **Traçabilité graphique :** PR #8 GRAPH-ACC-001 [fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) au commit `50d9e1dabd71725adba50279929694123fde0fda` ; maquette **DESIGN_PREVIEW**, sans validation tactile ni firmware embarqué.
+- **ERR-DOC-001 (§ 14.1), ERR-DOC-002 (§ 14.3), ERR-DOC-003 (§ 14.10.3) : CORRECTIONS RÉDACTIONNELLES DE COHÉRENCE DE LA v0.15**, et non nouvelles décisions PO. Respectivement : seuls Mousse et Amiral sont reportés ; les principes de Capitaine sont au § 16 et les anciennes règles de Mousse au § 17 ; Capitaine vainqueur autorise déjà systématiquement une révélation *facultative* depuis la v0.13 (§ 14.13).
+- **Invariants :** LOT 1 VS Capitaine seul ; dix principes CAP-CPU-001 à 010, confidentialité des flottes, résultats, abandon, palmarès et décisions V1.0 historiques intégralement conservés. La présente actualisation n'approuve ni réalisation technique ni nouveau mode jouable.
 
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
@@ -521,10 +528,10 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 - **DÉCIDÉ :** grille **10 × 10** ; cinq navires classiques (2, 3, 3, 4 et 5 cases), **17 cases** occupées au total.
 - **DÉCIDÉ :** **mono-tir simultané** : une cible par camp, tirs secrets, résolution commune à chaque manche ; **FEU** verrouille irrévocablement le tir du joueur. Les cases déjà attaquées restent visibles et ne peuvent plus être ciblées.
-- **DÉCIDÉ (découpage fonctionnel délégué à l'assistant PO) — LOT1-ACC-001 :** accueil volontairement minimal avec les accès fonctionnels **JOUER CONTRE CAPITAINE** et **PALMARÈS** ; aucun bouton factice vers des fonctions indisponibles.
-- **REPORTÉ à des lots ultérieurs, sans abandon V1.0 :** CRÉER/REJOINDRE et ESP-NOW, difficultés Capitaine/Amiral, familles tactiques, variante classique alternée, grilles 15 × 15 et placement manuel. L'accueil V1.0 s'enrichira lorsque ces expériences seront réellement disponibles.
+- **DÉCIDÉ — LOT1-ACC-001/008 (complément PO après v0.15) :** accueil volontairement minimal avec exactement deux actions **JOUER** et **PALMARÈS**, de même dimension visuelle sur la maquette d'accueil retenue. **JOUER ouvre dès le LOT 1 un écran de sélection d'adversaire** où seul **CAPITAINE** est jouable ; le choix de Capitaine mène au déploiement. **PALMARÈS** reste accessible depuis l'accueil. Aucun bouton factice vers une fonction indisponible.
+- **REPORTÉ à des lots ultérieurs, sans abandon V1.0 :** CRÉER/REJOINDRE et ESP-NOW, adversaires CPU Mousse et Amiral, familles tactiques, variante classique alternée, grilles 15 × 15 et placement manuel. L'accueil V1.0 s'enrichira lorsque ces expériences seront réellement disponibles.
 
-**PROPOSÉ — parcours utilisateur à détailler :** ACCUEIL → DÉPLOIEMENT → COMBAT → RÉSULTAT → INSPECTION / REJOUER / ACCUEIL. L'enchaînement des grandes étapes est cohérent avec les décisions ci-dessous ; les transitions et textes des écrans ne sont pas validés.
+**DÉCIDÉ — début du parcours LOT 1 :** ACCUEIL → **JOUER** → **SÉLECTION D'ADVERSAIRE (Capitaine seul jouable)** → **DÉPLOIEMENT**. **PROPOSÉ — suite du parcours à détailler :** COMBAT → RÉSULTAT → INSPECTION / REJOUER / ACCUEIL. La présentation du sélecteur, le retour à l'accueil et les textes des écrans restent **À CONCEVOIR / À ARBITRER** ; aucune entrée future n'est rendue jouable par cette décision.
 
 ### 14.2 Déploiement et contact des navires — LOT1-PL-001, LOT1-FLT-001
 
@@ -537,7 +544,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **DÉCIDÉ : Capitaine est le CPU du LOT 1** depuis la réorientation v0.12. Ses dix principes sont spécifiés au § 16 : recherche organisée et souple, exploitation locale des touches, révision des hypothèses contradictoires, pistes mémorisées et explorées prioritairement une à une, naufrages ambigus, persévérance et exploitation simple des tailles restantes. Pas d'omniscience, de tir répété ou d'optimisation probabiliste systématique.
 
-**À ARBITRER / À VÉRIFIER avant backlog :** compléments de comportement pour les cas limites non couverts par CAP-CPU-001 à 010, critères d'acceptation observables et difficulté réelle en partie. L'IA Capitaine est conservée au § 17 et REPORTÉE.
+**À ARBITRER / À VÉRIFIER avant backlog :** compléments de comportement pour les cas limites non couverts par CAP-CPU-001 à 010, critères d'acceptation observables et difficulté réelle en partie. Les règles historiques de l'IA Mousse sont conservées au § 17 et leur réalisation est REPORTÉE hors LOT 1. L'IA Capitaine, définie au § 16, est retenue pour le LOT 1.
 
 ### 14.4 Combat, naufrages et résultat — LOT1-CBT-001, LOT1-FIN-001
 
@@ -634,7 +641,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 - Le verdict est d'abord **bien visible**, puis se **réduit à une présentation compacte** qui libère de la place sur la grille, sans jamais perdre l'identification du résultat.
 - Cette présentation ne nécessite **aucune confirmation ni attente obligatoire** ; ses transitions et durées exactes restent à vérifier.
 - Les vues **ATTAQUE** et **DÉFENSE** restent librement consultables après le résultat, sans nouveau tir possible ; **REJOUER** et **ACCUEIL** restent accessibles.
-- La révélation facultative, **sous réserve d'autorisation par Capitaine vainqueur (À ARBITRER, LOT1-FIN-002/005)**, le choix du joueur et la confidentialité (**FIN-001**) sont précisés au § 14.13.
+- La révélation facultative de la flotte de Capitaine, **autorisée systématiquement lorsque Capitaine gagne (DÉCIDÉ en v0.13, LOT1-FIN-002/005)**, reste déclenchée au choix du joueur perdant via **VOIR SA FLOTTE** ; la confidentialité (**FIN-001**) et l'inspection sont détaillées au § 14.13.
 
 **PROPOSÉ (non encore décidé) :** ne pas ajouter de bouton INSPECTER si la bascule ATTAQUE/DÉFENSE permet déjà la consultation post-partie.
 
@@ -701,11 +708,13 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 - Le titre **CYD WARSHIP** apparaît **dans la partie haute**, clairement identifiable mais **visuellement discret** : il ne doit pas écraser le paysage.
 - Les commandes du LOT 1 sont **directement superposées à l'illustration**, dans une partie moins chargée, **de préférence en bas à gauche**. Éviter un panneau massif. Leur visibilité et leur facilité de sélection au stylet restent prioritaires.
 
-**DÉCIDÉ (LOT1-ACC-001, v0.12) — seules actions proposées au lancement du LOT 1 :**
-- **JOUER CONTRE CAPITAINE**
+**DÉCIDÉ (LOT1-ACC-001/008, complément PO après v0.15) — exactement deux actions sur l'accueil du LOT 1 :**
+- **JOUER**
 - **PALMARÈS**
 
-Les actions **CRÉER / REJOINDRE**, les autres adversaires CPU et les variantes de jeu restent prévues dans les périmètres ultérieurs ; elles **ne figurent pas comme actions actives sur l'accueil du LOT 1**.
+**DÉCIDÉ — navigation :** les deux plaques de commande ont la même dimension visuelle dans la maquette d'accueil retenue. **JOUER** ouvre un **écran de sélection d'adversaire dès le LOT 1**. Seul **CAPITAINE** y est jouable ; sa sélection conduit au déploiement classique 10 × 10. **PALMARÈS** reste une consultation depuis l'accueil. Le choix futur « VS autre CYD » relève de ce niveau de sélection, **sans activation ESP-NOW au LOT 1**.
+
+**À CONCEVOIR / À ARBITRER :** composition et retour de l'écran de sélection ; visibilité éventuelle d'adversaires futurs en tant qu'informations non interactives. Aucun bouton factice n'ouvre Mousse, Amiral, CRÉER / REJOINDRE, les variantes de jeu ou le multijoueur, tous **REPORTÉS hors LOT 1**. L'accueil n'expose jamais ces fonctions comme jouables.
 
 **PROPOSÉ par le PO, non encore approuvé comme composition finale :**
 - Un **avion en feu**, en chute vers la mer à proximité du navire principal.
@@ -716,7 +725,7 @@ Les actions **CRÉER / REJOINDRE**, les autres adversaires CPU et les variantes 
 
 ### 15.3 Frontière entre illustration et jeu
 
-Les images de bataille précédemment produites sont des **études narratives historiques**, non des maquettes d'accueil validées et non des assets firmware. Leur retrait de l'arborescence actuelle est déjà tracé dans [MAQUETTES.md](MAQUETTES.md) et dans l'historique Git. **Ne pas les réintroduire automatiquement comme fichiers actifs.** Le graphiste doit composer une véritable **maquette d'accueil comprenant titre et deux actions**, plutôt que superposer des boutons sans réflexion sur une ancienne image.
+Les images de bataille précédemment produites sont des **études narratives historiques**, non des maquettes d'accueil validées et non des assets firmware. Leur retrait de l'arborescence actuelle est déjà tracé dans [MAQUETTES.md](MAQUETTES.md) et dans l'historique Git. **Ne pas les réintroduire automatiquement comme fichiers actifs.** La mission GRAPH-ACC-001 a livré une **maquette d'accueil complète comprenant titre et deux actions**, retenue par le PO au **stade de conception** via la [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) (fusion `50d9e1dabd71725adba50279929694123fde0fda`). Cette acceptation artistique ne constitue ni une validation sur CYD réelle ni une intégration firmware.
 
 La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'autorise pas la révélation des positions secrètes adverses **pendant le combat**.
 
@@ -724,11 +733,11 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **DÉCIDÉ :** le PO a demandé de documenter ces intentions avant de confier au **Pilotage** la coordination de la prochaine maquette avec le graphiste. Le Pilotage garde la responsabilité des missions graphiques, des revues et des fusions.
 
-**PROPOSÉ — livrable de revue artistique :** une première composition unique, complète, **320 × 240**, montrée aussi en agrandissement ×4 sans interpolation ; les variations ou travaux additionnels dépendront du retour du PO. Pas de production de tous les autres écrans, de sprites définitifs ni de développement firmware à cette étape.
+**PROPOSÉ à la v0.8 / réalisé ensuite pour revue de conception :** une première composition unique, complète, **320 × 240**, avec agrandissement ×4 sans interpolation et source SVG intégrant un fond raster. La maquette retenue est versionnée dans `design/graph-acc-001/` après fusion de la PR #8. Pas de validation matérielle des zones tactiles, d'autres écrans, de sprites runtime ni de développement firmware.
 
-**À ARBITRER par le PO :** politique générale de conservation des ressources graphiques pour les futurs travaux. Le retrait ponctuel des **17 fichiers historiques**, autorisé le 29 octobre 2026, n'approuve pas automatiquement cette politique et ne concerne aucun asset actif ni la mission d'accueil LOT 1 en cours.
+**À ARBITRER par le PO :** politique générale de conservation des ressources graphiques pour les futurs travaux. Le retrait ponctuel des **17 fichiers historiques**, autorisé le 29 octobre 2026, n'approuve pas automatiquement cette politique et ne vaut autorisation de supprimer aucun asset actif ; la mission d'accueil LOT 1 a été livrée au stade maquette de conception.
 
-**Statut graphique général :** **AUCUNE CHARTE NI MAQUETTE D'ACCUEIL VALIDÉE POUR PRODUCTION**. Les décisions ci-dessus sont des intentions produit approuvées, pas une approbation anticipée du rendu du graphiste.
+**Statut graphique général :** **maquette d'accueil retenue par le PO au stade DESIGN_PREVIEW**, dans la PR #8 fusionnée ; **ON_DEVICE_UNVERIFIED**. Aucune charte visuelle globale, aucun format runtime/firmware et aucune ergonomie tactile réelle n'ont été validés par cette livraison. Les autres écrans restent à concevoir et à vérifier.
 
 ### Traçabilité de la v0.8
 
