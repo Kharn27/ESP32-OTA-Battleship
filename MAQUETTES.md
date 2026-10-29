@@ -5,7 +5,7 @@
 | Classe | Statut | Contenu / portée |
 | --- | --- | --- |
 | **Références graphiques approuvées pour production** | **AUCUNE** | Ni charte ni écran final validés ; ne pas convertir directement les archives en assets firmware |
-| **Accueil CYD WARSHIP — cadrage validé, maquette à produire** | **DÉCIDÉ (intentions PO) / À CONCEVOIR (visuel)** | Titre du jeu, scène fixe, riposte manquée, commandes en bas à gauche ; voir [Bible §15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08) |
+| **Accueil CYD WARSHIP — cadrage validé, mission artistique en cours** | **DÉCIDÉ (intentions PO) / EN COURS (visuel non validé)** | Titre du jeu, scène fixe, riposte manquée, commandes en bas à gauche ; voir [Bible §15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08) |
 | **Scènes narratives du 29 octobre 2026** | **HISTORIQUE_GIT — NON_VALIDEE_PO — NON_RUNTIME** | Retirées de `main` sur décision PO ; [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) et [dossier historique figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours) |
 | **Archives visuelles A/B/C** | **HISTORIQUE_GIT — NON RETENUES** | [Habillages A/B/C](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-themes/README.md), [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) |
 | **Archives d'agencements D/E/F** | **HISTORIQUE_GIT — NON RETENUES** | [Agencements D/E/F](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-layouts/README.md), [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) |
@@ -86,7 +86,7 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 - Un **indicateur intelligent DÉFENSE** montre le tir manqué de façon discrète, un touché de façon visible et un coulé de façon renforcée. Les dégâts non consultés maintiennent une alerte jusqu'à l'ouverture de DÉFENSE.
 - Le **LOT 1** cible une bataille classique contre **Mousse sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
 
-**Statut graphique : À CONCEVOIR / EN CONCEPTION pour l'accueil LOT 1.** Les anciens SVG conservés dans Git et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de la nouvelle disposition. La mission artistique de l'accueil LOT 1 est déjà en cours ; le présent nettoyage ne la relance ni ne l'élargit. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
+**Statut graphique des écrans de combat : À CONCEVOIR.** Les anciens SVG conservés dans Git et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de la nouvelle disposition. La mission artistique distincte de l'**accueil LOT 1** est déjà en cours ; le présent nettoyage ne la relance ni ne l'élargit. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
 
 ### Actualisation documentaire du 29 octobre 2026 — LOT 1
 
