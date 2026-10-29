@@ -193,7 +193,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 **Cas de l'égalité par destruction réciproque :** les deux flottes sont alors entièrement touchées et leurs positions déjà connues : un bouton de « révélation » symétrique reste envisageable **par analogie**, mais ne fournirait aucun nouveau renseignement. La présentation précise de cette option est **PROPOSÉE** et non encore fixée.
 
-**DÉCIDÉ pour le LOT 1 VS Mousse (cf. § 14) :** résolution des deux tirs avant le résultat ; victoire, défaite et match nul par destruction réciproque ; révélation facultative de la flotte de Mousse vainqueur à visée pédagogique ; inspection libre après bataille. **À ARBITRER :** conditions des autres variantes et détails graphiques des écrans de résultat. L'**abandon volontaire** est traité sans résultat comptabilisé (§ 7).
+**DÉCIDÉ pour le LOT 1 VS Capitaine (cf. § 14) :** résolution des deux tirs avant le résultat ; victoire, défaite et match nul par destruction réciproque ; inspection libre après bataille. **À ARBITRER :** la révélation facultative de la flotte de Capitaine vainqueur, autorisée automatiquement uniquement dans le cadrage antérieur VS Mousse. **À ARBITRER :** conditions des autres variantes et détails graphiques des écrans de résultat. L'**abandon volontaire** est traité sans résultat comptabilisé (§ 7).
 
 ## 7. Identité et palmarès de chaque CYD
 
@@ -487,9 +487,9 @@ Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idé
 
 ### Prochain chantier de réflexion produit (sans mission de développement)
 
-Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identifier puis fermer les derniers **arbitrages fonctionnels bloquants**, particulièrement les cas limites de Mousse, et consolider les **parcours et critères d'acceptation observables**. Les travaux artistiques déjà lancés conservent leur statut sans validation implicite. **Aucune nouvelle mission technique, graphique, issue ou planification n'est créée par cette mise à jour.**
+Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identifier puis fermer les derniers **arbitrages fonctionnels bloquants**, particulièrement les cas limites de Capitaine et les règles propres à l'adversaire, et consolider les **parcours et critères d'acceptation observables**. Les travaux artistiques déjà lancés conservent leur statut sans validation implicite. **Aucune nouvelle mission technique, graphique, issue ou planification n'est créée par cette mise à jour.**
 
-## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Capitaine (consolidation v0.7)
+## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Capitaine (changement v0.12, socle v0.7 conservé)
 
 **Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage fonctionnel non terminé.** La présente section reprend les décisions du PO validées dans la conversation du 29 octobre 2026. Les maquettes et critères d'acceptation définitifs restent à préparer ; la Bible complète n'est pas validée en bloc.
 
@@ -563,7 +563,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 ### 14.8 Palmarès, abandon et seuil d'engagement — LOT1-STAT-001, LOT1-ABD-001
 
 - **DÉCIDÉ — LOT1-STAT-001 :** depuis l'accueil, **PALMARÈS** permet de voir, sans consultation obligatoire, le bilan **VS CAPITAINE** : **parties jouées, victoires, défaites, matchs nuls**, et le **compteur global unique de forfaits volontaires**. Ces compteurs sont **persistants sur la CYD**, pas sur un compte personnel.
-- **DÉCIDÉ :** une victoire, défaite ou égalité définitive incrémente **exactement une** partie dans la catégorie VS CAPITAINE et **exactement une** catégorie de résultat ; les forfaits ne sont pas des parties jouées. Les quatre catégories V1.0 **VS HUMAIN / CAPITAINE / CAPITAINE / AMIRAL** restent décidées, mais seul le combat VS CAPITAINE est disponible dans ce lot.
+- **DÉCIDÉ :** une victoire, défaite ou égalité définitive incrémente **exactement une** partie dans la catégorie VS CAPITAINE et **exactement une** catégorie de résultat ; les forfaits ne sont pas des parties jouées. Les quatre catégories V1.0 **VS HUMAIN / MOUSSE / CAPITAINE / AMIRAL** restent décidées, mais seul le combat VS CAPITAINE est disponible dans ce lot.
 - **DÉCIDÉ — LOT1-ABD-001 :** **PRÊT est le seuil d'engagement.** Avant PRÊT, quitter le déploiement ne comptabilise **ni forfait ni partie**. Après PRÊT et avant le résultat définitif, une demande d'abandon affiche **CONTINUER / ABANDONNER**. CONTINUER préserve l'état et les compteurs ; ABANDONNER confirmé ajoute **1** au **compteur global de forfaits**, sans inscrire la bataille au palmarès VS CAPITAINE. Après résultat définitif, retour à l'accueil sans forfait supplémentaire.
 - **DÉCIDÉ :** un incident technique, une extinction ou une coupure imprévue ne valent pas automatiquement abandon volontaire (BN-STAT-003). La reprise après redémarrage reste **REPORTÉE** dans le cadre V1.0.
 
@@ -577,7 +577,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**DÉCIDÉ — v0.12 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. **PROPOSÉ — prochaine étape :** examiner **ce qui reste à trancher dans le LOT 1** et consolider les critères d'acceptation avant toute création de backlog ; priorité aux cas limites de Capitaine et à l'observabilité de ses décisions. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
+**DÉCIDÉ — v0.12 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. **PROPOSÉ — prochaine étape :** consolider les critères d'acceptation de Capitaine et fermer les deux règles propres au CPU encore ouvertes (autorisation de révélation, renouvellement de flotte), puis les derniers cas limites tactiles avant backlog. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
 
 ### 14.10 Parcours tactile et visuel d'une manche contre Capitaine — décisions PO du 29/10/2026
 
@@ -612,7 +612,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 - Le verdict est d'abord **bien visible**, puis se **réduit à une présentation compacte** qui libère de la place sur la grille, sans jamais perdre l'identification du résultat.
 - Cette présentation ne nécessite **aucune confirmation ni attente obligatoire** ; ses transitions et durées exactes restent à vérifier.
 - Les vues **ATTAQUE** et **DÉFENSE** restent librement consultables après le résultat, sans nouveau tir possible ; **REJOUER** et **ACCUEIL** restent accessibles.
-- La révélation facultative autorisée par Capitaine vainqueur (**LOT1-FIN-002/005**), le choix du joueur et la confidentialité (**FIN-001**) sont précisés au § 14.13.
+- La révélation facultative, **sous réserve d'autorisation par Capitaine vainqueur (À ARBITRER, LOT1-FIN-002/005)**, le choix du joueur et la confidentialité (**FIN-001**) sont précisés au § 14.13.
 
 **PROPOSÉ (non encore décidé) :** ne pas ajouter de bouton INSPECTER si la bascule ATTAQUE/DÉFENSE permet déjà la consultation post-partie.
 
@@ -637,7 +637,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER / À CONCEVOIR :** durées d'animation et de mise en avant du verdict, emplacement du résumé DÉFENSE, codes couleur, icônes, transitions, lisibilité au stylet et comportement observable sur le matériel réel. Les anciennes maquettes restent non normatives. Aucune mission graphique ni développement n'est engagé par cette section.
 
-### 14.13 Révélation volontaire et inspection pédagogique de Capitaine — décisions PO du 29/10/2026 (LOT1-FIN-002/005)
+### 14.13 Révélation volontaire et inspection pédagogique — décisions v0.10, adaptation Capitaine à arbitrer en v0.12 (LOT1-FIN-002/005)
 
 **Statut : DÉCIDÉ pour le parcours de consultation après autorisation ; autorisation automatique de Capitaine À ARBITRER. Graphisme À CONCEVOIR / À VÉRIFIER sur CYD 320 × 240.** Cette section complète FIN-001, LOT1-FIN-002/003/004 et ne modifie ni le résultat ni le palmarès.
 
@@ -658,7 +658,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À CONCEVOIR / À VÉRIFIER :** lisibilité des silhouettes de navires sous les marques de tir et des cases encore inconnues, taille et emplacement des commandes sur **CYD tactile 320 × 240**, formulation précise du basculement AFFICHER/MASQUER, coexistence du verdict compact et des commandes REJOUER / ACCUEIL. Aucun code couleur, dessin, durée ou maquette de production n'est validé par la présente décision.
 
-**Traçabilité historique v0.10 (VS Mousse) :** arbitrages successifs du PO dans la conversation de cadrage du 29 octobre 2026 : révélation sur ATTAQUE (option A) ; affichage/masquage réversible (option B) ; état mémorisé entre les deux grilles ; présentation discrète non modale (option A) ; condition préalable **MONTRER MA FLOTTE** du vainqueur ; Mousse autorise toujours s'il gagne (décision historique reportée) ; inspection visuelle simple (option A) ; absence de commande MONTRER MA FLOTTE lorsqu'un humain gagne en solo. Le cadrage de l'IA de Capitaine face aux contacts et fausses pistes reste ouvert ; un arbitrage complémentaire LOT1-CPU-006 et la démarche de référence Capitaine ont depuis été consignés en v0.11 (voir § 14.3 et § 16).
+**Traçabilité historique v0.10 (VS Mousse) :** révélation sur ATTAQUE, affichage/masquage réversible, état mémorisé entre les grilles, proposition discrète non modale, autorisation obligatoire et inspection visuelle simple. Mousse autorise toujours s'il gagne (décision maintenue, réalisation reportée) ; absence de commande MONTRER MA FLOTTE après victoire humaine solo. Le LOT 1 v0.12 retient désormais Capitaine (§ 14.3 et § 16) ; sa politique d'autorisation reste ouverte, tandis que les règles propres à Mousse sont conservées au § 17.
 
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
