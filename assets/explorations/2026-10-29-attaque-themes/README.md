@@ -33,3 +33,7 @@ Un deuxième axe d'étude compare **différentes dispositions de l'écran** (gri
 - Voir [les notes artistiques](NOTES_ARTISTIQUES.md) pour intention, palettes, animations et compromis.
 
 **Aucune charte graphique validée. Aucune modification du dépôt d'idées Le-Grenier-Geek.**
+
+## Exploration complémentaire des agencements
+
+À la demande du PO, les [trois variantes D/E/F](../2026-10-29-attaque-layouts/README.md) comparent **la disposition** des zones tactiles indépendamment des univers de couleur A/B/C. Les six pistes demeurent **NON VALIDÉES**.

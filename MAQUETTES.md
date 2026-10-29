@@ -88,3 +88,9 @@ Le dossier [`assets/explorations/2026-10-29-attaque-themes/`](assets/exploration
 **Retour PO exploratoire** : les trois pistes plaisent et pourraient constituer des **thèmes interchangeables** ; **ni choix de thème ni fonctionnalité de changement de thème validés**. Une étude distincte d'agencements (grille centrale, navigation latérale, commandes basses) est en cours, sans modification des règles.
 
 Ces sources SVG sont **des previews PC 320 × 240, non des assets runtime et non testées sur CYD physique**. L'intégration au produit nécessite une revue du Pilotage, une validation PO et des essais matériels.
+
+## G. Explorations d'agencements ATTAQUE D/E/F — 29 octobre 2026 (NON VALIDÉES)
+
+Le dossier [`assets/explorations/2026-10-29-attaque-layouts/`](assets/explorations/2026-10-29-attaque-layouts/README.md) documente **trois autres dispositions** indépendantes des thèmes A/B/C : **D grille centrale**, **E navigation latérale**, **F commandes basses**. Les trois SVG **320 × 240** sont visibles dans GitHub. Ils conservent les contraintes de `LOT1-UX-001/002/003`, le classique 10 × 10 contre Mousse, la sélection E6, les impacts antérieurs C3 et H8 et l'alerte de DÉFENSE non consultée.
+
+**Statut : DESIGN_PREVIEW, NON VALIDÉ PO et ON_DEVICE_UNVERIFIED.** Les PNG/zooms locaux ne sont pas versionnés ; les trois sources SVG et leurs notes le sont. Aucun choix d'agencement, de thème interchangeable ou de rendu technique n'est validé.
