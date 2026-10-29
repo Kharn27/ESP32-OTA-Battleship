@@ -9,17 +9,17 @@
 
 ## 1. Promesse et priorité de conception
 
-Créer un jeu de bataille navale familial, tactique et rétro, d'abord sur **deux ESP32 CYD classiques**, un par joueur, avec sa propre flotte secrète et des interactions au stylet.
+Créer un jeu de bataille navale familial, tactile et tactique sur ESP32 CYD classique. Le **LOT 1** commence contre Mousse sur une seule CYD ; la cible multijoueur humain utilise **deux ESP32 CYD**, un par joueur, avec une flotte secrète par console. **Intention artistique décidée par le PO :** jeu indépendant contemporain en pixel art riche, expressif et immersif, avec priorité à la lisibilité sur écran natif 320 × 240. **Charte visuelle définitive non validée.**
 
 **DÉCIDÉ — principes d'expérience :**
 - Le **gameplay passe avant le spectacle** : fluide, compréhensible sans se poser de questions, avec des retours immédiats.
-- Combiner stratégie familiale facile d'accès et ambiance de petit poste de commandement naval rétro.
+- Associer une stratégie familiale facile d'accès à une ambiance maritime vivante et expressive, sans imposer l'austérité d'un terminal militaire ou d'un tableau de bord technique. Les choix précis de palette, sprites et composition restent à arbitrer.
 - Les animations, le sonar et les éventuels sons doivent renforcer le suspense **sans ralentir** les actions.
 - Le jeu doit rester agréable à deux enfants comme à des joueurs qui souhaitent approfondir la stratégie.
 
 **PROPOSÉ :** retour visuel immédiat à la sélection, à la validation et à la révélation ; animations courtes et discrètes plutôt que séquences imposées.
 
-**Références graphiques :** [galerie des sept maquettes SVG 320 × 240](MAQUETTES.md), avec statut et provenance de chacune. Les visuels ne sont ni des captures de firmware ni des spécifications graphiques approuvées.
+**Références et explorations graphiques :** [index des maquettes, archives et scènes narratives](MAQUETTES.md), comprenant sept SVG UX historiques, six explorations A–F non retenues et deux illustrations d'ambiance avec originaux et aperçus 320 × 240 versionnés. **Aucune charte ni interface visuelle de production n'a été approuvée par le PO.** Les images ne sont ni des captures de firmware ni des représentations normatives des informations visibles en jeu.
 
 ## 2. Cadre matériel et frontières
 
