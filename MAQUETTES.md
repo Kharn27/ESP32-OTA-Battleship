@@ -19,7 +19,7 @@
 
 **Cap artistique recherché après revue PO :** jeu indépendant contemporain en pixel art **riche, expressif, immersif**, avec une vraie personnalité maritime. Il s'agit d'une **intention**, pas d'une charte validée. La proposition de thèmes interchangeables **n'est pas une fonctionnalité décidée**.
 
-Les décisions de gameplay du LOT 1 restent inchangées dans [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) : classique 10 × 10 VS Mousse, mono-tir simultané, FEU irrévocable, aucune bascule automatique, alerte DÉFENSE persistante jusqu'à consultation, positions adverses cachées.
+Les règles du gameplay LOT 1 sont conservées, mais **l'adversaire a changé en v0.12 : VS Capitaine** (Mousse et Amiral sont reportés). Voir [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) : classique 10 × 10 VS Capitaine, mono-tir simultané, FEU irrévocable, aucune bascule automatique, alerte DÉFENSE persistante jusqu'à consultation, positions adverses cachées.
 
 ---
 
@@ -84,13 +84,13 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 - En combat, **une seule grande grille à la fois** : ATTAQUE (pour cibler) ou DÉFENSE (pour inspecter les navires et impacts). Bascule volontaire, immédiate.
 - La résolution simultanée des tirs **ne provoque aucune bascule automatique**.
 - Un **indicateur intelligent DÉFENSE** montre le tir manqué de façon discrète, un touché de façon visible et un coulé de façon renforcée. Les dégâts non consultés maintiennent une alerte jusqu'à l'ouverture de DÉFENSE.
-- Le **LOT 1** cible une bataille classique contre **Mousse sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
+- Le **LOT 1** cible désormais une bataille classique contre **Capitaine sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
 
 **Statut graphique des écrans de combat : À CONCEVOIR.** Les anciens SVG conservés dans Git et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de la nouvelle disposition. La mission artistique distincte de l'**accueil LOT 1** est déjà en cours ; le présent nettoyage ne la relance ni ne l'élargit. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
 
 ### Actualisation documentaire du 29 octobre 2026 — LOT 1
 
-**DÉCIDÉ côté fonctionnel dans la Bible v0.7 :** fin de partie après résolution des deux tirs, match nul par destruction mutuelle, REJOUER avec conservation par défaut de la formation du joueur, nouvelle flotte aléatoire de Mousse, palmarès VS Mousse et abandon après PRÊT, IA débutante mémorisant ses pistes, navires autorisés à se toucher et épaves non identifiées, inspection libre post-partie et gravité maximale de l'indicateur DÉFENSE. L'accueil minimal du LOT 1 affiche seulement JOUER CONTRE MOUSSE et PALMARÈS.
+**HISTORIQUE — cadrage de la Bible v0.7, remplacé quant à l'adversaire en v0.12 :** fin de partie après résolution des deux tirs, match nul par destruction mutuelle, REJOUER avec conservation par défaut de la formation du joueur, nouvelle flotte aléatoire de Mousse, palmarès VS Mousse et abandon après PRÊT, IA débutante mémorisant ses pistes, navires autorisés à se toucher et épaves non identifiées, inspection libre post-partie et gravité maximale de l'indicateur DÉFENSE. L'accueil minimal du LOT 1 affiche seulement JOUER CONTRE MOUSSE et PALMARÈS.
 
 **Statut visuel inchangé :** les sept SVG restent des esquisses historiques ou reconstituées **non validées graphiquement**, consultables dans Git uniquement ; aucun ne prétend représenter toutes les nouvelles règles. La future charte et les nouveaux écrans 320 × 240 restent **À CONCEVOIR / À VÉRIFIER**, sans élargir la mission d'accueil LOT 1 en cours.
 
@@ -127,10 +127,12 @@ Le [dossier D/E/F au commit figé](https://github.com/Kharn27/ESP32-OTA-Battlesh
 
 ## H. CYD WARSHIP — écran d'accueil à concevoir (cadrage PO du 29 octobre 2026)
 
-**DÉCIDÉ — besoins, non maquette approuvée :** titre **CYD WARSHIP** en partie haute, visible mais discret ; scène **fixe** au coucher de soleil, navire du joueur au premier plan, navire ennemi lointain endommagé, tir vers l'horizon et **riposte ratée (gerbe d'eau) près du navire principal**. Commandes **JOUER CONTRE MOUSSE** et **PALMARÈS** superposées à l'image, de préférence dans une zone calme **en bas à gauche**.
+**DÉCIDÉ — besoins, non maquette approuvée :** titre **CYD WARSHIP** en partie haute, visible mais discret ; scène **fixe** au coucher de soleil, navire du joueur au premier plan, navire ennemi lointain endommagé, tir vers l'horizon et **riposte ratée (gerbe d'eau) près du navire principal**. Commandes **JOUER CONTRE CAPITAINE** et **PALMARÈS** superposées à l'image, de préférence dans une zone calme **en bas à gauche**.
 
 **PROPOSÉ / À VÉRIFIER :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil ; simplicité, équilibre et lisibilité à 320 × 240 priment. La position exacte des éléments et le dessin restent ouverts.
 
 **EN COURS — Pilotage / Graphiste :** première proposition complète d'accueil adaptée à la CYD classique, à soumettre au PO **avant toute validation ou classement comme référence active**. Mission existante, ni relancée ni étendue par le nettoyage. Les anciennes images supprimées de `main` restent accessibles dans Git ; aucune exploration rejetée ne doit être réintroduite automatiquement.
 
 **Référence détaillée :** [BIBLE_PRODUIT.md, § 15](BIBLE_PRODUIT.md). Aucun autre écran, thème ou code n'est demandé par ce cadrage.
+
+**Actualisation v0.12 — 29/10/2026 :** le PO a choisi **Capitaine pour le LOT 1** et reporté **Mousse et Amiral**. Les descriptions d'anciens SVG explicitement figés « VS Mousse » ci-dessus décrivent **l'historique de ces créations**, pas le périmètre de production actuel. Aucune maquette n'est approuvée par cette correction. Le brief graphique de l'accueil dans l'issue #6 requiert une mise en cohérence par le Pilotage avant exploitation.
