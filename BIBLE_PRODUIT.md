@@ -520,7 +520,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 ## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Capitaine (changement v0.12, socle v0.7 conservé)
 
-**Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage fonctionnel non terminé.** La présente section reprend les décisions du PO validées dans la conversation du 29 octobre 2026. Les maquettes et critères d'acceptation définitifs restent à préparer ; la Bible complète n'est pas validée en bloc.
+**Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage fonctionnel non terminé.** La présente section reprend les décisions du PO validées dans la conversation du 29 octobre 2026. La maquette d'accueil a été retenue au stade de conception (PR #8) ; les autres maquettes et les critères d'acceptation définitifs restent à préparer. La Bible complète n'est pas validée en bloc.
 
 ### 14.1 Objectif et découpage — LOT1-001, LOT1-ACC-001
 
@@ -691,7 +691,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
-Cette section complète la Bible **sans modifier les décisions de gameplay ni le découpage du LOT 1 définis au § 14**. Elle explicite les choix du PO pour une future maquette de l'accueil. La validation d'un concept **ne vaut pas validation de son illustration finale**.
+Cette section complète la Bible **sans modifier les décisions de gameplay ni le découpage du LOT 1 définis au § 14**. Elle retrace le cadrage initial de la maquette d'accueil (v0.8) et ses suites documentées ci-dessous. La validation initiale du concept **ne valait pas validation de l'illustration** ; celle-ci a ensuite été retenue au stade de conception (PR #8), sans validation firmware ni matérielle.
 
 ### 15.1 Nom du jeu — LOT1-ACC-002
 
@@ -716,12 +716,12 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 
 **À CONCEVOIR / À ARBITRER :** composition et retour de l'écran de sélection ; visibilité éventuelle d'adversaires futurs en tant qu'informations non interactives. Aucun bouton factice n'ouvre Mousse, Amiral, CRÉER / REJOINDRE, les variantes de jeu ou le multijoueur, tous **REPORTÉS hors LOT 1**. L'accueil n'expose jamais ces fonctions comme jouables.
 
-**PROPOSÉ par le PO, non encore approuvé comme composition finale :**
+**PROPOSÉ lors du cadrage initial v0.8 — options facultatives, non imposées à la composition finalement retenue :**
 - Un **avion en feu**, en chute vers la mer à proximité du navire principal.
 - Une **escadrille en silhouettes** dans le ciel lointain, idéalement devant les couleurs du coucher de soleil.
 - Réduire la quantité et le détail des avions si leur lisibilité ou la sobriété de la composition l'exigent.
 
-**À VÉRIFIER / À CONCEVOIR :** hiérarchie entre titre, bateaux, riposte, aéronefs et commandes ; lisibilité de la scène et des textes à **320 × 240 natifs** ; zones tactiles adaptées au stylet résistif ; contraste des boutons sur leur arrière-plan. Aucun emplacement exact, police, palette ou sprite n'est validé à ce stade.
+**DESIGN_PREVIEW retenu / À VÉRIFIER pour l'intégration :** composition, titre, boutons et rendu à **320 × 240 natifs** sont fixés dans la maquette approuvée par le PO (PR #8), **sans constituer un contrat firmware**. Lisibilité et contraste sur l'écran CYD réel, géométrie des zones tactiles au stylet résistif et format d'asset embarqué restent **À VÉRIFIER**. Les éléments aériens du cadrage initial demeurent facultatifs.
 
 ### 15.3 Frontière entre illustration et jeu
 
