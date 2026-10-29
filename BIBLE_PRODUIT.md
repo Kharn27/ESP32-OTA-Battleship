@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.13 — autorisation systématique de révélation par Capitaine vainqueur ; LOT 1 VS Capitaine v0.12 et acquis antérieurs conservés, 29 octobre 2026  
+**Version documentaire :** 0.14 — nouvelle flotte aléatoire de Capitaine pour chaque partie et revanche (LOT1-REV-003) ; règles et arbitrages antérieurs conservés, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -359,7 +359,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-FIN-005 | Le vainqueur humain choisit ; Mousse (lot futur) et Capitaine (LOT 1) autorisent toujours leur flotte après une victoire | **DÉCIDÉ (PO, v0.13)** |
 | LOT1-REV-001 | REJOUER contre Capitaine dans le LOT 1 | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-REV-002 | Revanche : ancien placement du joueur affiché par défaut, AUTO ou PRÊT | **DÉCIDÉ** |
-| LOT1-REV-003 | Renouvellement aléatoire décidé pour Mousse (reporté) ; Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
+| LOT1-REV-003 | Capitaine reçoit une nouvelle flotte aléatoire valide à chaque nouvelle partie et revanche, sans reconduction volontaire de la disposition précédente | **DÉCIDÉ (PO, v0.14)** |
 | LOT1-STAT-001 | Palmarès VS Capitaine et compteur global dès le LOT 1 | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-CPU-002 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
 | LOT1-CPU-003 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
@@ -466,7 +466,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - **Conservé :** partie classique 10 × 10 / cinq navires / 17 cases, mono-tir simultané, parcours combat, revanche, palmarès et règles UX ; les dix principes Capitaine du § 16 sont ceux du premier lot.
 - **Conséquences :** accueil **JOUER CONTRE CAPITAINE**, palmarès actif **VS CAPITAINE**, combats et revanche contre Capitaine.
 - **Conservé pour lot futur :** Mousse et ses décisions historiques LOT1-CPU-001 à 006 (§ 17). Le préfixe ancien n'implique plus une réalisation dans le LOT 1.
-- **À ARBITRER (non transféré automatiquement) :** Capitaine autorise-t-il systématiquement la révélation de sa flotte après victoire ? Regénère-t-il systématiquement sa flotte à chaque revanche ?
+- **Historique des questions ouvertes en v0.12, désormais résolues :** l'autorisation systématique de révélation a été décidée en v0.13 et le renouvellement aléatoire de la flotte de Capitaine à chaque partie/revanche en v0.14.
 - **Impact documentaire externe :** l'issue graphique #6 et les maquettes anciennes peuvent mentionner Mousse ; leur statut historique est conservé. Le Pilotage devra actualiser le brief d'accueil avant réalisation/validation, sans mission silencieuse.
 - **Aucune issue, nouvelle mission, implémentation ou planification lancée par cette correction.**
 
@@ -475,7 +475,14 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - Après le verdict DÉFAITE, **VOIR SA FLOTTE** est proposé discrètement, sans dialogue ni affichage obligatoire ; les cinq navires sont affichables et masquables à volonté sur ATTAQUE, avec marques des tirs conservées et état mémorisé après navigation vers DÉFENSE.
 - Aucune fiche, analyse automatique ou modification de résultat et statistiques. Aucun MONTRER MA FLOTTE après victoire du joueur contre CPU et aucune commande de révélation nécessaire en cas de match nul.
 - L'autorisation humaine en multijoueur reste volontaire ; la nouvelle décision ne la remplace pas.
-- **Toujours À ARBITRER :** renouvellement de la flotte de Capitaine lors d'une revanche. Aucune autre décision nouvelle.
+- **Question encore ouverte lors de la v0.13, désormais résolue en v0.14 :** renouvellement de la flotte de Capitaine à chaque partie et revanche (voir ci-dessous).
+
+**Arbitrage LOT1-REV-003 — DÉCIDÉ par le PO le 29 octobre 2026 (v0.14) :**
+- Pour **chaque nouvelle partie et chaque revanche** contre Capitaine, sa flotte classique de cinq navires est **aléatoirement repositionnée** dans une disposition secrète et valide.
+- Capitaine **ne choisit pas de conserver volontairement sa formation précédente**. Une égalité fortuite entre deux dispositions reste possible, sans être assimilée à une réutilisation délibérée.
+- En revanche, **le joueur humain conserve par défaut sa propre formation précédente** et peut choisir AUTO ou PRÊT, comme déjà décidé (LOT1-REV-002). Aucun changement des règles de contact, du mode de combat ou du palmarès.
+- Les arbitrages spécifiques Mousse restent conservés pour un lot ultérieur ; la présente décision n'ajoute pas Mousse ni Amiral au LOT 1.
+- **Aucun backlog, nouvelle mission, développement ou planning lancé.**
 
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
@@ -562,10 +569,10 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 - **DÉCIDÉ — LOT1-REV-001 (v0.12) :** après chaque résultat, **REJOUER** lance une nouvelle bataille contre **Capitaine**, en **classique mono-tir simultané**, sans repasser par la sélection des adversaires ; retour obligatoire au déploiement.
 - **DÉCIDÉ — LOT1-REV-002 :** lors d'une revanche, le déploiement affiche **par défaut la disposition précédente du joueur**. **PRÊT** la conserve ; **AUTO** permet de générer une autre disposition autant de fois que voulu. Aucun placement manuel dans le LOT 1.
-- **À ARBITRER pour Capitaine — LOT1-REV-003 :** une nouvelle flotte aléatoire valide après chaque revanche était décidée pour Mousse, maintenant reporté. Capitaine dispose toujours d'une flotte classique valide et secrète ; son éventuel renouvellement systématique demande une décision.
+- **DÉCIDÉ — LOT1-REV-003 (v0.14) :** pour **chaque nouvelle partie et chaque revanche**, Capitaine reçoit une **nouvelle disposition aléatoire valide et secrète** de ses cinq navires. Il ne conserve pas volontairement sa formation précédente ; une coïncidence aléatoire entre deux placements reste possible. La règle historiquement décidée pour Mousse est conservée pour son lot futur.
 - **DÉCIDÉ :** nouveaux historiques de tirs vierges et tous les navires intacts pour les deux camps ; le palmarès de la partie précédente demeure conservé.
 
-**Critère d'acceptation proposé :** après résultat, REJOUER revient au déploiement avec l'ancienne formation du joueur, AUTO/PRÊT et une flotte Capitaine valide et secrète ; le renouvellement de cette dernière est à arbitrer.
+**Critère d'acceptation proposé :** après résultat, REJOUER revient au déploiement avec l'ancienne formation du joueur et AUTO/PRÊT ; Capitaine reçoit une nouvelle flotte aléatoire valide et secrète. Il ne reprend pas volontairement sa disposition précédente ; les historiques de tirs sont remis à zéro, les navires redeviennent intacts et les statistiques déjà acquises sont conservées.
 
 ### 14.8 Palmarès, abandon et seuil d'engagement — LOT1-STAT-001, LOT1-ABD-001
 
@@ -584,7 +591,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**DÉCIDÉ — v0.12 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. **PROPOSÉ — prochaine étape :** consolider les critères d'acceptation de Capitaine et fermer la règle propre au CPU encore ouverte (renouvellement de flotte ; autorisation de révélation décidée en v0.13), puis les derniers cas limites tactiles avant backlog. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
+**DÉCIDÉ — v0.12 à v0.14 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. L'autorisation systématique de révélation par Capitaine vainqueur (v0.13) et la nouvelle flotte aléatoire de Capitaine à chaque partie et revanche (v0.14) sont décidées. **PROPOSÉ — prochaine étape :** consolider les critères d'acceptation de Capitaine et les derniers cas limites tactiles avant backlog. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
 
 ### 14.10 Parcours tactile et visuel d'une manche contre Capitaine — décisions PO du 29/10/2026
 
