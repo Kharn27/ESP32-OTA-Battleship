@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.17 — consolidation des arbitrages pré-backlog du LOT 1 (navigation directe VS Capitaine, CAP-TEST-001, compléments CAP-CPU-003/004/008, LOT1-UX-011), complétée par **LOT1-ACC-010** et une matrice de réception **PROPOSÉE** ; décisions et errata antérieurs conservés, 30 octobre 2026  
+**Version documentaire :** 0.17 — consolidation des arbitrages pré-backlog du LOT 1 (navigation directe VS Capitaine, CAP-TEST-001, compléments CAP-CPU-003/004/008, LOT1-UX-011), complétée par **LOT1-ACC-010** et une matrice de réception **validée comme base initiale évolutive pour le LOT 1** ; décisions et errata antérieurs conservés, 30 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -367,7 +367,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-CPU-005 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
 | LOT1-CPU-006 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
 | CAP-CPU-001 à 010 | Capitaine : dix principes décidés au § 16, désormais CPU du LOT 1 | **DÉCIDÉ (PO, v0.12)** |
-| CAP-TEST-001 | Capitaine évalué par ses comportements tactiques observables et des essais de difficulté ressentie, sans taux de victoire imposé | **DÉCIDÉ (PO, v0.17)** |
+| CAP-TEST-001 | Capitaine évalué par ses comportements tactiques observables et des essais de difficulté ressentie, sans taux de victoire imposé ; matrice des dix principes retenue comme **base initiale évolutive LOT 1**, tests détaillés à construire | **DÉCIDÉ (PO, v0.17, confirmation pré-backlog)** |
 | CAP-CPU-003/004/008 (précisions) | Après une touche : prochaine cible orthogonale inconnue plausible ; après deux touches voisines alignées : priorité aux prolongements plausibles, sans certitude d'un même navire | **DÉCIDÉ (PO, v0.17)** |
 | LOT1-FLT-001 | Navires au contact latéral ou diagonal autorisés, sans chevauchement | **DÉCIDÉ** |
 | LOT1-CBT-001 | Type du navire coulé annoncé, épave non identifiée case par case | **DÉCIDÉ** |
@@ -511,9 +511,10 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - **LOT1-UX-011 — DÉCIDÉ :** de FEU à la révélation synchronisée, **QUITTER/ABANDONNER** sont aussi momentanément indisponibles ; leurs appuis sont ignorés, sans action différée, puis la commande appropriée redevient accessible dès la révélation. La confirmation d'abandon après PRÊT, le palmarès et le forfait restent régis par LOT1-ABD-001 ; aucun nouveau mode d'abandon.
 - **À FORMALISER / À VÉRIFIER avant transmission finale :** scénarios d'acceptation objectifs des dix CAP-CPU, retours matériels stylet/affichage, éventuels détails de navigation et erreurs. **Aucun backlog ni travail technique engagé** par ces décisions.
 
-**Addendum pré-backlog à la v0.17 — décision PO du 30 octobre 2026 :**
+**Addendum pré-backlog à la v0.17 — décisions PO du 30 octobre 2026 :**
 - **LOT1-ACC-010 — DÉCIDÉ :** une sortie volontaire du déploiement vers l'accueil est obligatoire avant PRÊT, sans forfait ni nouvelle partie jouée, y compris lors d'une revanche. Les statistiques du résultat précédent sont conservées. L'ancienne mention « RETOUR éventuel » de LOT1-ACC-009 est **REMPLACÉE sur ce point uniquement** ; le sélecteur d'adversaire reste reporté. Libellé et présentation **À CONCEVOIR**.
-- **PROPOSÉ pour la réception :** scénarios objectifs couvrant les dix principes de Capitaine (§ 16) et les cas transversaux du LOT 1 (§ 14.14). Ces exemples ne constituent pas de nouvelles décisions produit ni un algorithme prescrit ; difficulté ressentie et lisibilité sur CYD réelle **À VÉRIFIER**.
+- **CAP-TEST-001 — VALIDATION COMPLÉMENTAIRE PO :** la matrice du § 16 couvrant les dix principes de Capitaine est **DÉCIDÉE comme base de référence fonctionnelle initiale du LOT 1** (« un bon début »). Elle n'est **ni exhaustive ni figée** ; le Pilotage pourra instruire des tests reproductibles et compléter les cas sans inventer de nouvelles règles produit. Les dix principes CAP-CPU ne sont pas redéfinis ; aucune obligation d'algorithme ou de taux de victoire. Les essais de difficulté ressentie et la validation sur matériel réel restent **À VÉRIFIER**.
+- **PROPOSÉ, non validé globalement par le PO :** la série de scénarios transversaux du LOT 1 (§ 14.14) ; ceux-ci illustrent les règles déjà approuvées mais n'emportent pas validation intégrale de l'expression de besoin.
 
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
@@ -820,7 +821,7 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 - Capitaine mémorise les autres pistes, peut revenir sur une zone ambiguë après naufrage, et n'identifie jamais avec certitude les cases d'une épave simplement annoncée comme coulée.
 - Une situation publique identique ne doit pas conduire à un choix favorisé par une **position secrète inaccessible** ; les modalités de vérification sont à instruire par le Pilotage.
 
-**Matrice de réception complémentaire PROPOSÉE pour les dix CAP-CPU — le tableau original des principes DÉCIDÉS ci-dessus reste inchangé :**
+**DÉCIDÉ — matrice de réception complémentaire approuvée par le PO comme référence fonctionnelle initiale du LOT 1 pour les dix CAP-CPU.** Cette matrice constitue un **bon début, évolutif et non exhaustif** ; elle n'impose ni un ordre unique de tirs, ni un algorithme, ni un taux de victoire. Le tableau original des principes DÉCIDÉS ci-dessus reste inchangé. Les tests précis sont **À INSTRUIRE par le Pilotage** et la difficulté ressentie **À VÉRIFIER** :
 
 | Référence | Situation contrôlée et comportement attendu |
 | --- | --- |
@@ -837,13 +838,13 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **Précautions proposées :** pour CAP-CPU-003/008, isoler le scénario de pistes concurrentes légitimes ; CAP-CPU-001/002/010 exigent plusieurs séquences et un examen de conformité, pas un ordre de coups unique. À informations publiques identiques, la flotte secrète ne doit pas favoriser un tir inaccessible ; tenir compte d'un éventuel aléa. Aucun algorithme, taux de victoire ni nouvelle priorité tactique ne sont imposés.
 
-Les scénarios sont **PROPOSÉS** comme formulation de réception et non comme décisions supplémentaires ni prescription d'algorithme.
+**Statut de la matrice : DÉCIDÉ comme base initiale de réception LOT 1, non comme cahier de tests exhaustif.** Les formulations illustratives et modalités de vérification pourront être affinées par le Pilotage, sans ajout silencieux de règles produit ni prescription d'algorithme. Les autres scénarios transversaux (§ 14.14) conservent leur statut **PROPOSÉ**.
 
 **Nuance fonctionnelle essentielle :** les navires peuvent se toucher. Une annonce de naufrage ne désigne **jamais les cases exactes de l'épave** ; l'analyse des touches non expliquées doit donc rester hypothétique, et aucun CPU ne peut « marquer » secrètement comme certaines les cases d'un navire coulé. En particulier, CAP-CPU-007 décrit le cas où **les touches observées ne peuvent toutes être expliquées par le navire annoncé**, sans supposer que Capitaine reçoit l'identité de ces touches.
 
 **DÉCIDÉ pour LOT 1 :** Capitaine sera l'adversaire du premier jeu complet. **REPORTÉ :** Mousse, Amiral, compositions tactiques et équilibrage comparatif. **PROPOSÉ / non décidé :** attribuer à Amiral un balayage en damier, des comparaisons de configurations ou une recherche probabiliste.
 
-**DÉCIDÉ — CAP-TEST-001 (v0.17) :** la conformité de Capitaine repose sur des scénarios de **comportement tactique observable** et des **essais de difficulté ressentie**, sans objectif statistique de victoire. **À FORMALISER** : ensemble représentatif de cas objectifs à vérifier (priorités locales, pistes multiples, naufrages ambigus, déductions géométriques sans secret), sans imposer un algorithme ni un ordre unique de tirs lorsque la règle laisse un choix. La difficulté ressentie reste **À VÉRIFIER en parties réelles** et ne conditionne pas la réception à un pourcentage arbitraire. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
+**DÉCIDÉ — CAP-TEST-001 (v0.17, confirmation pré-backlog) :** la conformité de Capitaine repose sur des scénarios de **comportement tactique observable** et des **essais de difficulté ressentie**, sans objectif statistique de victoire. **Matrice initiale de référence approuvée par le PO ; À FORMALISER par le Pilotage** : ensemble représentatif de cas objectifs à vérifier (priorités locales, pistes multiples, naufrages ambigus, déductions géométriques sans secret), sans imposer un algorithme ni un ordre unique de tirs lorsque la règle laisse un choix. La difficulté ressentie reste **À VÉRIFIER en parties réelles** et ne conditionne pas la réception à un pourcentage arbitraire. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
 
 **Traçabilité :** les dix choix CAP-CPU ont été approuvés successivement par le PO le 29 octobre 2026. Le PO a ensuite explicitement corrigé le périmètre du LOT 1 pour y retenir Capitaine et reporter Mousse et Amiral. Les règles Mousse sont conservées au § 17.
 
