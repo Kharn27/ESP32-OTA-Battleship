@@ -5,10 +5,18 @@
 | Classe | Statut | Contenu / portée |
 | --- | --- | --- |
 | **Références graphiques approuvées pour production** | **AUCUNE** | Ni charte ni écran final validés ; ne pas convertir directement les archives en assets firmware |
-| **Exploration artistique récente / en traitement séparé** | **EXPLORATION_D_AMBIANCE — NON_VALIDEE_PO — NON_RUNTIME** | [PR #2 — scène narrative de bataille](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2), non fusionnée dans cette PR |
+| **Scènes narratives archivées (PR #2 fusionnée)** | **EXPLORATION_D_AMBIANCE — NON_VALIDEE_PO — NON_RUNTIME** | [Scène narrative 01](assets/explorations/2026-10-29-bataille-en-cours/01_bataille_narrative_320x240.png) et [scène plus pixelisée 02](assets/explorations/2026-10-29-bataille-en-cours/02_bataille_pixelisee_320x240.png) ; [provenance et originaux](assets/explorations/2026-10-29-bataille-en-cours/README.md) |
 | **Archives visuelles et UX A/B/C** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Habillages A/B/C](assets/explorations/2026-10-29-attaque-themes/README.md) |
 | **Archives d'agencements D/E/F** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Agencements D/E/F](assets/explorations/2026-10-29-attaque-layouts/README.md) |
 | **Archives UX antérieures à LOT1-UX-001** | **HISTORIQUE / NON APPROUVÉ VISUELLEMENT** | Trois anciens SVG de combat + quatre reconstitutions UX dans [assets/maquettes](assets/maquettes/) |
+
+### Deux explorations d'ambiance conservées — non validées par le PO
+
+| 01 — Scène narrative | 02 — Pixel art plus marqué |
+| :---: | :---: |
+| ![Scène narrative 01, aperçu 320×240](assets/explorations/2026-10-29-bataille-en-cours/01_bataille_narrative_320x240.png) | ![Scène narrative 02, aperçu 320×240](assets/explorations/2026-10-29-bataille-en-cours/02_bataille_pixelisee_320x240.png) |
+
+[PR #2 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) — les deux PNG originaux 1448 × 1086, les exports et le manifeste sont [conservés dans le dépôt](assets/explorations/2026-10-29-bataille-en-cours/README.md). **Illustrations narratives uniquement :** elles ne représentent ni la grille tactique, ni une autorisation de révéler les positions adverses pendant le combat.
 
 **Valeur UX historique ≠ approbation visuelle.** Les documents peuvent décrire un principe fonctionnel conservé, mais leurs couleurs, leurs illustrations, leurs composants ou leurs mises en page n'ont pas été acceptés comme direction de production. Les anciens écrans à **deux grilles simultanément visibles** contredisent explicitement la décision **LOT1-UX-001 : une seule grille ATTAQUE ou DÉFENSE à la fois**.
 
@@ -91,9 +99,9 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 
 ## D. À ne pas confondre
 
-Certaines **illustrations d'ambiance affichées dans la conversation** provenaient de recherches visuelles temporaires. Les éléments interactifs présentés dans le chat (simulateurs, petits schémas) ne sont pas automatiquement enregistrés comme des images exportables.
+Les **deux scènes narratives de la PR #2** sont désormais archivées, contrairement à d'autres références temporaires issues de conversations. Les éléments interactifs présentés dans le chat (simulateurs, petits schémas) ne sont pas automatiquement enregistrés comme des images exportables.
 
-Cette galerie conserve les **trois vrais SVG historiques** et **quatre reconstitutions UX**. Elle ne prétend pas archiver à l'identique toutes les images externes ou tous les composants interactifs de la conversation.
+Cet index conserve les **trois SVG historiques**, **quatre reconstitutions UX**, les **six explorations A–F écartées** et les **deux nouvelles illustrations narratives non validées**. Il ne prétend pas archiver toutes les images temporaires ou les composants interactifs de la conversation.
 
 ## E. Suite de la conception
 
