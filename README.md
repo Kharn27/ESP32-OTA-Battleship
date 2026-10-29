@@ -8,7 +8,7 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 ➡️ [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) — vision, contraintes, règles décidées, variantes de jeu, parcours, décisions et questions ouvertes.
 
-🎨 [MAQUETTES.md](MAQUETTES.md) — **index des références et archives graphiques** : sept SVG historiques/UX, six explorations A–F non retenues et deux nouvelles scènes narratives conservées avec leurs [PNG natifs, originaux et provenance](assets/explorations/2026-10-29-bataille-en-cours/README.md). **Aucune référence visuelle de production approuvée.**
+🎨 [MAQUETTES.md](MAQUETTES.md) — **index des références et recherches graphiques** : sept anciens SVG UX et six explorations A–F toujours présents, non retenus visuellement. Les deux scènes narratives retirées de `main` restent consultables via la [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) et leur [dossier historique figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours). **Aucune référence visuelle de production approuvée.**
 
 La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **À ARBITRER**, **À VÉRIFIER** et **REPORTÉS**. Elle constitue une synthèse de travail, pas un cahier des charges validé dans son ensemble.
 

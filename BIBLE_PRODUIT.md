@@ -19,7 +19,7 @@ Créer un jeu de bataille navale familial, tactile et tactique sur ESP32 CYD cla
 
 **PROPOSÉ :** retour visuel immédiat à la sélection, à la validation et à la révélation ; animations courtes et discrètes plutôt que séquences imposées.
 
-**Références et explorations graphiques :** [index des maquettes, archives et scènes narratives](MAQUETTES.md), comprenant sept SVG UX historiques, six explorations A–F non retenues et deux illustrations d'ambiance avec originaux et aperçus 320 × 240 versionnés. **Aucune charte ni interface visuelle de production n'a été approuvée par le PO.** Les images ne sont ni des captures de firmware ni des représentations normatives des informations visibles en jeu.
+**Références et explorations graphiques :** [index des maquettes et recherches artistiques](MAQUETTES.md), comprenant sept SVG UX historiques et six explorations A–F non retenues, toujours présents sur `main`. Les deux scènes narratives de la [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) ont été retirées de l'arborescence courante par décision PO, mais leurs [originaux, exports et provenance restent consultables dans l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours). **Aucune charte ni interface visuelle de production n'a été approuvée par le PO.** Les images ne sont ni des captures de firmware ni des représentations normatives des informations visibles en jeu.
 
 ## 2. Cadre matériel et frontières
 
