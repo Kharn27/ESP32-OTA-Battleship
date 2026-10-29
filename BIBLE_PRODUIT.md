@@ -536,6 +536,7 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
 **PROPOSÉ — prochaine étape de cadrage :** définir précisément le déroulement joueur d'une manche, avec **une question produit importante à la fois**, puis consolider les critères d'acceptation. **Aucune mission technique/graphique, aucun backlog ni planning n'est lancé par ce document.**
+
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
 Cette section complète la Bible **sans modifier les décisions de gameplay ni le découpage du LOT 1 définis au § 14**. Elle explicite les choix du PO pour une future maquette de l'accueil. La validation d'un concept **ne vaut pas validation de son illustration finale**.
