@@ -18,6 +18,16 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **À ARBITRER**, **À VÉRIFIER** et **REPORTÉS**. Elle constitue une synthèse de travail, pas un cahier des charges validé dans son ensemble.
 
+## Organisation du développement multi-agents
+
+Le pilotage des missions passe par le [GitHub Project **CYD WARSHIP**](https://github.com/users/Kharn27/projects/1/views/1), en utilisant **les Issues du présent dépôt** et des PR liées. Le Project est un tableau de suivi, **pas un dépôt distinct**.
+
+- [Workflow des agents, Issues et PR](docs/WORKFLOW_AGENTS.md) — responsabilités, attribution des US, Kanban et règles de revue/fusion.
+- [Politique de preuves et de tests](docs/TEST_POLICY.md) — séparation PC, compilation cible, CI, CYD physique et essais ESP-NOW à deux cartes.
+- [Modèle de User Story / mission](.github/ISSUE_TEMPLATE/user_story.yml) et [modèle de Pull Request](.github/pull_request_template.md).
+
+Ces documents constituent **le cadre de travail**, pas le lancement d'un backlog de développement. Les champs et vues du GitHub Project doivent être configurés dans GitHub et ne sont pas créés par ces fichiers.
+
 ## Direction du jeu
 
 - Jeu naval fluide et intuitif au stylet ; recherche d'un univers maritime en pixel art moderne sans ralentir le gameplay, avec lisibilité à confirmer sur la CYD réelle.
