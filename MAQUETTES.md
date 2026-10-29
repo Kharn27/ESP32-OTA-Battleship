@@ -81,7 +81,13 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 - Un **indicateur intelligent DÉFENSE** montre le tir manqué de façon discrète, un touché de façon visible et un coulé de façon renforcée. Les dégâts non consultés maintiennent une alerte jusqu'à l'ouverture de DÉFENSE.
 - Le **LOT 1** cible une bataille classique contre **Mousse sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
 
-**Statut graphique : À CONCEVOIR.** Les anciens SVG et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de cette nouvelle disposition. La création de nouveaux visuels **320 × 240** et d'une charte graphique fera l'objet d'une discussion dédiée avec le PO avant toute mission au graphiste. Voir [bible produit v0.6](BIBLE_PRODUIT.md).
+**Statut graphique : À CONCEVOIR.** Les anciens SVG et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de cette nouvelle disposition. La création de nouveaux visuels **320 × 240** et d'une charte graphique fera l'objet d'une discussion dédiée avec le PO avant toute mission au graphiste. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
+
+### Actualisation documentaire du 29 octobre 2026 — LOT 1
+
+**DÉCIDÉ côté fonctionnel dans la Bible v0.7 :** fin de partie après résolution des deux tirs, match nul par destruction mutuelle, REJOUER avec conservation par défaut de la formation du joueur, nouvelle flotte aléatoire de Mousse, palmarès VS Mousse et abandon après PRÊT, IA débutante mémorisant ses pistes, navires autorisés à se toucher et épaves non identifiées, inspection libre post-partie et gravité maximale de l'indicateur DÉFENSE. L'accueil minimal du LOT 1 affiche seulement JOUER CONTRE MOUSSE et PALMARÈS.
+
+**Statut des visuels inchangé :** les sept SVG restent des esquisses historiques ou reconstituées, **non validées graphiquement** ; aucun SVG ne prétend représenter les nouvelles règles dans leur ensemble. La future charte et les nouveaux écrans 320 × 240 restent **À CONCEVOIR / À VÉRIFIER**.
 
 ## D. À ne pas confondre
 
