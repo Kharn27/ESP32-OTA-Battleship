@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.12 — LOT 1 VS Capitaine décidé par le PO ; Mousse et Amiral reportés, décisions antérieures préservées, 29 octobre 2026  
+**Version documentaire :** 0.13 — autorisation systématique de révélation par Capitaine vainqueur ; LOT 1 VS Capitaine v0.12 et acquis antérieurs conservés, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -193,7 +193,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 **Cas de l'égalité par destruction réciproque :** les deux flottes sont alors entièrement touchées et leurs positions déjà connues : un bouton de « révélation » symétrique reste envisageable **par analogie**, mais ne fournirait aucun nouveau renseignement. La présentation précise de cette option est **PROPOSÉE** et non encore fixée.
 
-**DÉCIDÉ pour le LOT 1 VS Capitaine (cf. § 14) :** résolution des deux tirs avant le résultat ; victoire, défaite et match nul par destruction réciproque ; inspection libre après bataille. **À ARBITRER :** la révélation facultative de la flotte de Capitaine vainqueur, autorisée automatiquement uniquement dans le cadrage antérieur VS Mousse. **À ARBITRER :** conditions des autres variantes et détails graphiques des écrans de résultat. L'**abandon volontaire** est traité sans résultat comptabilisé (§ 7).
+**DÉCIDÉ pour le LOT 1 VS Capitaine (cf. § 14) :** résolution des deux tirs avant le résultat ; victoire, défaite et match nul par destruction réciproque ; inspection libre après bataille. **Capitaine vainqueur autorise toujours** le perdant à révéler facultativement sa flotte, sans révélation automatique.  **À ARBITRER :** conditions des autres variantes et détails graphiques des écrans de résultat. L'**abandon volontaire** est traité sans résultat comptabilisé (§ 7).
 
 ## 7. Identité et palmarès de chaque CYD
 
@@ -354,9 +354,9 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-UX-002 | Après FEU, aucune bascule automatique ; résultat joueur sur ATTAQUE, défense consultable à volonté | **DÉCIDÉ (V1.0)** |
 | LOT1-UX-003 | Indicateur DÉFENSE : raté discret, touché visible, coulé renforcé, alerte persistante jusqu'à consultation | **DÉCIDÉ (principe V1.0)** |
 | LOT1-FIN-001 | Résultat après résolution des deux tirs ; destruction mutuelle = match nul | **DÉCIDÉ** |
-| LOT1-FIN-002 | Révélation visuelle facultative sur ATTAQUE ; autorisation automatique de Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
+| LOT1-FIN-002 | Capitaine vainqueur autorise toujours la révélation facultative sur ATTAQUE ; affichage/masquage réversible, tirs historiques conservés | **DÉCIDÉ (PO, v0.13)** |
 | LOT1-FIN-003 | Inspection libre ATTAQUE/DÉFENSE après résultat, sans nouveaux tirs | **DÉCIDÉ** |
-| LOT1-FIN-005 | Autorisation du vainqueur préalable ; Mousse l'accorde (lot futur), Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
+| LOT1-FIN-005 | Le vainqueur humain choisit ; Mousse (lot futur) et Capitaine (LOT 1) autorisent toujours leur flotte après une victoire | **DÉCIDÉ (PO, v0.13)** |
 | LOT1-REV-001 | REJOUER contre Capitaine dans le LOT 1 | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-REV-002 | Revanche : ancien placement du joueur affiché par défaut, AUTO ou PRÊT | **DÉCIDÉ** |
 | LOT1-REV-003 | Renouvellement aléatoire décidé pour Mousse (reporté) ; Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
@@ -470,6 +470,13 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - **Impact documentaire externe :** l'issue graphique #6 et les maquettes anciennes peuvent mentionner Mousse ; leur statut historique est conservé. Le Pilotage devra actualiser le brief d'accueil avant réalisation/validation, sans mission silencieuse.
 - **Aucune issue, nouvelle mission, implémentation ou planification lancée par cette correction.**
 
+**Arbitrage LOT1-FIN-002/005 — DÉCIDÉ par le PO le 29 octobre 2026 (v0.13) :**
+- **Capitaine vainqueur autorise systématiquement la révélation de sa flotte**, comme Mousse (reporté) ; le joueur perdant reste libre de ne pas l'afficher.
+- Après le verdict DÉFAITE, **VOIR SA FLOTTE** est proposé discrètement, sans dialogue ni affichage obligatoire ; les cinq navires sont affichables et masquables à volonté sur ATTAQUE, avec marques des tirs conservées et état mémorisé après navigation vers DÉFENSE.
+- Aucune fiche, analyse automatique ou modification de résultat et statistiques. Aucun MONTRER MA FLOTTE après victoire du joueur contre CPU et aucune commande de révélation nécessaire en cas de match nul.
+- L'autorisation humaine en multijoueur reste volontaire ; la nouvelle décision ne la remplace pas.
+- **Toujours À ARBITRER :** renouvellement de la flotte de Capitaine lors d'une revanche. Aucune autre décision nouvelle.
+
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
 Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idée pourra être réexaminée sans devenir une exigence tacite.
@@ -545,7 +552,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 - **DÉCIDÉ :** résultat clairement annoncé, tir et impacts déjà révélés conservés ; aucun tir après le résultat.
 - **DÉCIDÉ — LOT1-FIN-003 :** après **victoire, défaite ou nul**, le joueur peut basculer librement entre **ATTAQUE** et **DÉFENSE** et inspecter leurs historiques sans les modifier. **REJOUER** et **ACCUEIL** restent accessibles.
 - **DÉCIDÉ — FIN-001 conservée :** la flotte complète du **vainqueur** reste **secrète par défaut** ; le vainqueur humain choisit de l'autoriser ou non à la révélation. Le perdant ne voit **VOIR SA FLOTTE** que si le vainqueur a choisi **MONTRER MA FLOTTE**. Ce mécanisme de consentement humain est conservé pour le multijoueur, hors LOT 1.
-- **À ARBITRER pour Capitaine — LOT1-FIN-002/005 :** l'autorisation systématique de révélation après victoire était décidée pour Mousse, maintenant reporté. La consultation réversible sur ATTAQUE reste décidée sous réserve d'autorisation.
+- **DÉCIDÉ pour Capitaine — LOT1-FIN-002/005 (v0.13) :** Capitaine vainqueur autorise **toujours** le joueur perdant à utiliser **VOIR SA FLOTTE** ; cette révélation reste facultative pour le joueur et n'est jamais automatique. La consultation réversible sur ATTAQUE reste inchangée.
 - **DÉCIDÉ — victoire du joueur VS Capitaine :** aucune commande **MONTRER MA FLOTTE**, puisqu'aucun adversaire humain ne peut consulter cette révélation.
 - **DÉCIDÉ / cohérence :** en cas d'égalité par destruction réciproque, les deux flottes sont déjà intégralement touchées ; aucune commande spéciale de révélation n'est nécessaire dans le LOT 1.
 
@@ -577,7 +584,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**DÉCIDÉ — v0.12 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. **PROPOSÉ — prochaine étape :** consolider les critères d'acceptation de Capitaine et fermer les deux règles propres au CPU encore ouvertes (autorisation de révélation, renouvellement de flotte), puis les derniers cas limites tactiles avant backlog. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
+**DÉCIDÉ — v0.12 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. **PROPOSÉ — prochaine étape :** consolider les critères d'acceptation de Capitaine et fermer la règle propre au CPU encore ouverte (renouvellement de flotte ; autorisation de révélation décidée en v0.13), puis les derniers cas limites tactiles avant backlog. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
 
 ### 14.10 Parcours tactile et visuel d'une manche contre Capitaine — décisions PO du 29/10/2026
 
@@ -637,17 +644,17 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER / À CONCEVOIR :** durées d'animation et de mise en avant du verdict, emplacement du résumé DÉFENSE, codes couleur, icônes, transitions, lisibilité au stylet et comportement observable sur le matériel réel. Les anciennes maquettes restent non normatives. Aucune mission graphique ni développement n'est engagé par cette section.
 
-### 14.13 Révélation volontaire et inspection pédagogique — décisions v0.10, adaptation Capitaine à arbitrer en v0.12 (LOT1-FIN-002/005)
+### 14.13 Révélation volontaire et inspection pédagogique — v0.10 complétée pour Capitaine en v0.13 (LOT1-FIN-002/005)
 
-**Statut : DÉCIDÉ pour le parcours de consultation après autorisation ; autorisation automatique de Capitaine À ARBITRER. Graphisme À CONCEVOIR / À VÉRIFIER sur CYD 320 × 240.** Cette section complète FIN-001, LOT1-FIN-002/003/004 et ne modifie ni le résultat ni le palmarès.
+**Statut : DÉCIDÉ pour le parcours de consultation et l'autorisation systématique de Capitaine vainqueur. Graphisme À CONCEVOIR / À VÉRIFIER sur CYD 320 × 240.** Cette section complète FIN-001, LOT1-FIN-002/003/004 et ne modifie ni le résultat ni le palmarès.
 
 **DÉCIDÉ — autorisation préalable par le vainqueur (FIN-001, LOT1-FIN-005) :**
 - La commande **VOIR SA FLOTTE** n'est disponible pour le perdant **que si le vainqueur a autorisé la révélation de sa propre flotte** par **MONTRER MA FLOTTE**.
 - Dans le futur multijoueur humain, **MONTRER MA FLOTTE** est une action volontaire du vainqueur ; sans autorisation, aucune révélation adverse ni commande VOIR SA FLOTTE. Le détail du parcours d'échange entre deux CYD reste **REPORTÉ hors LOT 1**.
-- **DÉCIDÉ pour le futur Mousse :** il autorise systématiquement la révélation après victoire. **À ARBITRER pour Capitaine :** doit-il offrir la même autorisation ? Aucun navire n'est révélé automatiquement.
+- **DÉCIDÉ pour les CPU :** Mousse (lot futur) **et Capitaine (LOT 1)** autorisent toujours la révélation de leur flotte lorsqu'ils gagnent. Cette autorisation ne révèle aucun navire automatiquement et ne nécessite aucun bouton fictif actionné par le CPU.
 - Si le joueur gagne contre Capitaine, **MONTRER MA FLOTTE n'est pas affiché**, faute d'adversaire humain bénéficiaire. En cas de **match nul**, aucune commande de révélation particulière n'est nécessaire dans le LOT 1 : toutes les positions sont déjà connues.
 
-**DÉCIDÉ — consultation volontaire sous réserve d'autorisation (LOT1-FIN-002) :**
+**DÉCIDÉ — consultation volontaire après une défaite VS Capitaine (LOT1-FIN-002) :**
 - Après le verdict **DÉFAITE** puis son affichage compact, **VOIR SA FLOTTE** est accessible directement sur le **champ de bataille**, de manière discrète et persistante jusqu'au départ de la fin de partie ; **aucune boîte OUI/NON, aucune interruption ni écran d'analyse obligatoire**.
 - Un appui volontaire révèle la **totalité des cinq navires de Capitaine**, y compris leurs cases encore inconnues, **sur la grille ATTAQUE existante**.
 - Les **tirs réussis, tirs manqués et résultats historiques** restent visibles au-dessus / distinctement des positions révélées. Le joueur compare ainsi les tirs réellement tentés aux navires découverts **sur une même grille**.
@@ -658,7 +665,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À CONCEVOIR / À VÉRIFIER :** lisibilité des silhouettes de navires sous les marques de tir et des cases encore inconnues, taille et emplacement des commandes sur **CYD tactile 320 × 240**, formulation précise du basculement AFFICHER/MASQUER, coexistence du verdict compact et des commandes REJOUER / ACCUEIL. Aucun code couleur, dessin, durée ou maquette de production n'est validé par la présente décision.
 
-**Traçabilité historique v0.10 (VS Mousse) :** révélation sur ATTAQUE, affichage/masquage réversible, état mémorisé entre les grilles, proposition discrète non modale, autorisation obligatoire et inspection visuelle simple. Mousse autorise toujours s'il gagne (décision maintenue, réalisation reportée) ; absence de commande MONTRER MA FLOTTE après victoire humaine solo. Le LOT 1 v0.12 retient désormais Capitaine (§ 14.3 et § 16) ; sa politique d'autorisation reste ouverte, tandis que les règles propres à Mousse sont conservées au § 17.
+**Traçabilité historique v0.10 (VS Mousse) :** révélation sur ATTAQUE, affichage/masquage réversible, état mémorisé entre les grilles, proposition discrète non modale, autorisation obligatoire et inspection visuelle simple. Mousse autorise toujours s'il gagne (décision maintenue, réalisation reportée) ; absence de commande MONTRER MA FLOTTE après victoire humaine solo. Le LOT 1 v0.12 retient désormais Capitaine (§ 14.3 et § 16) ; **sa politique d'autorisation est désormais décidée en v0.13**, tandis que les règles propres à Mousse restent conservées au § 17.
 
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
