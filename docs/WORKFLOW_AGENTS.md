@@ -1,6 +1,6 @@
-# I-009 — Workflow GitHub multi-agents (proposition de référence)
+# I-009 — Workflow GitHub multi-agents (Issues comme backlog)
 
-**Portée :** organisation du travail sur [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship). **GitHub Project :** [CYD WARSHIP](https://github.com/users/Kharn27/projects/1/views/1). Le Project est un **tableau de pilotage** et non un second dépôt. Configuration des champs/vues à effectuer dans l'interface GitHub ; ce document ne prétend pas les avoir créés.
+**Portée :** organisation du travail directement dans les [GitHub Issues du dépôt ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship/issues). Les Issues sont **la source de vérité opérationnelle** et les PR portent les livraisons. Le tableau GitHub Projects créé par le PO est **facultatif et non utilisé** pour le pilotage : la connexion ChatGPT GitHub ne permet pas d'en piloter les cartes ni les champs. Aucune action humaine de déplacement de cartes n'est nécessaire.
 
 **Maturité :** conventions de pilotage, sans création de backlog fonctionnel ni déclenchement de mission firmware/graphisme. La Bible produit et les décisions explicites du PO restent les sources métier ; une Issue ne peut les contredire.
 
@@ -26,30 +26,39 @@ Chaque mission précise : **source PO**, valeur, inclus/exclus, responsable, dé
 
 **Dépendances :** renseigner les liens `bloquée par #NN` / `bloque #MM` dans les Issues ; utiliser les fonctionnalités GitHub natives si disponibles. Ne paralléliser que les travaux indépendants, avec une interface suffisamment stable. Une demande qui modifie l'expérience joueur repart au PO.
 
-## 3. Configuration recommandée du GitHub Project
+## 3. Pilotage opérationnel : Kanban logique **dans les Issues**
 
-La création du Project ne configure **pas** automatiquement ces champs. Les définir dans GitHub Projects lorsque le tableau est prêt :
+Aucun GitHub Project, champ personnalisé Projects ou label précréé n'est nécessaire. Le [formulaire d'Issue](../.github/ISSUE_TEMPLATE/user_story.yml) porte des champs **dans le corps même de l'Issue**, consultables et modifiables par Pilotage via le connecteur GitHub :
 
-| Champ Project | Valeurs recommandées | Usage |
+| Champ dans l'Issue | Valeurs | Auteur de la mise à jour |
 | --- | --- | --- |
-| **Status** (single select) | À qualifier ; Prête ; En cours ; En revue ; Bloquée ; Terminée | Flux réel des missions |
-| **Type** (single select) | US-DEV ; US-GRAPH ; DOC-PO ; SPIKE ; BUG ; TECH | Nature du travail |
-| **Responsable** (single select) | Pilotage ; Développeur ; Graphiste ; Assistant PO ; À attribuer | Agent, indépendant des assignees GitHub |
-| **Priorité** (single select) | P0 critique ; P1 haute ; P2 normale ; P3 basse | Ordre d'exécution fixé par Pilotage |
-| **Lot** (single select) | LOT 1 ; V1.0 futur ; Hors lot ; À préciser | Portée décidée, pas une promesse de livraison |
-| **Validation** (single select, facultatif) | À définir ; PC ; Build cible ; CI ; Matériel requis ; Matériel vérifié ; N/A | Vue synthétique ; les **preuves réelles** restent dans les Issues et PR |
+| **Type de mission** | US-DEV, US-GRAPH, DOC-PO, SPIKE, BUG, TECH | Pilotage au découpage |
+| **Statut Pilotage** | À qualifier, Prête, En cours, En revue, Bloquée, Terminée | Pilotage, après contrôle de l'état réel |
+| **Agent responsable principal** | Développeur, Graphiste, Assistant PO, Pilotage, À attribuer | Pilotage |
+| **Priorité** | À déterminer, P0 bloquant, P1 haute, P2 normale, P3 basse | Pilotage |
+| **Lot** | À préciser, LOT 1, V1.0 futur, Hors lot | Pilotage |
 
-**Vues :** (1) `Backlog` en table, trié par priorité et dépendances ; (2) `Kanban` groupé par Status ; (3) `Roadmap` **seulement après** définition de jalons fiables. Pour éviter de perdre une mission, le lien Issue doit rester l'identifiant canonique. Les automatisations de statut ne doivent pas déclarer `Terminée` une US dont les preuves obligatoires manquent.
+**Convention de titres :** `[US-DEV] ...`, `[US-GRAPH] ...`, `[DOC-PO] ...`, `[SPIKE] ...`, `[BUG] ...`, `[TECH] ...`. L'identifiant unique reste le numéro GitHub `#NN`, sans réutilisation ni renumérotation.
 
-**Définition des statuts :**
-- **À qualifier :** besoin non exploitable, critères ou autorité insuffisants.
-- **Prête :** US complète, dépendances libérées, agent attribué, tests exigibles connus.
-- **En cours :** agent travaille sur la branche de l'Issue.
-- **En revue :** PR remise avec HEAD et preuves, décision Pilotage attendue.
-- **Bloquée :** dépendance, preuve ou arbitrage manquant ; noter le blocage et son propriétaire.
-- **Terminée :** critères acceptés et preuves exigées acquises ; PR effectivement fusionnée si une PR est nécessaire. Si le matériel est obligatoire mais non vérifié, **ne pas clore** la validation : garder une Issue bloquée ou un suivi matériel lié explicite.
+**Cycle de vie :**
+- **À qualifier** : demande non exploitable, source/critères/autorité manquants ; pas encore attribuable.
+- **Prête** : besoin validé, Issue complète, dépendances connues et libérées, agent identifié, preuves attendues définies.
+- **En cours** : agent réalise le périmètre autorisé sur une branche.
+- **En revue** : PR avec HEAD et preuves remise au Pilotage ; les corrections repassent par ce statut sur chaque nouveau HEAD.
+- **Bloquée** : attente d'une dépendance, d'une preuve exigée ou d'un arbitrage PO ; consigner explicitement la raison, son propriétaire et l'étape pour débloquer.
+- **Terminée** : tous critères/contrôles de l'étape acceptés, fusion effectivement confirmée lorsque nécessaire, preuves obligatoires acquises. **Clôture GitHub de l'Issue seulement alors.**
 
-Le tableau GitHub Projects regroupe les mêmes Issues du dépôt et peut afficher des PR ; il n'est pas une base produit indépendante.
+**Journalisation** : à chaque transition significative, Pilotage **met à jour le champ Statut Pilotage dans le corps de l'Issue**, puis ajoute un bref commentaire `ancien → nouveau ; preuve / PR ; blocage / action`. Le commentaire n'est pas un remplacement de l'état courant. Le connecteur peut modifier le corps d'une Issue, ses commentaires et son état ouvert/fermé. Ne pas inventer un état Projects différent.
+
+**Recherche et vues sans maintenance manuelle** :
+- [Issues ouvertes](https://github.com/Kharn27/ESP32-OTA-Battleship/issues?q=is%3Aissue+is%3Aopen) — backlog vivant, toutes catégories.
+- [Issues clôturées](https://github.com/Kharn27/ESP32-OTA-Battleship/issues?q=is%3Aissue+is%3Aclosed) — livraisons terminées.
+- [PR ouvertes](https://github.com/Kharn27/ESP32-OTA-Battleship/pulls?q=is%3Apr+is%3Aopen) — travaux livrés / en revue.
+- Les recherches GitHub `in:body` et les préfixes de titre permettent des **filtres de lecture indicatifs** par type/statut ; la référence exacte est le champ **Statut Pilotage** de chaque Issue. À la demande, Pilotage produit un récapitulatif Kanban depuis les Issues et PR réelles, sans table secondaire à maintenir.
+
+**Pas de doubles sources de vérité** : aucun `BACKLOG.md` à synchroniser à la main, ni tableau Projects à actualiser. Un label n'est pas indispensable ; si des labels GitHub existent et sont utiles, Pilotage peut les utiliser en complément, mais **ne doit pas dépendre d'une capacité non disponible de création de labels**.
+
+**Validation matérielle distincte** : une PR peut être fusionnée dans un jalon technique défini avec vérification CYD différée, mais **une Issue dont un critère obligatoire reste non démontré ne passe pas à Terminée**. Garder l'Issue ouverte et marquer `Bloquée`, ou ouvrir un suivi matériel lié lorsqu'une séparation de jalon a été explicitement prévue.
 
 ## 4. Git, branches et PR
 
