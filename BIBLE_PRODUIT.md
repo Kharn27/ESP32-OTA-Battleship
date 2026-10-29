@@ -502,7 +502,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **Critères d'acceptation proposés à consolider :** AUTO et le déploiement initial respectent toujours la composition imposée, les limites de grille et l'absence de superposition ; PRÊT est nécessaire pour démarrer le combat ; un contact entre deux navires ne rend pas leur placement invalide.
 
-### 14.3 IA de Mousse — LOT1-CPU-001 à 005
+### 14.3 IA de Mousse — LOT1-CPU-001 à 006
 
 **DÉCIDÉ — adversaire débutant crédible, imparfait et sans triche.** Mousse ne reçoit jamais la carte secrète, l'identité secrète d'une case touchée ni la composition d'une épave ; il raisonne sur ses tirs passés et les annonces qu'un adversaire humain recevrait.
 
