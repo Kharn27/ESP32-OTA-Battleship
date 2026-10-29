@@ -20,13 +20,13 @@ La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **
 
 ## Organisation du développement multi-agents
 
-Le pilotage des missions passe par le [GitHub Project **CYD WARSHIP**](https://github.com/users/Kharn27/projects/1/views/1), en utilisant **les Issues du présent dépôt** et des PR liées. Le Project est un tableau de suivi, **pas un dépôt distinct**.
+Les [GitHub Issues du dépôt](https://github.com/Kharn27/ESP32-OTA-Battleship/issues) constituent le **backlog officiel**, piloté et mis à jour directement par le Chef de projet à l'aide du connecteur GitHub. Les PR contiennent les livraisons, revues et preuves. Le GitHub Project expérimental n'est pas requis et n'est pas la source de vérité.
 
-- [Workflow des agents, Issues et PR](docs/WORKFLOW_AGENTS.md) — responsabilités, attribution des US, Kanban et règles de revue/fusion.
-- [Politique de preuves et de tests](docs/TEST_POLICY.md) — séparation PC, compilation cible, CI, CYD physique et essais ESP-NOW à deux cartes.
-- [Modèle de User Story / mission](.github/ISSUE_TEMPLATE/user_story.yml) et [modèle de Pull Request](.github/pull_request_template.md).
+- [Workflow multi-agents et suivi par Issues](docs/WORKFLOW_AGENTS.md) — types, statuts, priorités, responsables, branches, preuves et fusions.
+- [Politique de preuves et de tests](docs/TEST_POLICY.md) — PC, build cible, CI, CYD physique et ESP-NOW à deux cartes.
+- [Modèle d'Issue](.github/ISSUE_TEMPLATE/user_story.yml) et [modèle de PR](.github/pull_request_template.md).
 
-Ces documents constituent **le cadre de travail**, pas le lancement d'un backlog de développement. Les champs et vues du GitHub Project doivent être configurés dans GitHub et ne sont pas créés par ces fichiers.
+Ce dispositif ne crée pas de backlog fonctionnel et ne lance aucun développement. Les champs de statut et d'attribution sont portés par chaque Issue, sans tableau séparé à administrer.
 
 ## Direction du jeu
 
