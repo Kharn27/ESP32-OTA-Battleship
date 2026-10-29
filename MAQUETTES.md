@@ -76,3 +76,15 @@ Cette galerie conserve les **trois vrais SVG historiques** et **quatre reconstit
 Les maquettes futures devront être **créées comme fichiers conservables** (SVG/PNG selon le besoin), clairement étiquetées **PROPOSÉ** ou **DÉCIDÉ**, et référencées ici et dans la [bible produit](BIBLE_PRODUIT.md).
 
 **Aucune mission de graphisme ou de développement n'est déclenchée par cette galerie.**
+
+## F. Nouvelles études de thèmes pour ATTAQUE (29 octobre 2026) — NON VALIDÉES
+
+Le dossier [`assets/explorations/2026-10-29-attaque-themes/`](assets/explorations/2026-10-29-attaque-themes/README.md) propose trois habillages de **l'unique grille ATTAQUE** du LOT 1 (classique 10 × 10, VS Mousse, mono-tir simultané), conformes aux décisions `LOT1-UX-001/002/003`.
+
+- **A — Abysses électriques** : océan profond, cyan bioluminescent et corail.
+- **B — Archipel** : aventure lumineuse, azur et teintes chaudes.
+- **C — Escadre** : stratégie contemporaine, acier et cuivre.
+
+**Retour PO exploratoire** : les trois pistes plaisent et pourraient constituer des **thèmes interchangeables** ; **ni choix de thème ni fonctionnalité de changement de thème validés**. Une étude distincte d'agencements (grille centrale, navigation latérale, commandes basses) est en cours, sans modification des règles.
+
+Ces sources SVG sont **des previews PC 320 × 240, non des assets runtime et non testées sur CYD physique**. L'intégration au produit nécessite une revue du Pilotage, une validation PO et des essais matériels.
