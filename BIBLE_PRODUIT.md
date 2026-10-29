@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.8 — nom officiel et cadrage PO de l'accueil LOT 1 ; règles métier v0.7 conservées, 29 octobre 2026  
+**Version documentaire :** 0.9 — parcours de manche et retour de combat LOT 1 ; règles métier v0.7 et cadrage de l'accueil v0.8 conservés, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -160,7 +160,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 **À VÉRIFIER sur CYD réel :** lisibilité des cases déjà attaquées et ergonomie de la sélection/désélection au stylet.
 
-**À ARBITRER :** ordre et animation de révélation des impacts ; définition exhaustive de victoire/égalité pour les variantes autres que le classique mono-tir simultané (qui est **DÉCIDÉ** pour le LOT 1, cf. § 14) ; comportement de l'écran quand la liaison est interrompue après FEU.
+**DÉCIDÉ pour le LOT 1 (§ 14.10) :** une courte animation précède la révélation **visuellement simultanée** du résultat sur ATTAQUE et de la riposte dans DÉFENSE, sans minuterie imposée entre les manches. **À ARBITRER :** détails graphiques et durées de l'animation ; modalités des variantes autres que le classique mono-tir simultané ; comportement de l'écran quand la liaison est interrompue après FEU.
 
 ### Présentation du combat — DÉCIDÉ pour la V1.0
 
@@ -364,6 +364,13 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-CBT-001 | Type du navire coulé annoncé, épave non identifiée case par case | **DÉCIDÉ** |
 | LOT1-ABD-001 | PRÊT ouvre la période d'abandon comptant comme forfait volontaire | **DÉCIDÉ** |
 | LOT1-UX-004 | Indicateur DÉFENSE par gravité maximale non consultée, acquis à l'ouverture | **DÉCIDÉ** |
+| LOT1-UX-005 | Enchaînement libre des manches sans timer ni CONTINUER ; nouvelle cible immédiatement disponible après révélation | **DÉCIDÉ (PO)** |
+| LOT1-UX-006 | Animation de tir brève après FEU ; préparation de la cible suivante ignorée pendant l'animation, non mémorisée | **DÉCIDÉ (PO) / durée À VÉRIFIER** |
+| LOT1-UX-007 | Résultat sur ATTAQUE et riposte dans DÉFENSE révélés visuellement au même instant | **DÉCIDÉ (PO)** |
+| LOT1-UX-008 | DÉFENSE : coordonnées de la seule dernière riposte ; gravité maximale non consultée conservée ; résumé et alerte acquittés à l'ouverture | **DÉCIDÉ (PO)** |
+| LOT1-UX-009 | Sélection de cible conservée lors d'un aller-retour volontaire ATTAQUE/DÉFENSE avant FEU | **DÉCIDÉ (PO)** |
+| LOT1-FIN-004 | Verdict sur le champ de bataille puis format compact, sans écran intermédiaire obligatoire | **DÉCIDÉ (PO) / rendu À VÉRIFIER** |
+| V1-UX-010 | Futures salves : commande DÉFENSE de taille fixe ; liste des touches de la dernière salve, naufrage près de sa coordonnée et débordement « +N impacts » | **DÉCIDÉ (PO) / hors LOT 1** |
 | LOT1-ACC-001 | Accueil minimal : JOUER CONTRE MOUSSE et PALMARÈS ; autres accès dans les lots ultérieurs | **DÉCIDÉ (découpage délégué)** |
 | LOT1-ACC-002 | Titre officiel affiché : CYD WARSHIP ; nom du dépôt GitHub inchangé | **DÉCIDÉ (PO)** |
 | LOT1-ACC-003 | Accueil V1.0 fondé sur une scène maritime **fixe**, sans animation obligatoire | **DÉCIDÉ (PO)** |
@@ -420,6 +427,16 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 **Aucune modification n'est apportée au dépôt historique Le Grenier Geek.** Ce document est une référence fonctionnelle vivante, destinée à être amendée avec les décisions du PO et le retour de l'architecte. Il n'autorise aucun développement.
 
+
+**Consolidation du parcours de combat LOT 1 (29 octobre 2026, version 0.9) — arbitrages PO du présent échange :**
+- **Rythme du combat :** aucune temporisation imposée entre les manches, aucun CONTINUER ; animation de tir brève, nouvelles sélections ignorées (non mises en file) pendant l'animation ; révélation visuelle simultanée du tir joueur et de la riposte (LOT1-UX-005 à 007).
+- **Navigation :** une cible sélectionnée avant FEU est conservée après un aller-retour volontaire ATTAQUE/DÉFENSE (LOT1-UX-009).
+- **DÉFENSE :** résumé intégré des seules coordonnées de la dernière riposte, avec naufrage nommé le cas échéant ; pas d'accumulation des coordonnées ; alerte maximale des événements non consultés conservée jusqu'à ouverture, qui acquitte aussi le résumé (LOT1-UX-008).
+- **Fin de combat :** verdict intégré au champ de bataille après les deux tirs, mis en avant puis compact ; inspection des deux grilles sans tir, REJOUER/ACCUEIL accessibles (LOT1-FIN-004).
+- **Salves futures :** commande DÉFENSE à taille fixe, pas de défilement, annonce du naufrage rattachée à sa coordonnée, résumé **« +N impacts »** pour les touches non affichables (V1-UX-010) ; pas de réalisation des salves dans le LOT 1.
+- **Question conservée ouverte :** association de « coulé » à une coordonnée lorsque plusieurs nouveaux tirs de la même salve achèvent ensemble un navire ; gestion graphique de l'espace limitée ; pas de règle d'ordre de résolution inventée.
+- **Maturité :** décisions fonctionnelles validées, mais effets, durées et implantation révisables après essais matériels sous arbitrage explicite du PO. Aucun changement de charte, aucune maquette approuvée, aucun travail technique lancé.
+- **Traçabilité :** v0.7 (règles LOT 1), v0.8 (nom CYD WARSHIP et accueil) et décisions antérieures intégralement conservées ; le fichier [MAQUETTES.md](MAQUETTES.md) et les assets restent inchangés.
 
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
@@ -487,7 +504,7 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
   - Les deux flottes ont encore un navire à flot : **manche suivante**.
   - Après un résultat définitif, **aucun nouveau tir** ; un résultat ne compte qu'**une seule partie**.
 
-**À ARBITRER :** séquence de choix du CPU et mise en scène/rythme de résolution, présentation d'une annonce « coulé », animations/retours ; aucun de ces détails ne modifie la simultanéité.
+**DÉCIDÉ (expérience LOT 1, cf. § 14.10) :** enchaînement sans minuterie obligatoire ni CONTINUER, animation courte après FEU et révélation visuelle synchronisée des deux attaques. **À ARBITRER / À VÉRIFIER :** séquence interne de choix de Mousse, style et durée exacts de l'animation, présentation graphique des annonces « coulé » ; aucun de ces détails ne modifie la résolution simultanée.
 
 ### 14.5 Présentation du combat et indicateur — LOT1-UX-001 à 004
 
@@ -507,7 +524,7 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 - **DÉCIDÉ — LOT1-FIN-002, exception pédagogique VS Mousse :** lorsque **Mousse gagne**, il **propose** au joueur une commande de type **VOIR SA FLOTTE**. Le joueur choisit de révéler ou non la disposition complète de Mousse, navires non découverts inclus. Les tirs précédents restent visibles. Cela ne change pas le résultat ni le palmarès.
 - **DÉCIDÉ / cohérence :** en cas d'égalité par destruction réciproque, les deux flottes sont déjà intégralement touchées ; un bouton spécial de révélation n'est **pas imposé** dans le LOT 1. Son affichage éventuel reste **PROPOSÉ** dans la Bible.
 
-**À ARBITRER :** mise en scène de la fin, accès à la révélation, retour visuel à une grille déjà inspectée et options pertinentes quand le joueur gagne.
+**DÉCIDÉ (présentation du verdict, cf. § 14.10.3) :** verdict sur le champ de bataille, d'abord clairement mis en avant puis affiché en format compact, sans écran de résultat intermédiaire obligatoire. **À ARBITRER / À VÉRIFIER :** style et durée de cette transition, parcours de révélation facultative, retour visuel à une grille déjà inspectée et options pertinentes quand le joueur gagne.
 
 ### 14.7 Rejouer et déploiements successifs — LOT1-REV-001 à 003
 
@@ -531,11 +548,69 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 
 **REPORTÉ hors LOT 1 :** multijoueur ESP-NOW et ses salons/connexions, autres niveaux CPU, variante alternée, modes et compositions tactiques, grille 15 × 15, placement manuel, interfaces avancées et éventuelle console commerciale. **Ces décisions V1.0 ne sont pas annulées.**
 
-**À ARBITRER :** parcours tactile et visuel **d'une manche complète contre Mousse**, y compris sélection, verrouillage FEU, résolution simultanée, information des deux impacts et retour à la manche suivante ; transitions entre les écrans ; cas particuliers restants de l'IA ; détails des vues de résultat et palmarès.
+**DÉCIDÉ — parcours nominal détaillé au § 14.10 :** sélection, FEU irrévocable, animation courte, révélation synchronisée, information des dégâts dans DÉFENSE, passage libre à la manche suivante et verdict intégré. **À ARBITRER :** détails des transitions et de la révélation pédagogique de Mousse, cas particuliers restants de l'IA, modalités de présentation du palmarès.
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**PROPOSÉ — prochaine étape de cadrage :** définir précisément le déroulement joueur d'une manche, avec **une question produit importante à la fois**, puis consolider les critères d'acceptation. **Aucune mission technique/graphique, aucun backlog ni planning n'est lancé par ce document.**
+**PROPOSÉ — prochaine étape de cadrage :** préciser le parcours de révélation pédagogique de la flotte de Mousse après une défaite et consolider les critères d'acceptation ; conserver un arbitrage produit à la fois. **Aucune mission technique/graphique, aucun backlog ni planning n'est lancé par ce document.**
+
+### 14.10 Parcours tactile et visuel d'une manche contre Mousse — décisions PO du 29/10/2026
+
+**Statut : DÉCIDÉ pour les principes ci-dessous ; durées, implantation et style graphique À VÉRIFIER sur CYD réelle.** Les règles de résolution simultanée et la confidentialité des flottes ne changent pas.
+
+#### 14.10.1 Choix, FEU, animation et nouvelle manche — LOT1-UX-005/006/007/009
+
+1. **Avant FEU :** sur ATTAQUE, le joueur sélectionne une case encore inconnue, peut la désélectionner ou choisir une autre cible ; les cases déjà attaquées ne sont pas sélectionnables. Une bascule volontaire vers DÉFENSE puis un retour sur ATTAQUE **conservent la sélection en cours**, sans validation ni annulation implicite.
+2. **FEU :** la cible choisie devient **irrévocablement verrouillée** pour cette manche. Mousse prépare également sa cible sans accès aux informations secrètes ; l'ordre interne exact de son choix n'est pas prescrit. Le joueur ne peut plus modifier le tir déjà engagé.
+3. **Animation brève :** un petit effet visuel de tir/impact accompagne la résolution. **Aucun timer de 5 ou 10 secondes, aucun délai artificiel entre les manches, aucun bouton CONTINUER** n'est imposé. Pendant cette animation, les **appuis sur la grille ATTAQUE visant à préparer une nouvelle cible sont ignorés et non mis en attente** ; le prochain tir ne peut être préparé qu'après la révélation.
+4. **Révélation visuelle synchronisée :** au même instant, le résultat du tir du joueur s'inscrit sur **ATTAQUE** et la commande **DÉFENSE** présente la riposte de Mousse. Il ne s'agit pas d'une résolution successivement avantageuse : les **deux attaques sont résolues ensemble**, et les deux résultats sont révélés ensemble. Un naufrage annonce le type de navire, sans identifier les cases de l'épave adverse.
+5. **Suite du combat :** si les deux flottes ont encore un bâtiment à flot, le joueur peut **immédiatement** préparer la manche suivante, ou consulter DÉFENSE aussi longtemps qu'il le souhaite. **Aucune bascule automatique** ne lui est imposée.
+
+**À VÉRIFIER :** durée et fluidité de la courte animation, confort du tactile et compréhension du résultat synchronisé. **À ARBITRER :** comportement précis d'une demande de bascule ATTAQUE/DÉFENSE pendant la brève animation ; aucune restriction nouvelle de consultation n'est décidée ici.
+
+#### 14.10.2 Commande DÉFENSE : dernière riposte et alerte non consultée — LOT1-UX-008
+
+**DÉCIDÉ :** le bouton/zone tactile **DÉFENSE** remplit deux fonctions indépendantes et complémentaires :
+
+- **Information de la dernière manche seulement :** si Mousse touche une case, le message intégré associe son impact à sa coordonnée, par exemple **« Mousse vous a touché en E5 »**, ou **« E5 (Croiseur coulé) »** si ce point achève un navire. Une riposte manquée reste indiquée discrètement. Le texte exact et l'habillage restent à concevoir.
+- **Alerte persistante :** la commande conserve la **gravité maximale des événements non consultés** (manqué < touché < coulé), même si la dernière manche est moins grave. Elle ne conserve pas une liste cumulative de toutes les coordonnées.
+- **Manche suivante sans consultation :** le contenu « dernière riposte » est **remplacé** par celui de la nouvelle manche ; les coordonnées antérieures ne sont pas répétées dans la commande. L'alerte maximale non consultée continue, elle, à s'appliquer.
+- **Ouverture de DÉFENSE :** la consultation **acquitte l'alerte et efface les coordonnées du résumé du bouton**. De retour sur ATTAQUE, la commande n'affiche plus ce message ancien. **Cela n'efface aucun impact ni aucun historique sur la grille DÉFENSE.**
+- **Navigation :** le joueur décide seul d'ouvrir DÉFENSE ; cette consultation ne modifie pas la cible déjà préparée sur ATTAQUE avant FEU.
+
+**Exemple observable :** manche N−1, Mousse touche B4 ; le joueur ne consulte pas DÉFENSE. Manche N, Mousse manque son tir : la commande donne l'information de la **dernière manche manquée**, mais conserve l'alerte **TOUCHÉ** de B4 non consulté. À l'ouverture de DÉFENSE, l'alerte et le résumé sont acquittés ; B4 reste marqué sur la grille.
+
+#### 14.10.3 Dernière manche, verdict et inspection — LOT1-FIN-004
+
+**DÉCIDÉ :** le verdict **VICTOIRE / DÉFAITE / MATCH NUL** n'intervient **qu'après** la révélation synchronisée des deux tirs de la dernière manche. Il apparaît **sur le champ de bataille**, en conservant la grille et ses impacts, **sans écran de résultat intermédiaire obligatoire**.
+
+- Le verdict est d'abord **bien visible**, puis se **réduit à une présentation compacte** qui libère de la place sur la grille, sans jamais perdre l'identification du résultat.
+- Cette présentation ne nécessite **aucune confirmation ni attente obligatoire** ; ses transitions et durées exactes restent à vérifier.
+- Les vues **ATTAQUE** et **DÉFENSE** restent librement consultables après le résultat, sans nouveau tir possible ; **REJOUER** et **ACCUEIL** restent accessibles.
+- La proposition facultative de Mousse vainqueur de montrer toute sa flotte (**LOT1-FIN-002**) et la règle de confidentialité (**FIN-001**) demeurent inchangées.
+
+**PROPOSÉ (non encore décidé) :** ne pas ajouter de bouton INSPECTER si la bascule ATTAQUE/DÉFENSE permet déjà la consultation post-partie.
+
+### 14.11 Prolongement UX des salves — décisions V1.0 conservées, réalisation hors LOT 1
+
+**DÉCIDÉ sur le principe pour les futurs modes salves ; REPORTÉ hors réalisation LOT 1.** Le LOT 1 ne présente qu'une seule coordonnée par manche, mais les règles d'information suivantes sont actées pour ne pas perdre les arbitrages du PO :
+
+- La commande **DÉFENSE reste de taille fixe**, quelle que soit la quantité d'impacts de la dernière salve : ni agrandissement automatique, ni texte défilant.
+- Le message expose, dans l'espace disponible, les **coordonnées touchées lors de la dernière salve uniquement** ; les impacts des manches précédentes ne s'empilent pas. Le joueur peut retrouver tous les dégâts sur sa grille DÉFENSE.
+- L'annonce du type de bâtiment coulé se place **auprès de la coordonnée ayant achevé ce navire**, et non dans un bandeau indépendant ni nécessairement à la fin de la liste totale : **« E4, E5 (Croiseur coulé), B4 »**. Dans cet exemple, E5 est le point qui complète le croiseur et B4 appartient aussi à la salve.
+- Si les coordonnées dépassent l'espace disponible, la commande privilégie les **annonces de naufrage**, puis affiche les coordonnées qu'elle peut contenir et termine par **« +N impacts »**, où **N compte uniquement les cases touchées omises du résumé**, et non les tirs manqués. Aucune donnée n'est supprimée de la grille.
+- L'ouverture de DÉFENSE acquitte **à la fois** le résumé de la dernière salve et l'alerte de gravité maximale non consultée, conformément au § 14.10.2.
+- Cette association d'un naufrage à une coordonnée concerne **les dégâts sur sa propre flotte**. Elle ne lève **jamais** l'interdiction de révéler à l'attaquant l'appartenance précise des cases touchées à une épave ennemie (LOT1-CBT-001).
+
+**À ARBITRER pour les salves :** lorsqu'au cours d'une même résolution simultanée plusieurs nouveaux impacts contribuent ensemble à couler un même navire, la convention exacte d'association du libellé « coulé » à l'une des coordonnées. Une attribution à la dernière coordonnée présentée a été **PROPOSÉE**, mais **pas validée**. L'ordre d'énumération des tirs ne doit pas créer de priorité de résolution fictive.
+
+**À VÉRIFIER sur écran réel 320 × 240 :** lisibilité des libellés de naufrage, nombre de coordonnées affichables, abréviations, tailles tactiles et maintien de la place destinée à la grille. Aucun détail graphique ni nombre maximal de caractères n'est validé.
+
+### 14.12 Maturité de ces arbitrages et essais de jeu
+
+**DÉCIDÉ :** l'expérience recherchée privilégie le **rythme libre**, la consultation volontaire des dégâts, des retours de tir courts et un verdict lisible sans interrompre l'inspection. **Les choix UX pourront être revus explicitement par le PO au vu des parties de test du LOT 1** ; ce caractère révisable ne constitue pas une autorisation de les modifier sans nouvel arbitrage.
+
+**À VÉRIFIER / À CONCEVOIR :** durées d'animation et de mise en avant du verdict, emplacement du résumé DÉFENSE, codes couleur, icônes, transitions, lisibilité au stylet et comportement observable sur le matériel réel. Les anciennes maquettes restent non normatives. Aucune mission graphique ni développement n'est engagé par cette section.
 
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
