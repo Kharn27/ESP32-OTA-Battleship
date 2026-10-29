@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.16 — actualisation documentaire de l'accueil (LOT1-ACC-001/008) et errata rédactionnels de cohérence de la v0.15 (ERR-DOC-001 à 003) ; toutes les décisions antérieures conservées, 29 octobre 2026  
+**Version documentaire :** 0.17 — consolidation des arbitrages pré-backlog du LOT 1 (navigation directe VS Capitaine, CAP-TEST-001, compléments CAP-CPU-003/004/008, LOT1-UX-011) ; décisions et errata antérieurs conservés, 30 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -367,6 +367,8 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-CPU-005 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
 | LOT1-CPU-006 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
 | CAP-CPU-001 à 010 | Capitaine : dix principes décidés au § 16, désormais CPU du LOT 1 | **DÉCIDÉ (PO, v0.12)** |
+| CAP-TEST-001 | Capitaine évalué par ses comportements tactiques observables et des essais de difficulté ressentie, sans taux de victoire imposé | **DÉCIDÉ (PO, v0.17)** |
+| CAP-CPU-003/004/008 (précisions) | Après une touche : prochaine cible orthogonale inconnue plausible ; après deux touches voisines alignées : priorité aux prolongements plausibles, sans certitude d'un même navire | **DÉCIDÉ (PO, v0.17)** |
 | LOT1-FLT-001 | Navires au contact latéral ou diagonal autorisés, sans chevauchement | **DÉCIDÉ** |
 | LOT1-CBT-001 | Type du navire coulé annoncé, épave non identifiée case par case | **DÉCIDÉ** |
 | LOT1-ABD-001 | PRÊT ouvre la période d'abandon comptant comme forfait volontaire | **DÉCIDÉ** |
@@ -377,10 +379,12 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-UX-008 | DÉFENSE : coordonnées de la seule dernière riposte ; gravité maximale non consultée conservée ; résumé et alerte acquittés à l'ouverture | **DÉCIDÉ (PO)** |
 | LOT1-UX-009 | Sélection de cible conservée lors d'un aller-retour volontaire ATTAQUE/DÉFENSE avant FEU | **DÉCIDÉ (PO)** |
 | LOT1-UX-010 | Navigation ATTAQUE/DÉFENSE verrouillée pendant l'animation après FEU, demandes ignorées sans mise en attente ; réactivée après révélation simultanée | **DÉCIDÉ (PO, v0.15)** |
+| LOT1-UX-011 | QUITTER/ABANDONNER également indisponibles pendant l'animation après FEU ; appuis ignorés, réactivation à la révélation | **DÉCIDÉ (PO, v0.17)** |
 | LOT1-FIN-004 | Verdict sur le champ de bataille puis format compact, sans écran intermédiaire obligatoire | **DÉCIDÉ (PO) / rendu À VÉRIFIER** |
 | V1-UX-010 | Futures salves : commande DÉFENSE de taille fixe ; liste des touches de la dernière salve, naufrage près de sa coordonnée et débordement « +N impacts » | **DÉCIDÉ (PO) / hors LOT 1** |
-| LOT1-ACC-001 | Accueil : JOUER et PALMARÈS, sans accès factice ; choix d'adversaire sous JOUER | **DÉCIDÉ (PO, complété après v0.15)** |
-| LOT1-ACC-008 | Dès le LOT 1, JOUER ouvre la sélection d'adversaire ; seul Capitaine est jouable | **DÉCIDÉ (PO, après v0.15)** |
+| LOT1-ACC-001 | Accueil : exactement JOUER et PALMARÈS, sans accès factice | **DÉCIDÉ (PO, après v0.15)** |
+| LOT1-ACC-008 | Ancien arbitrage : écran de sélection dès le LOT 1 avec Capitaine seul jouable | **DÉCIDÉ historiquement (v0.16) / REMPLACÉ par LOT1-ACC-009** |
+| LOT1-ACC-009 | LOT 1 : JOUER mène directement au déploiement VS Capitaine ; sélection d'adversaire reportée ; RETOUR éventuel du déploiement vers l'accueil sans forfait avant PRÊT | **DÉCIDÉ (PO, v0.17)** |
 | LOT1-ACC-002 | Titre officiel affiché : CYD WARSHIP ; nom du dépôt GitHub inchangé | **DÉCIDÉ (PO)** |
 | LOT1-ACC-003 | Accueil V1.0 fondé sur une scène maritime **fixe**, sans animation obligatoire | **DÉCIDÉ (PO)** |
 | LOT1-ACC-004 | Titre en haut : identifiable, lisible mais discret, sans masquer la scène | **DÉCIDÉ (intention PO) / implantation À CONCEVOIR** |
@@ -499,6 +503,13 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - **ERR-DOC-001 (§ 14.1), ERR-DOC-002 (§ 14.3), ERR-DOC-003 (§ 14.10.3) : CORRECTIONS RÉDACTIONNELLES DE COHÉRENCE DE LA v0.15**, et non nouvelles décisions PO. Respectivement : seuls Mousse et Amiral sont reportés ; les principes de Capitaine sont au § 16 et les anciennes règles de Mousse au § 17 ; Capitaine vainqueur autorise déjà systématiquement une révélation *facultative* depuis la v0.13 (§ 14.13).
 - **Invariants :** LOT 1 VS Capitaine seul ; dix principes CAP-CPU-001 à 010, confidentialité des flottes, résultats, abandon, palmarès et décisions V1.0 historiques intégralement conservés. La présente actualisation n'approuve ni réalisation technique ni nouveau mode jouable.
 
+**Arbitrages complémentaires pré-backlog (30 octobre 2026, version 0.17) — décisions PO ; conservation de la traçabilité :**
+- **LOT1-ACC-009 — DÉCIDÉ, remplace LOT1-ACC-008 pour le LOT 1 :** depuis l'accueil **JOUER / PALMARÈS**, JOUER conduit **directement au déploiement contre Capitaine** (flotte préplacée, AUTO, PRÊT). Aucun écran de sélection d'adversaire au LOT 1 ; ce niveau de menu est **REPORTÉ** aux lots où il deviendra utile. Le combat n'est engagé qu'à **PRÊT**. **Si** une commande RETOUR est proposée pendant le déploiement, elle ramène à l'accueil sans forfait avant PRÊT ; sa présence et sa représentation restent **À CONCEVOIR**. L'ancien choix LOT1-ACC-008 (sélection immédiate avec Capitaine seul) reste identifiable comme **REMPLACÉ**, non effacé.
+- **CAP-TEST-001 — DÉCIDÉ :** réception de Capitaine sur des **comportements tactiques observables** et des **essais de difficulté ressentie**, **sans objectif imposé de taux de victoire** ; scénarios de plateau reproductibles et équité/no-triche à formaliser sans imposer d'algorithme.
+- **CAP-CPU-003/004/008 — DÉCIDÉ (précisions) :** après une touche, le **prochain tir** vise une case orthogonale inconnue et plausible, si elle existe. Après deux touches adjacentes alignées (ex. E5/F5), priorité aux prolongements plausibles de l'axe (ex. D5/G5), même si un premier prolongement rate ; les deux touches **ne prouvent jamais** l'identité d'un même navire. Une hypothèse devenue impossible est révisée ; les autres pistes sont conservées selon CAP-CPU-005/008.
+- **LOT1-UX-011 — DÉCIDÉ :** de FEU à la révélation synchronisée, **QUITTER/ABANDONNER** sont aussi momentanément indisponibles ; leurs appuis sont ignorés, sans action différée, puis la commande appropriée redevient accessible dès la révélation. La confirmation d'abandon après PRÊT, le palmarès et le forfait restent régis par LOT1-ABD-001 ; aucun nouveau mode d'abandon.
+- **À FORMALISER / À VÉRIFIER avant transmission finale :** scénarios d'acceptation objectifs des dix CAP-CPU, retours matériels stylet/affichage, éventuels détails de navigation et erreurs. **Aucun backlog ni travail technique engagé** par ces décisions.
+
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
 Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idée pourra être réexaminée sans devenir une exigence tacite.
@@ -528,10 +539,10 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 - **DÉCIDÉ :** grille **10 × 10** ; cinq navires classiques (2, 3, 3, 4 et 5 cases), **17 cases** occupées au total.
 - **DÉCIDÉ :** **mono-tir simultané** : une cible par camp, tirs secrets, résolution commune à chaque manche ; **FEU** verrouille irrévocablement le tir du joueur. Les cases déjà attaquées restent visibles et ne peuvent plus être ciblées.
-- **DÉCIDÉ — LOT1-ACC-001/008 (complément PO après v0.15) :** accueil volontairement minimal avec exactement deux actions **JOUER** et **PALMARÈS**, de même dimension visuelle sur la maquette d'accueil retenue. **JOUER ouvre dès le LOT 1 un écran de sélection d'adversaire** où seul **CAPITAINE** est jouable ; le choix de Capitaine mène au déploiement. **PALMARÈS** reste accessible depuis l'accueil. Aucun bouton factice vers une fonction indisponible.
+- **DÉCIDÉ — LOT1-ACC-001/009 (révision PO v0.17) :** accueil volontairement minimal avec exactement deux actions **JOUER** et **PALMARÈS**, de même dimension visuelle sur la maquette d'accueil retenue. **JOUER mène directement au déploiement VS CAPITAINE** (AUTO / PRÊT), sans sélecteur intermédiaire dans le LOT 1. **PALMARÈS** reste accessible depuis l'accueil. Aucun bouton factice vers une fonction indisponible. Le choix antérieur LOT1-ACC-008 (sélection d'adversaire immédiate) est **REMPLACÉ** pour le LOT 1.
 - **REPORTÉ à des lots ultérieurs, sans abandon V1.0 :** CRÉER/REJOINDRE et ESP-NOW, adversaires CPU Mousse et Amiral, familles tactiques, variante classique alternée, grilles 15 × 15 et placement manuel. L'accueil V1.0 s'enrichira lorsque ces expériences seront réellement disponibles.
 
-**DÉCIDÉ — début du parcours LOT 1 :** ACCUEIL → **JOUER** → **SÉLECTION D'ADVERSAIRE (Capitaine seul jouable)** → **DÉPLOIEMENT**. **PROPOSÉ — suite du parcours à détailler :** COMBAT → RÉSULTAT → INSPECTION / REJOUER / ACCUEIL. La présentation du sélecteur, le retour à l'accueil et les textes des écrans restent **À CONCEVOIR / À ARBITRER** ; aucune entrée future n'est rendue jouable par cette décision.
+**DÉCIDÉ — début du parcours LOT 1 :** ACCUEIL → **JOUER** → **DÉPLOIEMENT VS CAPITAINE** → **PRÊT** → COMBAT. **PROPOSÉ — forme détaillée des transitions de fin :** RÉSULTAT → INSPECTION / REJOUER / ACCUEIL, conformément aux décisions déjà actées. Avant PRÊT, un éventuel **RETOUR** depuis le déploiement ramène à l'accueil sans forfait ; la présence et l'habillage de cette commande sont **À CONCEVOIR**. Aucun menu de sélection d'adversaire n'est nécessaire dans le LOT 1 ; il est **REPORTÉ**.
 
 ### 14.2 Déploiement et contact des navires — LOT1-PL-001, LOT1-FLT-001
 
@@ -544,7 +555,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **DÉCIDÉ : Capitaine est le CPU du LOT 1** depuis la réorientation v0.12. Ses dix principes sont spécifiés au § 16 : recherche organisée et souple, exploitation locale des touches, révision des hypothèses contradictoires, pistes mémorisées et explorées prioritairement une à une, naufrages ambigus, persévérance et exploitation simple des tailles restantes. Pas d'omniscience, de tir répété ou d'optimisation probabiliste systématique.
 
-**À ARBITRER / À VÉRIFIER avant backlog :** compléments de comportement pour les cas limites non couverts par CAP-CPU-001 à 010, critères d'acceptation observables et difficulté réelle en partie. Les règles historiques de l'IA Mousse sont conservées au § 17 et leur réalisation est REPORTÉE hors LOT 1. L'IA Capitaine, définie au § 16, est retenue pour le LOT 1.
+**DÉCIDÉ — CAP-TEST-001 :** les dix principes CAP-CPU sont évalués par des **comportements tactiques observables** et des **essais de difficulté ressentie**, sans taux de victoire imposé. **DÉCIDÉ (précisions CAP-CPU-003/004/008) :** prochaine cible orthogonale inconnue plausible après première touche ; après deux touches adjacentes alignées, prolongements plausibles prioritaires sans certitude sur leur appartenance à un même navire (détails au § 16). **À FORMALISER / À VÉRIFIER avant backlog :** scénarios représentatifs, équité objectivement contrôlable et difficulté ressentie à tester en parties réelles, sans prescrire l'algorithme. Les règles historiques de l'IA Mousse sont conservées au § 17 et leur réalisation est REPORTÉE hors LOT 1. L'IA Capitaine, définie au § 16, est retenue pour le LOT 1.
 
 ### 14.4 Combat, naufrages et résultat — LOT1-CBT-001, LOT1-FIN-001
 
@@ -621,6 +632,10 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 5. **Suite du combat :** si les deux flottes ont encore un bâtiment à flot, le joueur peut **immédiatement** préparer la manche suivante, ou consulter DÉFENSE aussi longtemps qu'il le souhaite. **Aucune bascule automatique** ne lui est imposée.
 
 **DÉCIDÉ — LOT1-UX-010 :** pendant l'animation de FEU, navigation verrouillée, appuis sur DÉFENSE ignorés et non différés ; libre consultation après révélation simultanée. **Critère d'acceptation proposé :** un appui DÉFENSE pendant l'animation ne quitte pas ATTAQUE, n'acquitte pas les alertes DÉFENSE et ne provoque aucune bascule a posteriori ; un nouvel appui après révélation ouvre DÉFENSE conformément à LOT1-UX-008. **À VÉRIFIER :** durée et fluidité de l'animation, confort tactile et compréhension sur CYD réelle.
+
+**DÉCIDÉ — LOT1-UX-011 (v0.17) :** de l'appui sur **FEU** jusqu'à la révélation synchronisée des deux attaques, les commandes **QUITTER / ABANDONNER** sont également indisponibles. Tout appui pendant cet intervalle est **ignoré et non mémorisé** ; aucun dialogue ne s'ouvre et aucune demande d'abandon différée n'est exécutée. Dès la révélation, la commande pertinente est de nouveau accessible : avant résultat définitif, l'abandon suit **CONTINUER / ABANDONNER** et les règles du forfait après PRÊT ; après résultat, le retour à l'accueil n'ajoute pas de forfait.
+
+**Critère d'acceptation proposé (LOT1-UX-011) :** une tentative d'abandon pendant l'animation ne modifie ni la manche, ni les tirs, ni les compteurs, et n'ouvre aucun dialogue après la révélation ; une nouvelle demande effectuée après révélation déclenche la confirmation seulement si la partie est encore en cours.
 
 #### 14.10.2 Commande DÉFENSE : dernière riposte et alerte non consultée — LOT1-UX-008
 
@@ -712,9 +727,9 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 - **JOUER**
 - **PALMARÈS**
 
-**DÉCIDÉ — navigation :** les deux plaques de commande ont la même dimension visuelle dans la maquette d'accueil retenue. **JOUER** ouvre un **écran de sélection d'adversaire dès le LOT 1**. Seul **CAPITAINE** y est jouable ; sa sélection conduit au déploiement classique 10 × 10. **PALMARÈS** reste une consultation depuis l'accueil. Le choix futur « VS autre CYD » relève de ce niveau de sélection, **sans activation ESP-NOW au LOT 1**.
+**DÉCIDÉ — navigation (LOT1-ACC-009, révision PO v0.17) :** les deux plaques de commande ont la même dimension visuelle dans la maquette d'accueil retenue. **JOUER** mène **directement au déploiement classique 10 × 10 VS CAPITAINE**, prépositionné et modifiable par AUTO ; seule la validation PRÊT lance le combat. **PALMARÈS** ouvre la consultation depuis l'accueil. Un éventuel **RETOUR** pendant le déploiement ramène à l'accueil sans forfait avant PRÊT ; l'existence et le dessin de cette commande ne sont pas imposés par cet arbitrage.
 
-**À CONCEVOIR / À ARBITRER :** composition et retour de l'écran de sélection ; visibilité éventuelle d'adversaires futurs en tant qu'informations non interactives. Aucun bouton factice n'ouvre Mousse, Amiral, CRÉER / REJOINDRE, les variantes de jeu ou le multijoueur, tous **REPORTÉS hors LOT 1**. L'accueil n'expose jamais ces fonctions comme jouables.
+**DÉCIDÉ historiquement / REMPLACÉ :** LOT1-ACC-008 prévoyait dès le LOT 1 un écran de sélection d'adversaire avec Capitaine seul jouable. Ce choix est **remplacé** par LOT1-ACC-009 pour éviter une étape intermédiaire à choix unique. **REPORTÉ :** la sélection d'adversaire lorsque d'autres modes seront réellement disponibles, y compris un futur « VS autre CYD » ; **aucun ESP-NOW, Mousse, Amiral, CRÉER / REJOINDRE, variantes ou bouton factice actif** au LOT 1.
 
 **PROPOSÉ lors du cadrage initial v0.8 — options facultatives, non imposées à la composition finalement retenue :**
 - Un **avion en feu**, en chute vers la mer à proximité du navire principal.
@@ -764,11 +779,28 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 | **CAP-CPU-009** | **Prise en compte des tailles restantes** | Grâce aux types déjà coulés, il évite une zone dont les cases inconnues isolées ne peuvent contenir aucun navire encore à flot ; déduction géométrique simple et justifiable. |
 | **CAP-CPU-010** | **Pas d'optimisation systématique des possibilités** | Il élimine les zones impossibles mais explore souplement les zones plausibles, sans classer systématiquement celles-ci par nombre de placements ou probabilité de touche. |
 
+### Précisions d'acceptation Capitaine décidées en v0.17 — CAP-TEST-001, CAP-CPU-003/004/008
+
+**DÉCIDÉ — première touche (CAP-CPU-003) :** après avoir touché une case (exemple E5), **le tir suivant vise une case orthogonale inconnue et plausible** parmi D5, F5, E4, E6 s'il en existe. L'ordre de ces possibilités n'est pas imposé. Un simple raté ne termine pas l'exploration d'une piste encore crédible. Lorsque tous les voisins directs ne sont plus exploitables, les règles existantes de prolongement, de révision et de mémorisation des pistes (CAP-CPU-005/008) demeurent applicables.
+
+**DÉCIDÉ — deux touches voisines alignées (CAP-CPU-003/004/008) :** exemple E5 et F5 touchés, navire non coulé : Capitaine **privilégie D5 ou G5**, lorsqu'un prolongement de l'axe est encore inconnu et plausible. Si l'un rate, l'autre demeure prioritaire s'il reste plausible ; si les prolongements deviennent impossibles, il révise son hypothèse et revient aux autres pistes crédibles. **Ces deux touches peuvent provenir de navires différents qui se touchent : l'alignement est une hypothèse, jamais une preuve ni une information secrète.**
+
+**DÉCIDÉ — méthode de validation (CAP-TEST-001) :** conformité des choix sur des situations de plateau observables, contrôle de l'absence de triche (seules les informations publiques peuvent orienter les choix), aucune attaque répétée, puis vérification qualitative de la difficulté ressentie lors de parties réelles ; **aucun taux de victoire contractuel**.
+
+**Critères d'acceptation PROPOSÉS à finaliser avant backlog :**
+- Étant donné une première touche isolée E5 et au moins une voisine orthogonale inconnue plausible, quand Capitaine rejoue, alors sa cible est l'une de ces voisines.
+- Étant donné E5/F5 touchées et D5/G5 encore plausibles, le tir suivant privilégie l'un des deux prolongements ; après un raté sur l'un, l'autre reste prioritaire, sans certitude sur l'identité du navire.
+- Étant donné deux touches alignées encadrées par des ratés et sans annonce de naufrage (ex. C4 raté, D4/E4 touchées, F4 raté), Capitaine doit réviser l'hypothèse d'un unique navire horizontal, sans exploiter d'information secrète.
+- Capitaine mémorise les autres pistes, peut revenir sur une zone ambiguë après naufrage, et n'identifie jamais avec certitude les cases d'une épave simplement annoncée comme coulée.
+- Une situation publique identique ne doit pas conduire à un choix favorisé par une **position secrète inaccessible** ; les modalités de vérification sont à instruire par le Pilotage.
+
+Les scénarios sont **PROPOSÉS** comme formulation de réception et non comme décisions supplémentaires ni prescription d'algorithme.
+
 **Nuance fonctionnelle essentielle :** les navires peuvent se toucher. Une annonce de naufrage ne désigne **jamais les cases exactes de l'épave** ; l'analyse des touches non expliquées doit donc rester hypothétique, et aucun CPU ne peut « marquer » secrètement comme certaines les cases d'un navire coulé. En particulier, CAP-CPU-007 décrit le cas où **les touches observées ne peuvent toutes être expliquées par le navire annoncé**, sans supposer que Capitaine reçoit l'identité de ces touches.
 
 **DÉCIDÉ pour LOT 1 :** Capitaine sera l'adversaire du premier jeu complet. **REPORTÉ :** Mousse, Amiral, compositions tactiques et équilibrage comparatif. **PROPOSÉ / non décidé :** attribuer à Amiral un balayage en damier, des comparaisons de configurations ou une recherche probabiliste.
 
-**À ARBITRER avant backlog LOT 1 :** traduire ces principes en comportements observables exhaustifs et vérifier les degrés de difficulté sur des parties réelles. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
+**DÉCIDÉ — CAP-TEST-001 (v0.17) :** la conformité de Capitaine repose sur des scénarios de **comportement tactique observable** et des **essais de difficulté ressentie**, sans objectif statistique de victoire. **À FORMALISER** : ensemble représentatif de cas objectifs à vérifier (priorités locales, pistes multiples, naufrages ambigus, déductions géométriques sans secret), sans imposer un algorithme ni un ordre unique de tirs lorsque la règle laisse un choix. La difficulté ressentie reste **À VÉRIFIER en parties réelles** et ne conditionne pas la réception à un pourcentage arbitraire. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
 
 **Traçabilité :** les dix choix CAP-CPU ont été approuvés successivement par le PO le 29 octobre 2026. Le PO a ensuite explicitement corrigé le périmètre du LOT 1 pour y retenir Capitaine et reporter Mousse et Amiral. Les règles Mousse sont conservées au § 17.
 
