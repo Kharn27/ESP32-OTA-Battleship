@@ -522,7 +522,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage fonctionnel non terminé.** La présente section reprend les décisions du PO validées dans la conversation du 29 octobre 2026. La maquette d'accueil a été retenue au stade de conception (PR #8) ; les autres maquettes et les critères d'acceptation définitifs restent à préparer. La Bible complète n'est pas validée en bloc.
 
-### 14.1 Objectif et découpage — LOT1-001, LOT1-ACC-001
+### 14.1 Objectif et découpage — LOT1-001, LOT1-ACC-001/008
 
 **DÉCIDÉ — LOT1-001 :** sur **une seule ESP32 CYD classique** (tactile au stylet, écran réel **320 × 240 en paysage**, sans PSRAM présumée), jouer **une bataille classique complète contre Capitaine**, de l'accueil jusqu'au résultat. Ce lot **ne dépend pas d'ESP-NOW**.
 
@@ -699,7 +699,7 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 
 **À VÉRIFIER si diffusion publique :** disponibilité et usage commercial du nom ; cette question ne bloque pas le cadrage artistique.
 
-### 15.2 Écran d'accueil : scène et composition — LOT1-ACC-003 à 007
+### 15.2 Écran d'accueil : scène, composition et navigation — LOT1-ACC-003 à 008
 
 **DÉCIDÉ (PO) — intentions à représenter :**
 - Pour la **V1.0**, l'accueil montre une **scène illustrée fixe** : pas d'animation requise sur cet écran.
