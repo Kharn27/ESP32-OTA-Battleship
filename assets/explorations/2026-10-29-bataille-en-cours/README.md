@@ -4,7 +4,7 @@
 
 > **FRONTIÈRE PRODUIT :** ces scènes montrent, à titre **strictement narratif**, un navire ennemi visible, touché et en feu, avec des tirs vers l'horizon. **Ce ne sont pas des écrans de gameplay** et elles n'autorisent jamais la révélation des positions inconnues de la flotte adverse en combat. Les règles du LOT 1 demeurent celles de [BIBLE_PRODUIT.md](../../../BIBLE_PRODUIT.md).
 
-Cette archive regroupe deux générations d'images OpenAI du 29 octobre 2026 : contre-torpilleur au premier plan, tir vers l'horizon, océan au couchant et adversaire touché. Les **originaux PNG exacts et les exports natifs** sont désormais **versionnés dans cette branche**. Ils ont été vérifiés par comparaison des Git blob SHA-1 du dépôt aux octets locaux et par rapprochement avec leurs tailles et empreintes SHA-256.
+Cette archive regroupe deux générations d'images OpenAI du 29 octobre 2026 : contre-torpilleur au premier plan, tir vers l'horizon, océan au couchant et adversaire touché. Les **originaux PNG exacts et les exports natifs** sont désormais **versionnés dans le dépôt sur `main`**. Ils ont été vérifiés par comparaison des Git blob SHA-1 du dépôt aux octets locaux et par rapprochement avec leurs tailles et empreintes SHA-256.
 
 ## Aperçus authentiques au format CYD — PNG 320 × 240
 
@@ -35,6 +35,6 @@ Océan bleu pétrole et turquoise, écume froide et reflet or/corail au coucher 
 
 **DESIGN_PREVIEW uniquement :** aucune charte validée, aucun asset runtime prêt pour ESP32, aucun budget Flash/RAM mesuré, aucune compilation ni aucun test tactile sur CYD physique.
 
-La [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1), désormais fusionnée, classe séparément les explorations historiques A–F dans [MAQUETTES.md](../../../MAQUETTES.md), qui renvoie déjà à cette PR #2. Aucun changement supplémentaire de cet index n'est nécessaire dans la présente branche.
+Les [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) et [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) sont fusionnées. [MAQUETTES.md](../../../MAQUETTES.md) distingue les archives historiques A–F de ces deux scènes narratives, toujours **non validées par le PO**.
 
-**Statut : ORIGINAUX ET EXPORTS ARCHIVÉS — CONTRÔLES BINAIRES CONFORMES — NON_VALIDEE_PO — ON_DEVICE_UNVERIFIED.** PR maintenue **DRAFT et NON FUSIONNÉE** jusqu'à la contre-revue du Pilotage.
+**Statut : ORIGINAUX ET EXPORTS ARCHIVÉS SUR `main` (PR #2 fusionnée) — CONTRÔLES BINAIRES CONFORMES — NON_VALIDEE_PO — NON_RUNTIME — ON_DEVICE_UNVERIFIED.** La fusion documentaire ne constitue aucune approbation artistique ni autorisation d'intégration au firmware.
