@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.14 — nouvelle flotte aléatoire de Capitaine pour chaque partie et revanche (LOT1-REV-003) ; règles et arbitrages antérieurs conservés, 29 octobre 2026  
+**Version documentaire :** 0.15 — verrouillage ATTAQUE/DÉFENSE pendant l'animation de FEU (LOT1-UX-010) ; décisions antérieures conservées, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -376,6 +376,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-UX-007 | Résultat sur ATTAQUE et riposte dans DÉFENSE révélés visuellement au même instant | **DÉCIDÉ (PO)** |
 | LOT1-UX-008 | DÉFENSE : coordonnées de la seule dernière riposte ; gravité maximale non consultée conservée ; résumé et alerte acquittés à l'ouverture | **DÉCIDÉ (PO)** |
 | LOT1-UX-009 | Sélection de cible conservée lors d'un aller-retour volontaire ATTAQUE/DÉFENSE avant FEU | **DÉCIDÉ (PO)** |
+| LOT1-UX-010 | Navigation ATTAQUE/DÉFENSE verrouillée pendant l'animation après FEU, demandes ignorées sans mise en attente ; réactivée après révélation simultanée | **DÉCIDÉ (PO, v0.15)** |
 | LOT1-FIN-004 | Verdict sur le champ de bataille puis format compact, sans écran intermédiaire obligatoire | **DÉCIDÉ (PO) / rendu À VÉRIFIER** |
 | V1-UX-010 | Futures salves : commande DÉFENSE de taille fixe ; liste des touches de la dernière salve, naufrage près de sa coordonnée et débordement « +N impacts » | **DÉCIDÉ (PO) / hors LOT 1** |
 | LOT1-ACC-001 | Accueil : JOUER CONTRE CAPITAINE et PALMARÈS | **DÉCIDÉ (PO, v0.12)** |
@@ -484,6 +485,13 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - Les arbitrages spécifiques Mousse restent conservés pour un lot ultérieur ; la présente décision n'ajoute pas Mousse ni Amiral au LOT 1.
 - **Aucun backlog, nouvelle mission, développement ou planning lancé.**
 
+**Arbitrage LOT1-UX-010 — DÉCIDÉ par le PO le 29 octobre 2026 (v0.15) :**
+- Après **FEU**, pendant la courte animation de tir, **ATTAQUE/DÉFENSE est verrouillée**. Le joueur reste sur ATTAQUE jusqu'à la révélation synchronisée des deux attaques.
+- Un appui sur DÉFENSE durant l'animation est ignoré, jamais mémorisé et ne vaut ni consultation ni acquittement de l'alerte DÉFENSE.
+- Navigation de nouveau libre immédiatement après la révélation, sans bascule automatique ni action différée.
+- Cette règle précise LOT1-UX-006/007/008/009 ; la durée et le confort tactile restent à vérifier sur matériel réel.
+- Aucun backlog, mission, développement ou planning engagé par cette mise à jour documentaire.
+
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
 Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idée pourra être réexaminée sans devenir une exigence tacite.
@@ -546,7 +554,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 ### 14.5 Présentation du combat et indicateur — LOT1-UX-001 à 004
 
-- **DÉCIDÉ — LOT1-UX-001 :** une seule **grande grille** affichée à la fois ; **ATTAQUE** pour cibler et consulter l'historique offensif, **DÉFENSE** pour voir sa flotte et les dégâts. Bascule immédiate, volontaire, sans menu intermédiaire.
+- **DÉCIDÉ — LOT1-UX-001 :** une seule **grande grille** affichée à la fois ; **ATTAQUE** pour cibler et consulter l'historique offensif, **DÉFENSE** pour voir sa flotte et les dégâts. Bascule immédiate, volontaire, sans menu intermédiaire, **sauf pendant l'animation après FEU** (LOT1-UX-010).
 - **DÉCIDÉ — LOT1-UX-002 :** **aucune bascule automatique** après résolution ; le résultat du joueur apparaît sur ATTAQUE, les tirs de Capitaine sont signalés par l'indicateur DÉFENSE. Le joueur reste libre de consulter ses dégâts plus tard.
 - **DÉCIDÉ — LOT1-UX-003/004 :** gravité croissante **manqué (discret) < touché (visible) < coulé (alerte renforcée)**. En cas de plusieurs événements non consultés, **l'indicateur conserve la gravité maximale**, même après un tir manqué. **L'ouverture de DÉFENSE acquitte** l'alerte accumulée. Pas de compteur d'événements dans le LOT 1.
 
@@ -601,11 +609,11 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 1. **Avant FEU :** sur ATTAQUE, le joueur sélectionne une case encore inconnue, peut la désélectionner ou choisir une autre cible ; les cases déjà attaquées ne sont pas sélectionnables. Une bascule volontaire vers DÉFENSE puis un retour sur ATTAQUE **conservent la sélection en cours**, sans validation ni annulation implicite.
 2. **FEU :** la cible choisie devient **irrévocablement verrouillée** pour cette manche. Capitaine prépare également sa cible sans accès aux informations secrètes ; l'ordre interne exact de son choix n'est pas prescrit. Le joueur ne peut plus modifier le tir déjà engagé.
-3. **Animation brève :** un petit effet visuel de tir/impact accompagne la résolution. **Aucun timer de 5 ou 10 secondes, aucun délai artificiel entre les manches, aucun bouton CONTINUER** n'est imposé. Pendant cette animation, les **appuis sur la grille ATTAQUE visant à préparer une nouvelle cible sont ignorés et non mis en attente** ; le prochain tir ne peut être préparé qu'après la révélation.
-4. **Révélation visuelle synchronisée :** au même instant, le résultat du tir du joueur s'inscrit sur **ATTAQUE** et la commande **DÉFENSE** présente la riposte de Capitaine. Il ne s'agit pas d'une résolution successivement avantageuse : les **deux attaques sont résolues ensemble**, et les deux résultats sont révélés ensemble. Un naufrage annonce le type de navire, sans identifier les cases de l'épave adverse.
+3. **Animation brève :** un petit effet visuel de tir/impact accompagne la résolution. **Aucun timer de 5 ou 10 secondes, aucun délai artificiel entre les manches, aucun bouton CONTINUER** n'est imposé. Pendant cette animation, les **appuis sur la grille ATTAQUE visant à préparer une nouvelle cible sont ignorés et non mis en attente** ; le prochain tir ne peut être préparé qu'après la révélation. **DÉCIDÉ — LOT1-UX-010 :** la navigation **ATTAQUE/DÉFENSE est temporairement verrouillée** de FEU jusqu'à la révélation. Un appui sur DÉFENSE durant cet intervalle est **ignoré et non mémorisé** ; l'écran reste sur ATTAQUE et aucune bascule différée n'intervient.
+4. **Révélation visuelle synchronisée :** au même instant, le résultat du tir du joueur s'inscrit sur **ATTAQUE** et la commande **DÉFENSE** présente la riposte de Capitaine. Il ne s'agit pas d'une résolution successivement avantageuse : les **deux attaques sont résolues ensemble**, et les deux résultats sont révélés ensemble. Un naufrage annonce le type de navire, sans identifier les cases de l'épave adverse. **Après la révélation**, la navigation redevient immédiatement libre : DÉFENSE n'est consultable qu'à la suite d'un nouvel appui volontaire, sans bascule automatique.
 5. **Suite du combat :** si les deux flottes ont encore un bâtiment à flot, le joueur peut **immédiatement** préparer la manche suivante, ou consulter DÉFENSE aussi longtemps qu'il le souhaite. **Aucune bascule automatique** ne lui est imposée.
 
-**À VÉRIFIER :** durée et fluidité de la courte animation, confort du tactile et compréhension du résultat synchronisé. **À ARBITRER :** comportement précis d'une demande de bascule ATTAQUE/DÉFENSE pendant la brève animation ; aucune restriction nouvelle de consultation n'est décidée ici.
+**DÉCIDÉ — LOT1-UX-010 :** pendant l'animation de FEU, navigation verrouillée, appuis sur DÉFENSE ignorés et non différés ; libre consultation après révélation simultanée. **Critère d'acceptation proposé :** un appui DÉFENSE pendant l'animation ne quitte pas ATTAQUE, n'acquitte pas les alertes DÉFENSE et ne provoque aucune bascule a posteriori ; un nouvel appui après révélation ouvre DÉFENSE conformément à LOT1-UX-008. **À VÉRIFIER :** durée et fluidité de l'animation, confort tactile et compréhension sur CYD réelle.
 
 #### 14.10.2 Commande DÉFENSE : dernière riposte et alerte non consultée — LOT1-UX-008
 
