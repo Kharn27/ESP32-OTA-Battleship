@@ -1,10 +1,11 @@
-# Index des maquettes et recherches artistiques — I-009
+# Index des maquettes et recherches artistiques — CYD WARSHIP / I-009
 
 **ÉTAT DOCUMENTAIRE AU 29/10/2026 — aucune direction artistique de production validée par le PO.**
 
 | Classe | Statut | Contenu / portée |
 | --- | --- | --- |
 | **Références graphiques approuvées pour production** | **AUCUNE** | Ni charte ni écran final validés ; ne pas convertir directement les archives en assets firmware |
+| **Accueil CYD WARSHIP — cadrage validé, maquette à produire** | **DÉCIDÉ (intentions PO) / À CONCEVOIR (visuel)** | Titre du jeu, scène fixe, riposte manquée, commandes en bas à gauche ; voir [Bible §15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08) |
 | **Scènes narratives du 29 octobre 2026** | **HISTORIQUE_GIT — NON_VALIDEE_PO — NON_RUNTIME** | Retirées de `main` sur décision PO ; [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) et [dossier historique figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours) |
 | **Archives visuelles et UX A/B/C** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Habillages A/B/C](assets/explorations/2026-10-29-attaque-themes/README.md) |
 | **Archives d'agencements D/E/F** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Agencements D/E/F](assets/explorations/2026-10-29-attaque-layouts/README.md) |
@@ -122,3 +123,14 @@ Ces sources SVG sont **des previews PC 320 × 240, non des assets runtime et non
 Le dossier [`assets/explorations/2026-10-29-attaque-layouts/`](assets/explorations/2026-10-29-attaque-layouts/README.md) archive **trois autres dispositions anciennement proposées** indépendantes des thèmes A/B/C : **D grille centrale**, **E navigation latérale**, **F commandes basses**. Les trois SVG **320 × 240** sont visibles dans GitHub. Ils conservent les contraintes de `LOT1-UX-001/002/003`, le classique 10 × 10 contre Mousse, la sélection E6, les impacts antérieurs C3 et H8 et l'alerte de DÉFENSE non consultée.
 
 **Statut : EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO.** Les PNG/zooms locaux ne sont pas versionnés ; les trois sources SVG et leurs notes le sont. Aucun choix d'agencement, de thème interchangeable ou de rendu technique n'est validé. Aucun test sur CYD.
+
+
+## H. CYD WARSHIP — écran d'accueil à concevoir (cadrage PO du 29 octobre 2026)
+
+**DÉCIDÉ — besoins, non maquette approuvée :** titre **CYD WARSHIP** en partie haute, visible mais discret ; scène **fixe** au coucher de soleil, navire du joueur au premier plan, navire ennemi lointain endommagé, tir vers l'horizon et **riposte ratée (gerbe d'eau) près du navire principal**. Commandes **JOUER CONTRE MOUSSE** et **PALMARÈS** superposées à l'image, de préférence dans une zone calme **en bas à gauche**.
+
+**PROPOSÉ / À VÉRIFIER :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil ; simplicité, équilibre et lisibilité à 320 × 240 priment. La position exacte des éléments et le dessin restent ouverts.
+
+**À PRODUIRE via Pilotage / Graphiste :** une première proposition complète d'accueil adaptée à la CYD classique, soumise au PO **avant toute validation ou classement comme référence active**. Les anciennes images supprimées de `main` restent accessibles dans Git ; aucune exploration rejetée ne doit être réintroduite automatiquement.
+
+**Référence détaillée :** [BIBLE_PRODUIT.md, § 15](BIBLE_PRODUIT.md). Aucun autre écran, thème ou code n'est demandé par ce cadrage.
