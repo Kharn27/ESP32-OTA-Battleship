@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.11 — décisions PO sur le référentiel CPU Capitaine et clarification du périmètre LOT 1 ; règles métier v0.7, accueil v0.8, parcours de manche v0.9 et révélation v0.10 conservés, 29 octobre 2026  
+**Version documentaire :** 0.12 — LOT 1 VS Capitaine décidé par le PO ; Mousse et Amiral reportés, décisions antérieures préservées, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -9,7 +9,7 @@
 
 ## 1. Promesse et priorité de conception
 
-Créer **CYD WARSHIP**, un jeu de bataille navale familial, tactile et tactique sur ESP32 CYD classique. Le **LOT 1** commence contre Mousse sur une seule CYD ; la cible multijoueur humain utilise **deux ESP32 CYD**, un par joueur, avec une flotte secrète par console. **Intention artistique décidée par le PO :** jeu indépendant contemporain en pixel art riche, expressif et immersif, avec priorité à la lisibilité sur écran natif 320 × 240. **Charte visuelle définitive non validée.**
+Créer **CYD WARSHIP**, un jeu de bataille navale familial, tactile et tactique sur ESP32 CYD classique. Le **LOT 1** commence contre **Capitaine** sur une seule CYD ; la cible multijoueur humain utilise **deux ESP32 CYD**, un par joueur, avec une flotte secrète par console. **Intention artistique décidée par le PO :** jeu indépendant contemporain en pixel art riche, expressif et immersif, avec priorité à la lisibilité sur écran natif 320 × 240. **Charte visuelle définitive non validée.**
 
 **DÉCIDÉ — principes d'expérience :**
 - Le **gameplay passe avant le spectacle** : fluide, compréhensible sans se poser de questions, avec des retours immédiats.
@@ -283,13 +283,13 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 **DÉCIDÉ comme intitulés des trois niveaux utilisés dans le palmarès : Mousse, Capitaine, Amiral.**
 
-**DÉCIDÉ — démarche de cadrage CPU (29/10/2026, v0.11) :** Capitaine sert d'**adversaire de référence fonctionnelle** pour étalonner ensuite les difficultés. Ses dix principes de comportement déjà arbitrés sont consignés au **§ 16**. Cette référence de conception **n'ajoute pas Capitaine au LOT 1** ; sa réalisation et le cadrage détaillé d'Amiral sont **REPORTÉS à des lots ultérieurs**. Le **LOT 1 reste exclusivement VS Mousse**.
+**DÉCIDÉ — démarche de cadrage CPU (29/10/2026, v0.11) :** Capitaine sert d'**adversaire de référence fonctionnelle** pour étalonner ensuite les difficultés. Ses dix principes de comportement déjà arbitrés sont consignés au **§ 16**. **DÉCIDÉ ensuite en v0.12 : le LOT 1 se joue contre Capitaine ; Mousse et Amiral sont REPORTÉS.** Ses dix principes servent maintenant au premier lot.
 
-**DÉCIDÉ — équité pour Mousse et référentiel Capitaine :** pas d'accès aux placements secrets, aux identités cachées des touches ni aux cases exactes des épaves ; les décisions reposent uniquement sur les tirs, résultats, annonces et règles accessibles à un humain.
+**DÉCIDÉ — équité des CPU :** pas d'accès aux placements secrets, aux identités cachées des touches ni aux cases exactes des épaves ; les décisions reposent uniquement sur les tirs, résultats, annonces et règles accessibles à un humain.
 
 **PROPOSÉ / À ARBITRER — différenciation non finalisée :**
-- **Mousse** : débutant, exploration plutôt instinctive, maladresses crédibles ; les règles LOT1-CPU-001 à 005 restent décidées, leurs cas limites demandent encore arbitrage.
-- **Capitaine** : joueur compétent mais imparfait, comportement de référence déjà cadré au § 16 ; équilibrage réel restant à vérifier.
+- **Mousse** : débutant, exploration plutôt instinctive, maladresses crédibles ; ses décisions historiques LOT1-CPU-001 à 006 sont conservées pour un lot futur (§ 17).
+- **Capitaine** : joueur compétent mais imparfait, CPU du LOT 1, dix principes déjà cadrés au § 16 ; équilibrage réel restant à vérifier.
 - **Amiral** : exploitation plus poussée des indices et des placements possibles ; comportement précis non décidé.
 - Les compositions de flottes tactiques selon les niveaux restent à définir dans les lots concernés.
 
@@ -303,7 +303,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 ## 10. Expérience à finaliser / questions transverses
 
-- **Fin de manche et de partie :** règles de victoire/défaite/égalité décidées pour le classique mono-tir simultané VS Mousse (§ 14) ; les autres variantes, les détails d'affichage et les transitions restent à préciser. Le secret du vainqueur (FIN-001) et la revanche pilotée par l'hôte en VS humain sont conservés.
+- **Fin de manche et de partie :** règles de victoire/défaite/égalité décidées pour le classique mono-tir simultané VS Capitaine (§ 14) ; les autres variantes, les détails d'affichage et les transitions restent à préciser. Le secret du vainqueur (FIN-001) et la revanche pilotée par l'hôte en VS humain sont conservés.
 - **Cas d'erreur :** la double sélection d'une cible et les tirs sur case déjà jouée sont traités ; restent notamment les écrans en désaccord, expiration des sessions et absence prolongée d'un adversaire. L'abandon **volontaire confirmé** est décidé, mais une interruption définitive non confirmée reste à définir.
 - **Lisibilité :** propre flotte versus eaux adverses ; possibilité d'une grande grille unique et d'une bascule immédiate, surtout en 15 × 15.
 - **Audio :** vérifier le matériel réel avant d'exiger des effets sonores.
@@ -347,26 +347,26 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | SOLO-003 | Noms Mousse / Capitaine / Amiral pour les niveaux et palmarès ; comportements et équité CPU à préciser | **DÉCIDÉ (noms) / PROPOSÉ (comportements et équité)** |
 | V1-001 | Trois familles de jeu comme cible de V1.0 ; MVP à préciser | **DÉCIDÉ sur le principe** |
 | V1-002 | Catalogue V1.0 jugé assez riche ; priorité désormais à détailler règles et parcours | **DÉCIDÉ comme orientation de travail** |
-| LOT1-001 | Première expérience à livrer : une partie classique complète VS Mousse sur une seule CYD | **DÉCIDÉ (orientation du lot)** |
+| LOT1-001 | Bataille classique complète VS Capitaine sur une CYD ; remplace VS Mousse (v0.12) | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-PL-001 | Déploiement par AUTO répétable puis PRÊT ; pas de retouche manuelle dans le LOT 1 | **DÉCIDÉ (lot 1)** |
-| LOT1-CPU-001 | Mousse explore au hasard et recherche autour des impacts, tout en commettant des erreurs | **DÉCIDÉ (principe LOT 1)** |
+| LOT1-CPU-001 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
 | LOT1-UX-001 | Une seule grande grille visible à la fois, bascule immédiate ATTAQUE/DÉFENSE | **DÉCIDÉ (V1.0)** |
 | LOT1-UX-002 | Après FEU, aucune bascule automatique ; résultat joueur sur ATTAQUE, défense consultable à volonté | **DÉCIDÉ (V1.0)** |
 | LOT1-UX-003 | Indicateur DÉFENSE : raté discret, touché visible, coulé renforcé, alerte persistante jusqu'à consultation | **DÉCIDÉ (principe V1.0)** |
 | LOT1-FIN-001 | Résultat après résolution des deux tirs ; destruction mutuelle = match nul | **DÉCIDÉ** |
-| LOT1-FIN-002 | Mousse vainqueur autorise toujours une révélation facultative ; VOIR SA FLOTTE sur ATTAQUE, superposition conservant les tirs, affichage/masquage réversible et état mémorisé pendant ATTAQUE/DÉFENSE ; inspection visuelle simple | **DÉCIDÉ (PO, précisé v0.10)** |
+| LOT1-FIN-002 | Révélation visuelle facultative sur ATTAQUE ; autorisation automatique de Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
 | LOT1-FIN-003 | Inspection libre ATTAQUE/DÉFENSE après résultat, sans nouveaux tirs | **DÉCIDÉ** |
-| LOT1-FIN-005 | VOIR SA FLOTTE est réservé au perdant lorsque le vainqueur a autorisé MONTRER MA FLOTTE ; Mousse autorise automatiquement si vainqueur ; aucune commande MONTRER MA FLOTTE lors d'une victoire humaine VS Mousse ; aucune commande de révélation requise en cas de nul | **DÉCIDÉ (PO, v0.10) / multijoueur hors LOT 1** |
-| LOT1-REV-001 | REJOUER contre Mousse dans le LOT 1 sans repasser par l'accueil | **DÉCIDÉ** |
+| LOT1-FIN-005 | Autorisation du vainqueur préalable ; Mousse l'accorde (lot futur), Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
+| LOT1-REV-001 | REJOUER contre Capitaine dans le LOT 1 | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-REV-002 | Revanche : ancien placement du joueur affiché par défaut, AUTO ou PRÊT | **DÉCIDÉ** |
-| LOT1-REV-003 | Nouvelle flotte aléatoire générée pour Mousse à chaque partie/revanche | **DÉCIDÉ** |
-| LOT1-STAT-001 | Palmarès VS Mousse et compteur global consultables dès le LOT 1 | **DÉCIDÉ** |
-| LOT1-CPU-002 | Après impact, Mousse privilégie une recherche autour de la cible | **DÉCIDÉ** |
-| LOT1-CPU-003 | Après deux impacts adjacents alignés, priorité à l'axe supposé | **DÉCIDÉ** |
-| LOT1-CPU-004 | Plusieurs pistes mémorisées, poursuivies prioritairement une à une | **DÉCIDÉ** |
-| LOT1-CPU-005 | Après coulé, piste supposée terminée ; priorité à une autre piste | **DÉCIDÉ** |
-| LOT1-CPU-006 | Après deux touches alignées, si un prolongement manque, Mousse privilégie l'autre extrémité encore inconnue avant de réviser l'alignement | **DÉCIDÉ (PO, 29/10/2026)** |
-| CAP-CPU-001 à 010 | Capitaine, étalon fonctionnel : dix principes détaillés au § 16 ; non inclus dans le LOT 1 | **DÉCIDÉ (référence de conception) / réalisation REPORTÉE** |
+| LOT1-REV-003 | Renouvellement aléatoire décidé pour Mousse (reporté) ; Capitaine À ARBITRER | **DÉCIDÉ (acquis) / À ARBITRER (Capitaine)** |
+| LOT1-STAT-001 | Palmarès VS Capitaine et compteur global dès le LOT 1 | **DÉCIDÉ (PO, v0.12)** |
+| LOT1-CPU-002 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
+| LOT1-CPU-003 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
+| LOT1-CPU-004 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
+| LOT1-CPU-005 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
+| LOT1-CPU-006 | Règle Mousse, ancien identifiant LOT 1 conservé au § 17 | **DÉCIDÉ historiquement / REPORTÉ** |
+| CAP-CPU-001 à 010 | Capitaine : dix principes décidés au § 16, désormais CPU du LOT 1 | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-FLT-001 | Navires au contact latéral ou diagonal autorisés, sans chevauchement | **DÉCIDÉ** |
 | LOT1-CBT-001 | Type du navire coulé annoncé, épave non identifiée case par case | **DÉCIDÉ** |
 | LOT1-ABD-001 | PRÊT ouvre la période d'abandon comptant comme forfait volontaire | **DÉCIDÉ** |
@@ -378,7 +378,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-UX-009 | Sélection de cible conservée lors d'un aller-retour volontaire ATTAQUE/DÉFENSE avant FEU | **DÉCIDÉ (PO)** |
 | LOT1-FIN-004 | Verdict sur le champ de bataille puis format compact, sans écran intermédiaire obligatoire | **DÉCIDÉ (PO) / rendu À VÉRIFIER** |
 | V1-UX-010 | Futures salves : commande DÉFENSE de taille fixe ; liste des touches de la dernière salve, naufrage près de sa coordonnée et débordement « +N impacts » | **DÉCIDÉ (PO) / hors LOT 1** |
-| LOT1-ACC-001 | Accueil minimal : JOUER CONTRE MOUSSE et PALMARÈS ; autres accès dans les lots ultérieurs | **DÉCIDÉ (découpage délégué)** |
+| LOT1-ACC-001 | Accueil : JOUER CONTRE CAPITAINE et PALMARÈS | **DÉCIDÉ (PO, v0.12)** |
 | LOT1-ACC-002 | Titre officiel affiché : CYD WARSHIP ; nom du dépôt GitHub inchangé | **DÉCIDÉ (PO)** |
 | LOT1-ACC-003 | Accueil V1.0 fondé sur une scène maritime **fixe**, sans animation obligatoire | **DÉCIDÉ (PO)** |
 | LOT1-ACC-004 | Titre en haut : identifiable, lisible mais discret, sans masquer la scène | **DÉCIDÉ (intention PO) / implantation À CONCEVOIR** |
@@ -461,6 +461,15 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - **REPORTÉ :** implémentation des difficultés Capitaine et Amiral, et approfondissement de leurs spécifications, à des lots ultérieurs. LOT 1 inchangé : **VS Mousse seul**, une CYD, classique mono-tir simultané.
 - **Prochaine étape demandée par le PO :** inventaire des manques fonctionnels et critères d'acceptation nécessaires **avant création d'un backlog**. La présente modification documentaire ne crée ni backlog, ni mission, ni planification, ni validation globale de la Bible.
 
+**Changement explicite du LOT 1 — v0.12, décision du PO (29 octobre 2026) :**
+- **DÉCIDÉ :** Capitaine remplace Mousse comme adversaire du LOT 1. **Mousse et Amiral sont REPORTÉS** à des lots ultérieurs, sans annulation des principes déjà validés.
+- **Conservé :** partie classique 10 × 10 / cinq navires / 17 cases, mono-tir simultané, parcours combat, revanche, palmarès et règles UX ; les dix principes Capitaine du § 16 sont ceux du premier lot.
+- **Conséquences :** accueil **JOUER CONTRE CAPITAINE**, palmarès actif **VS CAPITAINE**, combats et revanche contre Capitaine.
+- **Conservé pour lot futur :** Mousse et ses décisions historiques LOT1-CPU-001 à 006 (§ 17). Le préfixe ancien n'implique plus une réalisation dans le LOT 1.
+- **À ARBITRER (non transféré automatiquement) :** Capitaine autorise-t-il systématiquement la révélation de sa flotte après victoire ? Regénère-t-il systématiquement sa flotte à chaque revanche ?
+- **Impact documentaire externe :** l'issue graphique #6 et les maquettes anciennes peuvent mentionner Mousse ; leur statut historique est conservé. Le Pilotage devra actualiser le brief d'accueil avant réalisation/validation, sans mission silencieuse.
+- **Aucune issue, nouvelle mission, implémentation ou planification lancée par cette correction.**
+
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
 Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idée pourra être réexaminée sans devenir une exigence tacite.
@@ -480,17 +489,17 @@ Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idé
 
 Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identifier puis fermer les derniers **arbitrages fonctionnels bloquants**, particulièrement les cas limites de Mousse, et consolider les **parcours et critères d'acceptation observables**. Les travaux artistiques déjà lancés conservent leur statut sans validation implicite. **Aucune nouvelle mission technique, graphique, issue ou planification n'est créée par cette mise à jour.**
 
-## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Mousse (consolidation v0.7)
+## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Capitaine (consolidation v0.7)
 
 **Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage fonctionnel non terminé.** La présente section reprend les décisions du PO validées dans la conversation du 29 octobre 2026. Les maquettes et critères d'acceptation définitifs restent à préparer ; la Bible complète n'est pas validée en bloc.
 
 ### 14.1 Objectif et découpage — LOT1-001, LOT1-ACC-001
 
-**DÉCIDÉ — LOT1-001 :** sur **une seule ESP32 CYD classique** (tactile au stylet, écran réel **320 × 240 en paysage**, sans PSRAM présumée), jouer **une bataille classique complète contre Mousse**, de l'accueil jusqu'au résultat. Ce lot **ne dépend pas d'ESP-NOW**.
+**DÉCIDÉ — LOT1-001 :** sur **une seule ESP32 CYD classique** (tactile au stylet, écran réel **320 × 240 en paysage**, sans PSRAM présumée), jouer **une bataille classique complète contre Capitaine**, de l'accueil jusqu'au résultat. Ce lot **ne dépend pas d'ESP-NOW**.
 
 - **DÉCIDÉ :** grille **10 × 10** ; cinq navires classiques (2, 3, 3, 4 et 5 cases), **17 cases** occupées au total.
 - **DÉCIDÉ :** **mono-tir simultané** : une cible par camp, tirs secrets, résolution commune à chaque manche ; **FEU** verrouille irrévocablement le tir du joueur. Les cases déjà attaquées restent visibles et ne peuvent plus être ciblées.
-- **DÉCIDÉ (découpage fonctionnel délégué à l'assistant PO) — LOT1-ACC-001 :** accueil volontairement minimal avec les accès fonctionnels **JOUER CONTRE MOUSSE** et **PALMARÈS** ; aucun bouton factice vers des fonctions indisponibles.
+- **DÉCIDÉ (découpage fonctionnel délégué à l'assistant PO) — LOT1-ACC-001 :** accueil volontairement minimal avec les accès fonctionnels **JOUER CONTRE CAPITAINE** et **PALMARÈS** ; aucun bouton factice vers des fonctions indisponibles.
 - **REPORTÉ à des lots ultérieurs, sans abandon V1.0 :** CRÉER/REJOINDRE et ESP-NOW, difficultés Capitaine/Amiral, familles tactiques, variante classique alternée, grilles 15 × 15 et placement manuel. L'accueil V1.0 s'enrichira lorsque ces expériences seront réellement disponibles.
 
 **PROPOSÉ — parcours utilisateur à détailler :** ACCUEIL → DÉPLOIEMENT → COMBAT → RÉSULTAT → INSPECTION / REJOUER / ACCUEIL. L'enchaînement des grandes étapes est cohérent avec les décisions ci-dessous ; les transitions et textes des écrans ne sont pas validés.
@@ -498,42 +507,33 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 ### 14.2 Déploiement et contact des navires — LOT1-PL-001, LOT1-FLT-001
 
 - **DÉCIDÉ — LOT1-PL-001 :** dès l'entrée en déploiement, les cinq navires du joueur sont **intégralement prépositionnés au hasard** sur une grille valide. **AUTO** renouvelle toute la disposition autant de fois que voulu ; **PRÊT** valide la disposition affichée et engage le combat. **AUTO ne vaut jamais PRÊT.** Le placement individuel, la rotation et ✓/✕ sont **hors LOT 1**, conservés pour la V1.0.
-- **DÉCIDÉ — LOT1-FLT-001 :** les bâtiments peuvent se toucher **par un côté horizontal, vertical ou en diagonale**. Ils **ne se superposent pas**, restent dans la grille et aucune case d'eau n'est imposée entre eux. Cette règle s'applique **aux flottes du joueur et de Mousse** et doit rester cohérente avec le futur placement manuel.
+- **DÉCIDÉ — LOT1-FLT-001 :** les bâtiments peuvent se toucher **par un côté horizontal, vertical ou en diagonale**. Ils **ne se superposent pas**, restent dans la grille et aucune case d'eau n'est imposée entre eux. Cette règle s'applique **aux flottes du joueur et de Capitaine** et doit rester cohérente avec le futur placement manuel.
 
 **Critères d'acceptation proposés à consolider :** AUTO et le déploiement initial respectent toujours la composition imposée, les limites de grille et l'absence de superposition ; PRÊT est nécessaire pour démarrer le combat ; un contact entre deux navires ne rend pas leur placement invalide.
 
-### 14.3 IA de Mousse — LOT1-CPU-001 à 006
+### 14.3 IA de Capitaine — CAP-CPU-001 à 010
 
-**DÉCIDÉ — adversaire débutant crédible, imparfait et sans triche.** Mousse ne reçoit jamais la carte secrète, l'identité secrète d'une case touchée ni la composition d'une épave ; il raisonne sur ses tirs passés et les annonces qu'un adversaire humain recevrait.
+**DÉCIDÉ : Capitaine est le CPU du LOT 1** depuis la réorientation v0.12. Ses dix principes sont spécifiés au § 16 : recherche organisée et souple, exploitation locale des touches, révision des hypothèses contradictoires, pistes mémorisées et explorées prioritairement une à une, naufrages ambigus, persévérance et exploitation simple des tailles restantes. Pas d'omniscience, de tir répété ou d'optimisation probabiliste systématique.
 
-- **LOT1-CPU-001 / 002 — Exploration et chasse :** sans piste exploitable, Mousse tire au hasard parmi les cases **jamais attaquées**. Après une touche, il privilégie les cases inconnues voisines. Il peut choisir une mauvaise direction, mais cherche à exploiter sa découverte plutôt que repartir systématiquement ailleurs.
-- **LOT1-CPU-003 — Hypothèse d'alignement :** après **deux impacts voisins alignés**, Mousse **suppose** qu'ils appartiennent à un même navire et privilégie l'axe et ses prolongements encore inconnus. Il peut se tromper de sens. **Les navires pouvant se toucher**, cet alignement n'est pas une preuve d'appartenance commune et ne doit pas être traité comme une connaissance cachée.
-- **LOT1-CPU-004 — Pistes multiples :** Mousse mémorise toutes les découvertes et privilégie **une piste exploitable à la fois** ; il peut reprendre une autre piste déjà identifiée sans perdre les impacts précédents.
-- **LOT1-CPU-005 — Après un coulé :** la piste actuelle est considérée comme **probablement terminée** ; Mousse privilégie une autre piste disponible, tout en conservant les impacts antérieurs et la possibilité d'y revenir. Il ne connaît pas les cases exactes de l'épave.
-- **LOT1-CPU-006 — DÉCIDÉ (29/10/2026) :** si Mousse a deux touches adjacentes alignées et rate le premier prolongement testé, il **privilégie l'autre extrémité encore inconnue** avant de remettre en cause cet axe. Cela décrit une priorité, non une garantie de toucher.
-- **DÉCIDÉ :** aucune case déjà attaquée ne peut être rejouée par Mousse ; ses mauvaises décisions découlent des **hypothèses** et choix de direction, pas d'une consultation des positions secrètes.
-
-**À ARBITRER / préciser sans prescrire d'algorithme :** après deux prolongements ratés encadrant deux touches sans annonce de naufrage (ex. C4 raté, D4/E4 touchés, F4 raté), Mousse perd-il temporairement sa piste ou continue-t-il à explorer localement ? **Aucune option n'a été validée** pour ce cas. Restent également ouverts : sélection entre voisins, pistes qui se recoupent, absence de piste exploitable, réactions aux naufrages ambigus et mesure observable du niveau « débutant ». Ne pas transformer automatiquement les capacités de Capitaine (§ 16) en capacités de Mousse. Les principes ci-dessus ne constituent pas une implémentation technique.
-
-**Critères d'acceptation proposés à consolider :** préférence observable pour une zone touchée puis son axe possible ; capacité à retrouver une ancienne piste ; absence de tir répété ou de déduction utilisant une information secrète.
+**À ARBITRER / À VÉRIFIER avant backlog :** compléments de comportement pour les cas limites non couverts par CAP-CPU-001 à 010, critères d'acceptation observables et difficulté réelle en partie. L'IA Capitaine est conservée au § 17 et REPORTÉE.
 
 ### 14.4 Combat, naufrages et résultat — LOT1-CBT-001, LOT1-FIN-001
 
-- **DÉCIDÉ — FEU / ciblage :** le joueur peut modifier sa cible **avant FEU** ; après FEU, elle est **définitivement verrouillée**. Les tirs du joueur et de Mousse sont résolus pour la même manche, sans avantage de priorité. Un historique affiche raté/touché ; aucune case déjà attaquée ne redevient sélectionnable.
-- **DÉCIDÉ — LOT1-CBT-001 :** quand un navire coule, le **type du navire** est annoncé (« Croiseur coulé ! » par exemple), mais les cases appartenant précisément à son épave **ne sont pas identifiées visuellement parmi les touches**. Cela préserve l'intérêt tactique des navires collés. Le joueur **et Mousse** reçoivent cette même information limitée.
+- **DÉCIDÉ — FEU / ciblage :** le joueur peut modifier sa cible **avant FEU** ; après FEU, elle est **définitivement verrouillée**. Les tirs du joueur et de Capitaine sont résolus pour la même manche, sans avantage de priorité. Un historique affiche raté/touché ; aucune case déjà attaquée ne redevient sélectionnable.
+- **DÉCIDÉ — LOT1-CBT-001 :** quand un navire coule, le **type du navire** est annoncé (« Croiseur coulé ! » par exemple), mais les cases appartenant précisément à son épave **ne sont pas identifiées visuellement parmi les touches**. Cela préserve l'intérêt tactique des navires collés. Le joueur **et Capitaine** reçoivent cette même information limitée.
 - **DÉCIDÉ — LOT1-FIN-001 :** le résultat est évalué **après résolution des deux tirs de la manche**, même si l'un des tirs achève la flotte adverse :
-  - Tous les navires de Mousse coulés, flotte humaine encore à flot : **VICTOIRE**.
-  - Tous les navires humains coulés, flotte de Mousse encore à flot : **DÉFAITE**.
+  - Tous les navires de Capitaine coulés, flotte humaine encore à flot : **VICTOIRE**.
+  - Tous les navires humains coulés, flotte de Capitaine encore à flot : **DÉFAITE**.
   - Deux dernières flottes détruites au cours de cette même manche : **MATCH NUL**.
   - Les deux flottes ont encore un navire à flot : **manche suivante**.
   - Après un résultat définitif, **aucun nouveau tir** ; un résultat ne compte qu'**une seule partie**.
 
-**DÉCIDÉ (expérience LOT 1, cf. § 14.10) :** enchaînement sans minuterie obligatoire ni CONTINUER, animation courte après FEU et révélation visuelle synchronisée des deux attaques. **À ARBITRER / À VÉRIFIER :** séquence interne de choix de Mousse, style et durée exacts de l'animation, présentation graphique des annonces « coulé » ; aucun de ces détails ne modifie la résolution simultanée.
+**DÉCIDÉ (expérience LOT 1, cf. § 14.10) :** enchaînement sans minuterie obligatoire ni CONTINUER, animation courte après FEU et révélation visuelle synchronisée des deux attaques. **À ARBITRER / À VÉRIFIER :** séquence interne de choix de Capitaine, style et durée exacts de l'animation, présentation graphique des annonces « coulé » ; aucun de ces détails ne modifie la résolution simultanée.
 
 ### 14.5 Présentation du combat et indicateur — LOT1-UX-001 à 004
 
 - **DÉCIDÉ — LOT1-UX-001 :** une seule **grande grille** affichée à la fois ; **ATTAQUE** pour cibler et consulter l'historique offensif, **DÉFENSE** pour voir sa flotte et les dégâts. Bascule immédiate, volontaire, sans menu intermédiaire.
-- **DÉCIDÉ — LOT1-UX-002 :** **aucune bascule automatique** après résolution ; le résultat du joueur apparaît sur ATTAQUE, les tirs de Mousse sont signalés par l'indicateur DÉFENSE. Le joueur reste libre de consulter ses dégâts plus tard.
+- **DÉCIDÉ — LOT1-UX-002 :** **aucune bascule automatique** après résolution ; le résultat du joueur apparaît sur ATTAQUE, les tirs de Capitaine sont signalés par l'indicateur DÉFENSE. Le joueur reste libre de consulter ses dégâts plus tard.
 - **DÉCIDÉ — LOT1-UX-003/004 :** gravité croissante **manqué (discret) < touché (visible) < coulé (alerte renforcée)**. En cas de plusieurs événements non consultés, **l'indicateur conserve la gravité maximale**, même après un tir manqué. **L'ouverture de DÉFENSE acquitte** l'alerte accumulée. Pas de compteur d'événements dans le LOT 1.
 
 **Critère d'acceptation proposé :** touché → coulé → manqué sans ouverture de DÉFENSE laisse l'alerte « coulé » active jusqu'à cette ouverture ; aucun écran DÉFENSE ne s'ouvre sans action du joueur.
@@ -545,50 +545,50 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 - **DÉCIDÉ :** résultat clairement annoncé, tir et impacts déjà révélés conservés ; aucun tir après le résultat.
 - **DÉCIDÉ — LOT1-FIN-003 :** après **victoire, défaite ou nul**, le joueur peut basculer librement entre **ATTAQUE** et **DÉFENSE** et inspecter leurs historiques sans les modifier. **REJOUER** et **ACCUEIL** restent accessibles.
 - **DÉCIDÉ — FIN-001 conservée :** la flotte complète du **vainqueur** reste **secrète par défaut** ; le vainqueur humain choisit de l'autoriser ou non à la révélation. Le perdant ne voit **VOIR SA FLOTTE** que si le vainqueur a choisi **MONTRER MA FLOTTE**. Ce mécanisme de consentement humain est conservé pour le multijoueur, hors LOT 1.
-- **DÉCIDÉ — LOT1-FIN-002/005, exception pédagogique VS Mousse :** lorsque **Mousse gagne**, il autorise **systématiquement** la révélation (sans action tactile fictive du CPU). Le joueur perdant dispose alors de **VOIR SA FLOTTE** sur le champ de bataille, mais la révélation ne se produit que s'il la demande. La comparaison visuelle réversible sur ATTAQUE est décrite au § 14.13 ; résultat et palmarès inchangés.
-- **DÉCIDÉ — victoire du joueur VS Mousse :** aucune commande **MONTRER MA FLOTTE**, puisqu'aucun adversaire humain ne peut consulter cette révélation.
+- **À ARBITRER pour Capitaine — LOT1-FIN-002/005 :** l'autorisation systématique de révélation après victoire était décidée pour Mousse, maintenant reporté. La consultation réversible sur ATTAQUE reste décidée sous réserve d'autorisation.
+- **DÉCIDÉ — victoire du joueur VS Capitaine :** aucune commande **MONTRER MA FLOTTE**, puisqu'aucun adversaire humain ne peut consulter cette révélation.
 - **DÉCIDÉ / cohérence :** en cas d'égalité par destruction réciproque, les deux flottes sont déjà intégralement touchées ; aucune commande spéciale de révélation n'est nécessaire dans le LOT 1.
 
 **DÉCIDÉ (présentation du verdict, cf. § 14.10.3) :** verdict sur le champ de bataille, d'abord clairement mis en avant puis affiché en format compact, sans écran de résultat intermédiaire obligatoire. **À VÉRIFIER :** style et durée de cette transition, lisibilité et implantation de la commande facultative de révélation, inspection réelle sur CYD 320 × 240.
 
 ### 14.7 Rejouer et déploiements successifs — LOT1-REV-001 à 003
 
-- **DÉCIDÉ — LOT1-REV-001 :** après chaque résultat, **REJOUER** lance une nouvelle bataille contre **Mousse**, en **classique mono-tir simultané**, sans repasser par la sélection des adversaires ; retour obligatoire au déploiement.
+- **DÉCIDÉ — LOT1-REV-001 (v0.12) :** après chaque résultat, **REJOUER** lance une nouvelle bataille contre **Capitaine**, en **classique mono-tir simultané**, sans repasser par la sélection des adversaires ; retour obligatoire au déploiement.
 - **DÉCIDÉ — LOT1-REV-002 :** lors d'une revanche, le déploiement affiche **par défaut la disposition précédente du joueur**. **PRÊT** la conserve ; **AUTO** permet de générer une autre disposition autant de fois que voulu. Aucun placement manuel dans le LOT 1.
-- **DÉCIDÉ — LOT1-REV-003 :** pour **chaque nouvelle partie et chaque revanche**, Mousse obtient une **nouvelle génération aléatoire de flotte valide**. Il ne conserve pas volontairement son ancien placement ; une coïncidence aléatoire est possible.
+- **À ARBITRER pour Capitaine — LOT1-REV-003 :** une nouvelle flotte aléatoire valide après chaque revanche était décidée pour Mousse, maintenant reporté. Capitaine dispose toujours d'une flotte classique valide et secrète ; son éventuel renouvellement systématique demande une décision.
 - **DÉCIDÉ :** nouveaux historiques de tirs vierges et tous les navires intacts pour les deux camps ; le palmarès de la partie précédente demeure conservé.
 
-**Critère d'acceptation proposé :** après n'importe quel résultat, REJOUER revient à un déploiement avec l'ancienne formation du joueur, AUTO/PRÊT, et un adversaire préparant un nouvel agencement secret.
+**Critère d'acceptation proposé :** après résultat, REJOUER revient au déploiement avec l'ancienne formation du joueur, AUTO/PRÊT et une flotte Capitaine valide et secrète ; le renouvellement de cette dernière est à arbitrer.
 
 ### 14.8 Palmarès, abandon et seuil d'engagement — LOT1-STAT-001, LOT1-ABD-001
 
-- **DÉCIDÉ — LOT1-STAT-001 :** depuis l'accueil, **PALMARÈS** permet de voir, sans consultation obligatoire, le bilan **VS MOUSSE** : **parties jouées, victoires, défaites, matchs nuls**, et le **compteur global unique de forfaits volontaires**. Ces compteurs sont **persistants sur la CYD**, pas sur un compte personnel.
-- **DÉCIDÉ :** une victoire, défaite ou égalité définitive incrémente **exactement une** partie dans la catégorie VS MOUSSE et **exactement une** catégorie de résultat ; les forfaits ne sont pas des parties jouées. Les quatre catégories V1.0 **VS HUMAIN / MOUSSE / CAPITAINE / AMIRAL** restent décidées, mais seul le combat VS MOUSSE est disponible dans ce lot.
-- **DÉCIDÉ — LOT1-ABD-001 :** **PRÊT est le seuil d'engagement.** Avant PRÊT, quitter le déploiement ne comptabilise **ni forfait ni partie**. Après PRÊT et avant le résultat définitif, une demande d'abandon affiche **CONTINUER / ABANDONNER**. CONTINUER préserve l'état et les compteurs ; ABANDONNER confirmé ajoute **1** au **compteur global de forfaits**, sans inscrire la bataille au palmarès VS MOUSSE. Après résultat définitif, retour à l'accueil sans forfait supplémentaire.
+- **DÉCIDÉ — LOT1-STAT-001 :** depuis l'accueil, **PALMARÈS** permet de voir, sans consultation obligatoire, le bilan **VS CAPITAINE** : **parties jouées, victoires, défaites, matchs nuls**, et le **compteur global unique de forfaits volontaires**. Ces compteurs sont **persistants sur la CYD**, pas sur un compte personnel.
+- **DÉCIDÉ :** une victoire, défaite ou égalité définitive incrémente **exactement une** partie dans la catégorie VS CAPITAINE et **exactement une** catégorie de résultat ; les forfaits ne sont pas des parties jouées. Les quatre catégories V1.0 **VS HUMAIN / CAPITAINE / CAPITAINE / AMIRAL** restent décidées, mais seul le combat VS CAPITAINE est disponible dans ce lot.
+- **DÉCIDÉ — LOT1-ABD-001 :** **PRÊT est le seuil d'engagement.** Avant PRÊT, quitter le déploiement ne comptabilise **ni forfait ni partie**. Après PRÊT et avant le résultat définitif, une demande d'abandon affiche **CONTINUER / ABANDONNER**. CONTINUER préserve l'état et les compteurs ; ABANDONNER confirmé ajoute **1** au **compteur global de forfaits**, sans inscrire la bataille au palmarès VS CAPITAINE. Après résultat définitif, retour à l'accueil sans forfait supplémentaire.
 - **DÉCIDÉ :** un incident technique, une extinction ou une coupure imprévue ne valent pas automatiquement abandon volontaire (BN-STAT-003). La reprise après redémarrage reste **REPORTÉE** dans le cadre V1.0.
 
 **Critères d'acceptation proposés :** abandon confirmé en cours de bataille = forfait +1 uniquement ; quitter au déploiement ou après résultat = +0 ; annuler la confirmation = aucun changement ; résultat final = partie et bilan incrémentés une fois et persistants.
 
 ### 14.9 Exclusions, points à instruire et prochaine discussion
 
-**REPORTÉ hors LOT 1 :** multijoueur ESP-NOW et ses salons/connexions, autres niveaux CPU, variante alternée, modes et compositions tactiques, grille 15 × 15, placement manuel, interfaces avancées et éventuelle console commerciale. **Ces décisions V1.0 ne sont pas annulées.**
+**REPORTÉ hors LOT 1 :** multijoueur ESP-NOW et ses salons/connexions, les niveaux Mousse et Amiral, variante alternée, modes et compositions tactiques, grille 15 × 15, placement manuel, interfaces avancées et éventuelle console commerciale. **Ces décisions V1.0 ne sont pas annulées.**
 
-**DÉCIDÉ — parcours nominal détaillé au § 14.10 et révélation pédagogique au § 14.13 :** sélection, FEU irrévocable, animation courte, révélation synchronisée, information des dégâts dans DÉFENSE, passage libre à la manche suivante, verdict intégré et révélation facultative cadrée. **À ARBITRER / À CONCEVOIR :** cas particuliers restants de l'IA de Mousse, modalités visuelles et ergonomie du palmarès, détails graphiques et transitions.
+**DÉCIDÉ — parcours nominal détaillé au § 14.10 et révélation pédagogique au § 14.13 :** sélection, FEU irrévocable, animation courte, révélation synchronisée, information des dégâts dans DÉFENSE, passage libre à la manche suivante, verdict intégré et révélation facultative cadrée. **À ARBITRER / À CONCEVOIR :** cas particuliers restants de l'IA de Capitaine, modalités visuelles et ergonomie du palmarès, détails graphiques et transitions.
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**DÉCIDÉ — nouvelle démarche au § 16 :** Capitaine est le référentiel de conception, sans entrée dans le LOT 1. **PROPOSÉ — prochaine étape :** examiner **ce qui reste à trancher dans le LOT 1** et consolider les critères d'acceptation avant toute création de backlog ; priorité aux cas limites de Mousse et à l'observabilité de ses décisions. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
+**DÉCIDÉ — v0.12 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. **PROPOSÉ — prochaine étape :** examiner **ce qui reste à trancher dans le LOT 1** et consolider les critères d'acceptation avant toute création de backlog ; priorité aux cas limites de Capitaine et à l'observabilité de ses décisions. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
 
-### 14.10 Parcours tactile et visuel d'une manche contre Mousse — décisions PO du 29/10/2026
+### 14.10 Parcours tactile et visuel d'une manche contre Capitaine — décisions PO du 29/10/2026
 
 **Statut : DÉCIDÉ pour les principes ci-dessous ; durées, implantation et style graphique À VÉRIFIER sur CYD réelle.** Les règles de résolution simultanée et la confidentialité des flottes ne changent pas.
 
 #### 14.10.1 Choix, FEU, animation et nouvelle manche — LOT1-UX-005/006/007/009
 
 1. **Avant FEU :** sur ATTAQUE, le joueur sélectionne une case encore inconnue, peut la désélectionner ou choisir une autre cible ; les cases déjà attaquées ne sont pas sélectionnables. Une bascule volontaire vers DÉFENSE puis un retour sur ATTAQUE **conservent la sélection en cours**, sans validation ni annulation implicite.
-2. **FEU :** la cible choisie devient **irrévocablement verrouillée** pour cette manche. Mousse prépare également sa cible sans accès aux informations secrètes ; l'ordre interne exact de son choix n'est pas prescrit. Le joueur ne peut plus modifier le tir déjà engagé.
+2. **FEU :** la cible choisie devient **irrévocablement verrouillée** pour cette manche. Capitaine prépare également sa cible sans accès aux informations secrètes ; l'ordre interne exact de son choix n'est pas prescrit. Le joueur ne peut plus modifier le tir déjà engagé.
 3. **Animation brève :** un petit effet visuel de tir/impact accompagne la résolution. **Aucun timer de 5 ou 10 secondes, aucun délai artificiel entre les manches, aucun bouton CONTINUER** n'est imposé. Pendant cette animation, les **appuis sur la grille ATTAQUE visant à préparer une nouvelle cible sont ignorés et non mis en attente** ; le prochain tir ne peut être préparé qu'après la révélation.
-4. **Révélation visuelle synchronisée :** au même instant, le résultat du tir du joueur s'inscrit sur **ATTAQUE** et la commande **DÉFENSE** présente la riposte de Mousse. Il ne s'agit pas d'une résolution successivement avantageuse : les **deux attaques sont résolues ensemble**, et les deux résultats sont révélés ensemble. Un naufrage annonce le type de navire, sans identifier les cases de l'épave adverse.
+4. **Révélation visuelle synchronisée :** au même instant, le résultat du tir du joueur s'inscrit sur **ATTAQUE** et la commande **DÉFENSE** présente la riposte de Capitaine. Il ne s'agit pas d'une résolution successivement avantageuse : les **deux attaques sont résolues ensemble**, et les deux résultats sont révélés ensemble. Un naufrage annonce le type de navire, sans identifier les cases de l'épave adverse.
 5. **Suite du combat :** si les deux flottes ont encore un bâtiment à flot, le joueur peut **immédiatement** préparer la manche suivante, ou consulter DÉFENSE aussi longtemps qu'il le souhaite. **Aucune bascule automatique** ne lui est imposée.
 
 **À VÉRIFIER :** durée et fluidité de la courte animation, confort du tactile et compréhension du résultat synchronisé. **À ARBITRER :** comportement précis d'une demande de bascule ATTAQUE/DÉFENSE pendant la brève animation ; aucune restriction nouvelle de consultation n'est décidée ici.
@@ -597,13 +597,13 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **DÉCIDÉ :** le bouton/zone tactile **DÉFENSE** remplit deux fonctions indépendantes et complémentaires :
 
-- **Information de la dernière manche seulement :** si Mousse touche une case, le message intégré associe son impact à sa coordonnée, par exemple **« Mousse vous a touché en E5 »**, ou **« E5 (Croiseur coulé) »** si ce point achève un navire. Une riposte manquée reste indiquée discrètement. Le texte exact et l'habillage restent à concevoir.
+- **Information de la dernière manche seulement :** si Capitaine touche une case, le message intégré associe son impact à sa coordonnée, par exemple **« Capitaine vous a touché en E5 »**, ou **« E5 (Croiseur coulé) »** si ce point achève un navire. Une riposte manquée reste indiquée discrètement. Le texte exact et l'habillage restent à concevoir.
 - **Alerte persistante :** la commande conserve la **gravité maximale des événements non consultés** (manqué < touché < coulé), même si la dernière manche est moins grave. Elle ne conserve pas une liste cumulative de toutes les coordonnées.
 - **Manche suivante sans consultation :** le contenu « dernière riposte » est **remplacé** par celui de la nouvelle manche ; les coordonnées antérieures ne sont pas répétées dans la commande. L'alerte maximale non consultée continue, elle, à s'appliquer.
 - **Ouverture de DÉFENSE :** la consultation **acquitte l'alerte et efface les coordonnées du résumé du bouton**. De retour sur ATTAQUE, la commande n'affiche plus ce message ancien. **Cela n'efface aucun impact ni aucun historique sur la grille DÉFENSE.**
 - **Navigation :** le joueur décide seul d'ouvrir DÉFENSE ; cette consultation ne modifie pas la cible déjà préparée sur ATTAQUE avant FEU.
 
-**Exemple observable :** manche N−1, Mousse touche B4 ; le joueur ne consulte pas DÉFENSE. Manche N, Mousse manque son tir : la commande donne l'information de la **dernière manche manquée**, mais conserve l'alerte **TOUCHÉ** de B4 non consulté. À l'ouverture de DÉFENSE, l'alerte et le résumé sont acquittés ; B4 reste marqué sur la grille.
+**Exemple observable :** manche N−1, Capitaine touche B4 ; le joueur ne consulte pas DÉFENSE. Manche N, Capitaine manque son tir : la commande donne l'information de la **dernière manche manquée**, mais conserve l'alerte **TOUCHÉ** de B4 non consulté. À l'ouverture de DÉFENSE, l'alerte et le résumé sont acquittés ; B4 reste marqué sur la grille.
 
 #### 14.10.3 Dernière manche, verdict et inspection — LOT1-FIN-004
 
@@ -612,7 +612,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 - Le verdict est d'abord **bien visible**, puis se **réduit à une présentation compacte** qui libère de la place sur la grille, sans jamais perdre l'identification du résultat.
 - Cette présentation ne nécessite **aucune confirmation ni attente obligatoire** ; ses transitions et durées exactes restent à vérifier.
 - Les vues **ATTAQUE** et **DÉFENSE** restent librement consultables après le résultat, sans nouveau tir possible ; **REJOUER** et **ACCUEIL** restent accessibles.
-- La révélation facultative autorisée par Mousse vainqueur (**LOT1-FIN-002/005**), le choix du joueur et la confidentialité (**FIN-001**) sont précisés au § 14.13.
+- La révélation facultative autorisée par Capitaine vainqueur (**LOT1-FIN-002/005**), le choix du joueur et la confidentialité (**FIN-001**) sont précisés au § 14.13.
 
 **PROPOSÉ (non encore décidé) :** ne pas ajouter de bouton INSPECTER si la bascule ATTAQUE/DÉFENSE permet déjà la consultation post-partie.
 
@@ -637,19 +637,19 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER / À CONCEVOIR :** durées d'animation et de mise en avant du verdict, emplacement du résumé DÉFENSE, codes couleur, icônes, transitions, lisibilité au stylet et comportement observable sur le matériel réel. Les anciennes maquettes restent non normatives. Aucune mission graphique ni développement n'est engagé par cette section.
 
-### 14.13 Révélation volontaire et inspection pédagogique de Mousse — décisions PO du 29/10/2026 (LOT1-FIN-002/005)
+### 14.13 Révélation volontaire et inspection pédagogique de Capitaine — décisions PO du 29/10/2026 (LOT1-FIN-002/005)
 
-**Statut : DÉCIDÉ pour le parcours fonctionnel du LOT 1 ; mise en forme graphique À CONCEVOIR / À VÉRIFIER sur CYD 320 × 240.** Cette section complète FIN-001, LOT1-FIN-002/003/004 et ne modifie ni le résultat ni le palmarès.
+**Statut : DÉCIDÉ pour le parcours de consultation après autorisation ; autorisation automatique de Capitaine À ARBITRER. Graphisme À CONCEVOIR / À VÉRIFIER sur CYD 320 × 240.** Cette section complète FIN-001, LOT1-FIN-002/003/004 et ne modifie ni le résultat ni le palmarès.
 
 **DÉCIDÉ — autorisation préalable par le vainqueur (FIN-001, LOT1-FIN-005) :**
 - La commande **VOIR SA FLOTTE** n'est disponible pour le perdant **que si le vainqueur a autorisé la révélation de sa propre flotte** par **MONTRER MA FLOTTE**.
 - Dans le futur multijoueur humain, **MONTRER MA FLOTTE** est une action volontaire du vainqueur ; sans autorisation, aucune révélation adverse ni commande VOIR SA FLOTTE. Le détail du parcours d'échange entre deux CYD reste **REPORTÉ hors LOT 1**.
-- **Exception solo VS Mousse :** lorsque Mousse est vainqueur, **il autorise systématiquement** la révélation, sans prétendre qu'il appuie physiquement sur un bouton. Cela rend VOIR SA FLOTTE disponible au joueur perdant, **sans afficher automatiquement les navires**.
-- Si le joueur gagne contre Mousse, **MONTRER MA FLOTTE n'est pas affiché**, faute d'adversaire humain bénéficiaire. En cas de **match nul**, aucune commande de révélation particulière n'est nécessaire dans le LOT 1 : toutes les positions sont déjà connues.
+- **DÉCIDÉ pour le futur Mousse :** il autorise systématiquement la révélation après victoire. **À ARBITRER pour Capitaine :** doit-il offrir la même autorisation ? Aucun navire n'est révélé automatiquement.
+- Si le joueur gagne contre Capitaine, **MONTRER MA FLOTTE n'est pas affiché**, faute d'adversaire humain bénéficiaire. En cas de **match nul**, aucune commande de révélation particulière n'est nécessaire dans le LOT 1 : toutes les positions sont déjà connues.
 
-**DÉCIDÉ — proposition discrète et consultation volontaire (LOT1-FIN-002) :**
+**DÉCIDÉ — consultation volontaire sous réserve d'autorisation (LOT1-FIN-002) :**
 - Après le verdict **DÉFAITE** puis son affichage compact, **VOIR SA FLOTTE** est accessible directement sur le **champ de bataille**, de manière discrète et persistante jusqu'au départ de la fin de partie ; **aucune boîte OUI/NON, aucune interruption ni écran d'analyse obligatoire**.
-- Un appui volontaire révèle la **totalité des cinq navires de Mousse**, y compris leurs cases encore inconnues, **sur la grille ATTAQUE existante**.
+- Un appui volontaire révèle la **totalité des cinq navires de Capitaine**, y compris leurs cases encore inconnues, **sur la grille ATTAQUE existante**.
 - Les **tirs réussis, tirs manqués et résultats historiques** restent visibles au-dessus / distinctement des positions révélées. Le joueur compare ainsi les tirs réellement tentés aux navires découverts **sur une même grille**.
 - Une fois la révélation demandée, le joueur peut **AFFICHER ou MASQUER la flotte à volonté** ; masquer restitue la lecture initiale de la grille ATTAQUE, **sans supprimer les tirs ni révoquer l'autorisation**.
 - L'état courant **flotte affichée / flotte masquée** est **conservé** lorsqu'il passe volontairement sur DÉFENSE puis revient sur ATTAQUE. La navigation ATTAQUE/DÉFENSE, l'inspection libre et l'accès à REJOUER / ACCUEIL demeurent disponibles.
@@ -658,7 +658,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À CONCEVOIR / À VÉRIFIER :** lisibilité des silhouettes de navires sous les marques de tir et des cases encore inconnues, taille et emplacement des commandes sur **CYD tactile 320 × 240**, formulation précise du basculement AFFICHER/MASQUER, coexistence du verdict compact et des commandes REJOUER / ACCUEIL. Aucun code couleur, dessin, durée ou maquette de production n'est validé par la présente décision.
 
-**Traçabilité :** arbitrages successifs du PO dans la conversation de cadrage du 29 octobre 2026 : révélation sur ATTAQUE (option A) ; affichage/masquage réversible (option B) ; état mémorisé entre les deux grilles ; présentation discrète non modale (option A) ; condition préalable **MONTRER MA FLOTTE** du vainqueur ; Mousse autorise toujours s'il gagne ; inspection visuelle simple (option A) ; absence de commande MONTRER MA FLOTTE lorsqu'un humain gagne en solo. Le cadrage de l'IA de Mousse face aux contacts et fausses pistes reste ouvert ; un arbitrage complémentaire LOT1-CPU-006 et la démarche de référence Capitaine ont depuis été consignés en v0.11 (voir § 14.3 et § 16).
+**Traçabilité historique v0.10 (VS Mousse) :** arbitrages successifs du PO dans la conversation de cadrage du 29 octobre 2026 : révélation sur ATTAQUE (option A) ; affichage/masquage réversible (option B) ; état mémorisé entre les deux grilles ; présentation discrète non modale (option A) ; condition préalable **MONTRER MA FLOTTE** du vainqueur ; Mousse autorise toujours s'il gagne (décision historique reportée) ; inspection visuelle simple (option A) ; absence de commande MONTRER MA FLOTTE lorsqu'un humain gagne en solo. Le cadrage de l'IA de Capitaine face aux contacts et fausses pistes reste ouvert ; un arbitrage complémentaire LOT1-CPU-006 et la démarche de référence Capitaine ont depuis été consignés en v0.11 (voir § 14.3 et § 16).
 
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
@@ -679,8 +679,8 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 - Le titre **CYD WARSHIP** apparaît **dans la partie haute**, clairement identifiable mais **visuellement discret** : il ne doit pas écraser le paysage.
 - Les commandes du LOT 1 sont **directement superposées à l'illustration**, dans une partie moins chargée, **de préférence en bas à gauche**. Éviter un panneau massif. Leur visibilité et leur facilité de sélection au stylet restent prioritaires.
 
-**DÉCIDÉ (LOT1-ACC-001, inchangé) — seules actions proposées au lancement du LOT 1 :**
-- **JOUER CONTRE MOUSSE**
+**DÉCIDÉ (LOT1-ACC-001, v0.12) — seules actions proposées au lancement du LOT 1 :**
+- **JOUER CONTRE CAPITAINE**
 - **PALMARÈS**
 
 Les actions **CRÉER / REJOINDRE**, les autres adversaires CPU et les variantes de jeu restent prévues dans les périmètres ultérieurs ; elles **ne figurent pas comme actions actives sur l'accueil du LOT 1**.
@@ -716,7 +716,7 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 ## 16. Référentiel fonctionnel CPU Capitaine — décisions PO du 29 octobre 2026 (v0.11)
 
-**Statut : DÉCIDÉ sur les principes de conception ci-dessous ; mise en œuvre REPORTÉE hors LOT 1.** Le PO a choisi de définir un **joueur intermédiaire de référence** avant de décliner les difficultés. Cette démarche ne change ni le découpage V1.0, ni la réalisation du LOT 1 : **Mousse est le seul CPU à y figurer**. Les dix arbitrages suivants sont une **référence future**, pas un backlog, un algorithme ou un ordre de développement.
+**Statut : DÉCIDÉ pour les dix principes et l'inclusion de Capitaine au LOT 1 (v0.12).** Le PO a retenu Capitaine comme premier adversaire jouable après l'avoir défini comme référence intermédiaire. **Mousse et Amiral sont REPORTÉS** ; cette décision n'engage pas de développement.
 
 **Règle commune d'équité — DÉCIDÉ :** Capitaine raisonne sur les tirs, les résultats, les annonces de naufrage et les règles connues par les joueurs. Il n'obtient **aucune information secrète** sur la disposition humaine, l'appartenance des impacts ou les cases exactes des épaves.
 
@@ -735,8 +735,28 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **Nuance fonctionnelle essentielle :** les navires peuvent se toucher. Une annonce de naufrage ne désigne **jamais les cases exactes de l'épave** ; l'analyse des touches non expliquées doit donc rester hypothétique, et aucun CPU ne peut « marquer » secrètement comme certaines les cases d'un navire coulé. En particulier, CAP-CPU-007 décrit le cas où **les touches observées ne peuvent toutes être expliquées par le navire annoncé**, sans supposer que Capitaine reçoit l'identité de ces touches.
 
-**REPORTÉ à un lot ultérieur :** mise en œuvre de Capitaine, approfondissement de ses exceptions, conception détaillée d'Amiral, composition des flottes tactiques de ces niveaux et équilibrage comparatif. **PROPOSÉ / non décidé :** attribuer à Amiral un balayage en damier, des comparaisons de configurations ou une recherche probabiliste.
+**DÉCIDÉ pour LOT 1 :** Capitaine sera l'adversaire du premier jeu complet. **REPORTÉ :** Mousse, Amiral, compositions tactiques et équilibrage comparatif. **PROPOSÉ / non décidé :** attribuer à Amiral un balayage en damier, des comparaisons de configurations ou une recherche probabiliste.
 
-**À ARBITRER ultérieurement :** traduire ces principes en comportements observables exhaustifs et vérifier les degrés de difficulté sur des parties réelles. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
+**À ARBITRER avant backlog LOT 1 :** traduire ces principes en comportements observables exhaustifs et vérifier les degrés de difficulté sur des parties réelles. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
 
-**Traçabilité :** les dix choix ont été approuvés successivement par le PO dans la conversation du 29 octobre 2026, puis le PO a explicitement arrêté l'approfondissement des autres difficultés en demandant leur report hors LOT 1 et une revue des manques avant backlog. Les anciennes décisions LOT1-CPU-001 à 005 restent en vigueur ; la décision complémentaire LOT1-CPU-006 figure au § 14.3.
+**Traçabilité :** les dix choix CAP-CPU ont été approuvés successivement par le PO le 29 octobre 2026. Le PO a ensuite explicitement corrigé le périmètre du LOT 1 pour y retenir Capitaine et reporter Mousse et Amiral. Les règles Mousse sont conservées au § 17.
+
+## 17. Réserve historique Mousse — REPORTÉ hors LOT 1 (v0.12)
+
+**DÉCIDÉ historiquement ; réalisation REPORTÉE.** Ce texte provient de l'ancien § 14.3 et conserve ses identifiants d'origine LOT1-CPU-001 à 006 pour la traçabilité : ils ne constituent plus des exigences du LOT 1, désormais VS Capitaine.
+
+### 17.1 Règles de Mousse conservées, à rattacher au lot futur
+
+**DÉCIDÉ — adversaire débutant crédible, imparfait et sans triche.** Mousse ne reçoit jamais la carte secrète, l'identité secrète d'une case touchée ni la composition d'une épave ; il raisonne sur ses tirs passés et les annonces qu'un adversaire humain recevrait.
+
+- **LOT1-CPU-001 / 002 — Exploration et chasse :** sans piste exploitable, Mousse tire au hasard parmi les cases **jamais attaquées**. Après une touche, il privilégie les cases inconnues voisines. Il peut choisir une mauvaise direction, mais cherche à exploiter sa découverte plutôt que repartir systématiquement ailleurs.
+- **LOT1-CPU-003 — Hypothèse d'alignement :** après **deux impacts voisins alignés**, Mousse **suppose** qu'ils appartiennent à un même navire et privilégie l'axe et ses prolongements encore inconnus. Il peut se tromper de sens. **Les navires pouvant se toucher**, cet alignement n'est pas une preuve d'appartenance commune et ne doit pas être traité comme une connaissance cachée.
+- **LOT1-CPU-004 — Pistes multiples :** Mousse mémorise toutes les découvertes et privilégie **une piste exploitable à la fois** ; il peut reprendre une autre piste déjà identifiée sans perdre les impacts précédents.
+- **LOT1-CPU-005 — Après un coulé :** la piste actuelle est considérée comme **probablement terminée** ; Mousse privilégie une autre piste disponible, tout en conservant les impacts antérieurs et la possibilité d'y revenir. Il ne connaît pas les cases exactes de l'épave.
+- **LOT1-CPU-006 — DÉCIDÉ (29/10/2026) :** si Mousse a deux touches adjacentes alignées et rate le premier prolongement testé, il **privilégie l'autre extrémité encore inconnue** avant de remettre en cause cet axe. Cela décrit une priorité, non une garantie de toucher.
+- **DÉCIDÉ :** aucune case déjà attaquée ne peut être rejouée par Mousse ; ses mauvaises décisions découlent des **hypothèses** et choix de direction, pas d'une consultation des positions secrètes.
+
+**À ARBITRER / préciser sans prescrire d'algorithme :** après deux prolongements ratés encadrant deux touches sans annonce de naufrage (ex. C4 raté, D4/E4 touchés, F4 raté), Mousse perd-il temporairement sa piste ou continue-t-il à explorer localement ? **Aucune option n'a été validée** pour ce cas. Restent également ouverts : sélection entre voisins, pistes qui se recoupent, absence de piste exploitable, réactions aux naufrages ambigus et mesure observable du niveau « débutant ». Ne pas transformer automatiquement les capacités de Capitaine (§ 16) en capacités de Mousse. Les principes ci-dessus ne constituent pas une implémentation technique.
+
+**Critères d'acceptation proposés à consolider :** préférence observable pour une zone touchée puis son axe possible ; capacité à retrouver une ancienne piste ; absence de tir répété ou de déduction utilisant une information secrète.
+
