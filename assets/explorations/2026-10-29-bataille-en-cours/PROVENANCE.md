@@ -1,27 +1,32 @@
-# I-009 — Exploration de l’âme du jeu : scène de bataille en cours
+# I-009 — Origine des scènes de bataille en cours
 
-**Statut : EXPLORATION ARTISTIQUE — NON VALIDÉE PO.**
+**ARCHIVEE / EXPLORATION_D_AMBIANCE / NON_VALIDEE_PO / NON_RUNTIME**
 
-Deux images issues de générations d’images ChatGPT, produites le 29 octobre 2026 dans le cadre de l’itération « bataille en cours » : navire principal, adversaire touché au loin, trajectoires de tir et océan au coucher du soleil.
+Deux images issues de générations OpenAI dans la conversation d'exploration artistique I-009 du 29 octobre 2026. Cette archive sert à étudier une **atmosphère de jeu indépendant contemporain en pixel art**, pas un écran tactique.
 
-## Provenance et exactitude
+## Scène et confidentialité du gameplay
 
-- Outil : génération d’images OpenAI dans la conversation de conception artistique I-009 (pas une capture du firmware).
-- L’image `01` constitue l’illustration initiale de la scène de bataille.
-- L’image `02` est une **nouvelle sortie générative** demandée comme aperçu plus pixelisé de `01` : **ce n’est pas un agrandissement déterministe, pixel par pixel, de la première image**.
-- Les deux originaux sont livrés dans leur format PNG et leurs dimensions natifs de sortie de génération (1448 × 1086). Les prévisualisations 320 × 240 sont des **réductions** locales avec Pillow, méthode LANCZOS, sans nouvelle génération. Les zooms 4× sont des agrandissements exacts au plus proche voisin de ces exports 320 × 240.
-- Aucun calque/source éditable structurée n’est disponible ; les PNG sont des sources images, pas des fichiers de sprites prêts à embarquer.
-- Aucun test sur CYD physique, aucune validation artistique PO, aucune validation de coût Flash/RAM ni rendu en firmware.
+Navire du joueur au premier plan, navire ennemi touché au loin, tirs, feu et fumée, océan au coucher du soleil. **La représentation d'un navire ennemi identifié et touché constitue une illustration narrative, jamais une révélation autorisée de positions secrètes de flotte en combat.** L'affichage produit demeure régi par les décisions du LOT 1.
 
-## Fichiers
+## Origine et exactitude
 
-| Version | Original OpenAI | Preview écran CYD | Zoom 4× du preview | Identifiant génération |
-|---|---|---|---|---|
-| 01_bataille_narrative | [01_bataille_narrative_original_1448x1086.png](01_bataille_narrative_original_1448x1086.png) | ![01_bataille_narrative en 320×240](01_bataille_narrative_320x240.png) | [01_bataille_narrative_zoom4x.png](01_bataille_narrative_zoom4x.png) | `a7162bd7-fb6e-49cd-9961-a46bca06b5f5` |
-| 02_bataille_pixelisee | [02_bataille_pixelisee_original_1448x1086.png](02_bataille_pixelisee_original_1448x1086.png) | ![02_bataille_pixelisee en 320×240](02_bataille_pixelisee_320x240.png) | [02_bataille_pixelisee_zoom4x.png](02_bataille_pixelisee_zoom4x.png) | `2674048b-ed4f-45a0-9107-02e4fcc94b57` |
+- **Génération 01 :** `a7162bd7-fb6e-49cd-9961-a46bca06b5f5`, scène de bataille narrative.
+- **Génération 02 :** `2674048b-ed4f-45a0-9107-02e4fcc94b57`, **nouvelle sortie générative** visant un style plus pixelisé ; **pas** un agrandissement exact de 01.
+- Originaux de génération : PNG 1448 × 1086 conservés inchangés et contrôlés dans le dépôt.
+- Exports CYD : réduction 320 × 240 par Pillow/LANCZOS, sans recadrage.
+- Zooms ×4 : 1280 × 960 par redimensionnement NEAREST des exports CYD, égalité pixel à pixel vérifiée.
+- Comparatif : juxtaposition 640 × 240 sans interpolation supplémentaire.
+- Absence de source multicouche ou d'assets sprite structurés. Images 2D d'exploration, non optimisées pour le firmware.
 
-## Réserves et vérifications
+## Aperçus des fichiers PNG versionnés
 
-- Toutes les résolutions et checksums sont contrôlés sur les fichiers de ce dossier ; pour les valeurs détaillées voir `CONTROLES.txt`.
-- Statut GitHub : PR graphique de documentation, **sans changement du firmware**.
-- Aucune direction artistique n’est approuvée implicitement par la présence de ces images.
+| Version | Original PNG | Export natif 320 × 240 | Zoom ×4 |
+|---|---|---|---|
+| 01 — Narrative | [Original](01_bataille_narrative_original_1448x1086.png) | ![320×240](01_bataille_narrative_320x240.png) | [Zoom](01_bataille_narrative_zoom4x.png) |
+| 02 — Plus pixelisée | [Original](02_bataille_pixelisee_original_1448x1086.png) | ![320×240](02_bataille_pixelisee_320x240.png) | [Zoom](02_bataille_pixelisee_zoom4x.png) |
+
+[Comparatif natif 640 × 240](COMPARATIF_natif_2x320x240.png) — [MANIFEST_SHA256.md](MANIFEST_SHA256.md) — [CONTROLES.txt](CONTROLES.txt).
+
+**Contrôles réalisés :** dimensions, tailles, empreintes locales SHA-256, blob Git SHA-1 comparés aux entrées de l'arbre GitHub, et équivalence des pixels pour réductions, zooms et comparatif.
+
+**Non réalisés :** compilation firmware, consommation Flash/RAM de rendu, essai tactile / couleurs de dalle CYD physique. **NON_VALIDEE_PO** : aucune charte artistique n'est approuvée par cette archive.

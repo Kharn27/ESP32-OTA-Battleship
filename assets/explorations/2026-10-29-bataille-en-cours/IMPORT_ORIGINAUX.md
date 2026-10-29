@@ -1,32 +1,23 @@
-# Blocage et procédure d'import des PNG exacts dans PR #2
+# Journal d'import des originaux — PR #2 (blocage levé)
 
-**À l'attention du Pilotage / Graphiste — correction technique encore nécessaire.**
+**ARCHIVEE / EXPLORATION_D_AMBIANCE / NON_VALIDEE_PO / NON_RUNTIME**
 
-Le connecteur GitHub peut modifier les fichiers texte et créer des objets Git mais **ne dispose d'aucun accès direct aux octets des PNG de l'environnement local**. Les copies JPEG du premier dépôt sont des rendus avec pertes ; elles ne remplacent **ni** les PNG originaux exacts, **ni** les aperçus natifs.
+## Historique du problème
 
-Les fichiers sont disponibles sous leurs noms exacts dans l'archive de remise `I009-exploration-bataille-en-cours-revue-pilotage.zip`. Pour les déposer de façon **durable et versionnée** sur **la même branche**, utiliser un environnement ayant un accès GitHub authentifié et l'archive :
+Au dépôt initial, la branche ne contenait que **quatre JPEG avec pertes** produits par un service d'aperçu, faute de transfert direct fiable des octets des PNG locaux vers le connecteur GitHub. Les JPEG n'étaient pas substituables aux images originales. La revue Pilotage a demandé des PNG exacts, des aperçus natifs et leurs empreintes.
 
-```bash
-git clone https://github.com/Kharn27/ESP32-OTA-Battleship.git
-cd ESP32-OTA-Battleship
-git switch art/etude-bataille-en-cours-20261029
+## Résolution constatée
 
-DEST=assets/explorations/2026-10-29-bataille-en-cours
-SOURCE=/chemin/vers/I009-ART-exploration-bataille-en-cours
-cp "$SOURCE"/{01,02}_*original_1448x1086.png "$DEST/"
-cp "$SOURCE"/{01,02}_*320x240.png "$DEST/"
-cp "$SOURCE"/{01,02}_*zoom4x.png "$DEST/"
-cp "$SOURCE"/COMPARATIF_natif_2x320x240.png "$DEST/"
+Le dépôt a reçu manuellement **sept PNG exacts** via la branche existante `art/etude-bataille-en-cours-20261029`, dans le commit d'import :
 
-# Vérifier chaque empreinte dans MANIFEST_SHA256.md avant commit.
-sha256sum "$DEST"/*.png
-git add "$DEST"
-git commit -m "art: archive exact OpenAI PNG sources and 320x240 exports"
-git push origin art/etude-bataille-en-cours-20261029
-```
+`686e3e2b27f95860a22272e210b04c729fdf0976` (`Ajout manuelle`).
 
-Le dépôt ne doit **pas** recevoir une conversion JPEG renommée en `.png`. Les octets et le SHA-256 des originaux doivent coïncider avec [MANIFEST_SHA256.md](MANIFEST_SHA256.md).
+Les deux originaux 1448 × 1086, les deux exports 320 × 240, les deux zooms 1280 × 960 et le comparatif 640 × 240 figurent dans l'arbre GitHub. Pour les sept : **taille et Git blob SHA-1 identiques** aux calculs effectués à partir des fichiers sources locaux ; les empreintes SHA-256 sont consignées dans [MANIFEST_SHA256.md](MANIFEST_SHA256.md). Aucun fichier n'a été remplacé par un JPEG renommé.
 
-Après import : contrôler la liste `git ls-tree -r HEAD`, l'intégrité des sept PNG et le HEAD GitHub ; ajuster README et description de PR pour retirer la mention de blocage. Demander **une contre-revue Pilotage**, et **aucune fusion** sans sa décision.
+**Le blocage d'archivage binaire est levé.** Le README et la description de PR doivent désormais présenter les PNG comme références de revue et réserver les JPEG à l'historique.
 
-Les règles de **secret des positions ennemies** ne changent pas : l'illustration narrative ne définit aucune information légitime de l'écran ATTAQUE.
+## Gouvernance
+
+L'ajout des images n'approuve aucune direction artistique, n'autorise aucune révélation de positions de la flotte adverse en phase de combat et ne constitue ni une preuve d'intégration firmware ni un test CYD.
+
+**La PR reste DRAFT, non fusionnée, et relève de la contre-revue Pilotage.**
