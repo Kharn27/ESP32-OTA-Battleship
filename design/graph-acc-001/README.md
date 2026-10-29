@@ -1,35 +1,34 @@
-# GRAPH-ACC-001 — Correction de composition pour revue PO
+# GRAPH-ACC-001 — Révision 3 : réponse à la contre-revue Pilotage
 
-**Statut :** `DESIGN_PREVIEW — PO_ARTISTIC_APPROVAL_PENDING — ON_DEVICE_UNVERIFIED`.
+**Directive source** : [PR #8 — commentaire 6503053992](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8#issuecomment-6503053992).  
+**Statut** : `CORRECTIONS_APPLIQUÉES — DESIGN_PREVIEW — PO_ARTISTIC_REVIEW_PENDING — ON_DEVICE_UNVERIFIED`. PR maintenue en brouillon.
 
-## Continuité imposée par le retour PO
-Cette révision corrige le rejet artistique de la PR #8. La **référence obligatoire** est la version narrative originale `01_bataille_narrative_320x240.png` à l'arbre Git historique `872496d73a150dd5a016c219973e5865576b7e04`, fichier `assets/explorations/2026-10-29-bataille-en-cours/01_bataille_narrative_320x240.png`. La scène photographique/illustrée originale est **reprise au pixel près comme fond**, sans recadrage, recoloration, reconstruction du navire, de l'ennemi, des tirs existants, du ciel ou de la mer. Elle ne devient pas pour autant un asset firmware validé. La version historique 02 plus pixelisée n'est pas supprimée, et le degré de pixelisation n'est **pas arbitré**.
+## Composition et arbitrages
+La scène narrative originale `872496d73a150dd5a016c219973e5865576b7e04` (`assets/explorations/2026-10-29-bataille-en-cours/01_bataille_narrative_320x240.png`) est **préservée au pixel près** hors seules surimpressions. Coucher de soleil, navire principal, ennemi endommagé, relief de la mer, tirs déjà existants et aéronefs présents ne sont pas redessinés ; aucun avion supplémentaire. La granularité du fond n'est pas modifiée : **niveau de pixelisation toujours ouvert pour le PO**.
 
-### Adaptations minimales
-- Gerbe de riposte **dans l'eau à droite de la proue** (autour de x=273, y=180), séparée du navire. Trajectoire secondaire orangée issue de la zone de l'ennemi lointain ; le tir ami initial reste intact.
-- Titre **CYD WARSHIP**, discret en haut à gauche, avec bande fine de contraste.
-- Deux boutons sur l'eau en bas-gauche, sans panneau commun : `JOUER CONTRE MOUSSE` (deux lignes, exactement le même libellé) et `PALMARÈS`.
-- Aucun aéronef additionnel ; les silhouettes et autres détails **déjà présents dans la référence** sont conservés.
+1. **Origine du tir** : petit éclat sur la silhouette ennemie en `(229,43)` (au lieu de `(232,55)`). Trajectoire **unique et continue** `M229 43 C250 74 252 128 281 184`, corail/cuivrée, distincte des tirs alliés historiques.
+2. **Impact raté** : autour de `(280,187)`, dans l'eau, à droite de la proue du navire principal, sans couvrir la coque ; gerbe à lignes courbes, reflets froids, mousse et embruns en accord avec les vagues. Aucune gerbe géométrique blanche triangulaire.
+3. **Boutons** : deux **plaques navales individuelles** aux coins chanfreinés, métal vert-bleu oxydé, fines bordures cuivrées rappelant le soleil, reliefs et transparence laissant percevoir l'eau ; lettrage proportionnel anti-aliasé et contraste ivoire.
+4. **Titre** : directement posé sur le ciel en ivoire chaud et légèrement souligné, **sans bandeau noir**.
 
-### Rectangles tactiles pressentis (hypothèses, non contrat firmware)
-- JOUER CONTRE MOUSSE : `x=9,y=176,w=164,h=33`.
-- PALMARÈS : `x=9,y=213,w=132,h=23`.
-Deux zones sans chevauchement, espacées de 4 pixels ; boutons au stylet à confirmer **uniquement après validation esthétique PO**.
+## Hypothèses de zones tactiles (non contractuelles)
+- `JOUER CONTRE MOUSSE` : (8,177,156,27).
+- `PALMARÈS` : (8,208,114,27). Hauteur améliorée **23 → 27 px**, 5 px de marge inférieure, séparation 4 px. Confort à vérifier après validation artistique PO ; pas de test CYD demandé à ce stade.
 
-### Livrables et nature des sources
-- `accueil_cyd_warship_320x240.png` : rendu final natif exact 320 × 240, composition originale et surimpression.
-- `accueil_cyd_warship_x4.png` : agrandissement 1280 × 960 **nearest-neighbor strict**.
-- `accueil_cyd_warship.svg` : source éditable SVG autonome ; la couche de fond est un PNG historique **embarqué sans modification**, les superpositions sont des formes pixel indépendantes. Il s'agit d'une source éditable pour les ajouts, **pas** d'une vectorisation éditable de l'illustration historique. Aucune archive A–F n'est restaurée sur `main`.
-
-### Avant/après de la COMPOSITION (et non exploration artistique)
-| Sujet | Scène de référence (AVANT) | Correction de l'accueil (APRÈS) |
+## Comparatif avant/après
+| Élément | HEAD rejeté `aeb8ac24` | Correction |
 |---|---|---|
-| Cadrage, ciel, soleil, montagnes, ambiance | composition historique | **identique au pixel près hors surimpressions** |
-| Navire principal, ennemi endommagé, tirs existants | présents | **inchangés** |
-| Riposte manquée | non explicitement visible | trace secondaire et gerbe à l'eau près de la proue |
-| Titre officiel | absent | bande discrète et titre supérieur |
-| Accès LOT 1 | absents | deux seules actions superposées sur l'eau |
-| Aéronefs facultatifs | éléments existants seulement | aucun aéronef nouveau |
-| Pixelisation | originale, choix PO ouvert | fond original **sans transformation de grain** |
+| Scène narrative | conservée | conservée, pixel par pixel hors ajouts |
+| Tir ennemi | cinq fragments, origine (232,55) | départ visible (229,43), **courbe continue** |
+| Gerbe | blanche, anguleuse et isolée | mousse et gerbes courbes aux couleurs de l'eau |
+| Commandes | rectangles bleu-noir, texte pixel rigide | plaques cuivrées semi-transparentes, texte proportionnel |
+| PALMARÈS | 23 px | **27 px** |
+| Titre | bande noire | lettrage direct sur ciel |
 
-**Ne pas traiter le rendu comme validé par le PO.** Une fois le rendu artistique accepté, prévoir séparément un contrôle CYD physique de la lisibilité et du stylet. Aucun firmware n'a été modifié ou testé. Pas de mesure RAM/Flash runtime (PNG de revue, pas format firmware).
+## Livrables
+- `accueil_cyd_warship_320x240.png` : PNG natif 320×240.
+- `accueil_cyd_warship_x4.png` : zoom 1280×960 **nearest-neighbor**, chaque pixel répliqué 4×4.
+- `accueil_cyd_warship.svg` : fond raster **embarqué** non éditable en vectoriel ; surimpressions organisées par groupes éditables (forme et texte). Les moteurs SVG peuvent avoir un anti-aliasing légèrement différent ; **le PNG natif fait foi**.
+- `README.md` : présente note et zones tactiles.
+
+**Limites** : prévisualisation PC, pas de build firmware, pas de mesure Flash/RAM runtime, pas de test matériel CYD ni validation PO présumée. PR à conserver brouillon et non fusionnée. Aucun ajout hors GRAPH-ACC-001.
