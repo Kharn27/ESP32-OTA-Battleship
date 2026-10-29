@@ -19,7 +19,7 @@ Créer **CYD WARSHIP**, un jeu de bataille navale familial, tactile et tactique 
 
 **PROPOSÉ :** retour visuel immédiat à la sélection, à la validation et à la révélation ; animations courtes et discrètes plutôt que séquences imposées.
 
-**Références et explorations graphiques :** [index des maquettes et recherches artistiques](MAQUETTES.md), comprenant sept SVG UX historiques et six explorations A–F non retenues, toujours présents sur `main`. Les deux scènes narratives de la [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) ont été retirées de l'arborescence courante par décision PO, mais leurs [originaux, exports et provenance restent consultables dans l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours). **Aucune charte ni interface visuelle de production n'a été approuvée par le PO.** Les images ne sont ni des captures de firmware ni des représentations normatives des informations visibles en jeu.
+**Références et explorations graphiques :** [index des maquettes et recherches artistiques](MAQUETTES.md), comprenant sept SVG UX historiques et six explorations A–F non retenues, retirés de `main` sur décision PO du 29 octobre 2026 et [conservés dans l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets) (voir aussi la [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1)). Les deux scènes narratives de la [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) ont été retirées de l'arborescence courante par décision PO, mais leurs [originaux, exports et provenance restent consultables dans l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours). **Aucune charte ni interface visuelle de production n'a été approuvée par le PO.** Les images ne sont ni des captures de firmware ni des représentations normatives des informations visibles en jeu.
 
 ## 2. Cadre matériel et frontières
 
@@ -49,11 +49,11 @@ Créer **CYD WARSHIP**, un jeu de bataille navale familial, tactile et tactique 
 
 **Références d'intention, non normatives** : la maquette « classique » ci-dessous représente le tour par tour d'origine ; le **simultané est désormais le mode standard**. Le nombre de tirs visible dans l'ancienne maquette des salves peut également différer de nos règles tactiques actuelles.
 
-![Maquette du mode classique historique](assets/maquettes/mode-classique-320x240.svg)
+![Maquette du mode classique historique](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/mode-classique-320x240.svg)
 
-![Maquette du duel simultané](assets/maquettes/mode-simultane-320x240.svg)
+![Maquette du duel simultané](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/mode-simultane-320x240.svg)
 
-![Maquette des salves historique](assets/maquettes/mode-salves-320x240.svg)
+![Maquette des salves historique](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/mode-salves-320x240.svg)
 
 **À ARBITRER :** grille **15 × 15 envisagée**, non encore actée pour les deux familles tactiques ; arbitrage ergonomique réel sur CYD ; noms commerciaux ; place exacte des trois familles dans le premier MVP.
 
@@ -100,7 +100,7 @@ Les **quatre combinaisons sont conceptuellement possibles**, mais cela **ne vali
 
 ## 5. Déploiement tactile — DÉCIDÉ
 
-![Esquisse de placement tactile, état invalide](assets/maquettes/placement-flotte-320x240.svg)
+![Esquisse de placement tactile, état invalide](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/placement-flotte-320x240.svg)
 
 *Reconstitution conceptuelle 320 × 240 : commandes et positions à évaluer sur matériel, non validées graphiquement.*
 
@@ -187,7 +187,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 ### Fin de partie — confidentialité des flottes
 
-![Esquisse de fin de partie : révélation facultative de la flotte](assets/maquettes/fin-partie-secret-320x240.svg)
+![Esquisse de fin de partie : révélation facultative de la flotte](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/fin-partie-secret-320x240.svg)
 
 **DÉCIDÉ — FIN-001 :** résultat connu des deux joueurs ; les tirs et impacts déjà révélés restent visibles. **La disposition complète de la flotte victorieuse demeure secrète par défaut**, et **le vainqueur choisit s'il souhaite la révéler** à son adversaire. Refuser ou ne pas choisir ne déclenche aucune révélation.
 
@@ -197,7 +197,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 ## 7. Identité et palmarès de chaque CYD
 
-![Esquisse de la fiche adverse consultable à la demande](assets/maquettes/fiche-adversaire-320x240.svg)
+![Esquisse de la fiche adverse consultable à la demande](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/fiche-adversaire-320x240.svg)
 
 *Données fictives — esquisse UX, pas une interface validée.*
 
@@ -228,7 +228,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 ## 8. Créer / rejoindre : multijoueur humain
 
-![Esquisse de l'écran d'accueil avec création, rejoindre et VS CPU](assets/maquettes/accueil-creer-rejoindre-320x240.svg)
+![Esquisse de l'écran d'accueil avec création, rejoindre et VS CPU](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/accueil-creer-rejoindre-320x240.svg)
 
 *Disposition graphique encore PROPOSÉE ; les trois accès fonctionnels sont retenus pour la cible V1.0.*
 
@@ -374,7 +374,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 ## 12. Traçabilité et sources
 
-**Visuels sauvegardés :** [MAQUETTES.md](MAQUETTES.md) : 3 SVG historiques recopiés à l'identique depuis le Grenier Geek et 4 esquisses UX reconstituées, en assets locaux. Les images d'ambiance externes et anciens composants interactifs du chat ne sont pas archivés à l'identique.
+**Visuels historiques :** [MAQUETTES.md](MAQUETTES.md) : 3 SVG historiques recopiés à l'identique depuis le Grenier Geek et 4 esquisses UX reconstituées, [consultables dans l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes) après retrait de `main`. Les images d'ambiance externes et anciens composants interactifs du chat ne sont pas archivés à l'identique.
 
 **Source de départ (27 octobre 2026) :** [IDEE.md du Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md). Les anciennes illustrations sont disponibles dans le dossier [assets](https://github.com/Kharn27/Le-Grenier-Geek/tree/main/plans/I-009-bataille-navale-cyd/assets).
 
@@ -416,7 +416,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - La **reconnexion après perte radio temporaire** est un objectif V1.0 ; la reprise d'une partie après extinction/redémarrage est **reportée**.
 - Le PO veut désormais **détailler les règles et les parcours** plutôt qu'ajouter des modes à la cible V1.0, tout en conservant la trace des bonnes idées.
 - **Fin de partie :** le vainqueur décide seul de révéler ou non sa flotte ; les dispositions non découvertes restent secrètes. En cas de destruction réciproque, toutes les cases sont déjà connues.
-- **Conservation visuelle :** les trois maquettes d'origine et quatre reconstitutions UX sont désormais archivées dans le dépôt et référencées depuis la bible.
+- **Conservation visuelle :** les trois maquettes d'origine et quatre reconstitutions UX sont retrouvables dans l'historique Git du dépôt et référencées depuis la bible, sans être maintenues sur `main`.
 
 **Aucune modification n'est apportée au dépôt historique Le Grenier Geek.** Ce document est une référence fonctionnelle vivante, destinée à être amendée avec les décisions du PO et le retour de l'architecte. Il n'autorise aucun développement.
 
@@ -581,7 +581,7 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **PROPOSÉ — livrable de revue artistique :** une première composition unique, complète, **320 × 240**, montrée aussi en agrandissement ×4 sans interpolation ; les variations ou travaux additionnels dépendront du retour du PO. Pas de production de tous les autres écrans, de sprites définitifs ni de développement firmware à cette étape.
 
-**À ARBITRER avec le Pilotage :** politique légère de conservation des **seules planches et pistes retenues** dans l'arborescence courante, avec récupération des essais écartés via Git ; ne pas traiter cette préférence comme autorisation de supprimer les autres archives encore présentes sur `main`.
+**À ARBITRER par le PO :** politique générale de conservation des ressources graphiques pour les futurs travaux. Le retrait ponctuel des **17 fichiers historiques**, autorisé le 29 octobre 2026, n'approuve pas automatiquement cette politique et ne concerne aucun asset actif ni la mission d'accueil LOT 1 en cours.
 
 **Statut graphique général :** **AUCUNE CHARTE NI MAQUETTE D'ACCUEIL VALIDÉE POUR PRODUCTION**. Les décisions ci-dessus sont des intentions produit approuvées, pas une approbation anticipée du rendu du graphiste.
 

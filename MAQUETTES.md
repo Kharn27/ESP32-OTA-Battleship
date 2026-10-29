@@ -7,13 +7,13 @@
 | **Références graphiques approuvées pour production** | **AUCUNE** | Ni charte ni écran final validés ; ne pas convertir directement les archives en assets firmware |
 | **Accueil CYD WARSHIP — cadrage validé, maquette à produire** | **DÉCIDÉ (intentions PO) / À CONCEVOIR (visuel)** | Titre du jeu, scène fixe, riposte manquée, commandes en bas à gauche ; voir [Bible §15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08) |
 | **Scènes narratives du 29 octobre 2026** | **HISTORIQUE_GIT — NON_VALIDEE_PO — NON_RUNTIME** | Retirées de `main` sur décision PO ; [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) et [dossier historique figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours) |
-| **Archives visuelles et UX A/B/C** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Habillages A/B/C](assets/explorations/2026-10-29-attaque-themes/README.md) |
-| **Archives d'agencements D/E/F** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Agencements D/E/F](assets/explorations/2026-10-29-attaque-layouts/README.md) |
-| **Archives UX antérieures à LOT1-UX-001** | **HISTORIQUE / NON APPROUVÉ VISUELLEMENT** | Trois anciens SVG de combat + quatre reconstitutions UX dans [assets/maquettes](assets/maquettes/) |
+| **Archives visuelles A/B/C** | **HISTORIQUE_GIT — NON RETENUES** | [Habillages A/B/C](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-themes/README.md), [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) |
+| **Archives d'agencements D/E/F** | **HISTORIQUE_GIT — NON RETENUES** | [Agencements D/E/F](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-layouts/README.md), [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) |
+| **Archives UX antérieures à LOT1-UX-001** | **HISTORIQUE_GIT — NON APPROUVÉES VISUELLEMENT** | Trois anciens SVG de combat + quatre reconstitutions UX [au commit figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes) |
 
 **Traçabilité des scènes narratives retirées :** [PR #2 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2), [dossier au commit `872496d73a150dd5a016c219973e5865576b7e04`](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours) et [README historique, originaux PNG, exports 320 × 240 et manifeste](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours/README.md). Ces illustrations restent consultables dans Git ; elles ne sont ni des pistes actives, ni des écrans de gameplay. Leur retrait ne réécrit aucun historique.
 
-**Périmètre de la présente décision :** seuls les 16 fichiers narratifs ont reçu le statut `HISTORIQUE_GIT` et sont autorisés au retrait. Les sept anciennes maquettes UX et les dix fichiers A–F restent sur `main` jusqu'à un arbitrage PO distinct.
+**Décision PO du 29 octobre 2026 :** les 16 fichiers narratifs avaient déjà été retirés de `main` ; le retrait des **7 maquettes UX** et **10 fichiers A–F** est à présent autorisé. Les 17 fichiers restent retrouvables au [commit figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets), et A–F via la [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1). Ce nettoyage ne valide **aucune politique générale future de conservation des assets** et ne modifie aucune règle de jeu.
 
 **Valeur UX historique ≠ approbation visuelle.** Les documents peuvent décrire un principe fonctionnel conservé, mais leurs couleurs, leurs illustrations, leurs composants ou leurs mises en page n'ont pas été acceptés comme direction de production. Les anciens écrans à **deux grilles simultanément visibles** contredisent explicitement la décision **LOT1-UX-001 : une seule grille ATTAQUE ou DÉFENSE à la fois**.
 
@@ -26,55 +26,55 @@ Les décisions de gameplay du LOT 1 restent inchangées dans [BIBLE_PRODUIT.md](
 **État de cette galerie : archives de maquettes historiques, non validées comme spécifications graphiques.**  
 **Format des maquettes vectorielles historiques :** SVG **320 × 240**, orientation paysage, destinés à illustrer l'UX sur la vraie CYD classique.
 
-Les visuels sont versionnés dans [assets/maquettes](assets/maquettes/). Ils servent de repères pour les discussions avec le PO et pour une future direction artistique. Aucun ne prouve l'ergonomie tactile réelle ; elle devra être testée au stylet.
+Les sept visuels restent [consultables dans l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes), et non dans l'arborescence courante. Ils documentent les échanges UX passés sans servir de référence artistique active. Aucun ne prouve l'ergonomie tactile réelle ; elle devra être testée au stylet.
 
-## A. Maquettes historiques conservées à l'identique
+## A. Maquettes UX historiques — accessibles dans Git
 
 Ces **trois fichiers** proviennent du [dossier I-009 dans Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/tree/main/plans/I-009-bataille-navale-cyd/assets) et ont été recopiés sans modification.
 
 ### Classique — version historique
 
-![Maquette classique historique — 320×240](assets/maquettes/mode-classique-320x240.svg)
+![Maquette classique historique — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/mode-classique-320x240.svg)
 
 **Attention, règle devenue historique :** l'image suggère le tour par tour traditionnel. Depuis, le **mono-tir simultané est le standard décidé**, et l'alternance n'est plus qu'une variante facultative. Le dessin reste une **archive historique UX, et non une référence d'identité graphique**, mais **sa présentation simultanée de deux grilles est désormais écartée pour la V1.0** : une seule grande grille est visible à la fois.
 
 ### Simultané — concept d'origine
 
-![Maquette historique du duel simultané — 320×240](assets/maquettes/mode-simultane-320x240.svg)
+![Maquette historique du duel simultané — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/mode-simultane-320x240.svg)
 
 **Intention toujours pertinente :** deux cibles secrètes et résolution commune après validation des deux joueurs. **Attention : la disposition de deux océans à l'écran n'est plus la règle d'interface V1.0.** Les commandes, dimensions des cases et couleurs ne sont pas figées.
 
 ### Salves — concept d'origine
 
-![Maquette historique des salves — 320×240](assets/maquettes/mode-salves-320x240.svg)
+![Maquette historique des salves — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/mode-salves-320x240.svg)
 
 **Attention, chiffres non contractuels :** les indications de puissance de feu figurant sur cette ancienne maquette ne reflètent pas nécessairement la règle tactique désormais retenue (contribution de chaque navire encore à flot). Les grilles tactiques 15 × 15 restent **à arbitrer/tester**.
 
 ## B. Esquisses reconstituées depuis nos échanges
 
-Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts discutés dans le chat**, et non des copies pixel pour pixel des illustrations ou éléments interactifs affichés lors de la conversation. Leur réalisation dans le dépôt permet de ne pas perdre ces idées.
+Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts discutés dans le chat**, et non des copies pixel pour pixel des illustrations ou éléments interactifs affichés lors de la conversation. Leur conservation dans l'historique Git permet de retrouver ces idées sans maintenir les fichiers dans `main`.
 
 ### Accueil — CRÉER / REJOINDRE / VS CPU
 
-![Proposition d'écran d'accueil — 320×240](assets/maquettes/accueil-creer-rejoindre-320x240.svg)
+![Proposition d'écran d'accueil — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/accueil-creer-rejoindre-320x240.svg)
 
 **Décidé côté fonctionnel :** accès volontaire CRÉER / REJOINDRE ; VS CPU dans la cible V1.0. **Proposé côté interface :** disposition exacte des trois choix. La découverte ESP-NOW reste à valider sur deux CYD physiques.
 
 ### Placement — AUTO, rotation, validation et erreur
 
-![Esquisse de placement sur grille — 320×240](assets/maquettes/placement-flotte-320x240.svg)
+![Esquisse de placement sur grille — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/placement-flotte-320x240.svg)
 
 **Décidé côté fonctionnel pour la V1.0 :** flotte préremplie, AUTO répétable, déplacement par sélection puis destination, rotation même invalide, rouge si invalide, ✓ / ✕ et PRÊT indisponible tant qu'une édition est en cours ou invalide. **Attention LOT 1 : seul AUTO + PRÊT est retenu**, sans déplacement ni rotation manuels. **Proposé côté interface :** tailles et positionnement des boutons.
 
 ### Fiche adverse — palmarès de la CYD
 
-![Esquisse de palmarès adverse — 320×240](assets/maquettes/fiche-adversaire-320x240.svg)
+![Esquisse de palmarès adverse — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/fiche-adversaire-320x240.svg)
 
 **Décidé côté fonctionnel :** palmarès local propre à la CYD et consultation **à la demande**, jamais imposée ; **quatre catégories** Humain / Mousse / Capitaine / Amiral et **un compteur global** de forfaits volontaires. **Fictif :** chiffres et nom affichés ; la maquette antérieure ne représente pas encore cette ventilation ; navigation exacte et titres honorifiques non décidés.
 
 ### Victoire — révélation facultative de la flotte
 
-![Esquisse de fin de partie — 320×240](assets/maquettes/fin-partie-secret-320x240.svg)
+![Esquisse de fin de partie — 320×240](https://raw.githubusercontent.com/Kharn27/ESP32-OTA-Battleship/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes/fin-partie-secret-320x240.svg)
 
 **Décidé :** la disposition complète de la flotte victorieuse **reste secrète par défaut** ; le vainqueur peut la révéler volontairement après le combat. En cas de destruction réciproque complète, toutes les cases des deux flottes sont déjà connues ; proposer une option analogue ne révélerait donc rien de neuf. L'écran et ses libellés restent proposés.
 
@@ -86,29 +86,29 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 - Un **indicateur intelligent DÉFENSE** montre le tir manqué de façon discrète, un touché de façon visible et un coulé de façon renforcée. Les dégâts non consultés maintiennent une alerte jusqu'à l'ouverture de DÉFENSE.
 - Le **LOT 1** cible une bataille classique contre **Mousse sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
 
-**Statut graphique : À CONCEVOIR.** Les anciens SVG et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de cette nouvelle disposition. La création de nouveaux visuels **320 × 240** et d'une charte graphique fera l'objet d'une discussion dédiée avec le PO avant toute mission au graphiste. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
+**Statut graphique : À CONCEVOIR / EN CONCEPTION pour l'accueil LOT 1.** Les anciens SVG conservés dans Git et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de la nouvelle disposition. La mission artistique de l'accueil LOT 1 est déjà en cours ; le présent nettoyage ne la relance ni ne l'élargit. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
 
 ### Actualisation documentaire du 29 octobre 2026 — LOT 1
 
 **DÉCIDÉ côté fonctionnel dans la Bible v0.7 :** fin de partie après résolution des deux tirs, match nul par destruction mutuelle, REJOUER avec conservation par défaut de la formation du joueur, nouvelle flotte aléatoire de Mousse, palmarès VS Mousse et abandon après PRÊT, IA débutante mémorisant ses pistes, navires autorisés à se toucher et épaves non identifiées, inspection libre post-partie et gravité maximale de l'indicateur DÉFENSE. L'accueil minimal du LOT 1 affiche seulement JOUER CONTRE MOUSSE et PALMARÈS.
 
-**Statut des visuels inchangé :** les sept SVG restent des esquisses historiques ou reconstituées, **non validées graphiquement** ; aucun SVG ne prétend représenter les nouvelles règles dans leur ensemble. La future charte et les nouveaux écrans 320 × 240 restent **À CONCEVOIR / À VÉRIFIER**.
+**Statut visuel inchangé :** les sept SVG restent des esquisses historiques ou reconstituées **non validées graphiquement**, consultables dans Git uniquement ; aucun ne prétend représenter toutes les nouvelles règles. La future charte et les nouveaux écrans 320 × 240 restent **À CONCEVOIR / À VÉRIFIER**, sans élargir la mission d'accueil LOT 1 en cours.
 
 ## D. À ne pas confondre
 
 Les **deux scènes narratives de la PR #2** ont été retirées de `main` par décision PO et restent accessibles dans [l'historique Git](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours). Les éléments interactifs présentés dans le chat (simulateurs, petits schémas) ne sont pas automatiquement enregistrés comme des images exportables.
 
-Cet index décrit les **trois SVG historiques**, **quatre reconstitutions UX** et **six explorations A–F écartées** encore présents sur `main`. Il ne conserve qu'un lien historique vers les **deux scènes narratives retirées** et ne prétend pas archiver toutes les images temporaires ou les composants interactifs de la conversation.
+Cet index décrit les **trois SVG historiques**, **quatre reconstitutions UX** et **six explorations A–F écartées**, tous retirés de `main` mais retrouvables au [commit figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54) ; il conserve aussi un lien historique vers les **deux scènes narratives retirées**. Il ne prétend pas archiver toutes les images temporaires ou les composants interactifs de la conversation.
 
 ## E. Suite de la conception
 
-Les maquettes futures devront être **créées comme fichiers conservables** (SVG/PNG selon le besoin), clairement étiquetées **PROPOSÉ** ou **DÉCIDÉ**, et référencées ici et dans la [bible produit](BIBLE_PRODUIT.md).
+La politique générale de conservation et de référencement des **futurs visuels** reste **À ARBITRER par le PO**. Le retrait des fichiers historiques n'autorise ni suppression d'un asset actif ni changement du processus de validation graphique.
 
 **Aucune mission de graphisme ou de développement n'est déclenchée par cette galerie.**
 
 ## F. Archive historique A/B/C — NON RETENUE COMME RÉFÉRENCE VISUELLE
 
-Le dossier [`assets/explorations/2026-10-29-attaque-themes/`](assets/explorations/2026-10-29-attaque-themes/README.md) conserve trois anciens habillages de **l'unique grille ATTAQUE** du LOT 1 (classique 10 × 10, VS Mousse, mono-tir simultané), conformes aux décisions `LOT1-UX-001/002/003`.
+Le [dossier A/B/C au commit figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-themes) conserve dans l'historique Git trois anciens habillages de **l'unique grille ATTAQUE** du LOT 1 (classique 10 × 10, VS Mousse, mono-tir simultané), conformes aux décisions `LOT1-UX-001/002/003`.
 
 - **A — Abysses électriques** : océan profond, cyan bioluminescent et corail.
 - **B — Archipel** : aventure lumineuse, azur et teintes chaudes.
@@ -116,11 +116,11 @@ Le dossier [`assets/explorations/2026-10-29-attaque-themes/`](assets/exploration
 
 **Classement Pilotage :** trois explorations historiquement appréciées, mais **non retenues comme références visuelles de production**. La possibilité de thèmes interchangeables a été évoquée sans jamais être décidée. Les essais d'agencements D/E/F sont également archivés, et aucune règle n'a changé.
 
-Ces sources SVG sont **des previews PC 320 × 240, non des assets runtime et non testées sur CYD physique**. L'intégration au produit nécessite une revue du Pilotage, une validation PO et des essais matériels.
+Ces sources SVG retirées de `main` sont **des previews PC 320 × 240, non des assets runtime et non testées sur CYD physique**. L'intégration au produit nécessite une revue du Pilotage, une validation PO et des essais matériels.
 
 ## G. Archive historique D/E/F — NON RETENUE COMME RÉFÉRENCE VISUELLE
 
-Le dossier [`assets/explorations/2026-10-29-attaque-layouts/`](assets/explorations/2026-10-29-attaque-layouts/README.md) archive **trois autres dispositions anciennement proposées** indépendantes des thèmes A/B/C : **D grille centrale**, **E navigation latérale**, **F commandes basses**. Les trois SVG **320 × 240** sont visibles dans GitHub. Ils conservent les contraintes de `LOT1-UX-001/002/003`, le classique 10 × 10 contre Mousse, la sélection E6, les impacts antérieurs C3 et H8 et l'alerte de DÉFENSE non consultée.
+Le [dossier D/E/F au commit figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-layouts) documente dans l'historique Git **trois autres dispositions anciennement proposées** indépendantes des thèmes A/B/C : **D grille centrale**, **E navigation latérale**, **F commandes basses**. Les trois SVG **320 × 240** restent visibles dans l'historique GitHub, mais plus sur `main`. Ils conservent les contraintes de `LOT1-UX-001/002/003`, le classique 10 × 10 contre Mousse, la sélection E6, les impacts antérieurs C3 et H8 et l'alerte de DÉFENSE non consultée.
 
 **Statut : EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO.** Les PNG/zooms locaux ne sont pas versionnés ; les trois sources SVG et leurs notes le sont. Aucun choix d'agencement, de thème interchangeable ou de rendu technique n'est validé. Aucun test sur CYD.
 
@@ -131,6 +131,6 @@ Le dossier [`assets/explorations/2026-10-29-attaque-layouts/`](assets/exploratio
 
 **PROPOSÉ / À VÉRIFIER :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil ; simplicité, équilibre et lisibilité à 320 × 240 priment. La position exacte des éléments et le dessin restent ouverts.
 
-**À PRODUIRE via Pilotage / Graphiste :** une première proposition complète d'accueil adaptée à la CYD classique, soumise au PO **avant toute validation ou classement comme référence active**. Les anciennes images supprimées de `main` restent accessibles dans Git ; aucune exploration rejetée ne doit être réintroduite automatiquement.
+**EN COURS — Pilotage / Graphiste :** première proposition complète d'accueil adaptée à la CYD classique, à soumettre au PO **avant toute validation ou classement comme référence active**. Mission existante, ni relancée ni étendue par le nettoyage. Les anciennes images supprimées de `main` restent accessibles dans Git ; aucune exploration rejetée ne doit être réintroduite automatiquement.
 
 **Référence détaillée :** [BIBLE_PRODUIT.md, § 15](BIBLE_PRODUIT.md). Aucun autre écran, thème ou code n'est demandé par ce cadrage.
