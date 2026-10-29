@@ -1,8 +1,12 @@
-# ESP32-OTA-Battleship
+# CYD WARSHIP
+
+**I-009 — Bataille navale sur ESP32 CYD** · Dépôt technique : `ESP32-OTA-Battleship` (nom inchangé).
 
 Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran tactile 320 × 240), pensée comme un jeu familial et tactique. L'exploration artistique vise un **pixel art de jeu indépendant contemporain**, riche, expressif et immersif ; **aucune charte graphique n'est encore validée par le PO**.
 
 **État : exploration fonctionnelle. Aucun développement n'est engagé.**
+
+**DÉCIDÉ pour l'accueil LOT 1 :** titre **CYD WARSHIP**, scène maritime fixe au coucher du soleil, riposte ennemie manquée visible près du navire principal, titre haut lisible et discret, boutons **JOUER CONTRE MOUSSE** et **PALMARÈS** superposés à l'illustration (zone calme, plutôt en bas à gauche). Les avions restent une piste artistique à vérifier à 320 × 240. **Aucune maquette finale validée.** [Cadrage détaillé dans la Bible, § 15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08).
 
 ## Référence produit
 
