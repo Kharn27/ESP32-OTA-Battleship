@@ -1,11 +1,11 @@
 # I-009 — Remise pour revue Pilotage
 
 ## Références et périmètre
-- Issue liée : \`Refs #...\` (ne pas utiliser \`Closes #...\` tant que tous les critères ne sont pas acceptés).
+- Issue liée : `Refs #...` (ne pas utiliser `Closes #...` tant que tous les critères ne sont pas acceptés).
 - Type : US-DEV / US-GRAPH / DOC-PO / SPIKE / BUG / TECH.
 - Responsable / agent :
-- Base cible : \`main\`
-- **HEAD exact soumis à la revue :** \`<SHA complet>\`
+- Base cible : `main`
+- **HEAD exact soumis à la revue :** `<SHA complet>`
 - Résumé des changements et **exclusions** :
 
 ## Critères d'acceptation
@@ -35,10 +35,10 @@
 - [ ] Diff limité à la mission
 - [ ] Fichiers et sources/export graphiques cohérents si concernés
 - [ ] Tests et résultats **réels** fournis, échecs non masqués
-- [ ] Aucune dépendance au dépôt d'idées \`Le-Grenier-Geek\` modifiée
+- [ ] Aucune dépendance au dépôt d'idées `Le-Grenier-Geek` modifiée
 - [ ] HEAD exact actualisé après le dernier push
 
 ## Décision réservée au Pilotage
-\`CORRECTIONS_REQUISES\` / \`EN_ATTENTE_DE_PREUVES\` / \`EN_ATTENTE_ARBITRAGE_PO\` / \`ACCEPTEE_POUR_FUSION\` / \`FUSIONNEE\`
+`CORRECTIONS_REQUISES` / `EN_ATTENTE_DE_PREUVES` / `EN_ATTENTE_ARBITRAGE_PO` / `ACCEPTEE_POUR_FUSION` / `FUSIONNEE`
 
 > Une CI verte n'est ni une revue de code, ni un test CYD. Le Pilotage contrôle le dernier HEAD et effectue personnellement la fusion.
