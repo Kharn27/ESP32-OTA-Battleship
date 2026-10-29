@@ -1,6 +1,6 @@
-# I-009 — Bible produit : Bataille navale ESP32 CYD
+# I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.7 — consolidation des décisions fonctionnelles LOT 1, 29 octobre 2026  
+**Version documentaire :** 0.8 — nom officiel et cadrage PO de l'accueil LOT 1 ; règles métier v0.7 conservées, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -9,7 +9,7 @@
 
 ## 1. Promesse et priorité de conception
 
-Créer un jeu de bataille navale familial, tactile et tactique sur ESP32 CYD classique. Le **LOT 1** commence contre Mousse sur une seule CYD ; la cible multijoueur humain utilise **deux ESP32 CYD**, un par joueur, avec une flotte secrète par console. **Intention artistique décidée par le PO :** jeu indépendant contemporain en pixel art riche, expressif et immersif, avec priorité à la lisibilité sur écran natif 320 × 240. **Charte visuelle définitive non validée.**
+Créer **CYD WARSHIP**, un jeu de bataille navale familial, tactile et tactique sur ESP32 CYD classique. Le **LOT 1** commence contre Mousse sur une seule CYD ; la cible multijoueur humain utilise **deux ESP32 CYD**, un par joueur, avec une flotte secrète par console. **Intention artistique décidée par le PO :** jeu indépendant contemporain en pixel art riche, expressif et immersif, avec priorité à la lisibilité sur écran natif 320 × 240. **Charte visuelle définitive non validée.**
 
 **DÉCIDÉ — principes d'expérience :**
 - Le **gameplay passe avant le spectacle** : fluide, compréhensible sans se poser de questions, avec des retours immédiats.
@@ -365,6 +365,12 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-ABD-001 | PRÊT ouvre la période d'abandon comptant comme forfait volontaire | **DÉCIDÉ** |
 | LOT1-UX-004 | Indicateur DÉFENSE par gravité maximale non consultée, acquis à l'ouverture | **DÉCIDÉ** |
 | LOT1-ACC-001 | Accueil minimal : JOUER CONTRE MOUSSE et PALMARÈS ; autres accès dans les lots ultérieurs | **DÉCIDÉ (découpage délégué)** |
+| LOT1-ACC-002 | Titre officiel affiché : CYD WARSHIP ; nom du dépôt GitHub inchangé | **DÉCIDÉ (PO)** |
+| LOT1-ACC-003 | Accueil V1.0 fondé sur une scène maritime **fixe**, sans animation obligatoire | **DÉCIDÉ (PO)** |
+| LOT1-ACC-004 | Titre en haut : identifiable, lisible mais discret, sans masquer la scène | **DÉCIDÉ (intention PO) / implantation À CONCEVOIR** |
+| LOT1-ACC-005 | Commandes **superposées à l'illustration**, préférentiellement dans la zone calme en bas à gauche | **DÉCIDÉ (principe PO) / position exacte À VÉRIFIER** |
+| LOT1-ACC-006 | Conserver coucher de soleil, navire principal et ennemi distant ; représenter une **riposte adverse manquée** par une gerbe d'eau proche du navire principal | **DÉCIDÉ (intention de scène PO) / rendu À CONCEVOIR** |
+| LOT1-ACC-007 | Avion en feu en chute près du navire et escadrille en silhouettes devant le soleil | **PROPOSÉ par le PO / À VÉRIFIER en 320 × 240** |
 
 ## 12. Traçabilité et sources
 
@@ -530,3 +536,55 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
 **PROPOSÉ — prochaine étape de cadrage :** définir précisément le déroulement joueur d'une manche, avec **une question produit importante à la fois**, puis consolider les critères d'acceptation. **Aucune mission technique/graphique, aucun backlog ni planning n'est lancé par ce document.**
+## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
+
+Cette section complète la Bible **sans modifier les décisions de gameplay ni le découpage du LOT 1 définis au § 14**. Elle explicite les choix du PO pour une future maquette de l'accueil. La validation d'un concept **ne vaut pas validation de son illustration finale**.
+
+### 15.1 Nom du jeu — LOT1-ACC-002
+
+**DÉCIDÉ (PO) :** le titre officiel du jeu affiché au joueur est **CYD WARSHIP**. « Bataille navale » reste une description du jeu, non un second titre imposé. L'identifiant du projet **I-009** et le nom du dépôt **ESP32-OTA-Battleship** ne sont pas renommés automatiquement.
+
+**À VÉRIFIER si diffusion publique :** disponibilité et usage commercial du nom ; cette question ne bloque pas le cadrage artistique.
+
+### 15.2 Écran d'accueil : scène et composition — LOT1-ACC-003 à 007
+
+**DÉCIDÉ (PO) — intentions à représenter :**
+- Pour la **V1.0**, l'accueil montre une **scène illustrée fixe** : pas d'animation requise sur cet écran.
+- **Coucher de soleil préservé**, avec atmosphère maritime expressive ; un navire principal au premier plan et un navire ennemi à l'horizon, dans leur relation de composition actuelle.
+- Le navire ennemi reste identifiable et endommagé ; notre bâtiment tire vers lui. La scène doit aussi montrer **la riposte ennemie ratée**, par exemple une **gerbe d'eau près du navire principal**, sans cacher ce dernier.
+- Le titre **CYD WARSHIP** apparaît **dans la partie haute**, clairement identifiable mais **visuellement discret** : il ne doit pas écraser le paysage.
+- Les commandes du LOT 1 sont **directement superposées à l'illustration**, dans une partie moins chargée, **de préférence en bas à gauche**. Éviter un panneau massif. Leur visibilité et leur facilité de sélection au stylet restent prioritaires.
+
+**DÉCIDÉ (LOT1-ACC-001, inchangé) — seules actions proposées au lancement du LOT 1 :**
+- **JOUER CONTRE MOUSSE**
+- **PALMARÈS**
+
+Les actions **CRÉER / REJOINDRE**, les autres adversaires CPU et les variantes de jeu restent prévues dans les périmètres ultérieurs ; elles **ne figurent pas comme actions actives sur l'accueil du LOT 1**.
+
+**PROPOSÉ par le PO, non encore approuvé comme composition finale :**
+- Un **avion en feu**, en chute vers la mer à proximité du navire principal.
+- Une **escadrille en silhouettes** dans le ciel lointain, idéalement devant les couleurs du coucher de soleil.
+- Réduire la quantité et le détail des avions si leur lisibilité ou la sobriété de la composition l'exigent.
+
+**À VÉRIFIER / À CONCEVOIR :** hiérarchie entre titre, bateaux, riposte, aéronefs et commandes ; lisibilité de la scène et des textes à **320 × 240 natifs** ; zones tactiles adaptées au stylet résistif ; contraste des boutons sur leur arrière-plan. Aucun emplacement exact, police, palette ou sprite n'est validé à ce stade.
+
+### 15.3 Frontière entre illustration et jeu
+
+Les images de bataille précédemment produites sont des **études narratives historiques**, non des maquettes d'accueil validées et non des assets firmware. Leur retrait de l'arborescence actuelle est déjà tracé dans [MAQUETTES.md](MAQUETTES.md) et dans l'historique Git. **Ne pas les réintroduire automatiquement comme fichiers actifs.** Le graphiste doit composer une véritable **maquette d'accueil comprenant titre et deux actions**, plutôt que superposer des boutons sans réflexion sur une ancienne image.
+
+La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'autorise pas la révélation des positions secrètes adverses **pendant le combat**.
+
+### 15.4 Transmission au Pilotage et maturité
+
+**DÉCIDÉ :** le PO a demandé de documenter ces intentions avant de confier au **Pilotage** la coordination de la prochaine maquette avec le graphiste. Le Pilotage garde la responsabilité des missions graphiques, des revues et des fusions.
+
+**PROPOSÉ — livrable de revue artistique :** une première composition unique, complète, **320 × 240**, montrée aussi en agrandissement ×4 sans interpolation ; les variations ou travaux additionnels dépendront du retour du PO. Pas de production de tous les autres écrans, de sprites définitifs ni de développement firmware à cette étape.
+
+**À ARBITRER avec le Pilotage :** politique légère de conservation des **seules planches et pistes retenues** dans l'arborescence courante, avec récupération des essais écartés via Git ; ne pas traiter cette préférence comme autorisation de supprimer les autres archives encore présentes sur `main`.
+
+**Statut graphique général :** **AUCUNE CHARTE NI MAQUETTE D'ACCUEIL VALIDÉE POUR PRODUCTION**. Les décisions ci-dessus sont des intentions produit approuvées, pas une approbation anticipée du rendu du graphiste.
+
+### Traçabilité de la v0.8
+
+**Source :** arbitrages explicites du PO dans la conversation du 29 octobre 2026 : nom **CYD WARSHIP** ; illustration d'accueil fixe ; titre dans le ciel, visible mais discret ; boutons superposés dans une zone calme, idéalement en bas à gauche ; maintien du coucher de soleil et des navires ; ajout d'une riposte adverse manquée ; aéronefs à explorer sans les déclarer obligatoires. **Tous les autres arbitrages fonctionnels de la v0.7 sont conservés.**
+
