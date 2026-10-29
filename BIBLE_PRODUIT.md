@@ -1,6 +1,6 @@
 # I-009 — Bible produit : CYD WARSHIP (bataille navale ESP32 CYD)
 
-**Version documentaire :** 0.10 — révélation volontaire et inspection pédagogique LOT 1 ; règles métier v0.7, accueil v0.8 et parcours de manche v0.9 conservés, 29 octobre 2026  
+**Version documentaire :** 0.11 — décisions PO sur le référentiel CPU Capitaine et clarification du périmètre LOT 1 ; règles métier v0.7, accueil v0.8, parcours de manche v0.9 et révélation v0.10 conservés, 29 octobre 2026  
 **Maturité :** expression de besoin en construction ; **ce document entier n'est pas encore validé**  
 **Projet :** [ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship)  
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
@@ -283,11 +283,15 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 
 **DÉCIDÉ comme intitulés des trois niveaux utilisés dans le palmarès : Mousse, Capitaine, Amiral.**
 
-**PROPOSÉ — comportement précis des niveaux, non encore arbitré :**
-- **Mousse** : débutant, comportement simple, compositions plutôt aléatoires.
-- **Capitaine** : intermédiaire, recherche méthodique, flotte raisonnablement équilibrée.
-- **Amiral** : expérimenté, exploitation plus poussée des indices et composition stratégiquement optimisée.
-- **Principe d'équité souhaitable :** le CPU ne doit jamais accéder aux positions secrètes des navires humains ; sa difficulté provient de ses décisions, pas de tricherie.
+**DÉCIDÉ — démarche de cadrage CPU (29/10/2026, v0.11) :** Capitaine sert d'**adversaire de référence fonctionnelle** pour étalonner ensuite les difficultés. Ses dix principes de comportement déjà arbitrés sont consignés au **§ 16**. Cette référence de conception **n'ajoute pas Capitaine au LOT 1** ; sa réalisation et le cadrage détaillé d'Amiral sont **REPORTÉS à des lots ultérieurs**. Le **LOT 1 reste exclusivement VS Mousse**.
+
+**DÉCIDÉ — équité pour Mousse et référentiel Capitaine :** pas d'accès aux placements secrets, aux identités cachées des touches ni aux cases exactes des épaves ; les décisions reposent uniquement sur les tirs, résultats, annonces et règles accessibles à un humain.
+
+**PROPOSÉ / À ARBITRER — différenciation non finalisée :**
+- **Mousse** : débutant, exploration plutôt instinctive, maladresses crédibles ; les règles LOT1-CPU-001 à 005 restent décidées, leurs cas limites demandent encore arbitrage.
+- **Capitaine** : joueur compétent mais imparfait, comportement de référence déjà cadré au § 16 ; équilibrage réel restant à vérifier.
+- **Amiral** : exploitation plus poussée des indices et des placements possibles ; comportement précis non décidé.
+- Les compositions de flottes tactiques selon les niveaux restent à définir dans les lots concernés.
 
 **À ARBITRER :**
 - Logique de décision exacte, différenciation observable des trois niveaux et équilibre des flottes tactiques.
@@ -361,6 +365,8 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-CPU-003 | Après deux impacts adjacents alignés, priorité à l'axe supposé | **DÉCIDÉ** |
 | LOT1-CPU-004 | Plusieurs pistes mémorisées, poursuivies prioritairement une à une | **DÉCIDÉ** |
 | LOT1-CPU-005 | Après coulé, piste supposée terminée ; priorité à une autre piste | **DÉCIDÉ** |
+| LOT1-CPU-006 | Après deux touches alignées, si un prolongement manque, Mousse privilégie l'autre extrémité encore inconnue avant de réviser l'alignement | **DÉCIDÉ (PO, 29/10/2026)** |
+| CAP-CPU-001 à 010 | Capitaine, étalon fonctionnel : dix principes détaillés au § 16 ; non inclus dans le LOT 1 | **DÉCIDÉ (référence de conception) / réalisation REPORTÉE** |
 | LOT1-FLT-001 | Navires au contact latéral ou diagonal autorisés, sans chevauchement | **DÉCIDÉ** |
 | LOT1-CBT-001 | Type du navire coulé annoncé, épave non identifiée case par case | **DÉCIDÉ** |
 | LOT1-ABD-001 | PRÊT ouvre la période d'abandon comptant comme forfait volontaire | **DÉCIDÉ** |
@@ -447,6 +453,14 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - **Prochaine discussion :** cas particuliers de l'IA Mousse lorsque des navires se touchent ou que plusieurs pistes semblent alignées ; les règles existantes restent inchangées.
 - **Portée :** complément strictement fonctionnel aux décisions v0.7 à v0.9 ; aucune maquette ni travail technique créé ; [MAQUETTES.md](MAQUETTES.md) inchangé.
 
+**Consolidation de l'étalon CPU Capitaine (29 octobre 2026, version 0.11) — arbitrages PO dans la conversation de cadrage :**
+- **DÉCIDÉ — méthode :** définir un joueur de référence **Capitaine** pour apprécier ensuite les comportements de Mousse et d'Amiral, sans transformer cette référence en développement du LOT 1.
+- **DÉCIDÉ — CAP-CPU-001 à 010 (§ 16) :** recherche initiale organisée mais souple, exploration orthogonale soutenue après touche, révision des hypothèses contradictoires, gestion prioritaire d'une piste à la fois, mémoire après naufrage, exploitation des touches inexpliquées, persévérance raisonnée, prise en compte simple des tailles restantes, sans optimisation probabiliste systématique.
+- **DÉCIDÉ — LOT1-CPU-006 (§ 14.3) :** après deux touches alignées et un prolongement manqué, Mousse privilégie l'autre extrémité encore inconnue.
+- **NON DÉCIDÉ :** comportement de Mousse après échec des **deux** prolongements d'une fausse piste ; deux alternatives ont été proposées sans choix du PO. Ne pas transférer automatiquement les déductions de Capitaine à Mousse.
+- **REPORTÉ :** implémentation des difficultés Capitaine et Amiral, et approfondissement de leurs spécifications, à des lots ultérieurs. LOT 1 inchangé : **VS Mousse seul**, une CYD, classique mono-tir simultané.
+- **Prochaine étape demandée par le PO :** inventaire des manques fonctionnels et critères d'acceptation nécessaires **avant création d'un backlog**. La présente modification documentaire ne crée ni backlog, ni mission, ni planification, ni validation globale de la Bible.
+
 ## 13. Réserve d'idées — ne rien perdre sans gonfler la V1.0
 
 Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idée pourra être réexaminée sans devenir une exigence tacite.
@@ -464,7 +478,7 @@ Cette réserve n'est **ni un backlog ni un engagement de livraison**. Toute idé
 
 ### Prochain chantier de réflexion produit (sans mission de développement)
 
-Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de périmètre fonctionnel et ses critères d'acceptation**, sans confondre ce travail PO avec un planning technique ou un backlog. En parallèle, explorer une **charte graphique cohérente**, des parcours et les besoins exprimables en **user stories pour le graphiste** (sans engager ni assigner une mission).
+Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identifier puis fermer les derniers **arbitrages fonctionnels bloquants**, particulièrement les cas limites de Mousse, et consolider les **parcours et critères d'acceptation observables**. Les travaux artistiques déjà lancés conservent leur statut sans validation implicite. **Aucune nouvelle mission technique, graphique, issue ou planification n'est créée par cette mise à jour.**
 
 ## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Mousse (consolidation v0.7)
 
@@ -496,9 +510,10 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 - **LOT1-CPU-003 — Hypothèse d'alignement :** après **deux impacts voisins alignés**, Mousse **suppose** qu'ils appartiennent à un même navire et privilégie l'axe et ses prolongements encore inconnus. Il peut se tromper de sens. **Les navires pouvant se toucher**, cet alignement n'est pas une preuve d'appartenance commune et ne doit pas être traité comme une connaissance cachée.
 - **LOT1-CPU-004 — Pistes multiples :** Mousse mémorise toutes les découvertes et privilégie **une piste exploitable à la fois** ; il peut reprendre une autre piste déjà identifiée sans perdre les impacts précédents.
 - **LOT1-CPU-005 — Après un coulé :** la piste actuelle est considérée comme **probablement terminée** ; Mousse privilégie une autre piste disponible, tout en conservant les impacts antérieurs et la possibilité d'y revenir. Il ne connaît pas les cases exactes de l'épave.
+- **LOT1-CPU-006 — DÉCIDÉ (29/10/2026) :** si Mousse a deux touches adjacentes alignées et rate le premier prolongement testé, il **privilégie l'autre extrémité encore inconnue** avant de remettre en cause cet axe. Cela décrit une priorité, non une garantie de toucher.
 - **DÉCIDÉ :** aucune case déjà attaquée ne peut être rejouée par Mousse ; ses mauvaises décisions découlent des **hypothèses** et choix de direction, pas d'une consultation des positions secrètes.
 
-**À ARBITRER / préciser sans prescrire d'algorithme :** sélection entre plusieurs voisins, comportement lorsque plusieurs pistes se recoupent, absence de piste restante et cas limites, mesure observable de la difficulté « débutant ». Les principes ci-dessus ne constituent pas une implémentation technique.
+**À ARBITRER / préciser sans prescrire d'algorithme :** après deux prolongements ratés encadrant deux touches sans annonce de naufrage (ex. C4 raté, D4/E4 touchés, F4 raté), Mousse perd-il temporairement sa piste ou continue-t-il à explorer localement ? **Aucune option n'a été validée** pour ce cas. Restent également ouverts : sélection entre voisins, pistes qui se recoupent, absence de piste exploitable, réactions aux naufrages ambigus et mesure observable du niveau « débutant ». Ne pas transformer automatiquement les capacités de Capitaine (§ 16) en capacités de Mousse. Les principes ci-dessus ne constituent pas une implémentation technique.
 
 **Critères d'acceptation proposés à consolider :** préférence observable pour une zone touchée puis son axe possible ; capacité à retrouver une ancienne piste ; absence de tir répété ou de déduction utilisant une information secrète.
 
@@ -558,11 +573,11 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 
 **REPORTÉ hors LOT 1 :** multijoueur ESP-NOW et ses salons/connexions, autres niveaux CPU, variante alternée, modes et compositions tactiques, grille 15 × 15, placement manuel, interfaces avancées et éventuelle console commerciale. **Ces décisions V1.0 ne sont pas annulées.**
 
-**DÉCIDÉ — parcours nominal détaillé au § 14.10 :** sélection, FEU irrévocable, animation courte, révélation synchronisée, information des dégâts dans DÉFENSE, passage libre à la manche suivante et verdict intégré. **À ARBITRER :** détails des transitions et de la révélation pédagogique de Mousse, cas particuliers restants de l'IA, modalités de présentation du palmarès.
+**DÉCIDÉ — parcours nominal détaillé au § 14.10 et révélation pédagogique au § 14.13 :** sélection, FEU irrévocable, animation courte, révélation synchronisée, information des dégâts dans DÉFENSE, passage libre à la manche suivante, verdict intégré et révélation facultative cadrée. **À ARBITRER / À CONCEVOIR :** cas particuliers restants de l'IA de Mousse, modalités visuelles et ergonomie du palmarès, détails graphiques et transitions.
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**DÉCIDÉ — révélation pédagogique cadrée au § 14.13. PROPOSÉ — prochaine étape de cadrage :** approfondir les **cas particuliers de l'IA de Mousse**, notamment les navires au contact, les fausses pistes d'alignement, les pistes concurrentes et le comportement après un naufrage, puis consolider les critères d'acceptation. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique, aucun backlog ni planning n'est lancé par ce document.**
+**DÉCIDÉ — nouvelle démarche au § 16 :** Capitaine est le référentiel de conception, sans entrée dans le LOT 1. **PROPOSÉ — prochaine étape :** examiner **ce qui reste à trancher dans le LOT 1** et consolider les critères d'acceptation avant toute création de backlog ; priorité aux cas limites de Mousse et à l'observabilité de ses décisions. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
 
 ### 14.10 Parcours tactile et visuel d'une manche contre Mousse — décisions PO du 29/10/2026
 
@@ -643,7 +658,7 @@ Le **LOT 1 est choisi dans son intention** ; il reste à produire sa **fiche de 
 
 **À CONCEVOIR / À VÉRIFIER :** lisibilité des silhouettes de navires sous les marques de tir et des cases encore inconnues, taille et emplacement des commandes sur **CYD tactile 320 × 240**, formulation précise du basculement AFFICHER/MASQUER, coexistence du verdict compact et des commandes REJOUER / ACCUEIL. Aucun code couleur, dessin, durée ou maquette de production n'est validé par la présente décision.
 
-**Traçabilité :** arbitrages successifs du PO dans la conversation de cadrage du 29 octobre 2026 : révélation sur ATTAQUE (option A) ; affichage/masquage réversible (option B) ; état mémorisé entre les deux grilles ; présentation discrète non modale (option A) ; condition préalable **MONTRER MA FLOTTE** du vainqueur ; Mousse autorise toujours s'il gagne ; inspection visuelle simple (option A) ; absence de commande MONTRER MA FLOTTE lorsqu'un humain gagne en solo. Le sujet suivant reste **l'IA de Mousse face aux contacts et fausses pistes**, sans décision nouvelle à ce stade.
+**Traçabilité :** arbitrages successifs du PO dans la conversation de cadrage du 29 octobre 2026 : révélation sur ATTAQUE (option A) ; affichage/masquage réversible (option B) ; état mémorisé entre les deux grilles ; présentation discrète non modale (option A) ; condition préalable **MONTRER MA FLOTTE** du vainqueur ; Mousse autorise toujours s'il gagne ; inspection visuelle simple (option A) ; absence de commande MONTRER MA FLOTTE lorsqu'un humain gagne en solo. Le cadrage de l'IA de Mousse face aux contacts et fausses pistes reste ouvert ; un arbitrage complémentaire LOT1-CPU-006 et la démarche de référence Capitaine ont depuis été consignés en v0.11 (voir § 14.3 et § 16).
 
 ## 15. Identité « CYD WARSHIP » et écran d'accueil — cadrage PO du 29 octobre 2026 (v0.8)
 
@@ -697,3 +712,31 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **Source :** arbitrages explicites du PO dans la conversation du 29 octobre 2026 : nom **CYD WARSHIP** ; illustration d'accueil fixe ; titre dans le ciel, visible mais discret ; boutons superposés dans une zone calme, idéalement en bas à gauche ; maintien du coucher de soleil et des navires ; ajout d'une riposte adverse manquée ; aéronefs à explorer sans les déclarer obligatoires. **Tous les autres arbitrages fonctionnels de la v0.7 sont conservés.**
 
+
+
+## 16. Référentiel fonctionnel CPU Capitaine — décisions PO du 29 octobre 2026 (v0.11)
+
+**Statut : DÉCIDÉ sur les principes de conception ci-dessous ; mise en œuvre REPORTÉE hors LOT 1.** Le PO a choisi de définir un **joueur intermédiaire de référence** avant de décliner les difficultés. Cette démarche ne change ni le découpage V1.0, ni la réalisation du LOT 1 : **Mousse est le seul CPU à y figurer**. Les dix arbitrages suivants sont une **référence future**, pas un backlog, un algorithme ou un ordre de développement.
+
+**Règle commune d'équité — DÉCIDÉ :** Capitaine raisonne sur les tirs, les résultats, les annonces de naufrage et les règles connues par les joueurs. Il n'obtient **aucune information secrète** sur la disposition humaine, l'appartenance des impacts ou les cases exactes des épaves.
+
+| Référence | Principe DÉCIDÉ par le PO | Portée / limite |
+| --- | --- | --- |
+| **CAP-CPU-001** | **Recherche organisée dès le premier tir** | Capitaine répartit ses recherches sur les zones inconnues au lieu d'attendre une touche en tirant purement au hasard. |
+| **CAP-CPU-002** | **Recherche organisée mais souple** | Aucune obligation de balayage en damier ou de motif rigide ; l'exploration conserve de l'imprévisibilité. |
+| **CAP-CPU-003** | **Exploitation méthodique d'une première touche** | Il privilégie les cases orthogonales inconnues autour d'une touche jusqu'à découvrir un nouvel indice ou épuiser les voisins possibles, sans renoncer après un simple raté. |
+| **CAP-CPU-004** | **Révision d'une hypothèse contradictoire** | Avec D4/E4 touchés, C4/F4 ratés et aucun naufrage, il comprend que les deux touches ne forment pas un unique navire horizontal et les traite comme des pistes distinctes, sans identifier les bateaux. |
+| **CAP-CPU-005** | **Une piste prioritaire à la fois** | Il explore une piste exploitable jusqu'à épuisement ou révision justifiée, mémorise les autres et y revient ; pas de comparaison permanente des meilleures chances. |
+| **CAP-CPU-006** | **Prudence après naufrage** | Après « coulé », il considère sa piste probablement terminée, passe à une autre piste connue si disponible, mais conserve les touches ambiguës et peut y revenir. |
+| **CAP-CPU-007** | **Exploitation d'une zone ambiguë sans autre piste connue** | Si une zone rassemble quatre touches qu'une épave annoncée de trois cases ne suffit pas à expliquer, il soupçonne au moins une touche appartenant à un autre navire et explore la zone en priorité, **sans savoir laquelle**. |
+| **CAP-CPU-008** | **Persévérance raisonnée** | Il poursuit une piste tant qu'il reste des prolongements crédibles, élimine les hypothèses impossibles à la lumière des ratés, puis passe à une autre piste ou à la recherche générale. |
+| **CAP-CPU-009** | **Prise en compte des tailles restantes** | Grâce aux types déjà coulés, il évite une zone dont les cases inconnues isolées ne peuvent contenir aucun navire encore à flot ; déduction géométrique simple et justifiable. |
+| **CAP-CPU-010** | **Pas d'optimisation systématique des possibilités** | Il élimine les zones impossibles mais explore souplement les zones plausibles, sans classer systématiquement celles-ci par nombre de placements ou probabilité de touche. |
+
+**Nuance fonctionnelle essentielle :** les navires peuvent se toucher. Une annonce de naufrage ne désigne **jamais les cases exactes de l'épave** ; l'analyse des touches non expliquées doit donc rester hypothétique, et aucun CPU ne peut « marquer » secrètement comme certaines les cases d'un navire coulé. En particulier, CAP-CPU-007 décrit le cas où **les touches observées ne peuvent toutes être expliquées par le navire annoncé**, sans supposer que Capitaine reçoit l'identité de ces touches.
+
+**REPORTÉ à un lot ultérieur :** mise en œuvre de Capitaine, approfondissement de ses exceptions, conception détaillée d'Amiral, composition des flottes tactiques de ces niveaux et équilibrage comparatif. **PROPOSÉ / non décidé :** attribuer à Amiral un balayage en damier, des comparaisons de configurations ou une recherche probabiliste.
+
+**À ARBITRER ultérieurement :** traduire ces principes en comportements observables exhaustifs et vérifier les degrés de difficulté sur des parties réelles. **Aucun nouveau comportement de Mousse n'est validé par analogie** avec les principes CAP-CPU-001 à 010.
+
+**Traçabilité :** les dix choix ont été approuvés successivement par le PO dans la conversation du 29 octobre 2026, puis le PO a explicitement arrêté l'approfondissement des autres difficultés en demandant leur report hors LOT 1 et une revue des manques avant backlog. Les anciennes décisions LOT1-CPU-001 à 005 restent en vigueur ; la décision complémentaire LOT1-CPU-006 figure au § 14.3.
