@@ -1,40 +1,41 @@
-# GRAPH-ACC-001 — Révision 4 : retouche ciblée du tir et de l’impact
+# GRAPH-ACC-001 — Révision 5 : tir et impact réellement relus dans le composite
 
-**Retour PO reçu** : composition historique actée ; titre et boutons OK en principe ; **tir ennemi et impact dans l’eau à corriger**, sans nouvelle exploration.
+**Périmètre strict :** réponse au rejet artistique PO de la révision 4 (`277f38d173e7f75d1f228494092461d45f67d0e2`), directive Pilotage sur la PR #8. La scène, le titre et les deux boutons sont **verrouillés** ; aucun changement de direction artistique globale.
 
-**Statut demandé :** `RETOUR_PO_CIBLE — SCENE_ACTEE — TITRE_OK_EN_PRINCIPE — BOUTONS_OK_EN_PRINCIPE — CORRECTIONS_GRAPHIQUES_APPLIQUÉES — PO_VALIDATION_FINALE_PENDING — PR_DRAFT_NON_MERGED`.
+**Statut :** `CORRECTIF_GRAPHISTE_LIVRE_POUR_REVUE_PO — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED — PR_DRAFT_NON_MERGED`. Le PO **n'a pas encore validé** cette nouvelle correction.
 
-## Intervention circonscrite
+## Ce qui est modifié
 
-- **Scène** : conserve pixel pour pixel le fond maritime narratif de `872496d73a150dd5a016c219973e5865576b7e04` (original `01_bataille_narrative_320x240.png`). Aucun changement de palette globale, perspective, ciel, navires, nuages, vagues ou tirs alliés.
-- **Titre et boutons** : repris **pixel pour pixel** de la révision 3 (`cabee0d8c4263a8b3599d657aee368afed6fa507`). Zones contrôlées : titre (8,9)-(120,30), commandes (7,176)-(166,205) et (7,207)-(126,237). **10 533 pixels** de ces trois zones contrôlés identiques. Texte et contours inchangés.
-- **Tir ennemi** : suppression du « laser » continu, trop chaud et trop blanc. Point de mise à feu près de la silhouette ennemie `(229,43)` ; déplacement suivant une trajectoire balistique sous-jacente `(229,43) → (278,184)`, mais tracé rendu par une **trace atmosphérique irrégulière très ténue**, quelques reflets cuivrés dispersés et légère fumée. Pas de segments rectilignes graphiques.
-- **Impact manqué** : centre vers `(278,186)`, loin de la coque et dans la mer. Ancienne étoile blanche supprimée au profit d'une **écume discontinue et d'embruns courts**, sur une bande de vague plus sombre et des reflets de l'eau. Couleurs localement mélangées à celles du pixel maritime d'origine ; petites particules à transparence variable, pas de contour régulier ou de sprite découpé.
-- **Grain** : fond historique **inchangé**. Pixelisation toujours à arbitrer par le PO.
+**1. Mise à feu ennemie.** Éclat orangé-blanc contrôlé près de l'armement/silhouette du navire ennemi, vers `(229,43)`. Son échelle reste petite au regard de la distance.
 
-## Livrables
+**2. Trajectoire.** Sillage de fumée sombre bleu-gris et grains cuivrés/ambre par endroits, depuis la bouche jusqu'à l'impact, suivant une légère courbe balistique passant de `(229,43)` vers `(281,184)`. La traînée est **assez matérialisée pour être suivie à l'écran natif**, mais texturée et rompue par l'atmosphère : pas de trait vectoriel uniforme, pas de grand laser blanc.
 
-- `accueil_cyd_warship_320x240.png` — rendu natif 320 × 240, référence de validation esthétique.
-- `accueil_cyd_warship_x4.png` — strict ×4 nearest-neighbor (1280 × 960).
-- `accueil_cyd_warship.svg` — source éditable : fond historique intégré, zones UI vectorielles inchangées, nouvelle couche de riposte indépendante.
-- `effet_riposte_320x240.png` — **couche transparente RGBA isolée** pour retouche ciblée dans Krita/GIMP/Aseprite ; SVG et couche à conserver dans le même dossier.
-- `README.md` — cette note de composition et de contrôle.
+**3. Impact raté dans l'eau.** À droite et au-delà de la proue, vers `(280,187)`, sans contact avec le navire. Une colonne d'eau irrégulière, des embruns lumineux à granularité variable, des éclats de mousse et une dépression sombre se raccordent aux vagues et aux lumières du coucher de soleil. Les couleurs de la gerbe sont dérivées des pixels de la mer historique à cet emplacement ; blancs chauds côté lumière, cyan et bleu-gris sur les bords.
 
-## Avant / après : la zone corrigée uniquement
+Les éléments graphiques s'inscrivent dans **le même plan de profondeur** que les vagues au lieu d'un pictogramme géométrique collé. Aucun aéronef, bateau, animation ou commande ajouté.
 
-| Critère | HEAD précédent | Nouvelle correction |
-|---|---|---|
-| Mise à feu | flash + trait lumineux apparent | flash discret, condensation/particules |
-| Trajectoire | courbe brillante continue | légère traînée décomposée, atmosphère visible au travers |
-| Impact | gerbe blanche en étoile | fines projections irrégulières mêlées à l'écume et aux reflets |
-| Scène, UI | retenues en principe | **strictement préservées** |
+## Preuve d'immuabilité — comparatif avec le HEAD rejeté
 
-Les rectangles tactiles restent (8,177,156,27) et (8,208,114,27) : **aucune modification UX**. Environ 1 060 pixels seulement changent par rapport au précédent PNG ; les retouches se concentrent sur la zone du tir et de la gerbe.
+| Zone / élément | Contrôle |
+|---|---|
+| Scène historique, cadrage, mer, coucher de soleil, navires, tirs amis | Fond historique original `872496d73a150dd5a016c219973e5865576b7e04` préservé, hors seule intervention de riposte |
+| Titre `CYD WARSHIP` | Pixels inchangés par comparaison directe |
+| `JOUER CONTRE MOUSSE`, `PALMARÈS` | Apparence, positions et zones tactiles inchangées |
+| Total zones verrouillées | **10 533 / 10 533 pixels RGB identiques** avec `277f38d` |
+| Pixels modifiés dans le composite | **1 693** pixels (uniquement effet de tir, impact et raccords dans l'eau) |
+| Ancien effet presque invisible | Remplacé par mise à feu contrastée, trace fumée/ambre identifiable, gerbe plus volumétrique et mousse au niveau des vagues |
 
-## Niveau de preuve et réserves
+## Fichiers de revue
+- `accueil_cyd_warship_320x240.png` — **PNG final composite 320 × 240**, référence de jugement PO, image fixe.
+- `accueil_cyd_warship_x4.png` — **1280 × 960**, pixels répétés 4 × 4, nearest-neighbor strict, sans réinterpolation.
+- `effet_riposte_320x240.png` — **calque transparent RGBA** actualisé. Effet local éditable (Krita/GIMP). Ce n'est pas le composite final.
+- `accueil_cyd_warship.svg` — **inchangé par rapport au HEAD précédent** : fond narratif intégré, titre et boutons vectoriels d'origine, référence relative vers `effet_riposte_320x240.png` à conserver à côté du SVG. Le fond reste raster ; les rendus de police SVG peuvent différer du PNG de référence.
+- `README.md` — présente note de revue et limites.
 
-`DESIGN_PREVIEW` uniquement : PNG natif inspecté en aperçu sur ordinateur, génération ×4 par réplication exacte. **Pas de build, pas de test CYD, pas d'estimation empirique du coût mémoire firmware**. L'asset de revue n'est pas un asset runtime.
+Rectangles tactiles **inchangés**, non contractuels : `JOUER CONTRE MOUSSE (8,177,156,27)` ; `PALMARÈS (8,208,114,27)`.
 
-Le fichier SVG conserve des objets texte et des plaques éditables ; comme avant, ses moteurs de rendu peuvent présenter de petites différences par rapport au raster validé : **PNG natif = référence visuelle**. Source SVG liée au PNG transparent externe pour préserver la matière plutôt que lui substituer des formes vectorielles lisses.
+## Validation
 
-**PO : validation artistique finale non acquise. PR #8 à maintenir en brouillon. Pilotage seul responsable de sa revue et de la fusion.**
+Contrôles d'export effectués pour le PNG natif et le zoom ×4 sur poste. La **lisibilité finale à 100 % doit être jugée sur le PNG composite**, non sur le calque isolé. Une production graphique n'est **ni une approbation PO ni un test embarqué**.
+
+**Aucun firmware, compilation Xtensa, mesure RAM/Flash runtime ou test physique CYD.** Aucune fusion de la PR par le Graphiste. L'état de la PR doit rester `DRAFT` jusqu'aux décisions du PO et du Pilotage.
