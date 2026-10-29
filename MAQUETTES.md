@@ -86,13 +86,13 @@ Les quatre visuels ci-dessous sont des **reconstitutions statiques de concepts d
 - Un **indicateur intelligent DÉFENSE** montre le tir manqué de façon discrète, un touché de façon visible et un coulé de façon renforcée. Les dégâts non consultés maintiennent une alerte jusqu'à l'ouverture de DÉFENSE.
 - Le **LOT 1** cible désormais une bataille classique contre **Capitaine sur une seule CYD**, avec placement automatique **AUTO + PRÊT**, sans manipulation individuelle des navires.
 
-**Statut graphique des écrans de combat : À CONCEVOIR.** Les anciens SVG conservés dans Git et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de la nouvelle disposition. La mission artistique distincte de l'**accueil LOT 1** est déjà en cours ; le présent nettoyage ne la relance ni ne l'élargit. Voir [bible produit v0.7](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1 désormais consolidé.
+**Statut graphique des écrans de combat : À CONCEVOIR.** Les anciens SVG conservés dans Git et les petits schémas interactifs de conversation ne constituent **pas** une maquette validée de la nouvelle disposition. La mission artistique distincte de l'**accueil LOT 1** a depuis été livrée et fusionnée ([PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8)) au stade **DESIGN_PREVIEW** ; cela ne valide ni ne déclenche la conception des écrans de combat. Voir la [Bible produit actuelle](BIBLE_PRODUIT.md), § 14, pour le périmètre fonctionnel LOT 1.
 
 ### Actualisation documentaire du 29 octobre 2026 — LOT 1
 
 **HISTORIQUE — cadrage de la Bible v0.7, remplacé quant à l'adversaire en v0.12 :** fin de partie après résolution des deux tirs, match nul par destruction mutuelle, REJOUER avec conservation par défaut de la formation du joueur, nouvelle flotte aléatoire de Mousse, palmarès VS Mousse et abandon après PRÊT, IA débutante mémorisant ses pistes, navires autorisés à se toucher et épaves non identifiées, inspection libre post-partie et gravité maximale de l'indicateur DÉFENSE. L'accueil minimal du LOT 1 affiche seulement JOUER CONTRE MOUSSE et PALMARÈS.
 
-**Statut visuel inchangé :** les sept SVG restent des esquisses historiques ou reconstituées **non validées graphiquement**, consultables dans Git uniquement ; aucun ne prétend représenter toutes les nouvelles règles. La future charte et les nouveaux écrans 320 × 240 restent **À CONCEVOIR / À VÉRIFIER**, sans élargir la mission d'accueil LOT 1 en cours.
+**Statut visuel des sept SVG historiques inchangé :** ces esquisses ou reconstitutions restent **non validées graphiquement**, consultables dans Git uniquement ; aucune ne prétend représenter toutes les nouvelles règles. L'accueil actif est désormais la **maquette de conception retenue** (PR #8) ; la charte globale et les autres écrans 320 × 240 restent **À CONCEVOIR / À VÉRIFIER**.
 
 ## D. À ne pas confondre
 
@@ -125,11 +125,11 @@ Le [dossier D/E/F au commit figé](https://github.com/Kharn27/ESP32-OTA-Battlesh
 **Statut : EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO.** Les PNG/zooms locaux ne sont pas versionnés ; les trois sources SVG et leurs notes le sont. Aucun choix d'agencement, de thème interchangeable ou de rendu technique n'est validé. Aucun test sur CYD.
 
 
-## H. CYD WARSHIP — écran d'accueil à concevoir (cadrage PO du 29 octobre 2026)
+## H. CYD WARSHIP — maquette d'accueil retenue au stade conception (cadrage initial du 29 octobre 2026)
 
 **DÉCIDÉ — intention PO et actualisation après v0.15 :** titre **CYD WARSHIP** en partie haute, visible mais discret ; scène **fixe** au coucher de soleil, navire du joueur au premier plan, navire ennemi lointain endommagé, tir vers l'horizon et **riposte ratée (gerbe d'eau) près du navire principal**. Les deux commandes de l'accueil sont désormais **JOUER** et **PALMARÈS**, présentées sur deux plaques de même taille dans la maquette sélectionnée. **JOUER** ouvre dès le LOT 1 la sélection d'adversaire, **Capitaine seul jouable**. Le placement exact des zones tactiles reste à tester sur CYD.
 
-**PROPOSÉ / À VÉRIFIER :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil ; simplicité, équilibre et lisibilité à 320 × 240 priment. La position exacte des éléments et le dessin restent ouverts.
+**Historique — pistes facultatives du cadrage initial :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil. La **composition de l'accueil a ensuite été retenue par le PO** dans la PR #8 et n'est plus « à dessiner » ; cette acceptation ne valide pas le rendu sur CYD physique.
 
 **GRAPH-ACC-001 — LIVRÉE ET FUSIONNÉE :** [maquette d'accueil 320 × 240 retenue par le PO](design/graph-acc-001/accueil_cyd_warship_320x240.png), [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8), fusion `50d9e1dabd71725adba50279929694123fde0fda`. **Statut : DESIGN_PREVIEW accepté / ON_DEVICE_UNVERIFIED** ; les dimensions d'export sont vérifiées, pas la lisibilité tactile sur la vraie CYD, ni l'intégration runtime. Les archives retirées restent consultables dans Git ; aucune exploration rejetée n'est réactivée.
 
