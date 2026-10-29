@@ -1,39 +1,26 @@
-# Exploration artistique ATTAQUE — trois thèmes candidats (29 octobre 2026)
+# I-009 — Archives historiques A/B/C : habillages de l'écran ATTAQUE
 
-**Statut : PROPOSÉ / DESIGN_PREVIEW — NON VALIDÉ par le PO.**
-Ce dossier archive trois propositions visuelles **SVG natifs 320 × 240** pour `LOT1-UX-001/002/003`.
-Ces fichiers sont des **sources éditables et visualisables directement sur GitHub**, non des assets firmware, ni des captures de la vraie CYD.
+**STATUT OFFICIEL : `EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO`**
+
+**Conclusions de la revue Pilotage du 29/10/2026 :** les propositions A/B/C restent conservées pour la **traçabilité historique et l'étude UX**, mais **ne sont plus candidates à un choix de direction artistique de production**. Le PO a réorienté la recherche vers un **pixel art indie contemporain, riche, expressif et immersif**. Aucune charte, palette ni interface graphique de production n'est validée.
 
 | A — Abysses électriques | B — Archipel | C — Escadre |
 | :---: | :---: | :---: |
-| ![Abysses](A_abysses_electriques.svg) | ![Archipel](B_archipel.svg) | ![Escadre](C_escadre.svg) |
-| Bleu profond / néon turquoise / corail | Azur / sable / orange | Pétrole / acier / cuivre |
+| ![A](A_abysses_electriques.svg) | ![B](B_archipel.svg) | ![C](C_escadre.svg) |
+| Bleu profond et cyan | Azur et sable | Métal et cuivre |
 
-## Contexte commun, conforme à la Bible produit v0.6
+### Ce que cette archive permet encore de comparer
+Les trois prototypes historiques illustrent **une seule grille 10 × 10 ATTAQUE**, la hiérarchie des commandes FEU et DÉFENSE, la lisibilité des impacts et le confort supposé du ciblage. Leur ambiance visuelle n'est **pas** une référence à reproduire dans les futurs assets.
 
-- Classique **10 × 10 VS MOUSSE**, mono-tir simultané, **une seule grille ATTAQUE** à la fois.
-- E6 est sélectionnée mais **non verrouillée** ; C3 est déjà touchée ; H8 est déjà manquée.
-- FEU verrouille irrévocablement la cible sans déclencher de bascule automatique.
-- DÉFENSE reste consultable immédiatement, avec **alerte de navire touché non consultée**.
-- Les cases déjà attaquées ne sont plus sélectionnables ; **la flotte adverse reste secrète**.
-- Les illustrations de navire hors-grille représentent **votre escadre**, pas des positions ennemies.
+**Situation fictive commune** : classique vs Mousse, mono-tir simultané ; E6 sélectionnée (non tirée), C3 touchée et H8 manquée auparavant ; FEU verrouille sans basculement de vue ; DÉFENSE est accessible volontairement, avec une alerte persistante tant que les dégâts n'ont pas été consultés. Les cases déjà attaquées restent non sélectionnables et aucun emplacement ennemi secret n'est révélé.
 
-## Retour exploratoire reçu
+**Retour PO historique (non décision de production)** : le PO avait apprécié les trois ambiances et évoqué des thèmes interchangeables. **La fonction de changement de thème n'a jamais été décidée.** La revue Pilotage a ensuite classé ces images comme archives non retenues.
 
-Le PO apprécie **les trois ambiances**, et a suggéré la possibilité de **thèmes interchangeables**.
-**Ce retour ne vaut pas approbation d'une direction graphique, ni décision d'implémenter la sélection de thèmes.**
-Un deuxième axe d'étude compare **différentes dispositions de l'écran** (grille centrale, navigation latérale, barre de commandes basse).
+### Références et vérifications
+- [Notes artistiques rétrospectives](NOTES_ARTISTIQUES.md) ; [variantes de disposition D/E/F, également historiques](../2026-10-29-attaque-layouts/README.md).
+- Six SVG 320 × 240 de ces deux séries **conservés sans déplacement, suppression ou renommage**.
+- Sources SVG éditables pour documentation ; **pas** des sprites runtime.
+- PNG et zooms produits lors de l'exploration initiale, **non versionnés ici**.
+- **DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED** : aucun test CYD physique, aucune compilation, aucune mesure Flash/RAM, aucune validation PO.
 
-## Preuves et réserves
-
-- Les 3 SVG ont le canevas `320 × 240` et restent éditables ; les exports PNG natifs et zooms 4× sont **disponibles dans le dossier exploratoire fourni au PO hors GitHub**, non versionnés dans cette PR.
-- **Aucun test au stylet sur CYD** ; les cellules font 15 × 15 px et la lisibilité des libellés reste à éprouver.
-- Les SVG emploient du vectoriel et des typographies de PC : **formats d'exploration, pas sprites optimisés**.
-- Aucune estimation RAM/Flash de rendu, aucune compilation firmware, aucune PR à fusionner sans revue Pilotage.
-- Voir [les notes artistiques](NOTES_ARTISTIQUES.md) pour intention, palettes, animations et compromis.
-
-**Aucune charte graphique validée. Aucune modification du dépôt d'idées Le-Grenier-Geek.**
-
-## Exploration complémentaire des agencements
-
-À la demande du PO, les [trois variantes D/E/F](../2026-10-29-attaque-layouts/README.md) comparent **la disposition** des zones tactiles indépendamment des univers de couleur A/B/C. Les six pistes demeurent **NON VALIDÉES**.
+**Cette archive n'est pas une sélection de thèmes à proposer au PO.** Les règles LOT 1 demeurent dans [BIBLE_PRODUIT.md](../../../BIBLE_PRODUIT.md).

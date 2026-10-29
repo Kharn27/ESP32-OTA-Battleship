@@ -1,4 +1,6 @@
-# Exploration artistique I-009 — choix non validés
+# Notes artistiques historiques A/B/C — NON RETENUES COMME RÉFÉRENCE VISUELLE
+
+> **ARCHIVE — `EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO`.** Texte conservé comme trace des intentions et hypothèses créatives antérieures. Les ambiances et dispositions décrites ci-dessous sont **écartées comme référence visuelle de production**. Les mentions d'améliorations/animations et compromis sont des pistes **historiques non décidées**, non des recommandations actives. Aucun test sur CYD ni validation PO. Le cap artistique ultérieur vise un **pixel art indie moderne, riche, expressif et immersif**, sans charte approuvée.
 
 **Situation de référence** : classique 10 × 10 contre Mousse, résolution mono-tir simultané, ATTAQUE affichée, E6 sélectionné (non tiré), C3 touché auparavant, H8 manqué auparavant. Bouton FEU = verrouillage irrévocable du tir. Bouton DÉFENSE = navigation volontaire, avec une alerte de navire touché non consultée. Les illustrations de navires hors grille représentent une vignette d'ambiance « votre escadre », jamais une fuite sur les emplacements secrets ennemis.
 
@@ -40,4 +42,4 @@
 - La flotte ennemie inconnue n'est jamais dessinée.
 - Les SVG sont des **sources d'exploration éditables**, pas des ressources firmware optimisées. Tout chiffrage de RAM runtime, Flash embarquée ou fluidité de l'ESP32 serait prématuré.
 - Les PNG sont vérifiés informatiquement. **Aucun test sur écran CYD réel, aucune compilation de firmware.**
-- **NON VALIDÉ PO — DESIGN_PREVIEW / ASSET_EXPORT_VERIFIED (dimensions et fichiers uniquement) — ON_DEVICE_UNVERIFIED**.
+- **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO.** Les contrôles antérieurs ne prouvent ni rendu firmware ni acceptation.

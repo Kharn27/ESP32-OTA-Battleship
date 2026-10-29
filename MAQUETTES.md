@@ -1,7 +1,25 @@
-# Galerie des maquettes — I-009 Bataille navale CYD
+# Index des maquettes et recherches artistiques — I-009
 
-**État : explorations visuelles, non validées comme spécifications graphiques.**  
-**Format :** tous les fichiers de cette galerie sont des SVG **320 × 240**, orientation paysage, destinés à illustrer l'UX sur la vraie CYD classique.
+**ÉTAT DOCUMENTAIRE AU 29/10/2026 — aucune direction artistique de production validée par le PO.**
+
+| Classe | Statut | Contenu / portée |
+| --- | --- | --- |
+| **Références graphiques approuvées pour production** | **AUCUNE** | Ni charte ni écran final validés ; ne pas convertir directement les archives en assets firmware |
+| **Exploration artistique récente / en traitement séparé** | **EXPLORATION_D_AMBIANCE — NON_VALIDEE_PO — NON_RUNTIME** | [PR #2 — scène narrative de bataille](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2), non fusionnée dans cette PR |
+| **Archives visuelles et UX A/B/C** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Habillages A/B/C](assets/explorations/2026-10-29-attaque-themes/README.md) |
+| **Archives d'agencements D/E/F** | **EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO** | [Agencements D/E/F](assets/explorations/2026-10-29-attaque-layouts/README.md) |
+| **Archives UX antérieures à LOT1-UX-001** | **HISTORIQUE / NON APPROUVÉ VISUELLEMENT** | Trois anciens SVG de combat + quatre reconstitutions UX dans [assets/maquettes](assets/maquettes/) |
+
+**Valeur UX historique ≠ approbation visuelle.** Les documents peuvent décrire un principe fonctionnel conservé, mais leurs couleurs, leurs illustrations, leurs composants ou leurs mises en page n'ont pas été acceptés comme direction de production. Les anciens écrans à **deux grilles simultanément visibles** contredisent explicitement la décision **LOT1-UX-001 : une seule grille ATTAQUE ou DÉFENSE à la fois**.
+
+**Cap artistique recherché après revue PO :** jeu indépendant contemporain en pixel art **riche, expressif, immersif**, avec une vraie personnalité maritime. Il s'agit d'une **intention**, pas d'une charte validée. La proposition de thèmes interchangeables **n'est pas une fonctionnalité décidée**.
+
+Les décisions de gameplay du LOT 1 restent inchangées dans [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) : classique 10 × 10 VS Mousse, mono-tir simultané, FEU irrévocable, aucune bascule automatique, alerte DÉFENSE persistante jusqu'à consultation, positions adverses cachées.
+
+---
+
+**État de cette galerie : archives de maquettes historiques, non validées comme spécifications graphiques.**  
+**Format des maquettes vectorielles historiques :** SVG **320 × 240**, orientation paysage, destinés à illustrer l'UX sur la vraie CYD classique.
 
 Les visuels sont versionnés dans [assets/maquettes](assets/maquettes/). Ils servent de repères pour les discussions avec le PO et pour une future direction artistique. Aucun ne prouve l'ergonomie tactile réelle ; elle devra être testée au stylet.
 
@@ -13,7 +31,7 @@ Ces **trois fichiers** proviennent du [dossier I-009 dans Le Grenier Geek](https
 
 ![Maquette classique historique — 320×240](assets/maquettes/mode-classique-320x240.svg)
 
-**Attention, règle devenue historique :** l'image suggère le tour par tour traditionnel. Depuis, le **mono-tir simultané est le standard décidé**, et l'alternance n'est plus qu'une variante facultative. Le dessin reste une **référence historique d'identité graphique**, mais **sa présentation simultanée de deux grilles est désormais écartée pour la V1.0** : une seule grande grille est visible à la fois.
+**Attention, règle devenue historique :** l'image suggère le tour par tour traditionnel. Depuis, le **mono-tir simultané est le standard décidé**, et l'alternance n'est plus qu'une variante facultative. Le dessin reste une **archive historique UX, et non une référence d'identité graphique**, mais **sa présentation simultanée de deux grilles est désormais écartée pour la V1.0** : une seule grande grille est visible à la fois.
 
 ### Simultané — concept d'origine
 
@@ -77,20 +95,20 @@ Les maquettes futures devront être **créées comme fichiers conservables** (SV
 
 **Aucune mission de graphisme ou de développement n'est déclenchée par cette galerie.**
 
-## F. Nouvelles études de thèmes pour ATTAQUE (29 octobre 2026) — NON VALIDÉES
+## F. Archive historique A/B/C — NON RETENUE COMME RÉFÉRENCE VISUELLE
 
-Le dossier [`assets/explorations/2026-10-29-attaque-themes/`](assets/explorations/2026-10-29-attaque-themes/README.md) propose trois habillages de **l'unique grille ATTAQUE** du LOT 1 (classique 10 × 10, VS Mousse, mono-tir simultané), conformes aux décisions `LOT1-UX-001/002/003`.
+Le dossier [`assets/explorations/2026-10-29-attaque-themes/`](assets/explorations/2026-10-29-attaque-themes/README.md) conserve trois anciens habillages de **l'unique grille ATTAQUE** du LOT 1 (classique 10 × 10, VS Mousse, mono-tir simultané), conformes aux décisions `LOT1-UX-001/002/003`.
 
 - **A — Abysses électriques** : océan profond, cyan bioluminescent et corail.
 - **B — Archipel** : aventure lumineuse, azur et teintes chaudes.
 - **C — Escadre** : stratégie contemporaine, acier et cuivre.
 
-**Retour PO exploratoire** : les trois pistes plaisent et pourraient constituer des **thèmes interchangeables** ; **ni choix de thème ni fonctionnalité de changement de thème validés**. Une étude distincte d'agencements (grille centrale, navigation latérale, commandes basses) est en cours, sans modification des règles.
+**Classement Pilotage :** trois explorations historiquement appréciées, mais **non retenues comme références visuelles de production**. La possibilité de thèmes interchangeables a été évoquée sans jamais être décidée. Les essais d'agencements D/E/F sont également archivés, et aucune règle n'a changé.
 
 Ces sources SVG sont **des previews PC 320 × 240, non des assets runtime et non testées sur CYD physique**. L'intégration au produit nécessite une revue du Pilotage, une validation PO et des essais matériels.
 
-## G. Explorations d'agencements ATTAQUE D/E/F — 29 octobre 2026 (NON VALIDÉES)
+## G. Archive historique D/E/F — NON RETENUE COMME RÉFÉRENCE VISUELLE
 
-Le dossier [`assets/explorations/2026-10-29-attaque-layouts/`](assets/explorations/2026-10-29-attaque-layouts/README.md) documente **trois autres dispositions** indépendantes des thèmes A/B/C : **D grille centrale**, **E navigation latérale**, **F commandes basses**. Les trois SVG **320 × 240** sont visibles dans GitHub. Ils conservent les contraintes de `LOT1-UX-001/002/003`, le classique 10 × 10 contre Mousse, la sélection E6, les impacts antérieurs C3 et H8 et l'alerte de DÉFENSE non consultée.
+Le dossier [`assets/explorations/2026-10-29-attaque-layouts/`](assets/explorations/2026-10-29-attaque-layouts/README.md) archive **trois autres dispositions anciennement proposées** indépendantes des thèmes A/B/C : **D grille centrale**, **E navigation latérale**, **F commandes basses**. Les trois SVG **320 × 240** sont visibles dans GitHub. Ils conservent les contraintes de `LOT1-UX-001/002/003`, le classique 10 × 10 contre Mousse, la sélection E6, les impacts antérieurs C3 et H8 et l'alerte de DÉFENSE non consultée.
 
-**Statut : DESIGN_PREVIEW, NON VALIDÉ PO et ON_DEVICE_UNVERIFIED.** Les PNG/zooms locaux ne sont pas versionnés ; les trois sources SVG et leurs notes le sont. Aucun choix d'agencement, de thème interchangeable ou de rendu technique n'est validé.
+**Statut : EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO.** Les PNG/zooms locaux ne sont pas versionnés ; les trois sources SVG et leurs notes le sont. Aucun choix d'agencement, de thème interchangeable ou de rendu technique n'est validé. Aucun test sur CYD.

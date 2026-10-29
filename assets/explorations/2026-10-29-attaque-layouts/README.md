@@ -1,39 +1,28 @@
-# I-009 — Exploration des agencements ATTAQUE D/E/F
+# I-009 — Archives historiques D/E/F : agencements d'écran ATTAQUE
 
-**PROPOSÉ — DESIGN_PREVIEW — NON VALIDÉ PO — ON_DEVICE_UNVERIFIED**
+**STATUT OFFICIEL : `EXPLORATION_HISTORIQUE — NON_RETENUE_COMME_REFERENCE_VISUELLE — NON_VALIDEE_PO`**
 
-Cette **deuxième** exploration isole les **agencements** de l'écran de combat après l'étude des [trois univers A/B/C](../2026-10-29-attaque-themes/README.md). Il n'y a **aucun choix de composition validé**. Chaque SVG a un canevas **320 × 240 pixels natifs** et reste éditable et consultable dans GitHub.
+Les compositions D/E/F sont conservées comme **témoins UX documentaires**. Depuis la revue Pilotage du 29/10/2026, elles **ne sont pas des options d'écran à faire choisir au PO ni des références graphiques de production**. Le cap artistique recherché est désormais le pixel art indie contemporain, expressif, immersif, sans charte validée.
 
 | D — Grille centrale | E — Navigation latérale | F — Commandes basses |
 |:---:|:---:|:---:|
 | ![D](D_grille_centrale.svg) | ![E](E_navigation_laterale.svg) | ![F](F_commandes_basses.svg) |
-| [Ouvrir SVG](D_grille_centrale.svg) | [Ouvrir SVG](E_navigation_laterale.svg) | [Ouvrir SVG](F_commandes_basses.svg) |
-| Grille 17 × 17 px, FEU vertical à droite | Grille 16 × 16 px à droite, barre d'onglets à gauche | Grille 15 × 15 px à gauche, 3 commandes en bas |
+| 17 px/case, FEU vertical | 16 px/case, onglets à gauche | 15 px/case, commandes basses |
 
-## Situation et conformité au produit
+### Valeur historique et limites
+- **D** : agrandissement des cellules, mais petit texte périphérique et FEU vertical à tester.
+- **E** : FEU large et navigation latérale, mais trajet de stylet plus long.
+- **F** : gestes regroupés en bas, mais précision et confort tactile non mesurés.
+- Ces comparaisons sont des **hypothèses de disposition**, sans validation ergonomique matérielle. Aucun de ces agencements n'est actuellement retenu.
 
-- **Classique 10 × 10 VS Mousse**, **mono-tir simultané**.
-- **Une seule grille visible : ATTAQUE** ; bascule immédiate et volontaire vers DÉFENSE.
-- Coordonnées **A à J**, **1 à 10**.
-- **E6 sélectionnée, mais tir non verrouillé** ; **C3 touchée** précédemment ; **H8 manquée** précédemment.
-- FEU verrouille le tir sans changement automatique de vue, les cases déjà jouées restent verrouillées.
-- Un navire du joueur a été touché : alerte visible sur la commande DÉFENSE jusqu'à consultation.
-- Aucun emplacement ennemi secret révélé ; les bâtiments illustrés hors de la grille sont ceux de **notre propre escadre**.
+### Fonctionnement produit conservé
+Classique 10 × 10 contre Mousse, résolution mono-tir simultanée, **une seule vue ATTAQUE visible** avec bascule immédiate et volontaire vers DÉFENSE, coordonnées A–J / 1–10, E6 sélectionnée non tirée, C3 touchée et H8 manquée auparavant. FEU verrouille sans changer de vue. Alerte de navire touché sur DÉFENSE persistante jusqu'à consultation. Cases déjà attaquées non sélectionnables ; aucune flotte secrète ennemie révélée. Les navires hors de la grille ne représentent que la flotte du joueur.
 
-## Comparaison UX à réaliser sur CYD
+### Traçabilité et preuves
+- [Notes ergonomiques historiques](NOTES_AGENCEMENTS.md) et [série graphique historique A/B/C](../2026-10-29-attaque-themes/README.md).
+- Trois SVG éditables natifs **320 × 240**, **conservés aux chemins d'origine**.
+- Exports PNG natifs et zooms 4× présentés antérieurement dans la conversation, **non versionnés dans la PR**.
+- **DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED** : aucun essai stylet sur CYD, compilation ni chiffrage Flash/RAM.
+- La possibilité de thèmes interchangeables est une **idée historique non décidée**, pas une option du produit.
 
-**D — Grille centrale** : cases les plus grandes (17 px), réticule au centre ; contrôler la précision du bouton vertical FEU et le confort des petits libellés.
-
-**E — Navigation latérale** : navigation distincte et FEU large (139 × 37 px) ; contrôler le trajet main/stylet entre onglets et cible.
-
-**F — Commandes basses** : toutes les actions concentrées dans le bandeau inférieur, informations de visée sur la droite ; contrôler la visibilité en utilisation réelle.
-
-## Vérification et réserves
-
-- SVG vectoriels **320 × 240**, à vocation de **maquettes PC** ; non prêts pour intégration dans l'ESP32.
-- PNG natifs, aperçus 4× et comparatif ont été produits localement et remis au PO dans la discussion ; **ils ne sont pas versionnés dans cette PR**.
-- **Pas de test tactile sur CYD**, pas de compilation, pas d'estimation mesurée des coûts Flash/RAM ; polices et rendu SVG non retenus comme format firmware.
-- Les notes originales sont dans [NOTES_AGENCEMENTS.md](NOTES_AGENCEMENTS.md).
-- L'idée de **thèmes interchangeables** A/B/C est une **piste évoquée par le PO**, pas une fonctionnalité validée.
-
-**Décision PO attendue :** comparer le principe d'agencement, sans verrouiller la palette ou le gameplay. **Pilotage seul responsable de fusionner.**
+**Aucune sollicitation du PO pour sélectionner D/E/F. Aucune direction ou interface validée. Fusion réservée au Pilotage.**
