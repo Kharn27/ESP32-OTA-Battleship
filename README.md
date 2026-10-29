@@ -6,9 +6,9 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 **État : exploration fonctionnelle. Aucun développement n'est engagé.**
 
-**DÉCIDÉ — LOT 1 (Bible v0.12) :** une partie classique complète sur une CYD **VS Capitaine** ; **Mousse et Amiral** sont reportés à des lots ultérieurs. L'issue graphique existante #6 mentionne encore l'ancien adversaire et doit être alignée avant validation.
+**DÉCIDÉ — LOT 1 (depuis Bible v0.12) :** une partie classique complète sur une CYD **VS Capitaine** ; **Mousse et Amiral** sont reportés à des lots ultérieurs. L'ancien libellé « JOUER CONTRE MOUSSE » de l'issue graphique #6 est historique ; la maquette d'accueil a été retenue par le PO puis fusionnée dans la [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8).
 
-**DÉCIDÉ pour l'accueil LOT 1 :** titre **CYD WARSHIP**, scène maritime fixe au coucher du soleil, riposte ennemie manquée visible près du navire principal, titre haut lisible et discret, boutons **JOUER CONTRE CAPITAINE** et **PALMARÈS** superposés à l'illustration (zone calme, plutôt en bas à gauche). Les avions restent une piste artistique à vérifier à 320 × 240. **Aucune maquette finale validée.** [Cadrage détaillé dans la Bible, § 15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08).
+**DÉCIDÉ pour l'accueil LOT 1 (complément PO après v0.15) :** titre **CYD WARSHIP**, scène maritime fixe au coucher du soleil, riposte ennemie manquée près du navire principal et commandes **JOUER** et **PALMARÈS**, de même taille visuelle sur la maquette retenue. **JOUER** ouvre dès le LOT 1 un **écran de sélection d'adversaire**, où **Capitaine est le seul jouable** ; Mousse, Amiral et VS CYD sont reportés. **Maquette retenue au stade DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED**, sans validation runtime ni ergonomie tactile. [Cadrage détaillé dans la Bible, § 15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08).
 
 ## Référence produit
 
