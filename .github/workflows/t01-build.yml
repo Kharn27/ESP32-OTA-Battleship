@@ -1,4 +1,4 @@
-name: T01 C99 host and ESP32 build
+name: C99 host and ESP32 build
 
 on:
   push:
@@ -61,10 +61,10 @@ jobs:
             idf.py size &&
             idf.py size-components &&
             sha256sum build/cyd_warship.bin
-      - name: Firmware artifact (build output; no device test)
+      - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
         with:
-          name: t01-esp32-firmware-${{ github.event.pull_request.head.sha || github.sha }}
+          name: warship-esp32-firmware-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             build/cyd_warship.bin
             build/cyd_warship.elf
@@ -73,4 +73,5 @@ jobs:
             build/flasher_args.json
             build/cyd_warship.map
             sdkconfig
+            dependencies.lock
           if-no-files-found: error
