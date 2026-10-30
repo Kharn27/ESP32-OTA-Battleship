@@ -27,6 +27,27 @@ jobs:
           curl --fail --location --silent --show-error --retry 3 "$ZOOM_URL" -o attaque_recomposition_x4.png
           curl --fail --location --silent --show-error --retry 3 "$SVG_URL" -o attaque_recomposition_trace_editable.svg
           file attaque_recomposition*
+      - name: Recover original editable authored sources (four raster layers and generating script)
+        env:
+          SOURCE_URL: "https://at.adobe.com/6QlPDSD0Im8tItU5"
+        run: |
+          set -euo pipefail
+          python -m pip install Pillow
+          curl --fail --location --silent --show-error --retry 3 "$SOURCE_URL" -o "$RUNNER_TEMP/g01_source_transport.png"
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import base64,hashlib,os
+          p=Path('design/issue-16-direction-lot1')
+          with Image.open(Path(os.environ['RUNNER_TEMP'])/'g01_source_transport.png') as im:
+              py=im.info['original_python_source'].encode('utf-8')
+              ora=base64.b64decode(im.info['original_openraster_source_base64'])
+          assert hashlib.sha256(py).hexdigest()=='7b22095f8d01c133afa4e0e6aa02a373f9d943d07ab6b6294075f1cc3e7fd633'
+          assert hashlib.sha256(ora).hexdigest()=='1dddfe28c2563a228c8120a58bf6dc5dcb11f836787866500a3d30227200c616'
+          (p/'attaque_recomposition.py').write_bytes(py)
+          (p/'attaque_recomposition_layers.ora').write_bytes(ora)
+          print('PASS: source Python and 4-layer ORA byte-identical to authored originals')
+          PY
       - name: Pixel-accurate native and x4 checks
         run: |
           python -m pip install Pillow
