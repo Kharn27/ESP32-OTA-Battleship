@@ -1,0 +1,39 @@
+name: G01 preview export (temporary design-stage job)
+on:
+  push:
+    branches:
+      - design/issue-16-direction-lot1
+    paths:
+      - '.github/workflows/g01-preview-exports.yml'
+      - 'design/issue-16-direction-lot1/render_g01.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install design dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-dejavu-core
+          python -m pip install 'Pillow==12.3.0'
+      - name: Render native and 4x previews
+        run: |
+          python design/issue-16-direction-lot1/render_g01.py design/issue-16-direction-lot1
+      - name: Commit exact PNG exports on design branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/issue-16-direction-lot1/*.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'design(g01): add reproducible 320x240 and nearest x4 exports'
+            git push origin HEAD:design/issue-16-direction-lot1
+          fi
