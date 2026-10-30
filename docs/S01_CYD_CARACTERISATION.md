@@ -58,6 +58,38 @@ La discussion [Bodmer/TFT_eSPI #2677](https://github.com/Bodmer/TFT_eSPI/discuss
 
 **NON TESTÉ :** build Xtensa, exécution de tests projet, CI, Flash réelle, heaps/piles, TFT/tactile, performances, PSRAM, port série sur CYD.
 
+### Reproduction du smoke test hôte (hors projet)
+
+Les tests ci-dessus ont été exécutés sur des sources temporaires sous `/tmp`. Fixture minimale permettant de refaire le contrôle des compilateurs :
+
+```sh
+cat >/tmp/s01_smoke.c <<'EOF'
+#include <stdint.h>
+#include <stdio.h>
+static int checked(uint8_t a, uint8_t b, uint8_t *out) {
+    if (!out || (unsigned)a + (unsigned)b > UINT8_MAX) return -1;
+    *out = (uint8_t)(a + b);
+    return 0;
+}
+int main(void) {
+    uint8_t out = 0;
+    if (checked(200, 55, &out) || out != 255) return 1;
+    if (checked(200, 56, &out) != -1) return 2;
+    if (checked(1, 2, NULL) != -1) return 3;
+    puts("S01_HOST_COMPILER_SMOKE_PASS 3/3");
+    return 0;
+}
+EOF
+for CC in gcc clang; do
+  "$CC" -std=c99 -Wall -Wextra -Werror -pedantic -O1 -g \
+    -fno-omit-frame-pointer -fsanitize=address,undefined \
+    /tmp/s01_smoke.c -o "/tmp/s01_smoke_$CC"
+  "/tmp/s01_smoke_$CC"
+done
+```
+
+Test négatif exécuté séparément : `volatile int v = INT_MAX; return v + 1;` compilé avec `gcc -std=c99 -Wall -Wextra -Werror -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined` ; **exit 1 / signed integer overflow attendu**. Aucun de ces tests n'est attribué au HEAD du firmware, absent.
+
 ## 5. Stratégie de validation (proposition pour futures Issues)
 
 1. **Hôte PC :** cible CMake minimale autonome, `-std=c99 -Wall -Wextra -Werror -pedantic`, GCC puis Clang ; tests unitaires des règles et API sans ESP-IDF. Scénarios déterministes, invalides, bornes et état réinitialisé ; ASan/UBSan (et analyse statique si disponible). CI Linux sur commit précis et logs ; les tests du projet commencent **après** création de sources autorisées.
