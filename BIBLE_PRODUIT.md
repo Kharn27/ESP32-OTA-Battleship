@@ -501,7 +501,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 - Aucun backlog, mission, développement ou planning engagé par cette mise à jour documentaire.
 
 **Complément documentaire à la v0.15 — DOC-ACC-001 / issue #9 (décisions PO du 29 octobre 2026) :**
-- **DÉCIDÉ — LOT1-ACC-001/008 :** l'accueil comporte **JOUER** et **PALMARÈS** (plaques de même taille dans la maquette retenue). JOUER ouvre dès le LOT 1 un **écran de sélection d'adversaire** où **Capitaine est le seul adversaire jouable** ; Mousse, Amiral et VS CYD sont reportés. La composition et le retour du sous-menu restent **À CONCEVOIR / À ARBITRER** sans accès factice.
+- **DÉCIDÉ à la v0.16 / REMPLACÉ pour le LOT 1 par LOT1-ACC-009 — LOT1-ACC-001/008 :** l'accueil comporte **JOUER** et **PALMARÈS** (plaques de même taille dans la maquette retenue). JOUER ouvre dès le LOT 1 un **écran de sélection d'adversaire** où **Capitaine est le seul adversaire jouable** ; Mousse, Amiral et VS CYD sont reportés. La composition et le retour du sous-menu restent **À CONCEVOIR / À ARBITRER** sans accès factice.
 - **Traçabilité graphique :** PR #8 GRAPH-ACC-001 [fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) au commit `50d9e1dabd71725adba50279929694123fde0fda` ; maquette **DESIGN_PREVIEW**, sans validation tactile ni firmware embarqué.
 - **ERR-DOC-001 (§ 14.1), ERR-DOC-002 (§ 14.3), ERR-DOC-003 (§ 14.10.3) : CORRECTIONS RÉDACTIONNELLES DE COHÉRENCE DE LA v0.15**, et non nouvelles décisions PO. Respectivement : seuls Mousse et Amiral sont reportés ; les principes de Capitaine sont au § 16 et les anciennes règles de Mousse au § 17 ; Capitaine vainqueur autorise déjà systématiquement une révélation *facultative* depuis la v0.13 (§ 14.13).
 - **Invariants :** LOT 1 VS Capitaine seul ; dix principes CAP-CPU-001 à 010, confidentialité des flottes, résultats, abandon, palmarès et décisions V1.0 historiques intégralement conservés. La présente actualisation n'approuve ni réalisation technique ni nouveau mode jouable.
@@ -626,7 +626,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 **À VÉRIFIER :** ergonomie réelle sur CYD 320 × 240 et comportement observable en parties de test. Les ajustements visuels issus des tests ne doivent pas devenir silencieusement de nouvelles règles.
 
-**DÉCIDÉ — v0.12 à v0.14 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. L'autorisation systématique de révélation par Capitaine vainqueur (v0.13) et la nouvelle flotte aléatoire de Capitaine à chaque partie et revanche (v0.14) sont décidées. **PROPOSÉ — prochaine étape :** consolider les critères d'acceptation de Capitaine et les derniers cas limites tactiles avant backlog. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
+**DÉCIDÉ — v0.12 à v0.14 :** Capitaine est l'adversaire du LOT 1 ; Mousse et Amiral sont reportés. L'autorisation systématique de révélation par Capitaine vainqueur (v0.13) et la nouvelle flotte aléatoire de Capitaine à chaque partie et revanche (v0.14) sont décidées. **À INSTRUIRE lors du découpage des futures US :** préciser les tests de réception de Capitaine à partir de la matrice initiale approuvée (§ 16), ainsi que les derniers cas limites tactiles. Conserver un arbitrage produit à la fois. **Aucune mission technique/graphique supplémentaire, aucun backlog ni planning n'est lancé par ce document.**
 
 ### 14.10 Parcours tactile et visuel d'une manche contre Capitaine — décisions PO du 29/10/2026
 
@@ -715,7 +715,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 ### 14.14 Scénarios transversaux d'acceptation — PROPOSÉS avant transmission
 
-Ces scénarios traduisent les règles déjà **DÉCIDÉES** en comportements vérifiables. **Seule LOT1-ACC-010 est une nouvelle décision PO.** Les détails de présentation et d'exécution restent à instruire.
+Ces scénarios **PROPOSÉS** traduisent les règles déjà **DÉCIDÉES** en comportements vérifiables. Dans ce tableau, la sortie obligatoire du déploiement avant PRÊT découle notamment de **LOT1-ACC-010**, décision PO récente ; les autres arbitrages v0.17 restent consignés dans leurs sections respectives. Les modalités de présentation et d'exécution restent à instruire.
 
 | Situation | Résultat attendu |
 | --- | --- |
