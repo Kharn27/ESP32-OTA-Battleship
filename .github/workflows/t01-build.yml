@@ -19,6 +19,12 @@ jobs:
         cc: [gcc, clang]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact source HEAD
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git rev-parse HEAD
       - name: Tool versions
         run: |
           ${{ matrix.cc }} --version | head -1
@@ -36,6 +42,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact source HEAD
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git rev-parse HEAD
       - name: Build and static memory report
         uses: espressif/esp-idf-ci-action@v1
         with:
@@ -52,11 +64,13 @@ jobs:
       - name: Firmware artifact (build output; no device test)
         uses: actions/upload-artifact@v4
         with:
-          name: t01-esp32-firmware-${{ github.sha }}
+          name: t01-esp32-firmware-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             build/cyd_warship.bin
             build/cyd_warship.elf
             build/bootloader/bootloader.bin
             build/partition_table/partition-table.bin
             build/flasher_args.json
+            build/cyd_warship.map
+            sdkconfig
           if-no-files-found: error
