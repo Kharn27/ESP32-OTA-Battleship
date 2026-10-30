@@ -1,0 +1,137 @@
+name: "CYD WARSHIP — User Story / mission"
+description: "Contrat de réalisation remis à un agent. Le Pilotage prépare et attribue l'Issue."
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **I-009 — CYD WARSHIP.** Une Issue est le contrat de mission partagé entre agents.
+        Ne pas démarrer un travail technique ou graphique sans mandat du Pilotage.
+        Le backlog est géré dans les Issues du dépôt, sans GitHub Projects obligatoire.
+        Pilotage tient à jour le statut, le type, le responsable, la priorité et le lot dans le corps de l'Issue ; les changements significatifs sont datés en commentaire.
+        Préfixer le titre avec [US-DEV], [US-GRAPH], [DOC-PO], [SPIKE], [BUG] ou [TECH].
+  - type: dropdown
+    id: type
+    attributes:
+      label: "Type de mission"
+      options:
+        - "US-DEV"
+        - "US-GRAPH"
+        - "DOC-PO"
+        - "SPIKE"
+        - "BUG"
+        - "TECH"
+    validations:
+      required: true
+  - type: dropdown
+    id: statut
+    attributes:
+      label: "Statut Pilotage"
+      description: "À la création, laisser À qualifier. Seul Pilotage déclare Prête, En revue ou Terminée."
+      options:
+        - "À qualifier"
+        - "Prête"
+        - "En cours"
+        - "En revue"
+        - "Bloquée"
+        - "Terminée"
+    validations:
+      required: true
+  - type: dropdown
+    id: priorite
+    attributes:
+      label: "Priorité"
+      options:
+        - "À déterminer"
+        - "P0 — Bloquant critique"
+        - "P1 — Haute"
+        - "P2 — Normale"
+        - "P3 — Basse"
+    validations:
+      required: true
+  - type: dropdown
+    id: lot
+    attributes:
+      label: "Lot"
+      options:
+        - "À préciser"
+        - "LOT 1"
+        - "V1.0 futur"
+        - "Hors lot"
+    validations:
+      required: true
+  - type: dropdown
+    id: responsable
+    attributes:
+      label: "Agent responsable principal"
+      options:
+        - "À attribuer par Pilotage"
+        - "Développeur C / ESP32 CYD"
+        - "Graphiste / Directeur artistique"
+        - "Assistant PO (documentaire)"
+        - "Pilotage (investigation / coordination)"
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: "Source du besoin et contexte"
+      description: "Décision PO et référence exacte dans la Bible, maquette, issue ou ADR. Préciser la maturité du besoin."
+      placeholder: "Référence produit / décision, objectif utilisateur, contexte matériel."
+    validations:
+      required: true
+  - type: textarea
+    id: valeur
+    attributes:
+      label: "Objectif / valeur"
+      placeholder: "En tant que ..., je veux ..., afin de ... ; ou objectif explicite d'investigation."
+    validations:
+      required: true
+  - type: textarea
+    id: perimetre
+    attributes:
+      label: "Inclus / exclus"
+      description: "Définir une portée bornée ; noter expressément les éléments hors mission."
+      value: |
+        **Inclus :**
+
+        **Exclus :**
+    validations:
+      required: true
+  - type: textarea
+    id: dependances
+    attributes:
+      label: "Dépendances / contrats"
+      description: "Liens d'Issues, interfaces C/graphique/radio et éventuels points bloquants."
+      placeholder: "Bloquée par #..., dépend de l'interface ..., ou AUCUNE."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptation
+    attributes:
+      label: "Critères d'acceptation vérifiables"
+      description: "Comportements observables, cas limites et tests négatifs utiles. Pas de critères vagues."
+      value: |
+        - [ ] Critère observable 1
+        - [ ] Critère observable 2
+    validations:
+      required: true
+  - type: textarea
+    id: preuves
+    attributes:
+      label: "Preuves de livraison exigées"
+      description: "Préciser les niveaux requis : tests PC, compilation cible, CI, CYD physique, ou revue de maquette."
+      value: |
+        - [ ] PR liée, HEAD exact, diff et limites
+        - [ ] Tests / revues requis pour cette mission (préciser)
+        - [ ] Vérification matérielle : REQUISE / DIFFÉRÉE / NON APPLICABLE (justifier)
+    validations:
+      required: true
+  - type: textarea
+    id: risques
+    attributes:
+      label: "Risques, inconnues et arbitrage PO"
+      description: "Si une incertitude bloque le découpage, proposer un SPIKE plutôt que d'inventer la règle."
+      placeholder: "Aucun, ou éléments à vérifier / décision PO nécessaire."
+    validations:
+      required: false
