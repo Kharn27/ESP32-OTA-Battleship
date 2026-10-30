@@ -2,7 +2,7 @@
 
 **Portée :** organisation du travail directement dans les [GitHub Issues du dépôt ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship/issues). Les Issues sont **la source de vérité opérationnelle** et les PR portent les livraisons. Le tableau GitHub Projects créé par le PO est **facultatif et non utilisé** pour le pilotage : la connexion ChatGPT GitHub ne permet pas d'en piloter les cartes ni les champs. Aucune action humaine de déplacement de cartes n'est nécessaire.
 
-**Maturité :** conventions de pilotage, sans création de backlog fonctionnel ni déclenchement de mission firmware/graphisme. **`BIBLE_PRODUIT.md` est l'unique référence métier** : les décisions PO applicables doivent y figurer avant attribution d'une US. Les maquettes, ADR, Issues historiques et échanges ne sont que des références complémentaires ; ils ne peuvent créer ou modifier une règle produit.
+**Maturité :** conventions de pilotage, sans création de backlog fonctionnel ni déclenchement de mission firmware/graphisme. **`BIBLE_PRODUIT.md` est l'unique référence métier** : les nouvelles décisions PO doivent y être intégrées avant qu'une US qui en dépend soit déclarée « Prête ». Les maquettes, ADR, Issues historiques et échanges ne sont que des références complémentaires ; ils ne peuvent créer ou modifier une règle produit.
 
 ## 1. Responsabilités — une source de vérité commune
 
