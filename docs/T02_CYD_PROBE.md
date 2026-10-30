@@ -59,7 +59,36 @@ sha256sum build/cyd_warship.bin
 
 CI de référence : [workflow existant](../.github/workflows/t01-build.yml) exécuté sur HEAD exact, artefact `warship-esp32-firmware-<SHA>` avec binaire, ELF, `.map`, `sdkconfig`, `dependencies.lock`, partitions, `flasher_args.json`. Le `sdkconfig` de la sonde n'impose **pas** une partition applicative de production. Les mesures historiques de BASIC et T01 ne doivent jamais être substituées aux tailles **du build WARSHIP T02**.
 
-**Statut à renseigner après exécution du workflow :** `HOST_TESTED`, `TARGET_BUILD_VERIFIED`, `CI_PASSED` avec run/HEAD, commandes, versions, warnings, IRAM, DRAM, Flash Code/Data, image, taille binaire et SHA-256. **À CE STADE DE RÉDACTION : NON TESTÉ tant que la CI T02 n'a pas fini.**
+## Premières preuves réellement acquises — commit T02 `57b860a22bb647f480fdeb6c7c0f73a941e85f22`
+
+[GitHub Actions #41125556488](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/41125556488) : **3/3 jobs success**. Checkout contrôlé sur le HEAD source exact (sans commit de fusion temporaire). Sur Ubuntu 24.04 :
+- **HOST_TESTED** : GCC 13.3.0 et Clang 18.1.3, C99 strict + ASan/UBSan, tests T01 **13/13** et T02 mapping tactile **24/24** pour **chaque compilateur**, CTest **2/2**. Le mapping couvre bornes, axes inversés, saturation, maxima et refus transactionnel des paramètres invalides.
+- **TARGET_BUILD_VERIFIED** : image `espressif/idf:v5.5.6`, `xtensa-esp-elf-gcc` 14.2.0, `idf.py set-target esp32`, `idf.py build`, `idf.py size`, `idf.py size-components`, `sha256sum` exécutés. Pilote Espressif `esp_lcd_ili9341==2.1.0` résolu et lié. Aucune erreur de compilation applicative relevée ; avertissements `DEP0040`/`DEP0169` Node.js en upload d'artefact, sans rapport avec C.
+- **CI_PASSED** : oui **sur ce commit précis**. La CI du commit documentaire ultérieur doit être réacquise avant de prononcer `CI_PASSED` sur le HEAD final.
+- **ON_DEVICE_UNVERIFIED** : **aucun essai WARSHIP physique effectué** ; mesures dynamiques et calibration des coordonnées **NON TESTÉES**, matériel PO à solliciter par Pilotage après revue.
+
+### Mesures statiques de WARSHIP T02 (pas du firmware BASIC)
+
+| Sortie `idf.py size` | Octets | Contexte |
+| --- | ---: | --- |
+| Flash Code | **84 674** | code Flash |
+| Flash Data | **49 868** | constantes Flash |
+| IRAM | **63 635** | 48,55 % des 131 072 o rapportés |
+| DRAM | **13 720** | 7,59 % des 180 736 o rapportés |
+| RTC SLOW | **56** | statique |
+| Total image `idf.py size` | **209 585** | taille calculée |
+| `cyd_warship.bin` | **209 696** (`0x33320`) | application binaire |
+| Partition app **temporaire** du build | **1 048 576** (`0x100000`) | valeurs IDF par défaut, **pas** choix de production |
+
+**Empreinte binaire du commit `57b860a2…` uniquement :**
+
+```text
+d7b85afe589d50e0b431c45ebbf9fd9b8d77de292921fdaac9a0d726b2ebbffa  build/cyd_warship.bin
+```
+
+Artefact : `warship-esp32-firmware-57b860a22bb647f480fdeb6c7c0f73a941e85f22` dans [#41125556488](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/41125556488). Comprend BIN/ELF/MAP, bootloader, table de partitions, `flasher_args.json`, `sdkconfig`, `dependencies.lock`.
+
+**Interprétation :** ce build ne mesure **ni** heap libre après initialisation, **ni** DMA réellement disponible, **ni** pile libre, **ni** latence du LCD, **ni** résultat XPT2046 sur la CYD. La mémoire dynamique et les temps sont **instrumentés dans le firmware**, mais seul le log UART matériel T02 fournira leurs valeurs. Ni la taille Flash physique ni la PSRAM réelle ne sont déduites de `idf.py size`.
 
 ## Fiche de test pour Pilotage → PO (après revue et firmware SHA exact)
 
