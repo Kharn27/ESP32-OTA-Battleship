@@ -1,5 +1,9 @@
 # G01 — Direction visuelle LOT 1 / Issue #16
 
+> **Recomposition artistique G01 — nouvelle proposition ATTAQUE (30/10/2026, NON VALIDÉE PO).**  
+> La V2.1 ci-dessous est conservée comme **historique rejeté artistiquement**. La proposition courante demandée par Pilotage se trouve dans [ATTAQUE_RECOMPOSITION_NOTE.md](ATTAQUE_RECOMPOSITION_NOTE.md), avec [PNG natif 320×240](attaque_recomposition_320x240.png), [zoom ×4](attaque_recomposition_x4.png), [source Python](attaque_recomposition.py), [4 calques OpenRaster](attaque_recomposition_layers.ora) et [source vectorielle Adobe complémentaire](attaque_recomposition_trace_editable.svg).  
+> **Périmètre : ATTAQUE uniquement.** La PR #19 reste DRAFT / ON_DEVICE_UNVERIFIED, et le PO doit encore choisir la direction artistique. Aucun écran DÉFENSE nouveau ni révision de l'accueil n'est engagé.
+
 **Responsable :** Graphiste / DA. **Maturité actuelle ATTAQUE V2.1 :** `CORRECTIONS_REQUISES — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED — EN_ATTENTE_ARBITRAGE_ARTISTIQUE_PO`.
 
 > **Reprise ciblée PO — 30/10/2026 :** [V2.1 à examiner](ATTAQUE_V21_REVUE_PO.md), [rendu natif 320×240](attaque_v21_320x240.png), [zoom ×4](attaque_v21_x4.png), [avant/après](comparatif_v2_v21.png), [source Python](attaque_g01_v21.py), [calques ORA](attaque_v21_layers.ora). **Aucune validation artistique, matérielle ou runtime.**  
