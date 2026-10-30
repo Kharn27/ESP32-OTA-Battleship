@@ -1,0 +1,51 @@
+name: G01 recomposition asset staging (temporary)
+on:
+  push:
+    branches: [design/issue-16-direction-lot1]
+    paths:
+      - .github/workflows/g01-recomposition-staging.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/issue-16-direction-lot1
+          persist-credentials: true
+      - name: Download signed design exports and editable vector
+        env:
+          NATIVE_URL: "https://at.adobe.com/uVmbNTjOaj36gmHD"
+          ZOOM_URL: "https://at.adobe.com/oFJO00eqCiEGDOAO"
+          SVG_URL: "https://to.adobe.com/tiMYqdi9IjWJnYs2"
+        run: |
+          set -euo pipefail
+          cd design/issue-16-direction-lot1
+          curl --fail --location --silent --show-error --retry 3 "$NATIVE_URL" -o attaque_recomposition_320x240.png
+          curl --fail --location --silent --show-error --retry 3 "$ZOOM_URL" -o attaque_recomposition_x4.png
+          curl --fail --location --silent --show-error --retry 3 "$SVG_URL" -o attaque_recomposition_trace_editable.svg
+          file attaque_recomposition*
+      - name: Pixel-accurate native and x4 checks
+        run: |
+          python -m pip install Pillow
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          d=Path('design/issue-16-direction-lot1')
+          a=Image.open(d/'attaque_recomposition_320x240.png').convert('RGB')
+          b=Image.open(d/'attaque_recomposition_x4.png').convert('RGB')
+          assert a.size==(320,240),a.size
+          assert b.size==(1280,960),b.size
+          assert b.tobytes()==a.resize((1280,960),Image.Resampling.NEAREST).tobytes()
+          print('PASS G01 320x240 / x4 exact / preview only / on device unverified')
+          PY
+          sha256sum design/issue-16-direction-lot1/attaque_recomposition*.png
+      - name: Commit staged graphics (not firmware assets)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/issue-16-direction-lot1/attaque_recomposition*
+          git diff --cached --quiet || git commit -m "design(g01): stage original ATTAQUE recomposition previews and editable vector"
+          git push
