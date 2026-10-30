@@ -1,11 +1,10 @@
 # G01 — Direction visuelle LOT 1 / Issue #16
 
-**Responsable :** Graphiste / DA. **Maturité actuelle V2 :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED — EN_ATTENTE_RETOUR_ARTISTIQUE_PO`.
+**Responsable :** Graphiste / DA. **Maturité actuelle ATTAQUE V2.1 :** `CORRECTIONS_REQUISES — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED — EN_ATTENTE_ARBITRAGE_ARTISTIQUE_PO`.
 
-> **Reprise artistique du 30/10/2026 — V2 en attente du PO.**
-> La déclinaison initiale (attaque_320x240.png, defense_320x240.png, conventions_320x240.png et render_g01.py) a été **rejetée artistiquement** par le PO. Elle reste dans cette branche comme historique, pas comme cible de production.
-> **Proposition actuelle** : [note](ATTAQUE_EXPRESSION_V2.md), [ATTAQUE native](attaque_expression_320x240.png), [zoom ×4](attaque_expression_x4.png), [source Python](attaque_g01_v2.py) et [ORA en calques](attaque_expression_layers.ora). La déclinaison DÉFENSE/conventions est suspendue jusqu'au retour artistique du PO.
-
+> **Reprise ciblée PO — 30/10/2026 :** [V2.1 à examiner](ATTAQUE_V21_REVUE_PO.md), [rendu natif 320×240](attaque_v21_320x240.png), [zoom ×4](attaque_v21_x4.png), [avant/après](comparatif_v2_v21.png), [source Python](attaque_g01_v21.py), [calques ORA](attaque_v21_layers.ora). **Aucune validation artistique, matérielle ou runtime.**  
+> **Historique :** la première version géométrique (attaque_320x240.png, defense_320x240.png, conventions_320x240.png, render_g01.py) a été rejetée artistiquement. La [V2](ATTAQUE_EXPRESSION_V2.md) apporte une meilleure structure, mais a aussi reçu un retour artistique négatif. Ces fichiers sont conservés **uniquement comme historiques de revue**, et ne doivent pas être traités comme charte ou assets à intégrer.
+> **Périmètre volontairement bloqué :** ne pas décliner DÉFENSE, composants ou autres écrans avant le retour PO sur ATTAQUE V2.1 et l'ordre du Pilotage.
 
 
 ## Intention
