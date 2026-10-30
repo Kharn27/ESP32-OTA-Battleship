@@ -6,7 +6,7 @@
 
 Le PO confirme sa CYD identique à celle d'ESP32-Locomotive-Basic, USB-C + micro-USB, ILI9341 **et non ST7789**. Références **en lecture seule** :
 - [Validation J0.25-HW1](https://github.com/Kharn27/ESP32-Locomotive-Basic/blob/main/docs/J0.25-HW1-cyd-physical-validation.md) : référence ESP32-D0WD-V3 rev 3.1, Flash 4 Mio, pas de PSRAM connue pour cet exemplaire. Ce sont des mesures **d'un autre firmware**.
-- [HW4-B](https://github.com/Kharn27/ESP32-Locomotive-Basic/blob/main/docs/HW4-B-ili9341-driver.md) : LCD SPI2 MOSI13/SCLK14/CS15/DC2/BL21 haut actif, 20 MHz, DMA 5120 o, paysage *cas 9* déclaré validé physiquement ; aucun RESET LCD GPIO piloté.
+- [HW4-B](https://github.com/Kharn27/ESP32-Locomotive-Basic/blob/main/docs/HW4-B-ili9341-driver.md) : LCD SPI2 MOSI13/SCLK14/CS15/DC2/BL21 haut actif, 20 MHz, DMA 5120 o, paysage *« cas 9 »* déclaré valide dans **ce pilote différent** ; **ce numéro d'orientation n'est pas réutilisable tel quel** par le pilote officiel Espressif ; aucun RESET LCD GPIO piloté.
 - [HW4-TOUCH-T1](https://github.com/Kharn27/ESP32-Locomotive-Basic/blob/main/docs/HW4-TOUCH-T1.md) : `/PENIRQ GPIO36`, actif bas, **aucune lecture X/Y confirmée par cette preuve**.
 - [S01](S01_CYD_CARACTERISATION.md) : SPI XPT2046 **candidat documentaire** MOSI32/MISO39/SCLK25/CS33, bus différent du LCD, **non vérifié physiquement**.
 - [Pilote C et manifeste d'origine](https://github.com/Kharn27/ESP32-Locomotive-Basic/tree/main/firmware/components/cyd_ili9341) étudiés **uniquement comme références techniques**. Ce dépôt possède une licence racine **GPLv3**, malgré la mention « MIT » dans certains commentaires de fichiers : **aucun code ni header n'a été copié** dans WARSHIP. Sonde écrite indépendamment via les API ESP-IDF publiques.
@@ -16,7 +16,7 @@ Le PO confirme sa CYD identique à celle d'ESP32-Locomotive-Basic, USB-C + micro
 
 | Élément | Valeur | Preuve/limite |
 | --- | --- | --- |
-| LCD | ILI9341, 320×240 paysage, hypothèse MADCTL *cas 9* (`swap_xy=false`, `mirror_x=true`, `mirror_y=false`) | Validé sur **autre firmware** ; à vérifier sur WARSHIP |
+| LCD | ILI9341, adressage `320×240` : **`swap_xy=true` (MADCTL.MV=1)** après nettoyage natif 240×320, `mirror_x=true` et `mirror_y=false` comme **hypothèse de sens physique** | Géométrie imposée par le pilote officiel Espressif ; **orientation physique des repères non testée sur WARSHIP** |
 | LCD SPI2 | MOSI 13, SCLK 14, CS 15, DC 2 ; rétroéclairage 21 HIGH | Rapport matériel PO historique ; aucun RESET GPIO (attention GPIO2/15 strapping) |
 | SPI écran | 20 MHz, MSB-first RGB565, 8 rangées ×320×2 = **5120 octets** DMA | Choix technique pour la sonde, temps et coûts à **mesurer** |
 | Tactile /PENIRQ | GPIO36 entrée uniquement, sans pull interne, actif bas | Historique PO validé pour détection d'appui, pas pour X/Y |
@@ -29,7 +29,7 @@ Les fonctions de mapping C99 `components/t02_touch_map/` prennent des bornes exp
 ### Motifs écran et instrumentation
 
 - Au démarrage : log puce, taille Flash exposée par ESP-IDF, mémoire avant/après allocations ; initialisation rétroéclairage éteint.
-- Nettoyage GRAM natif 240×320 avant cas 9, puis remplissage écran RGB en trois bandes verticales (rouge, vert, bleu). Repères **blanc en haut gauche, noir en haut droite, jaune en bas gauche, magenta en bas droite, croix cyan centrale**, bord blanc. Confirmer placement, orientation et absence de bande fantôme/scintillement.
+- Nettoyage GRAM natif 240×320 avec `swap_xy(false)`, puis **activation de `swap_xy(true)` avant tout envoi 320×240** ; remplissage écran RGB en trois bandes verticales (rouge, vert, bleu). Repères **blanc en haut gauche, noir en haut droite, jaune en bas gauche, magenta en bas droite, croix cyan centrale**, bord blanc. Confirmer placement, orientation et absence de bande fantôme/scintillement.
 - Toutes les 2 s : rafraîchir **seulement 48×32 px** sous le centre, alternance noir/blanc. Logs de temps microsecondes et nombre de transferts. Pas de framebuffer 320×240 (153600 o), une bande DMA de 5120 o. Sur échec/timeout DMA : extinction rétroéclairage, arrêt de dessin et **mémoire tampon conservée** (callback asynchrone possible).
 - Traces `MEM phase=...` au boot, après LCD, image, tactile, puis toutes les 10 s : heap8 libre / plus grand bloc / minimum, DMA libre / plus grand bloc, marge de pile `app_main` en **octets pour ESP-IDF**, bande DMA ; `COUNTERS` transactions/erreurs. Temps de rendu en µs ; toute valeur chiffrée doit être **recopiée depuis le journal physique de la CYD**.
 
@@ -89,6 +89,14 @@ d7b85afe589d50e0b431c45ebbf9fd9b8d77de292921fdaac9a0d726b2ebbffa  build/cyd_wars
 Artefact : `warship-esp32-firmware-57b860a22bb647f480fdeb6c7c0f73a941e85f22` dans [#41125556488](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/41125556488). Comprend BIN/ELF/MAP, bootloader, table de partitions, `flasher_args.json`, `sdkconfig`, `dependencies.lock`.
 
 **Interprétation :** ce build ne mesure **ni** heap libre après initialisation, **ni** DMA réellement disponible, **ni** pile libre, **ni** latence du LCD, **ni** résultat XPT2046 sur la CYD. La mémoire dynamique et les temps sont **instrumentés dans le firmware**, mais seul le log UART matériel T02 fournira leurs valeurs. Ni la taille Flash physique ni la PSRAM réelle ne sont déduites de `idf.py size`.
+
+### Correction suite à la code review de la PR #22
+
+[Observation Codex P2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/22#discussion_r4428368983) : l'ancienne version lançait l'affichage 320×240 **sans activation de MADCTL.MV** (`esp_lcd_panel_swap_xy(panel, false)`). L'API `esp_lcd_ili9341` émet les coordonnées au contrôleur **sans transposition logicielle** ; les colonnes 240..319 dépassaient alors la largeur native 240. Erreur confirmée en consultant l'implémentation du [pilote officiel Espressif](https://github.com/espressif/esp-bsp/blob/master/components/lcd/esp_lcd_ili9341/esp_lcd_ili9341.c) : `swap_xy(true)` active `LCD_CMD_MV_BIT`, tandis que `mirror()` ne modifie que MX/MY.
+
+**Correction code :** après l'effacement GRAM natif 240×320, `esp_lcd_panel_swap_xy(panel, true)` **avant** `esp_lcd_panel_mirror(panel, true, false)` et avant tout dessin 320×240. Le log `LCD_ORIENTATION` donne les trois paramètres sans réutiliser « cas 9 ». Le sens/position physique des coins et l'absence de bandes résiduelles restent à vérifier par le PO ; un build et une CI verte **ne constituent pas** une validation de la dalle.
+
+Cette correction n'altère ni les GPIO ni les buffers DMA et **invalide le SHA binaire précédent** pour les essais PO. Le commit corrigé devra produire un **nouvel artefact/empreinte** et les métriques actualisées dans la description de la PR.
 
 ## Fiche de test pour Pilotage → PO (après revue et firmware SHA exact)
 

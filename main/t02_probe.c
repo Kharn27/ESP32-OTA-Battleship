@@ -191,15 +191,17 @@ static esp_err_t lcd_init(void)
     err = esp_lcd_panel_disp_on_off(panel, true);
     if (err != ESP_OK) return err;
 
-    /* Known reference "case 9": native-wide addressing (swap_xy=false,
-     * mirror_x=true, mirror_y=false). First clear native 240x320 GRAM,
-     * then set this case without switching orientations during T02.
+    /* Native clear uses 240x320 addresses (MADCTL.MV=0). With the
+     * Espressif esp_lcd_ili9341 driver, 320x240 requires MADCTL.MV=1:
+     * changing mirror_x/y alone NEVER swaps the address axes. Mirror
+     * polarity is a T02 physical-test hypothesis, not an imported
+     * orientation index from a different driver's implementation.
      */
     err = esp_lcd_panel_swap_xy(panel, false);
     if (err != ESP_OK) return err;
     err = esp_lcd_panel_mirror(panel, false, false);
     if (err != ESP_OK) return err;
-    ESP_LOGI(TAG, "LCD_INIT native=240x320 wanted=320x240 case=9 clock_hz=%u pins=13,14,15,2,21 reset_gpio=-1",
+    ESP_LOGI(TAG, "LCD_INIT native=240x320 target=320x240 clock_hz=%u pins=13,14,15,2,21 reset_gpio=-1",
              (unsigned)LCD_CLOCK_HZ);
     for (int row = 0; row < 320; row += LCD_TILE_ROWS) {
         memset(dma_buf, 0, 240 * LCD_TILE_ROWS * 2);
@@ -216,10 +218,12 @@ static esp_err_t lcd_init(void)
         }
         ++bands_sent;
     }
-    err = esp_lcd_panel_swap_xy(panel, false);
+    err = esp_lcd_panel_swap_xy(panel, true); /* MADCTL.MV=1: 320 columns */
     if (err != ESP_OK) return err;
-    err = esp_lcd_panel_mirror(panel, true, false);
-    if (err == ESP_OK) ESP_LOGI(TAG, "LCD_ORIENTATION candidate_case=9 320x240 check_physical=1");
+    err = esp_lcd_panel_mirror(panel, true, false); /* candidate handedness */
+    if (err == ESP_OK) {
+        ESP_LOGI(TAG, "LCD_ORIENTATION geometry=320x240 swap_xy=1 mirror_x=1 mirror_y=0 physical_mirror_check=1");
+    }
     return err;
 }
 
