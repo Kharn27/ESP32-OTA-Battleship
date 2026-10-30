@@ -2,7 +2,7 @@
 
 **Portée :** organisation du travail directement dans les [GitHub Issues du dépôt ESP32-OTA-Battleship](https://github.com/Kharn27/ESP32-OTA-Battleship/issues). Les Issues sont **la source de vérité opérationnelle** et les PR portent les livraisons. Le tableau GitHub Projects créé par le PO est **facultatif et non utilisé** pour le pilotage : la connexion ChatGPT GitHub ne permet pas d'en piloter les cartes ni les champs. Aucune action humaine de déplacement de cartes n'est nécessaire.
 
-**Maturité :** conventions de pilotage, sans création de backlog fonctionnel ni déclenchement de mission firmware/graphisme. La Bible produit et les décisions explicites du PO restent les sources métier ; une Issue ne peut les contredire.
+**Maturité :** conventions de pilotage, sans création de backlog fonctionnel ni déclenchement de mission firmware/graphisme. **`BIBLE_PRODUIT.md` est l'unique référence métier** : les nouvelles décisions PO doivent y être intégrées avant qu'une US qui en dépend soit déclarée « Prête ». Les maquettes, ADR, Issues historiques et échanges ne sont que des références complémentaires ; ils ne peuvent créer ou modifier une règle produit.
 
 ## 1. Responsabilités — une source de vérité commune
 
@@ -22,7 +22,7 @@
 
 Une **Issue = une mission bornée** : `[US-DEV]`, `[US-GRAPH]`, `[DOC-PO]`, `[SPIKE]`, `[BUG]` ou `[TECH]`. Utiliser le [modèle d'Issue](../.github/ISSUE_TEMPLATE/user_story.yml), complété par le Pilotage avant attribution. Les IDs pérennes restent les numéros GitHub (`#NN`) ; un identifiant métier peut être ajouté au titre, sans remplacer le lien.
 
-Chaque mission précise : **source PO**, valeur, inclus/exclus, responsable, dépendances/interfaces, critères d'acceptation, tests et preuves, risques, points d'arbitrage et conditions de clôture. Privilégier des US petites et vérifiables ; isoler une incertitude matérielle ou radio dans un `SPIKE`. Ne pas créer à l'avance des dizaines de tickets à partir d'une Bible encore incomplète.
+Chaque mission précise brièvement : **décisions applicables de `BIBLE_PRODUIT.md` (§ / IDs)**, valeur, inclus/exclus, responsable, dépendances/interfaces, critères testables, preuves requises et blocages éventuels. **Une US détaille le besoin sans ajouter de règle métier** ; les autres sources ne valent que comme compléments. Ne pas recopier la Bible ni ses justifications historiques, ni imposer de spécifications techniques hors mission. Un champ sans objet indique **« Non applicable » avec une justification brève**. Isoler une incertitude matérielle ou radio dans un `SPIKE` plutôt que d'inventer une règle. Préférer quelques US bornées à un backlog artificiellement exhaustif.
 
 **Dépendances :** renseigner les liens `bloquée par #NN` / `bloque #MM` dans les Issues ; utiliser les fonctionnalités GitHub natives si disponibles. Ne paralléliser que les travaux indépendants, avec une interface suffisamment stable. Une demande qui modifie l'expérience joueur repart au PO.
 
@@ -42,7 +42,7 @@ Aucun GitHub Project, champ personnalisé Projects ou label précréé n'est né
 
 **Cycle de vie :**
 - **À qualifier** : demande non exploitable, source/critères/autorité manquants ; pas encore attribuable.
-- **Prête** : besoin validé, Issue complète, dépendances connues et libérées, agent identifié, preuves attendues définies.
+- **Prête** : besoin validé et **toutes les décisions PO applicables intégrées à `BIBLE_PRODUIT.md`**, Issue concise et testable, dépendances connues et libérées, agent identifié, preuves attendues définies. Une décision PO nouvelle non encore consignée dans la Bible bloque ce statut pour toute US qui en dépend.
 - **En cours** : agent réalise le périmètre autorisé sur une branche.
 - **En revue** : PR avec HEAD et preuves remise au Pilotage ; les corrections repassent par ce statut sur chaque nouveau HEAD.
 - **Bloquée** : attente d'une dépendance, d'une preuve exigée ou d'un arbitrage PO ; consigner explicitement la raison, son propriétaire et l'étape pour débloquer.
@@ -79,4 +79,4 @@ En cas de conversation longue ou d'agent remplacé, tenir dans l'Issue/PR un ré
 
 ## 6. Avant de démarrer le développement
 
-Ce workflow n'est **pas** un mandat de codage. Quand le PO aura livré un besoin suffisamment stable, Pilotage proposera un MVP, les dépendances et un petit premier lot de **SPIKE/US** à attribuer. À confirmer à ce moment : framework/version ESP-IDF, écran/tactile/rotation, budgets mesurés, politique Flash/assets et outils de test. Aucun serveur ni accès Internet n'est requis pour le jeu entre deux CYD ; ESP-NOW fera l'objet de preuves sur **deux cartes**.
+Ce workflow n'est **pas** un mandat de codage. Sur la base du **périmètre LOT 1 décidé par le PO**, Pilotage proposera **le découpage, les dépendances et les missions de réalisation du LOT 1** (US et éventuels SPIKE), sans redéfinir le produit. Les difficultés qui modifieraient l'expérience joueur retournent au PO pour arbitrage et mise à jour de la Bible avant qu'une US concernée soit « Prête ». À confirmer techniquement au démarrage : framework/version ESP-IDF, écran/tactile/rotation, budgets mesurés, politique Flash/assets et outils de test. Aucun serveur ni accès Internet n'est requis pour le jeu entre deux CYD ; ESP-NOW fera l'objet de preuves sur **deux cartes**.
