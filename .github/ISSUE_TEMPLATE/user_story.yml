@@ -10,6 +10,10 @@ body:
         Le backlog est géré dans les Issues du dépôt, sans GitHub Projects obligatoire.
         Pilotage tient à jour le statut, le type, le responsable, la priorité et le lot dans le corps de l'Issue ; les changements significatifs sont datés en commentaire.
         Préfixer le titre avec [US-DEV], [US-GRAPH], [DOC-PO], [SPIKE], [BUG] ou [TECH].
+        BIBLE_PRODUIT.md est l'unique référence métier : toute US cite les décisions applicables (§ et IDs), sans les recopier.
+        Maquettes, ADR, Issues antérieures et échanges sont complémentaires et ne peuvent créer de règles produit.
+        Nouvelle décision PO non intégrée à la Bible = US dépendante non « Prête ».
+        Rester concis, autonome et testable ; inscrire « Non applicable » avec justification lorsqu'un champ est sans objet.
   - type: dropdown
     id: type
     attributes:
@@ -76,8 +80,8 @@ body:
     id: source
     attributes:
       label: "Source du besoin et contexte"
-      description: "Décision PO et référence exacte dans la Bible, maquette, issue ou ADR. Préciser la maturité du besoin."
-      placeholder: "Référence produit / décision, objectif utilisateur, contexte matériel."
+      description: "Citer les décisions applicables de BIBLE_PRODUIT.md (§ et IDs). Les autres liens sont complémentaires, non normatifs. Si aucune règle métier ne s’applique (mission purement technique), indiquer « Non applicable » et pourquoi."
+      placeholder: "Bible §14.2 — LOT1-PL-001, LOT1-FLT-001 ; compléments utiles, uniquement si nécessaires."
     validations:
       required: true
   - type: textarea
@@ -91,7 +95,7 @@ body:
     id: perimetre
     attributes:
       label: "Inclus / exclus"
-      description: "Définir une portée bornée ; noter expressément les éléments hors mission."
+      description: "Portée bornée, sans recopier les exigences de la Bible. Pour un point sans objet : « Non applicable » (justifier)."
       value: |
         **Inclus :**
 
@@ -102,7 +106,7 @@ body:
     id: dependances
     attributes:
       label: "Dépendances / contrats"
-      description: "Liens d'Issues, interfaces C/graphique/radio et éventuels points bloquants."
+      description: "Uniquement les liens et interfaces nécessaires. Indiquer « Non applicable » et justifier si aucune dépendance."
       placeholder: "Bloquée par #..., dépend de l'interface ..., ou AUCUNE."
     validations:
       required: true
@@ -110,7 +114,7 @@ body:
     id: acceptation
     attributes:
       label: "Critères d'acceptation vérifiables"
-      description: "Comportements observables, cas limites et tests négatifs utiles. Pas de critères vagues."
+      description: "Quelques critères autonomes, observables et testables, dérivés de la Bible ; aucun ajout de règle métier."
       value: |
         - [ ] Critère observable 1
         - [ ] Critère observable 2
@@ -120,7 +124,7 @@ body:
     id: preuves
     attributes:
       label: "Preuves de livraison exigées"
-      description: "Préciser les niveaux requis : tests PC, compilation cible, CI, CYD physique, ou revue de maquette."
+      description: "Niveaux de preuve requis pour cette mission : PC, build ESP32, CI, CYD physique, ou revue de maquette. Non applicable si justifié."
       value: |
         - [ ] PR liée, HEAD exact, diff et limites
         - [ ] Tests / revues requis pour cette mission (préciser)
