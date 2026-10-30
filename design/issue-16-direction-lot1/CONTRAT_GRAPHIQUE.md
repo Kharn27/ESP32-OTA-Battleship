@@ -1,7 +1,7 @@
 # G01 — Contrat graphique provisoire consolidé du LOT 1
 
 **Issue #16 · PR #19 (DRAFT) · 30/10/2026**  
-**Statut : PROPOSITION D'IDENTITÉ POUR ACCEPTATION PO — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**  
+**Statut : IDENTITÉ ARTISTIQUE ACCEPTÉE PAR LE PO COMME SOCLE LOT 1 — CONTRAT PROVISOIRE — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.** Décision PO du 30/10/2026 [tracée dans l'Issue #16](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/16#issuecomment-6534947575). Aucune approbation d'écran définitif ni de format firmware.  
 **Périmètre :** langage artistique commun et besoins graphiques du LOT 1, **pas** validation pixel à pixel d'ATTAQUE, **pas** contrat d'asset firmware définitif. **Source métier unique :** [BIBLE_PRODUIT.md](../../BIBLE_PRODUIT.md), §14.1/14.4/14.5/14.10/14.13 et §15.
 
 ## 1 — Identité à conserver
@@ -32,7 +32,7 @@
 | **REJETÉ ARTISTIQUEMENT / ARCHIVE** | G01 initiale, V2, V2.1 | Ne pas conserver leur géométrie dashboard/vignette comme direction ; utiles à l'historique et aux états métier |
 | **NON RETENU / ARCHIVE GIT** | Anciens habillages A/B/C, agencements D/E/F, scènes narratives et SVG UX obsolètes | Voir [MAQUETTES.md](../../MAQUETTES.md) ; **A/B/C ne sont pas les trois premières planches illustrées** ; ne pas réactiver ces thèmes |
 | **OUVERT : missions d'écran** | Haut d'ATTAQUE trop dense, grille chargée, position du bateau/décor, taille des commandes | Corriger dans les missions d'écran **sans refaire G01** |
-| **OUVERT : PO / Développeur / S02** | Acceptation artistique, formats, police, tactile, contrastes et performances | Ne pas prétendre que l'image PC vaut validation PO ou CYD |
+| **OUVERT : missions d'écran / Développeur / S02** | Composition finale, formats, police, tactile, contrastes et performances | L'acceptation du socle artistique ne vaut ni approbation d'écran ni validation CYD |
 
 La comparaison V2.1/recomposition est dans [ATTAQUE_RECOMPOSITION_NOTE.md](ATTAQUE_RECOMPOSITION_NOTE.md). Les vieilles previews DÉFENSE/conventions du dossier sont **des témoins historiques**, non des maquettes actuelles à généraliser.
 
@@ -57,7 +57,7 @@ Ancres **RVB hex exactes** de la source actuelle **attaque_recomposition.py**. L
 
 **Code sémantique de travail :** cible = **coins cyan + coordonnée** ; FEU = **orange/cuivre + verbe** ; raté = **écume claire ancrée dans l'eau** ; touché = **gerbe chaude + assise sombre** ; gravité DÉFENSE = **intensité, contraste et texte**, pas couleur seule. Un naufrage ennemi est annoncé **par le type du navire**, jamais par des segments d'épave dessinés sur ATTAQUE (Bible §14.4).
 
-**Validation PO non obtenue à ce stade :** chaleur de la palette, relief et puissance expressive. **S02 :** contrastes et différenciation sur dalle réelle, y compris selon la texture de mer ; valeurs hex non garanties identiques après conversion éventuelle.
+**Décision PO :** ambiance, richesse et expressivité retenues **comme identité commune**, sans validation définitive des nuances HEX ou des effets sur chaque écran. **S02 :** contrastes et différenciation sur dalle réelle, y compris selon la texture de mer ; valeurs hex non garanties identiques après conversion éventuelle.
 
 ## 3 — Typographies et règles de lecture
 
@@ -148,10 +148,8 @@ La recomposition **illustre** des cases **18×18 pixels**, FEU proche de x205–
 
 ## 9 — Clôture G01 et frontière de responsabilité
 
-**Critère :** le **PO reconnaît explicitement et accepte** ce langage comme **base de conception** des écrans LOT 1, **sans devoir approuver chaque pixel d'ATTAQUE**. Formulation de décision **proposée au PO, non prononcée à sa place** :
+**Décision PO du 30/10/2026 : ACCEPTÉ — SOCLE ARTISTIQUE LOT 1.** [Trace officielle](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/16#issuecomment-6534947575). Le PO retient le pixel art naval contemporain riche et expressif, la mer vivante continue, le crépuscule maritime, les silhouettes crédibles, les impacts expressifs, les commandes cuivrées et la priorité à la lisibilité. Les trois premières planches restent références de l'ambition visuelle. Cette acceptation vaut **base de conception**, sans approbation au pixel de la recomposition ATTAQUE ni finalisation des autres écrans.
 
-> « Je retiens l'identité d'un jeu naval illustré en pixel art contemporain : mer vivante continue, crépuscule chaleureux, silhouettes nautiques crédibles, impacts/écume expressifs mais lisibles, commandes cuivrées et priorité de lecture de la grille. C'est la base de conception des écrans LOT 1 ; les défauts du bandeau et de la grille ATTAQUE seront traités dans les missions d'écran. »
-
-Après trace explicite de cette décision : **revue du HEAD par Pilotage**, vérification de la synchronisation/CI sous sa responsabilité et fusion **par Pilotage seul**. G01 ne certifie ni maquette runtime, ni confort tactile, ni contrat mémoire. **PR #19 reste DRAFT et Issue #16 ouverte** tant que ces décisions de gouvernance ne sont pas prises.
+**À traiter dans les missions suivantes :** composition, bandeau supérieur, densité de la grille, dimensions, fonts, animations, hitboxes et validations S02. Aucun nouveau cycle artistique n'est requis dans G01. **Pilotage conserve la responsabilité des revues, CI et fusion** ; G01 reste un `DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED`, pas un asset firmware certifié.
 
 Références : [Issue #16](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/16), [PR #19](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/19), [workflow](../../docs/WORKFLOW_AGENTS.md), [politique de test](../../docs/TEST_POLICY.md), [index des archives](../../MAQUETTES.md).
