@@ -6,6 +6,8 @@
 **Origine :** [I-009 / IDEE.md — Le Grenier Geek](https://github.com/Kharn27/Le-Grenier-Geek/blob/main/plans/I-009-bataille-navale-cyd/IDEE.md)
 
 > Gouvernance : **DÉCIDÉ** = approuvé par le PO ; **PROPOSÉ** = suggestion non validée ; **À ARBITRER** = règle encore ouverte ; **À VÉRIFIER** = faisabilité, mesure ou essai nécessaire ; **REPORTÉ** = hors du besoin immédiat. Une cible V1.0 ne signifie pas automatiquement « MVP fixé ».
+>
+> **Source de vérité métier :** cette Bible porte les règles et décisions produit. Les futures US en préciseront les comportements et critères d'acceptation sans en créer une version concurrente. `README.md` oriente vers les sources et `MAQUETTES.md` indexe les références visuelles : aucun des deux ne constitue un référentiel de règles. Les décisions marquées **REMPLACÉ** demeurent dans la traçabilité mais ne prévalent pas sur les décisions PO plus récentes.
 
 ## 1. Promesse et priorité de conception
 
@@ -385,7 +387,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-ACC-001 | Accueil : exactement JOUER et PALMARÈS, sans accès factice | **DÉCIDÉ (PO, après v0.15)** |
 | LOT1-ACC-008 | Ancien arbitrage : écran de sélection dès le LOT 1 avec Capitaine seul jouable | **DÉCIDÉ historiquement (v0.16) / REMPLACÉ par LOT1-ACC-009** |
 | LOT1-ACC-009 | LOT 1 : JOUER mène directement au déploiement VS Capitaine ; sélection d'adversaire reportée ; retour initialement facultatif, complété par LOT1-ACC-010 | **DÉCIDÉ (PO, v0.17)** |
-| LOT1-ACC-010 | Sortie du déploiement vers l'accueil obligatoire avant PRÊT (aussi après REJOUER), sans forfait ni nouvelle partie comptabilisée ; libellé et graphisme à concevoir | **DÉCIDÉ (PO, addendum pré-backlog)** |
+| LOT1-ACC-010 | Une commande permettant de revenir à l'accueil doit être disponible pendant tout déploiement avant PRÊT (aussi après REJOUER), sans forfait ni nouvelle partie comptabilisée ; libellé et graphisme à concevoir | **DÉCIDÉ (PO, addendum pré-backlog)** |
 | LOT1-ACC-002 | Titre officiel affiché : CYD WARSHIP ; nom du dépôt GitHub inchangé | **DÉCIDÉ (PO)** |
 | LOT1-ACC-003 | Accueil V1.0 fondé sur une scène maritime **fixe**, sans animation obligatoire | **DÉCIDÉ (PO)** |
 | LOT1-ACC-004 | Titre en haut : identifiable, lisible mais discret, sans masquer la scène | **DÉCIDÉ (intention PO) / implantation À CONCEVOIR** |
@@ -537,7 +539,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 ## 14. Périmètre fonctionnel du LOT 1 — Première bataille contre Capitaine (changement v0.12, socle v0.7 conservé)
 
-**Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage fonctionnel non terminé.** La présente section reprend les décisions du PO validées dans la conversation du 29 octobre 2026. La maquette d'accueil a été retenue au stade de conception (PR #8) ; les autres maquettes et les critères d'acceptation définitifs restent à préparer. La Bible complète n'est pas validée en bloc.
+**Statut : DÉCIDÉ pour les éléments explicitement marqués ci-dessous ; cadrage du LOT 1 suffisant pour instruire les futures US.** Cette section reprend les décisions PO des 29 et 30 octobre 2026. La maquette d'accueil est retenue au stade de conception (PR #8) ; les essais sur CYD, les interfaces de production et les critères d'acceptation détaillés restent à instruire. La Bible complète n'est pas validée en bloc.
 
 ### 14.1 Objectif et découpage — LOT1-001, LOT1-ACC-001/009/010
 
@@ -548,7 +550,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 - **DÉCIDÉ — LOT1-ACC-001/009 (révision PO v0.17) :** accueil volontairement minimal avec exactement deux actions **JOUER** et **PALMARÈS**, de même dimension visuelle sur la maquette d'accueil retenue. **JOUER mène directement au déploiement VS CAPITAINE** (AUTO / PRÊT), sans sélecteur intermédiaire dans le LOT 1. **PALMARÈS** reste accessible depuis l'accueil. Aucun bouton factice vers une fonction indisponible. Le choix antérieur LOT1-ACC-008 (sélection d'adversaire immédiate) est **REMPLACÉ** pour le LOT 1.
 - **REPORTÉ à des lots ultérieurs, sans abandon V1.0 :** CRÉER/REJOINDRE et ESP-NOW, adversaires CPU Mousse et Amiral, familles tactiques, variante classique alternée, grilles 15 × 15 et placement manuel. L'accueil V1.0 s'enrichira lorsque ces expériences seront réellement disponibles.
 
-**DÉCIDÉ — début du parcours LOT 1 :** ACCUEIL → **JOUER** → **DÉPLOIEMENT VS CAPITAINE** → **PRÊT** → COMBAT. **PROPOSÉ — forme détaillée des transitions de fin :** RÉSULTAT → INSPECTION / REJOUER / ACCUEIL, conformément aux décisions déjà actées. **DÉCIDÉ — LOT1-ACC-010 :** une sortie du déploiement vers l'accueil est **obligatoire avant PRÊT**, y compris lors d'une revanche, sans forfait ni nouvelle partie comptabilisée. Sa présentation reste **À CONCEVOIR**. Aucun menu de sélection d'adversaire n'est nécessaire dans le LOT 1 ; il est **REPORTÉ**.
+**DÉCIDÉ — début du parcours LOT 1 :** ACCUEIL → **JOUER** → **DÉPLOIEMENT VS CAPITAINE** → **PRÊT** → COMBAT. **PROPOSÉ — forme détaillée des transitions de fin :** RÉSULTAT → INSPECTION / REJOUER / ACCUEIL, conformément aux décisions déjà actées. **DÉCIDÉ — LOT1-ACC-010 :** le joueur doit pouvoir **revenir volontairement à l'accueil à tout moment du déploiement avant PRÊT**, y compris lors d'une revanche, sans forfait ni nouvelle partie comptabilisée. La présence d'une commande de retour est obligatoire ; son libellé et sa présentation restent **À CONCEVOIR**. Aucun menu de sélection d'adversaire n'est nécessaire dans le LOT 1 ; il est **REPORTÉ**.
 
 ### 14.2 Déploiement et contact des navires — LOT1-PL-001, LOT1-FLT-001
 
@@ -610,7 +612,7 @@ Le **LOT 1 est choisi dans son intention** ; avant de créer un backlog, identif
 
 - **DÉCIDÉ — LOT1-STAT-001 :** depuis l'accueil, **PALMARÈS** permet de voir, sans consultation obligatoire, le bilan **VS CAPITAINE** : **parties jouées, victoires, défaites, matchs nuls**, et le **compteur global unique de forfaits volontaires**. Ces compteurs sont **persistants sur la CYD**, pas sur un compte personnel.
 - **DÉCIDÉ :** une victoire, défaite ou égalité définitive incrémente **exactement une** partie dans la catégorie VS CAPITAINE et **exactement une** catégorie de résultat ; les forfaits ne sont pas des parties jouées. Les quatre catégories V1.0 **VS HUMAIN / MOUSSE / CAPITAINE / AMIRAL** restent décidées, mais seul le combat VS CAPITAINE est disponible dans ce lot.
-- **DÉCIDÉ — LOT1-ACC-010 :** l'écran de déploiement, y compris après REJOUER, propose obligatoirement une sortie vers l'accueil **avant PRÊT**, sans forfait ni nouvelle partie comptabilisée. Le résultat et les statistiques d'une bataille antérieure restent acquis.
+- **DÉCIDÉ — LOT1-ACC-010 :** l'écran de déploiement, y compris après REJOUER, permet toujours au joueur de **revenir volontairement à l'accueil avant PRÊT**, sans forfait ni nouvelle partie comptabilisée. Le résultat et les statistiques d'une bataille antérieure restent acquis.
 - **DÉCIDÉ — LOT1-ABD-001 :** **PRÊT est le seuil d'engagement.** Avant PRÊT, quitter le déploiement ne comptabilise **ni forfait ni partie**. Après PRÊT et avant le résultat définitif, une demande d'abandon affiche **CONTINUER / ABANDONNER**. CONTINUER préserve l'état et les compteurs ; ABANDONNER confirmé ajoute **1** au **compteur global de forfaits**, sans inscrire la bataille au palmarès VS CAPITAINE. Après résultat définitif, retour à l'accueil sans forfait supplémentaire.
 - **DÉCIDÉ :** un incident technique, une extinction ou une coupure imprévue ne valent pas automatiquement abandon volontaire (BN-STAT-003). La reprise après redémarrage reste **REPORTÉE** dans le cadre V1.0.
 
@@ -754,7 +756,7 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 - **JOUER**
 - **PALMARÈS**
 
-**DÉCIDÉ — navigation (LOT1-ACC-009, révision PO v0.17) :** les deux plaques de commande ont la même dimension visuelle dans la maquette d'accueil retenue. **JOUER** mène **directement au déploiement classique 10 × 10 VS CAPITAINE**, prépositionné et modifiable par AUTO ; seule la validation PRÊT lance le combat. **PALMARÈS** ouvre la consultation depuis l'accueil. **LOT1-ACC-010 — DÉCIDÉ :** une sortie du déploiement vers l'accueil est **obligatoire avant PRÊT**, lors de la première partie comme après REJOUER. Aucun forfait ni nouvelle partie n'est comptabilisé ; le graphisme et le libellé restent à concevoir. Cela remplace la faculté précédemment laissée ouverte dans LOT1-ACC-009.
+**DÉCIDÉ — navigation (LOT1-ACC-009, révision PO v0.17) :** les deux plaques de commande ont la même dimension visuelle dans la maquette d'accueil retenue. **JOUER** mène **directement au déploiement classique 10 × 10 VS CAPITAINE**, prépositionné et modifiable par AUTO ; seule la validation PRÊT lance le combat. **PALMARÈS** ouvre la consultation depuis l'accueil. **LOT1-ACC-010 — DÉCIDÉ :** une commande de retour volontaire à l'accueil doit être disponible **à tout moment avant PRÊT**, lors de la première partie comme après REJOUER. Aucun forfait ni nouvelle partie n'est comptabilisé ; le graphisme et le libellé restent à concevoir. Cela remplace la faculté précédemment laissée ouverte dans LOT1-ACC-009.
 
 **DÉCIDÉ historiquement / REMPLACÉ :** LOT1-ACC-008 prévoyait dès le LOT 1 un écran de sélection d'adversaire avec Capitaine seul jouable. Ce choix est **remplacé** par LOT1-ACC-009 pour éviter une étape intermédiaire à choix unique. **REPORTÉ :** la sélection d'adversaire lorsque d'autres modes seront réellement disponibles, y compris un futur « VS autre CYD » ; **aucun ESP-NOW, Mousse, Amiral, CRÉER / REJOINDRE, variantes ou bouton factice actif** au LOT 1.
 
