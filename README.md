@@ -6,9 +6,7 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 **État : exploration fonctionnelle. Aucun développement n'est engagé.**
 
-**DÉCIDÉ — LOT 1 (depuis Bible v0.12) :** une partie classique complète sur une CYD **VS Capitaine** ; **Mousse et Amiral** sont reportés à des lots ultérieurs. L'ancien libellé « JOUER CONTRE MOUSSE » de l'issue graphique #6 est historique ; la maquette d'accueil a été retenue par le PO puis fusionnée dans la [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8).
-
-**DÉCIDÉ pour l'accueil LOT 1 (complément PO après v0.15) :** titre **CYD WARSHIP**, scène maritime fixe au coucher du soleil, riposte ennemie manquée près du navire principal et commandes **JOUER** et **PALMARÈS**, de même taille visuelle sur la maquette retenue. **JOUER** conduit **directement au déploiement VS Capitaine** dans le LOT 1 ; le combat commence après **PRÊT**. **LOT1-ACC-010 — DÉCIDÉ :** une sortie vers l'accueil est obligatoire pendant le déploiement (initial ou de revanche) avant PRÊT, sans forfait ni nouvelle partie comptabilisée ; libellé et graphisme à concevoir. L'ancien écran de sélection d'adversaire, décidé en v0.16, est **reporté** jusqu'à disponibilité de plusieurs adversaires ; Mousse, Amiral et VS CYD restent reportés. **Maquette retenue au stade DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED**, sans validation runtime ni ergonomie tactile. [Cadrage détaillé dans la Bible, § 15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08).
+**LOT 1 :** bataille classique complète sur une CYD contre **Capitaine**. Le parcours de l'accueil, les règles actives, les exclusions et les décisions remplacées sont définis **uniquement dans la [Bible produit](BIBLE_PRODUIT.md)** (§ 14–16). Ce README est un point d'entrée, pas une seconde spécification.
 
 ## Référence produit
 
@@ -18,17 +16,9 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **À ARBITRER**, **À VÉRIFIER** et **REPORTÉS**. Elle constitue une synthèse de travail, pas un cahier des charges validé dans son ensemble.
 
-## Direction du jeu
+## Intention
 
-- Jeu naval fluide et intuitif au stylet ; recherche d'un univers maritime en pixel art moderne sans ralentir le gameplay, avec lisibilité à confirmer sur la CYD réelle.
-- Mode standard : un tir secret par joueur, résolution simultanée.
-- Variante classique alternée et variantes tactiques avec salves et composition de flotte.
-- Palmarès persistant propre à chaque CYD et consultable à la demande par l'adversaire.
-- Fin de partie : la flotte du vainqueur reste secrète, sauf s'il choisit lui-même de la révéler.
-- Liaison directe ESP-NOW : avis de faisabilité favorable de l'architecte ; CRÉER / REJOINDRE retenu, découverte et reconnexion à vérifier sur matériel.
-- Mode solo contre CPU **décidé pour la cible V1.0 dans tous les modes**, avec trois difficultés et compositions tactiques adaptées.
-- Coupures radio temporaires : suspension et reprise cohérente **visées en V1.0** ; reprise après redémarrage **reportée**.
-- Réserve d'idées futures conservée dans la bible, sans élargir tacitement le périmètre V1.0.
+Un jeu naval familial, lisible et fluide au stylet, avec une identité maritime expressive. Les expériences V1.0, contraintes, variantes et choix de règles sont décrits dans la **Bible produit** ; ils ne sont pas redéfinis ici.
 
 ## Origine
 
