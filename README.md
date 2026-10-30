@@ -16,6 +16,16 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 La bible distingue explicitement les éléments **DÉCIDÉS**, **PROPOSÉS**, **À ARBITRER**, **À VÉRIFIER** et **REPORTÉS**. Elle constitue une synthèse de travail, pas un cahier des charges validé dans son ensemble.
 
+## Organisation du développement multi-agents
+
+Les [GitHub Issues du dépôt](https://github.com/Kharn27/ESP32-OTA-Battleship/issues) constituent le **backlog officiel**, piloté et mis à jour directement par le Chef de projet à l'aide du connecteur GitHub. Les PR contiennent les livraisons, revues et preuves. Le GitHub Project expérimental n'est pas requis et n'est pas la source de vérité.
+
+- [Workflow multi-agents et suivi par Issues](docs/WORKFLOW_AGENTS.md) — types, statuts, priorités, responsables, branches, preuves et fusions.
+- [Politique de preuves et de tests](docs/TEST_POLICY.md) — PC, build cible, CI, CYD physique et ESP-NOW à deux cartes.
+- [Modèle d'Issue](.github/ISSUE_TEMPLATE/user_story.yml) et [modèle de PR](.github/pull_request_template.md).
+
+Ce dispositif ne crée pas de backlog fonctionnel et ne lance aucun développement. Les champs de statut et d'attribution sont portés par chaque Issue, sans tableau séparé à administrer.
+
 ## Intention
 
 Un jeu naval familial, lisible et fluide au stylet, avec une identité maritime expressive. Les expériences V1.0, contraintes, variantes et choix de règles sont décrits dans la **Bible produit** ; ils ne sont pas redéfinis ici.
