@@ -1,0 +1,76 @@
+name: T01 C99 host and ESP32 build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host:
+    name: C99 ${{ matrix.cc }} (ASan UBSan)
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact source HEAD
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git rev-parse HEAD
+      - name: Tool versions
+        run: |
+          ${{ matrix.cc }} --version | head -1
+          cmake --version | head -1
+          ninja --version
+      - name: Configure
+        run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON
+      - name: Build
+        run: cmake --build build-host --verbose
+      - name: Run tests
+        run: ctest --test-dir build-host --output-on-failure -V
+
+  esp32:
+    name: ESP-IDF v5.5.6 Xtensa esp32
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact source HEAD
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git rev-parse HEAD
+      - name: Build and static memory report
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            idf.py --version &&
+            xtensa-esp32-elf-gcc --version &&
+            idf.py set-target esp32 &&
+            idf.py build &&
+            idf.py size &&
+            idf.py size-components &&
+            sha256sum build/cyd_warship.bin
+      - name: Firmware artifact (build output; no device test)
+        uses: actions/upload-artifact@v4
+        with:
+          name: t01-esp32-firmware-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build/cyd_warship.bin
+            build/cyd_warship.elf
+            build/bootloader/bootloader.bin
+            build/partition_table/partition-table.bin
+            build/flasher_args.json
+            build/cyd_warship.map
+            sdkconfig
+          if-no-files-found: error
