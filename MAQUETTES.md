@@ -5,7 +5,7 @@
 | Classe | Statut | Contenu / portée |
 | --- | --- | --- |
 | **Références graphiques approuvées pour production** | **AUCUNE** | Ni charte ni écran final validés ; ne pas convertir directement les archives en assets firmware |
-| **Accueil CYD WARSHIP — maquette retenue au stade conception** | **DÉCIDÉ (PO) / DESIGN_PREVIEW accepté, ON_DEVICE_UNVERIFIED** | [PR #8 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) : commandes **JOUER / PALMARÈS** ; sélection de Capitaine sous JOUER ; aucune validation comme asset runtime. Voir [Bible §15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08) |
+| **Accueil CYD WARSHIP — maquette retenue au stade conception** | **DÉCIDÉ (PO) / DESIGN_PREVIEW accepté, ON_DEVICE_UNVERIFIED** | [PR #8 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) : maquette d'accueil avec **JOUER / PALMARÈS** ; aucune validation comme asset runtime, et aucune règle de navigation portée par cet index. Voir [Bible §15](BIBLE_PRODUIT.md#15-identité--cyd-warship--et-écran-daccueil--cadrage-po-du-29-octobre-2026-v08) |
 | **Scènes narratives du 29 octobre 2026** | **HISTORIQUE_GIT — NON_VALIDEE_PO — NON_RUNTIME** | Retirées de `main` sur décision PO ; [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) et [dossier historique figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours) |
 | **Archives visuelles A/B/C** | **HISTORIQUE_GIT — NON RETENUES** | [Habillages A/B/C](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-themes/README.md), [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) |
 | **Archives d'agencements D/E/F** | **HISTORIQUE_GIT — NON RETENUES** | [Agencements D/E/F](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-layouts/README.md), [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1) |
@@ -19,7 +19,7 @@
 
 **Cap artistique recherché après revue PO :** jeu indépendant contemporain en pixel art **riche, expressif, immersif**, avec une vraie personnalité maritime. Il s'agit d'une **intention**, pas d'une charte validée. La proposition de thèmes interchangeables **n'est pas une fonctionnalité décidée**.
 
-Les règles du gameplay LOT 1 sont conservées, mais **l'adversaire a changé en v0.12 : VS Capitaine** (Mousse et Amiral sont reportés). Voir [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) : classique 10 × 10 VS Capitaine, mono-tir simultané, FEU irrévocable, aucune bascule automatique, alerte DÉFENSE persistante jusqu'à consultation, positions adverses cachées.
+**Référence métier unique :** les parcours, comportements et règles actifs sont définis dans [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md). Cet index documente seulement les visuels, leur statut et leur provenance ; une maquette historique ne redéfinit jamais le gameplay.
 
 ---
 
@@ -127,7 +127,7 @@ Le [dossier D/E/F au commit figé](https://github.com/Kharn27/ESP32-OTA-Battlesh
 
 ## H. CYD WARSHIP — maquette d'accueil retenue au stade conception (cadrage initial du 29 octobre 2026)
 
-**DÉCIDÉ — intention PO et actualisation après v0.15 :** titre **CYD WARSHIP** en partie haute, visible mais discret ; scène **fixe** au coucher de soleil, navire du joueur au premier plan, navire ennemi lointain endommagé, tir vers l'horizon et **riposte ratée (gerbe d'eau) près du navire principal**. Les deux commandes de l'accueil sont désormais **JOUER** et **PALMARÈS**, présentées sur deux plaques de même taille dans la maquette sélectionnée. **JOUER** ouvre dès le LOT 1 la sélection d'adversaire, **Capitaine seul jouable**. Le placement exact des zones tactiles reste à tester sur CYD.
+**DÉCIDÉ — intention PO et actualisation après v0.15 :** titre **CYD WARSHIP** en partie haute, visible mais discret ; scène **fixe** au coucher de soleil, navire du joueur au premier plan, navire ennemi lointain endommagé, tir vers l'horizon et **riposte ratée (gerbe d'eau) près du navire principal**. Les deux commandes de l'accueil sont désormais **JOUER** et **PALMARÈS**, présentées sur deux plaques de même taille dans la maquette sélectionnée. La navigation associée à **JOUER**, la sortie du déploiement avant PRÊT et les reports sont exclusivement définis dans la [Bible produit, §§ 14.1 et 15.2](BIBLE_PRODUIT.md) ; cet index visuel ne constitue pas une seconde spécification de ces comportements. Le placement exact des zones tactiles reste à tester sur CYD.
 
 **Historique — pistes facultatives du cadrage initial :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil. La **composition de l'accueil a ensuite été retenue par le PO** dans la PR #8 et n'est plus « à dessiner » ; cette acceptation ne valide pas le rendu sur CYD physique.
 
