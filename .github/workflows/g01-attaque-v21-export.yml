@@ -1,0 +1,56 @@
+name: G01 V2.1 native visual export (one-shot)
+on:
+  push:
+    branches: [design/issue-16-direction-lot1]
+    paths:
+      - '.github/workflows/g01-attaque-v21-export.yml'
+      - 'design/issue-16-direction-lot1/attaque_g01_v21.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render-v21:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-dejavu-core
+          python -m pip install 'Pillow==12.1.0'
+      - name: Verify 320x240, nearest-neighbor x4 and ORA composite
+        run: python design/issue-16-direction-lot1/attaque_g01_v21.py design/issue-16-direction-lot1
+      - name: Native before/after with no interpolation
+        run: |
+          python - <<'PY'
+          from PIL import Image,ImageDraw,ImageFont
+          from pathlib import Path
+          p=Path("design/issue-16-direction-lot1")
+          a=Image.open(p/"attaque_expression_320x240.png").convert("RGB")
+          b=Image.open(p/"attaque_v21_320x240.png").convert("RGB")
+          assert a.size==b.size==(320,240)
+          im=Image.new("RGB",(640,268),(8,21,32))
+          im.paste(a,(0,28));im.paste(b,(320,28))
+          d=ImageDraw.Draw(im)
+          ft=ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf",14)
+          d.text((10,5),"V2  ·  avant / dernier : raté",font=ft,fill=(242,194,128))
+          d.text((331,5),"V2.1  ·  après / E5 touché",font=ft,fill=(255,231,169))
+          im.save(p/"comparatif_v2_v21.png")
+          PY
+      - name: Commit verified native art and editable layers
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/issue-16-direction-lot1/attaque_v21_320x240.png
+          git add design/issue-16-direction-lot1/attaque_v21_x4.png
+          git add design/issue-16-direction-lot1/attaque_v21_layers.ora
+          git add design/issue-16-direction-lot1/comparatif_v2_v21.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'design(g01): verify and export native ATTAQUE V2.1 for PO'
+            git push origin HEAD:design/issue-16-direction-lot1
+          fi
