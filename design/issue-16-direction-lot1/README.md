@@ -1,6 +1,12 @@
 # G01 — Direction visuelle LOT 1 / Issue #16
 
-**Responsable :** Graphiste / DA. **Maturité :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED — EN_ATTENTE_ARBITRAGE_PO`.
+**Responsable :** Graphiste / DA. **Maturité actuelle V2 :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED — EN_ATTENTE_RETOUR_ARTISTIQUE_PO`.
+
+> **Reprise artistique du 30/10/2026 — V2 en attente du PO.**
+> La déclinaison initiale (attaque_320x240.png, defense_320x240.png, conventions_320x240.png et render_g01.py) a été **rejetée artistiquement** par le PO. Elle reste dans cette branche comme historique, pas comme cible de production.
+> **Proposition actuelle** : [note](ATTAQUE_EXPRESSION_V2.md), [ATTAQUE native](attaque_expression_320x240.png), [zoom ×4](attaque_expression_x4.png), [source Python](attaque_g01_v2.py) et [ORA en calques](attaque_expression_layers.ora). La déclinaison DÉFENSE/conventions est suspendue jusqu'au retour artistique du PO.
+
+
 
 ## Intention
 
