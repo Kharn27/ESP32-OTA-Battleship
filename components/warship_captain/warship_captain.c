@@ -79,47 +79,81 @@ static unsigned neighbors(unsigned pos, const uint8_t used[BOARD_CELLS],
     return n;
 }
 
-/* First pursue an extendable aligned HIT pair, newest evidence first;
- * then an unknown orthogonal neighbor of the newest remaining HIT.
- * SUNK reports reveal only type, never the membership of older HITs.
- * More nuanced post-sink / multiple-track reasoning is outside D03.
+/* A SUNK reveals the impact cell and type, NEVER the rest of the wreck.
+ * Only HITs ALREADY OBSERVED when that SUNK occurred can be considered
+ * ambiguous old clues. Later HITs cannot belong to that sunk ship.
+ * Proximity is a soft priority only; no wreck ownership or water halo.
+ */
+static void mark_sunk_neighborhood(unsigned pos,
+                                   const uint8_t hit[BOARD_CELLS],
+                                   uint8_t hint[BOARD_CELLS])
+{
+    const unsigned x = pos % GRID, y = pos / GRID;
+    const unsigned xmin = x == 0u ? 0u : x - 1u;
+    const unsigned xmax = x + 1u == GRID ? x : x + 1u;
+    const unsigned ymin = y == 0u ? 0u : y - 1u;
+    const unsigned ymax = y + 1u == GRID ? y : y + 1u;
+    for (unsigned row = ymin; row <= ymax; ++row)
+        for (unsigned col = xmin; col <= xmax; ++col)
+            if (hit[cell(col, row)] != 0u)
+                hint[cell(col, row)] = 1u;
+}
+
+/* Multiple clues are reconstructed from public HIT history (stateless).
+ * First try plausible aligned pairs, then isolated HIT neighbors. Within
+ * each class, newest evidence first, preserving older unexhausted pistas.
+ * After SUNK, prefer unambiguous clues over PRE-SUNK hits in its vicinity;
+ * subsequent HITs stay fresh even beside that SUNK. A pair containing a
+ * fresh HIT remains fresh. Revisit older ambiguous HITs if needed.
+ * Hints never assert wreck membership, exclude targets or mark water.
+ *
+ * Contradicted alignment has no unknown endpoints; the next phase tests
+ * orthogonal alternatives or an independent track. D01 touching is legal.
  */
 static int pursue(const WarshipBattlePublic *view,
                   const uint8_t used[BOARD_CELLS],
-                  const uint8_t hit[BOARD_CELLS], uint32_t sample,
-                  unsigned *chosen)
+                  const uint8_t hit[BOARD_CELLS],
+                  const uint8_t hint[BOARD_CELLS],
+                  uint32_t sample, unsigned *chosen)
 {
-    for (unsigned i = view->outgoing_count; i > 0u; --i) {
-        const WarshipBattleShot *shot = &view->outgoing[i - 1u];
-        if (shot->impact != WARSHIP_BATTLE_HIT) continue;
-        const unsigned pos = cell(shot->x, shot->y);
-        const unsigned x = pos % GRID;
-        unsigned c[2];
-        unsigned n;
-        if (x + 1u < GRID && hit[pos + 1u]) {
-            n = endpoints(pos, pos + 1u, used, c);
-            if (n != 0u) { *chosen = c[sample % n]; return 1; }
+    for (unsigned priority = 0u; priority < 2u; ++priority) {
+        for (unsigned i = view->outgoing_count; i > 0u; --i) {
+            const WarshipBattleShot *shot = &view->outgoing[i - 1u];
+            if (shot->impact != WARSHIP_BATTLE_HIT) continue;
+            const unsigned pos = cell(shot->x, shot->y);
+            const unsigned x = pos % GRID;
+            unsigned options[2];
+            unsigned n;
+            if (x + 1u < GRID && hit[pos + 1u] &&
+                (unsigned)(hint[pos] && hint[pos + 1u]) == priority) {
+                n = endpoints(pos, pos + 1u, used, options);
+                if (n != 0u) { *chosen = options[sample % n]; return 1; }
+            }
+            if (x > 0u && hit[pos - 1u] &&
+                (unsigned)(hint[pos] && hint[pos - 1u]) == priority) {
+                n = endpoints(pos - 1u, pos, used, options);
+                if (n != 0u) { *chosen = options[sample % n]; return 1; }
+            }
+            if (pos + GRID < BOARD_CELLS && hit[pos + GRID] &&
+                (unsigned)(hint[pos] && hint[pos + GRID]) == priority) {
+                n = endpoints(pos, pos + GRID, used, options);
+                if (n != 0u) { *chosen = options[sample % n]; return 1; }
+            }
+            if (pos >= GRID && hit[pos - GRID] &&
+                (unsigned)(hint[pos] && hint[pos - GRID]) == priority) {
+                n = endpoints(pos - GRID, pos, used, options);
+                if (n != 0u) { *chosen = options[sample % n]; return 1; }
+            }
         }
-        if (x > 0u && hit[pos - 1u]) {
-            n = endpoints(pos - 1u, pos, used, c);
-            if (n != 0u) { *chosen = c[sample % n]; return 1; }
+        for (unsigned i = view->outgoing_count; i > 0u; --i) {
+            const WarshipBattleShot *shot = &view->outgoing[i - 1u];
+            if (shot->impact != WARSHIP_BATTLE_HIT) continue;
+            const unsigned pos = cell(shot->x, shot->y);
+            if (hint[pos] != priority) continue;
+            unsigned options[4];
+            const unsigned n = neighbors(pos, used, options);
+            if (n != 0u) { *chosen = options[sample % n]; return 1; }
         }
-        if (pos + GRID < BOARD_CELLS && hit[pos + GRID]) {
-            n = endpoints(pos, pos + GRID, used, c);
-            if (n != 0u) { *chosen = c[sample % n]; return 1; }
-        }
-        if (pos >= GRID && hit[pos - GRID]) {
-            n = endpoints(pos - GRID, pos, used, c);
-            if (n != 0u) { *chosen = c[sample % n]; return 1; }
-        }
-    }
-    for (unsigned i = view->outgoing_count; i > 0u; --i) {
-        const WarshipBattleShot *shot = &view->outgoing[i - 1u];
-        if (shot->impact != WARSHIP_BATTLE_HIT) continue;
-        const unsigned pos = cell(shot->x, shot->y);
-        unsigned c[4];
-        const unsigned n = neighbors(pos, used, c);
-        if (n != 0u) { *chosen = c[sample % n]; return 1; }
     }
     return 0;
 }
@@ -175,6 +209,7 @@ WarshipCaptainStatus warship_captain_choose(const WarshipBattlePublic *view,
 {
     uint8_t used[BOARD_CELLS] = {0};
     uint8_t hit[BOARD_CELLS] = {0};
+    uint8_t sunk_hint[BOARD_CELLS] = {0};
     if (view == NULL || random_u32 == NULL || out == NULL)
         return WARSHIP_CAPTAIN_BAD_ARGUMENT;
     if (!valid_view(view)) return WARSHIP_CAPTAIN_BAD_OBSERVATION;
@@ -187,12 +222,14 @@ WarshipCaptainStatus warship_captain_choose(const WarshipBattlePublic *view,
         const unsigned pos = cell(shot->x, shot->y);
         used[pos] = 1u;
         if (shot->impact == WARSHIP_BATTLE_HIT) hit[pos] = 1u;
+        if (shot->impact == WARSHIP_BATTLE_SUNK)
+            mark_sunk_neighborhood(pos, hit, sunk_hint);
     }
     uint32_t sample = 0u;
     if (random_u32(random_context, &sample) != 0)
         return WARSHIP_CAPTAIN_RANDOM_FAILURE;
     unsigned chosen = 0u;
-    if (!pursue(view, used, hit, sample, &chosen))
+    if (!pursue(view, used, hit, sunk_hint, sample, &chosen))
         chosen = explore(used, sample);
     WarshipCaptainTarget target = {(uint8_t)(chosen % GRID),
                                    (uint8_t)(chosen / GRID)};
