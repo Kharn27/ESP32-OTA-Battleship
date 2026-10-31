@@ -1,6 +1,7 @@
 #include "esp_log.h"
 #include "t02_probe.h"
 #include "warship_core.h"
+#include "warship_fleet.h"
 
 static const char *const TAG = "CYD_WARSHIP";
 
@@ -12,6 +13,11 @@ void app_main(void)
         return;
     }
     ESP_LOGI(TAG, "%s", banner);
+    /* Link-time integration only; preserve the existing T02 hardware probe.
+     * No generation, combat state, display or touch handling in D01.
+     */
+    ESP_LOGI(TAG, "D01 fleet component linked: carrier length=%u",
+             (unsigned)warship_fleet_ship_length(WARSHIP_SHIP_CARRIER));
     ESP_LOGW(TAG, "T02 DIAGNOSTIC PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
     t02_probe_run();
 }
