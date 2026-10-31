@@ -140,3 +140,29 @@ Cette fiche longue **n'est pas le prochain test demandé au PO**. Les quinze app
 ## Frontières
 
 **Exclus :** moteur, Capitaine, écran de jeu, UX G01, NVS métier, PSRAM/microSD, radio/ESP-NOW, deuxième carte, fonts/assets finaux. Ne pas utiliser les valeurs `heap` statiques comme budget de production. La PR ne pourra être déclarée **T02 terminée** sans essai matériel exigé par l'Issue.
+
+## Preuves du correctif « console 10 » — premier commit source
+
+La première version corrective du composant isolé est au commit **`44663d87a9a081980f6b64301bb7b2bed4bd0fbc`** sur `spike/issue-21-cyd-tft-touch-probe`. Ce commit a produit une **CI entière verte** : [GitHub Actions #41150448014](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/41150448014), **3/3 jobs PASS** sur le SHA exact, avec les commandes `idf.py set-target esp32`, `idf.py build`, `idf.py size`, `idf.py size-components` et `sha256sum` exécutées sous ESP-IDF **5.5.6**, GCC Xtensa **14.2.0**. Tests hôte : GCC 13.3.0 / Clang 18.1.3, C99 strict + ASan/UBSan, tests T01 13/13 et mapping T02 24/24, CTest 2/2 pour chaque compilateur.
+
+| Zone statique du firmware WARSHIP T02 corrigé | Mesuré (octets) |
+| --- | ---: |
+| Flash Code | **85 802** |
+| Flash Data | **50 156** |
+| IRAM | **63 635** (48,55 % de 131 072) |
+| DRAM | **13 720** (7,59 % de 180 736) |
+| RTC SLOW | **56** |
+| Image `idf.py size` | **211 001** |
+| Fichier `cyd_warship.bin` | **210 096** (`0x338b0`) |
+| Partition app du build | **1 048 576** (configuration temporaire par défaut IDF, pas décision de production) |
+
+**SHA-256 du binaire pour le commit source ci-dessus uniquement :**
+
+```text
+9e428715a370fad6f4807426a7a546122b777f0ac3ad0c1609305a735a1459e1  build/cyd_warship.bin
+```
+
+Artefact : `warship-esp32-firmware-44663d87a9a081980f6b64301bb7b2bed4bd0fbc` dans la [CI #41150448014](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/41150448014), avec application, ELF, bootloader, partitions, `.map`, `sdkconfig`, `dependencies.lock` et `flasher_args.json`. **Ne pas confondre empreintes des builds d'autres commits** ; la présente modification documentaire crée un nouveau HEAD qui doit être soumis à sa propre CI. Aucune autre modification firmware n'est apportée par ce paragraphe. Avertissements Node.js dans `upload-artifact` (dépréciation `punycode`/`url.parse`) sans avertissement C applicatif établi.
+
+**Statuts :** `HOST_TESTED`, `TARGET_BUILD_VERIFIED`, `CI_PASSED` **sur le commit source `44663d87a9a081980f6b64301bb7b2bed4bd0fbc`** ; `ON_DEVICE_UNVERIFIED` pour WARSHIP et `PO_REPORTED_VISUAL_FAIL` historique non lié à un SHA exact. Nouvelle observation physique suspendue jusqu'à revue Pilotage. Heap, blocs DMA et piles réellement libres à l'exécution ainsi que vitesse/cadrage LCD **NON TESTÉS**.
+
