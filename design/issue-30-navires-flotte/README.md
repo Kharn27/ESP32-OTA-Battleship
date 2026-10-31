@@ -9,7 +9,17 @@
 - [États du Croiseur](g02_etats_320x240.svg) et [×4](g02_etats_x4.svg) : intact, partiellement touché, coulé, **uniquement sur DÉFENSE du joueur**.
 - [Orientations](g02_orientations_320x240.svg) et [×4](g02_orientations_x4.svg) : Patrouilleur 2 et Porte-avions 5, H et V.
 
-Les SVG contiennent des éléments géométriques éditables, aucune police intégrée, aucune image tierce et des couleurs issues du socle G01. Ils sont des **sources de présentation**, pas des sprites firmware validés. L'export PNG 320×240 et zoom 1280×960, accompagné du code auteur Pillow et du contrôle d'occupation, est fourni séparément au Pilotage dans la remise G02.
+Les SVG contiennent des éléments géométriques éditables, aucune police intégrée, aucune image tierce et des couleurs issues du socle G01. **Exports versionnés au format SVG** : les copies PNG raster doivent être générées localement via `export_previews.py` (CairoSVG + Pillow) ; les PNG ne sont pas présents dans cette branche. Pour les fichiers PNG vérifiés en conversation, consulter l'archive de remise distincte. Ils sont des **sources de présentation**, pas des sprites firmware validés. L'export PNG 320×240 et zoom 1280×960, accompagné du code auteur Pillow et du contrôle d'occupation, est fourni séparément au Pilotage dans la remise G02.
+
+## Reproduction des exports et vérification géométrique
+
+```sh
+python3 -m pip install cairosvg pillow
+python3 design/issue-30-navires-flotte/validate_fleet.py
+python3 design/issue-30-navires-flotte/export_previews.py
+```
+
+`validate_fleet.py` contrôle 5 navires, 17 cellules distinctes, orientations mixtes, contact orthogonal et diagonal. `export_previews.py` génère les PNG 320×240 et 1280×960 par agrandissement **NEAREST**, ainsi que la planche raster. **Les tests de géométrie ont été exécutés sur PC ; les exports des SVG du dépôt sont reproductibles mais n'ont pas été exécutés sur CYD.**
 
 ## Épreuve de contact sans superposition
 
