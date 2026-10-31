@@ -153,7 +153,7 @@ La première version corrective du composant isolé est au commit **`44663d87a9a
 | DRAM | **13 720** (7,59 % de 180 736) |
 | RTC SLOW | **56** |
 | Image `idf.py size` | **211 001** |
-| Fichier `cyd_warship.bin` | **210 096** (`0x338b0`) |
+| Fichier `cyd_warship.bin` | **211 120** (`0x338b0`) |
 | Partition app du build | **1 048 576** (configuration temporaire par défaut IDF, pas décision de production) |
 
 **SHA-256 du binaire pour le commit source ci-dessus uniquement :**
