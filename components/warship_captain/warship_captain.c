@@ -79,11 +79,13 @@ static unsigned neighbors(unsigned pos, const uint8_t used[BOARD_CELLS],
     return n;
 }
 
-/* A SUNK event reveals its impact square and type, NEVER the rest of
- * that ship's wreck. These nine hints form only a SOFT priority class:
- * diagonal or orthogonal neighbors remain legal candidates.
+/* A SUNK reveals the impact cell and type, NEVER the rest of the wreck.
+ * Only HITs ALREADY OBSERVED when that SUNK occurred can be considered
+ * ambiguous old clues. Later HITs cannot belong to that sunk ship.
+ * Proximity is a soft priority only; no wreck ownership or water halo.
  */
 static void mark_sunk_neighborhood(unsigned pos,
+                                   const uint8_t hit[BOARD_CELLS],
                                    uint8_t hint[BOARD_CELLS])
 {
     const unsigned x = pos % GRID, y = pos / GRID;
@@ -93,15 +95,17 @@ static void mark_sunk_neighborhood(unsigned pos,
     const unsigned ymax = y + 1u == GRID ? y : y + 1u;
     for (unsigned row = ymin; row <= ymax; ++row)
         for (unsigned col = xmin; col <= xmax; ++col)
-            hint[cell(col, row)] = 1u;
+            if (hit[cell(col, row)] != 0u)
+                hint[cell(col, row)] = 1u;
 }
 
 /* Multiple clues are reconstructed from public HIT history (stateless).
  * First try plausible aligned pairs, then isolated HIT neighbors. Within
  * each class, newest evidence first, preserving older unexhausted pistas.
- * After SUNK, prefer clues away from the SUNK location; if none can be
- * pursued, REVISIT nearby ambiguous HITs. A hint is NEVER an exclusion
- * zone, attribution of old HITs, or asserted wreck membership.
+ * After SUNK, prefer unambiguous clues over PRE-SUNK hits in its vicinity;
+ * subsequent HITs stay fresh even beside that SUNK. A pair containing a
+ * fresh HIT remains fresh. Revisit older ambiguous HITs if needed.
+ * Hints never assert wreck membership, exclude targets or mark water.
  *
  * Contradicted alignment has no unknown endpoints; the next phase tests
  * orthogonal alternatives or an independent track. D01 touching is legal.
@@ -121,22 +125,22 @@ static int pursue(const WarshipBattlePublic *view,
             unsigned options[2];
             unsigned n;
             if (x + 1u < GRID && hit[pos + 1u] &&
-                (unsigned)(hint[pos] || hint[pos + 1u]) == priority) {
+                (unsigned)(hint[pos] && hint[pos + 1u]) == priority) {
                 n = endpoints(pos, pos + 1u, used, options);
                 if (n != 0u) { *chosen = options[sample % n]; return 1; }
             }
             if (x > 0u && hit[pos - 1u] &&
-                (unsigned)(hint[pos] || hint[pos - 1u]) == priority) {
+                (unsigned)(hint[pos] && hint[pos - 1u]) == priority) {
                 n = endpoints(pos - 1u, pos, used, options);
                 if (n != 0u) { *chosen = options[sample % n]; return 1; }
             }
             if (pos + GRID < BOARD_CELLS && hit[pos + GRID] &&
-                (unsigned)(hint[pos] || hint[pos + GRID]) == priority) {
+                (unsigned)(hint[pos] && hint[pos + GRID]) == priority) {
                 n = endpoints(pos, pos + GRID, used, options);
                 if (n != 0u) { *chosen = options[sample % n]; return 1; }
             }
             if (pos >= GRID && hit[pos - GRID] &&
-                (unsigned)(hint[pos] || hint[pos - GRID]) == priority) {
+                (unsigned)(hint[pos] && hint[pos - GRID]) == priority) {
                 n = endpoints(pos - GRID, pos, used, options);
                 if (n != 0u) { *chosen = options[sample % n]; return 1; }
             }
@@ -219,7 +223,7 @@ WarshipCaptainStatus warship_captain_choose(const WarshipBattlePublic *view,
         used[pos] = 1u;
         if (shot->impact == WARSHIP_BATTLE_HIT) hit[pos] = 1u;
         if (shot->impact == WARSHIP_BATTLE_SUNK)
-            mark_sunk_neighborhood(pos, sunk_hint);
+            mark_sunk_neighborhood(pos, hit, sunk_hint);
     }
     uint32_t sample = 0u;
     if (random_u32(random_context, &sample) != 0)
