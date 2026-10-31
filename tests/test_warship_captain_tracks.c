@@ -120,6 +120,48 @@ static void test_sunk_without_wreck_map(void)
     const WarshipCaptainTarget u=pick(&a,101u),q=pick(&b,101u);
     assert(memcmp(&u,&q,sizeof u)==0);
 }
+
+/* Pilotage P2: HIT recorded AFTER a nearby SUNK is fresh evidence,
+ * never a possible remnant of that already sunk ship. */
+static void test_post_sunk_chronology(void)
+{
+    WarshipBattlePublic v={0};
+    add(&v,1,1,WARSHIP_BATTLE_HIT,255); /* B2: older separate track */
+    add(&v,4,3,WARSHIP_BATTLE_HIT,255); /* E4: ambiguous before sinking */
+    add(&v,4,4,WARSHIP_BATTLE_SUNK,0);  /* E5: patrol sunk */
+    add(&v,3,4,WARSHIP_BATTLE_HIT,255); /* D5: NEW track after sinking */
+    for (unsigned s=0u;s<8u;++s) {
+        const WarshipCaptainTarget t=pick(&v,s);
+        assert(neighbor(t,3u,4u));      /* D5 before B2 -> A2 */
+        assert(!(t.x==0u && t.y==1u));
+    }
+    /* Mirror around the vertical center line: G5 is fresh. */
+    WarshipBattlePublic mirror={0};
+    add(&mirror,8,1,WARSHIP_BATTLE_HIT,255); /* I2 */
+    add(&mirror,5,3,WARSHIP_BATTLE_HIT,255); /* F4 */
+    add(&mirror,5,4,WARSHIP_BATTLE_SUNK,0);  /* F5 */
+    add(&mirror,6,4,WARSHIP_BATTLE_HIT,255); /* G5 */
+    for (unsigned s=0u;s<8u;++s)
+        assert(neighbor(pick(&mirror,s),6u,4u));
+
+    /* Mixed-age adjacent pair: the new E3 cannot be demoted merely
+     * because pre-SUNK E4 could conceivably belong to the wreck. */
+    WarshipBattlePublic mixed={0};
+    add(&mixed,1,1,WARSHIP_BATTLE_HIT,255); /* B2 */
+    add(&mixed,4,3,WARSHIP_BATTLE_HIT,255); /* E4 */
+    add(&mixed,4,4,WARSHIP_BATTLE_SUNK,0);  /* E5 */
+    add(&mixed,4,2,WARSHIP_BATTLE_HIT,255); /* E3, AFTER SUNK */
+    WarshipCaptainTarget t=pick(&mixed,0u);
+    assert(t.x==4u && t.y==1u); /* E2: extension of mixed-age axis */
+
+    /* The fresh clue is still exhaustible. If all its neighbors are
+     * known misses, the older independent B2 track must be recovered. */
+    add(&v,2,4,WARSHIP_BATTLE_MISS,255); /* C5 */
+    add(&v,3,3,WARSHIP_BATTLE_MISS,255); /* D4 */
+    add(&v,3,5,WARSHIP_BATTLE_MISS,255); /* D6 */
+    t=pick(&v,0u);
+    assert(neighbor(t,1u,1u));          /* B2 still available */
+}
 static void test_bounds_and_errors(void)
 {
     WarshipBattlePublic v={0};
@@ -147,7 +189,7 @@ static void test_bounds_and_errors(void)
 int main(void)
 {
     test_contradictions();test_two_tracks();test_sunk_without_wreck_map();
-    test_bounds_and_errors();
+    test_bounds_and_errors();test_post_sunk_chronology();
     printf("D04 PASS sizeof(target)=%zu sizeof(public)=%zu\n",
            sizeof(WarshipCaptainTarget),sizeof(WarshipBattlePublic));
     return 0;
