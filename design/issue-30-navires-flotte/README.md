@@ -1,46 +1,55 @@
-# G02 — Les cinq navires classiques (Issue #30)
+# G02 — Design des cinq navires classiques (Issue #30)
 
-**Responsable :** Graphiste / DA. **Statut : DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.** Proposition unique, sans validation PO de G02.
+**Responsable :** Graphiste / DA · **Statut :** DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED · **Avis artistique PO G02 :** en attente.  
+**Branche / PR :** `design/issue-30-navires-flotte` · [PR Draft #32](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32) · Refs #30 (pas Closes).
 
-## Livrables GitHub : sources SVG vectorielles éditables
+## Les livrables canoniques dans le dépôt
 
-- [Planche complète](g02_planche_flotte.svg) : cinq profils distincts, vue de dessus, tailles 2/3/3/4/5.
-- [Test de grille 320×240](g02_grille_320x240.svg) et [agrandissement ×4](g02_grille_x4.svg) : grille 10×10, 18 px/case provisoire.
-- [États du Croiseur](g02_etats_320x240.svg) et [×4](g02_etats_x4.svg) : intact, partiellement touché, coulé, **uniquement sur DÉFENSE du joueur**.
-- [Orientations](g02_orientations_320x240.svg) et [×4](g02_orientations_x4.svg) : Patrouilleur 2 et Porte-avions 5, H et V.
+| Vue | Source SVG éditable | Export PNG natif | Preuve PNG zoom x4 NEAREST |
+|---|---|---|---|
+| Flotte complète | [Planche 960×560](g02_planche_flotte.svg) | [Planche PNG 960×560](g02_planche_flotte.png) | Non applicable (planche non 320×240) |
+| Grille joueur 10×10 | [SVG 320×240](g02_grille_320x240.svg) | [PNG 320×240](g02_grille_320x240.png) | [PNG 1280×960](g02_grille_x4.png) |
+| Trois états Croiseur, joueur DÉFENSE | [SVG 320×240](g02_etats_320x240.svg) | [PNG 320×240](g02_etats_320x240.png) | [PNG 1280×960](g02_etats_x4.png) |
+| Orientation Patrouilleur et Porte-avions | [SVG 320×240](g02_orientations_320x240.svg) | [PNG 320×240](g02_orientations_320x240.png) | [PNG 1280×960](g02_orientations_x4.png) |
 
-Les SVG contiennent des éléments géométriques éditables, aucune police intégrée, aucune image tierce et des couleurs issues du socle G01. **Exports versionnés au format SVG** : les copies PNG raster doivent être générées localement via `export_previews.py` (CairoSVG + Pillow) ; les PNG ne sont pas présents dans cette branche. Pour les fichiers PNG vérifiés en conversation, consulter l'archive de remise distincte. Ils sont des **sources de présentation**, pas des sprites firmware validés. L'export PNG 320×240 et zoom 1280×960, accompagné du code auteur Pillow et du contrôle d'occupation, est fourni séparément au Pilotage dans la remise G02.
+**Chaîne normative unique :** SVG versionné → rasterisation PNG **320×240** (CairoSVG) → agrandissement **1280×960 depuis le PNG natif** (Pillow, `Image.Resampling.NEAREST`). Les SVG `*_x4.svg` sont des commodités vectorielles historiques, **pas** des preuves d'agrandissement exact. La planche et les images générées par l'**ancien script Pillow autonome** transmis en archive lors de la première remise sont des **explorations NON NORMATIVES**, pas des références de comparaison ni des sources de production.
 
-## Reproduction des exports et vérification géométrique
+Ces sources sont éditables et relèvent exclusivement du **concept PC** ; elles ne sont pas des sprites finaux destinés à la Flash.
+
+## Contrôle reproductible des vrais placements SVG
+
+Le validateur [validate_fleet.py](validate_fleet.py) lit chaque balise `<use href="#nav-*">` dans le **SVG de grille effectivement rendu**, collecte ses `data-col/data-row/data-length/data-orient`, puis vérifie la transformation `translate` et `rotate(-90)` de la coque dessinée. Il vérifie indépendamment la grille native et son SVG x4, et refuse toute divergence des positions :
+
+| Navire | Orientation | Emprise attestée dans les SVG |
+|---|---|---|
+| Porte-avions 5 | horizontale | B2–F2 |
+| Sous-marin 3 | horizontale | C6–E6 |
+| Contre-torpilleur 3 | verticale | F5–F7 (translate **109,165**) |
+| Croiseur 4 | verticale | I4–I7 (translate **163,165**) |
+| Patrouilleur 2 | horizontale | G8–H8 |
+
+**17 cases distinctes.** Contact **par côté** Sous-marin / Contre-torpilleur (E6/F6) et **en diagonale** Patrouilleur / Croiseur (H8/I7). Pas de superposition. Les silhouettes verticales restent dans la colonne identifiée, grâce à la transformation cohérente avec la grille de 18 px/case (uniquement banc d'essai graphique).
+
+## Génération et tests PC
+
+Depuis la racine du dépôt :
 
 ```sh
-python3 -m pip install cairosvg pillow
+python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
 python3 design/issue-30-navires-flotte/validate_fleet.py
 python3 design/issue-30-navires-flotte/export_previews.py
 ```
 
-`validate_fleet.py` contrôle 5 navires, 17 cellules distinctes, orientations mixtes, contact orthogonal et diagonal. `export_previews.py` génère les PNG 320×240 et 1280×960 par agrandissement **NEAREST**, ainsi que la planche raster. **Les tests de géométrie ont été exécutés sur PC ; les exports des SVG du dépôt sont reproductibles mais n'ont pas été exécutés sur CYD.**
+`export_previews.py` contrôle **la taille réelle 320×240**, **1280×960**, **l'égalité exacte du raster agrandi à l'image native redimensionnée en NEAREST**, et un échantillon correspondant pour chaque pixel natif. Les sept PNG sont **versionnés dans cette PR**.
 
-## Épreuve de contact sans superposition
+**Preuve exécutée :** [GitHub Actions G02, run #41254090648 — PASS](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/41254090648), contrôle des vrais `<use>` et génération/commit des PNG, avec logs détaillés. Cette vérification graphique ne fait **pas** partie des jobs hôte/ESP32 génériques.
 
-| Bâtiment | Orientation | Cases |
-|---|---|---|
-| Porte-avions (5) | H | B2–F2 |
-| Sous-marin (3) | H | C6–E6 |
-| Contre-torpilleur (3) | V | F5–F7 |
-| Croiseur (4) | V | I4–I7 |
-| Patrouilleur (2) | H | G8–H8 |
+## Direction artistique et limites
 
-Total **17 cases distinctes** ; Sous-marin/Contre-torpilleur **par côté**, Croiseur/Patrouilleur **en diagonale**. Les coques et leurs bords restent séparés par la marge interne de chaque case. Le contraste matière/formes distingue les deux 3 cases.
+Identité G01 acceptée par le PO : **« La mer est le plateau »**, mer turquoise continue, reflets organiques, cuivre et ambre, encrage froid, éclairage cohérent. Une proposition principale de cinq coques distinctes : Patrouilleur = vedette courte ; Sous-marin = fuseau avec kiosque ; Contre-torpilleur = étrave/tourelles ; Croiseur = plusieurs groupes d'artillerie ; Porte-avions = longue piste et îlot asymétrique. Les deux modèles de trois cases ne reposent pas sur la seule couleur.
 
-## Direction artistique
+**Proposé, NON validé G02 :** personnalité, détails, lisibilité réelle, impact et état coulé. Les états de dommages illustrent **la propre flotte du joueur** (DÉFENSE), sans silhouette/épave de Capitaine sur ATTAQUE. **Non testé sur CYD :** stylet, contraste TFT, formats, masques, Flash/RAM, latence, police. T02/S02 et le Développeur établiront l'interface runtime sans présumer d'un budget ou d'un format.
 
-Socle G01 accepté par le PO : **« la mer est le plateau »**. Mer continue turquoise, reflets organiques, cuivre et ambre du crépuscule, contours d'encre froide, même lumière de dessus pour chaque coque. Patrouilleur = vedette courte ; Sous-marin = fuseau/kiosque ; Contre-torpilleur = proue fine, deux tourelles ; Croiseur = trois groupes d'artillerie et passerelle ; Porte-avions = long pont, piste et îlot asymétrique.
+**Provenance :** dessin original G02, sans image tierce ni police embarquée livrée ; fonte sans-serif hôte comme substitution de preview. **Aucun changement métier, firmware, accueil ou G01.**
 
-## Portée, preuves et questions ouvertes
-
-**PROPOSÉ :** formes de coques, détails, style des impacts et contraste. **VALIDÉ PO :** identité artistique générale G01 seulement ; **G02 en attente d'avis PO**. **NON TESTÉ SUR CYD :** reconnaissance réelle à 18 px, stylet, rendu TFT, tactile, fontes, Flash/RAM/temps d'affichage. T02/S02 et Développeur fixeront formats, compression, masques et budgets. **Aucune règle métier ni écran complet modifié.** Ce dossier ne révèle jamais la flotte cachée de Capitaine sur ATTAQUE. La forme en croix des dommages coulés n'est qu'une hypothèse de représentation de la flotte propre, pas une annonce de l'épave ennemie.
-
-Provenance : dessin original G02, sans image ni police tierce distribuée. Le texte des SVG utilise une fonte sans-serif hôte comme substitut de prévisualisation.
-
-Références : [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [G01](../issue-16-direction-lot1/CONTRAT_GRAPHIQUE.md), [Bible](../../BIBLE_PRODUIT.md), [politique de test](../../docs/TEST_POLICY.md). Refs #30, **pas Closes #30**.
+Références : [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [revue Pilotage](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32#pullrequestreview-5724899315), [contrat G01](../issue-16-direction-lot1/CONTRAT_GRAPHIQUE.md) et [politique de preuve](../../docs/TEST_POLICY.md).
