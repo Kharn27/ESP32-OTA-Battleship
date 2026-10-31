@@ -1,0 +1,43 @@
+name: G02 preview PNG export (temporary delivery helper)
+on:
+  push:
+    branches:
+      - design/issue-30-navires-flotte
+    paths:
+      - 'design/issue-30-navires-flotte/*.svg'
+      - 'design/issue-30-navires-flotte/*.py'
+      - '.github/workflows/g02-preview-exports.yml'
+permissions:
+  contents: write
+jobs:
+  generate-canonical-previews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/issue-30-navires-flotte
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install raster tools
+        run: python -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
+      - name: Verify actual SVG placements
+        run: python design/issue-30-navires-flotte/validate_fleet.py
+      - name: Rasterize native and exactly nearest zoom
+        run: python design/issue-30-navires-flotte/export_previews.py
+      - name: Commit canonical PNG on same draft branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/issue-30-navires-flotte/g02_grille_320x240.png
+          git add design/issue-30-navires-flotte/g02_grille_x4.png
+          git add design/issue-30-navires-flotte/g02_etats_320x240.png
+          git add design/issue-30-navires-flotte/g02_etats_x4.png
+          git add design/issue-30-navires-flotte/g02_orientations_320x240.png
+          git add design/issue-30-navires-flotte/g02_orientations_x4.png
+          git add design/issue-30-navires-flotte/g02_planche_flotte.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'design(g02): version canonical SVG raster PNG previews (refs #30)'
+            git push origin HEAD:design/issue-30-navires-flotte
+          fi
