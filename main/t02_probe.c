@@ -10,12 +10,12 @@
  */
 #include "t02_probe.h"
 #include "t02_touch_map.h"
+#include "warship_lcd.h"
 
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
 
 #include "driver/gpio.h"
 #include "driver/spi_master.h"
@@ -23,27 +23,15 @@
 #include "esp_err.h"
 #include "esp_flash.h"
 #include "esp_heap_caps.h"
-#include "esp_lcd_ili9341.h"
-#include "esp_lcd_panel_io.h"
-#include "esp_lcd_panel_ops.h"
-#include "esp_lcd_panel_vendor.h"
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/semphr.h"
 #include "freertos/task.h"
 
-#define LCD_BUS SPI2_HOST
-#define LCD_PIN_MOSI GPIO_NUM_13
-#define LCD_PIN_SCLK GPIO_NUM_14
-#define LCD_PIN_CS GPIO_NUM_15
-#define LCD_PIN_DC GPIO_NUM_2
-#define LCD_PIN_BL GPIO_NUM_21
-#define LCD_CLOCK_HZ 20000000
-#define LCD_W 320
-#define LCD_H 240
-#define LCD_TILE_ROWS 8
-#define LCD_DMA_BYTES (LCD_W * LCD_TILE_ROWS * 2)
+#define LCD_W WARSHIP_LCD_WIDTH
+#define LCD_H WARSHIP_LCD_HEIGHT
+#define LCD_TILE_ROWS WARSHIP_LCD_BAND_ROWS
+#define LCD_DMA_BYTES WARSHIP_LCD_DMA_BYTES
 
 /* Candidate CYD XPT2046 wire mapping, not established by PENIRQ test.
  * SPI3 is physically separate from the LCD SPI2 bus.
@@ -57,13 +45,8 @@
 #define TOUCH_CLOCK_HZ 1000000
 
 static const char *TAG = "T02";
-static esp_lcd_panel_handle_t panel;
-static esp_lcd_panel_io_handle_t panel_io;
-static SemaphoreHandle_t dma_done;
-static uint8_t *dma_buf;
 static spi_device_handle_t touch_dev;
-static bool lcd_fault;
-static uint32_t bands_sent, dma_timeouts, samples_ok, samples_invalid;
+static uint32_t samples_ok, samples_invalid;
 
 /* Do NOT mistake the bounds below for calibration. They encode a linear
  * diagnostic display of the 12-bit ADC range, without confirmed orientation.
@@ -74,20 +57,11 @@ static const T02TouchMap diagnostic_map = {
     .width = LCD_W, .height = LCD_H,
 };
 
-static bool IRAM_ATTR lcd_complete(esp_lcd_panel_io_handle_t io,
-                                   esp_lcd_panel_io_event_data_t *ev,
-                                   void *ctx)
-{
-    (void)io;
-    (void)ev;
-    BaseType_t awakened = pdFALSE;
-    xSemaphoreGiveFromISR((SemaphoreHandle_t)ctx, &awakened);
-    return awakened == pdTRUE;
-}
-
 static void snapshot(const char *phase)
 {
-    ESP_LOGI(TAG, "MEM phase=%s heap8=%u largest8=%u min8=%u dma_free=%u dma_largest=%u stack_margin_bytes=%u lcd_dma_bytes=%u",
+    WarshipLcdInfo info;
+    (void)warship_lcd_info(&info);
+    ESP_LOGI(TAG, "MEM phase=%s heap8=%u largest8=%u min8=%u dma_free=%u dma_largest=%u stack_margin_bytes=%u lcd_dma_bytes=%u lcd_transfers=%u dma_timeouts=%u dma_fault=%u",
              phase,
              (unsigned)heap_caps_get_free_size(MALLOC_CAP_8BIT),
              (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_8BIT),
@@ -95,136 +69,9 @@ static void snapshot(const char *phase)
              (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA),
              (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA),
              (unsigned)uxTaskGetStackHighWaterMark(NULL),
-             (unsigned)LCD_DMA_BYTES);
-}
-
-static esp_err_t send_band(int x, int y, int width, int height)
-{
-    if (lcd_fault || !panel || !dma_done) return ESP_ERR_INVALID_STATE;
-    if (x < 0 || y < 0 || width <= 0 || height <= 0 ||
-        x >= LCD_W || y >= LCD_H ||
-        width > LCD_W - x || height > LCD_H - y ||
-        (size_t)width * (size_t)height > LCD_DMA_BYTES / 2u) {
-        return ESP_ERR_INVALID_ARG;
-    }
-    (void)xSemaphoreTake(dma_done, 0);
-    const esp_err_t err = esp_lcd_panel_draw_bitmap(panel, x, y,
-                                                     x + width, y + height,
-                                                     dma_buf);
-    if (err != ESP_OK) {
-        lcd_fault = true;
-        (void)gpio_set_level(LCD_PIN_BL, 0);
-        ESP_LOGE(TAG, "LCD_FAIL transfer=%s sticky=1 dma_memory_retained=1",
-                 esp_err_to_name(err));
-        return err;
-    }
-    if (xSemaphoreTake(dma_done, pdMS_TO_TICKS(2000)) != pdTRUE) {
-        ++dma_timeouts;
-        lcd_fault = true;
-        (void)gpio_set_level(LCD_PIN_BL, 0);
-        ESP_LOGE(TAG, "LCD_TIMEOUT sticky=1 dma_memory_retained=1");
-        return ESP_ERR_TIMEOUT;
-    }
-    ++bands_sent;
-    return ESP_OK;
-}
-
-static esp_err_t lcd_init(void)
-{
-    const gpio_config_t bl = {
-        .pin_bit_mask = 1ULL << LCD_PIN_BL,
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    esp_err_t err = gpio_config(&bl);
-    if (err != ESP_OK) return err;
-    err = gpio_set_level(LCD_PIN_BL, 0);
-    if (err != ESP_OK) return err;
-    dma_buf = heap_caps_malloc(LCD_DMA_BYTES,
-                               MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA);
-    if (!dma_buf) return ESP_ERR_NO_MEM;
-    dma_done = xSemaphoreCreateBinary();
-    if (!dma_done) return ESP_ERR_NO_MEM;
-
-    spi_bus_config_t bus = {
-        .mosi_io_num = LCD_PIN_MOSI,
-        .miso_io_num = -1,
-        .sclk_io_num = LCD_PIN_SCLK,
-        .quadwp_io_num = -1,
-        .quadhd_io_num = -1,
-        .max_transfer_sz = LCD_DMA_BYTES + 16,
-    };
-    err = spi_bus_initialize(LCD_BUS, &bus, SPI_DMA_CH_AUTO);
-    if (err != ESP_OK) return err;
-    const esp_lcd_panel_io_spi_config_t io = {
-        .cs_gpio_num = LCD_PIN_CS,
-        .dc_gpio_num = LCD_PIN_DC,
-        .spi_mode = 0,
-        .pclk_hz = LCD_CLOCK_HZ,
-        .trans_queue_depth = 2,
-        .lcd_cmd_bits = 8,
-        .lcd_param_bits = 8,
-    };
-    err = esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)LCD_BUS,
-                                    &io, &panel_io);
-    if (err != ESP_OK) return err;
-    const esp_lcd_panel_io_callbacks_t callbacks = {
-        .on_color_trans_done = lcd_complete,
-    };
-    err = esp_lcd_panel_io_register_event_callbacks(panel_io, &callbacks,
-                                                     dma_done);
-    if (err != ESP_OK) return err;
-    const esp_lcd_panel_dev_config_t config = {
-        .reset_gpio_num = -1, /* NO GPIO12/strap or guessed reset. */
-        .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB,
-        .data_endian = LCD_RGB_DATA_ENDIAN_BIG,
-        .bits_per_pixel = 16,
-    };
-    err = esp_lcd_new_panel_ili9341(panel_io, &config, &panel);
-    if (err != ESP_OK) return err;
-    err = esp_lcd_panel_reset(panel);
-    if (err != ESP_OK) return err;
-    err = esp_lcd_panel_init(panel);
-    if (err != ESP_OK) return err;
-    err = esp_lcd_panel_disp_on_off(panel, true);
-    if (err != ESP_OK) return err;
-
-    /* Native clear uses 240x320 addresses (MADCTL.MV=0). With the
-     * Espressif esp_lcd_ili9341 driver, 320x240 requires MADCTL.MV=1:
-     * changing mirror_x/y alone NEVER swaps the address axes. Mirror
-     * polarity is a T02 physical-test hypothesis, not an imported
-     * orientation index from a different driver's implementation.
-     */
-    err = esp_lcd_panel_swap_xy(panel, false);
-    if (err != ESP_OK) return err;
-    err = esp_lcd_panel_mirror(panel, false, false);
-    if (err != ESP_OK) return err;
-    ESP_LOGI(TAG, "LCD_INIT native=240x320 target=320x240 clock_hz=%u pins=13,14,15,2,21 reset_gpio=-1",
-             (unsigned)LCD_CLOCK_HZ);
-    for (int row = 0; row < 320; row += LCD_TILE_ROWS) {
-        memset(dma_buf, 0, 240 * LCD_TILE_ROWS * 2);
-        /* Native 240x320 clear cannot use landscape send_band bounds. */
-        (void)xSemaphoreTake(dma_done, 0);
-        err = esp_lcd_panel_draw_bitmap(panel, 0, row, 240,
-                                        row + LCD_TILE_ROWS, dma_buf);
-        if (err != ESP_OK ||
-            xSemaphoreTake(dma_done, pdMS_TO_TICKS(2000)) != pdTRUE) {
-            lcd_fault = true;
-            (void)gpio_set_level(LCD_PIN_BL, 0);
-            ESP_LOGE(TAG, "LCD_NATIVE_CLEAR_FAIL err=%s", esp_err_to_name(err));
-            return err != ESP_OK ? err : ESP_ERR_TIMEOUT;
-        }
-        ++bands_sent;
-    }
-    err = esp_lcd_panel_swap_xy(panel, true); /* MADCTL.MV=1: 320 columns */
-    if (err != ESP_OK) return err;
-    err = esp_lcd_panel_mirror(panel, true, false); /* candidate handedness */
-    if (err == ESP_OK) {
-        ESP_LOGI(TAG, "LCD_ORIENTATION geometry=320x240 swap_xy=1 mirror_x=1 mirror_y=0 physical_mirror_check=1");
-    }
-    return err;
+             (unsigned)LCD_DMA_BYTES,
+             (unsigned)info.transfers, (unsigned)info.timeouts,
+             (unsigned)info.dma_fault);
 }
 
 static uint16_t pixel(int x, int y, unsigned phase)
@@ -246,28 +93,37 @@ static uint16_t pixel(int x, int y, unsigned phase)
     return 0x001fu; /* blue */
 }
 
-static esp_err_t draw_rect(int x, int y, int width, int height, unsigned phase)
+static esp_err_t draw_rect(int x, int y, int width, int height,
+                           unsigned phase)
 {
-    if (width <= 0 || width > LCD_W || height <= 0 ||
+    if (x < 0 || y < 0 || width <= 0 || height <= 0 ||
+        x >= (int)LCD_W || y >= (int)LCD_H ||
+        width > (int)LCD_W - x || height > (int)LCD_H - y ||
         (size_t)width * LCD_TILE_ROWS * 2u > LCD_DMA_BYTES)
         return ESP_ERR_INVALID_ARG;
+
+    uint8_t *const buffer = warship_lcd_band();
+    if (buffer == NULL) return ESP_ERR_INVALID_STATE;
     const int64_t start = esp_timer_get_time();
-    for (int top = 0; top < height; top += LCD_TILE_ROWS) {
-        const int tile_h = height - top < LCD_TILE_ROWS ? height - top : LCD_TILE_ROWS;
+    for (int top = 0; top < height; top += (int)LCD_TILE_ROWS) {
+        const int tile_h = height - top < (int)LCD_TILE_ROWS ?
+                           height - top : (int)LCD_TILE_ROWS;
         for (int r = 0; r < tile_h; ++r) {
             for (int col = 0; col < width; ++col) {
-                const uint16_t c = pixel(x + col, y + top + r, phase);
-                const size_t offset = 2u * ((size_t)r * (size_t)width + (size_t)col);
-                dma_buf[offset] = (uint8_t)(c >> 8);
-                dma_buf[offset + 1u] = (uint8_t)c;
+                const uint16_t color = pixel(x + col, y + top + r, phase);
+                const size_t at = 2u * ((size_t)r * (size_t)width + (size_t)col);
+                buffer[at] = (uint8_t)(color >> 8);
+                buffer[at + 1u] = (uint8_t)color;
             }
         }
-        esp_err_t err = send_band(x, y + top, width, tile_h);
+        esp_err_t err = warship_lcd_send(x, y + top, width, tile_h);
         if (err != ESP_OK) return err;
     }
+    WarshipLcdInfo info;
+    (void)warship_lcd_info(&info);
     ESP_LOGI(TAG, "DRAW region=%dx%d at=%d,%d phase=%u time_us=%" PRId64 " transfers=%u",
              width, height, x, y, phase, esp_timer_get_time() - start,
-             (unsigned)bands_sent);
+             (unsigned)info.transfers);
     return ESP_OK;
 }
 
@@ -370,19 +226,27 @@ void t02_probe_run(void)
              (unsigned)flash_bytes, esp_err_to_name(flash_err));
     ESP_LOGW(TAG, "This is a DIAGNOSTIC: touch raw, pin mapping and display orientation require PO physical checks");
     snapshot("startup");
-    esp_err_t err = lcd_init();
+    esp_err_t err = warship_lcd_init();
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "LCD_INIT_FAIL err=%s; no framebuffer or touch initialized", esp_err_to_name(err));
         snapshot("lcd_fail");
         return;
     }
     snapshot("lcd_initialized");
-    err = draw_rect(0, 0, LCD_W, LCD_H, 0u);
+    err = warship_lcd_prepare_console(0x0000u);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "LCD_PROFILE_FAIL err=%s", esp_err_to_name(err));
+        snapshot("orientation_fail");
+        return;
+    }
+    ESP_LOGI(TAG, "LCD_PROFILE_PASS console_case=10 mv=0 mx=0 my=1");
+    snapshot("lcd_profile_applied");
+    err = draw_rect(0, 0, (int)LCD_W, (int)LCD_H, 0u);
     if (err != ESP_OK) {
         snapshot("draw_fail");
         return; /* DMA buffer kept pinned if transfer status is uncertain. */
     }
-    err = gpio_set_level(LCD_PIN_BL, 1);
+    err = warship_lcd_backlight(true);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "LCD_BACKLIGHT_FAIL err=%s", esp_err_to_name(err));
         return;
@@ -430,8 +294,11 @@ void t02_probe_run(void)
         }
         if (now - last_mem >= 10000000) {
             snapshot("running");
-            ESP_LOGI(TAG, "COUNTERS bands=%u dma_timeouts=%u touch_samples=%u touch_failures=%u",
-                     (unsigned)bands_sent, (unsigned)dma_timeouts,
+            WarshipLcdInfo lcd;
+            (void)warship_lcd_info(&lcd);
+            ESP_LOGI(TAG, "COUNTERS bands=%u dma_timeouts=%u lcd_fault=%u touch_samples=%u touch_failures=%u",
+                     (unsigned)lcd.transfers, (unsigned)lcd.timeouts,
+                     (unsigned)lcd.dma_fault,
                      (unsigned)samples_ok, (unsigned)samples_invalid);
             last_mem = now;
         }
