@@ -337,6 +337,16 @@ static unsigned test_endings(int mode, unsigned draw_at,
                 WARSHIP_BATTLE_VICTORY : mode == 2 ?
                 WARSHIP_BATTLE_DEFEAT : WARSHIP_BATTLE_DRAW;
             EQ(pair.verdict, expected);
+            /* The two shots were resolved BEFORE the terminal verdict:
+             * their final SUNK events coexist in the same D02 pair. */
+            if (mode == 1 || mode == 3) {
+                EQ(pair.human.impact, WARSHIP_BATTLE_SUNK);
+                EQ(pair.human.ship_id, WARSHIP_SHIP_CARRIER);
+            }
+            if (mode == 2 || mode == 3) {
+                EQ(pair.captain.impact, WARSHIP_BATTLE_SUNK);
+                CHECK(pair.captain.ship_id < WARSHIP_FLEET_SHIPS);
+            }
             EQ(after_reveal.phase, WARSHIP_SOLO_FINISHED);
             EQ(warship_solo_select(&session, 9u, 9u),
                WARSHIP_SOLO_BAD_PHASE);
