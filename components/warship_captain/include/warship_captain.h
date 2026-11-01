@@ -26,7 +26,7 @@ typedef struct {
  */
 typedef int (*WarshipCaptainRandom)(void *context, uint32_t *value);
 
-/* D03/D04: choose an untried target from CAPTAIN's D02 public observation.
+/* D03/D04/D05: choose an untried target from CAPTAIN's D02 public observation.
  * The caller MUST supply warship_battle_observe(battle, CAPTAIN, &view),
  * NOT the private WarshipBattle or either WarshipFleet.
  * This API has no persistent state, heap, IO, timers or hidden data.
@@ -38,7 +38,7 @@ typedef int (*WarshipCaptainRandom)(void *context, uint32_t *value);
  * D04 reconstructs several public HIT tracks from history. Contradicted
  * alignments are revised; SUNK proximity is only a soft priority hint,
  * NEVER an ownership attribution or a halo of excluded water. No persistent
- * CPU state is needed. CAP-CPU-009 is explicitly outside D04.
+ * CPU state is needed. D05 filters only general exploration using public\n * SUNK types and straight-line plausible runs, without assigning old HITs.
  * Execution is bounded by small, fixed scans of the 10x10 grid.
  */
 WarshipCaptainStatus warship_captain_choose(const WarshipBattlePublic *view,
