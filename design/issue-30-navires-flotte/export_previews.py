@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """G02: one canonical chain SVG -> 320x240 PNG -> NEAREST 1280x960 PNG."""
 from pathlib import Path
-from PIL import Image, ImageChops
+from PIL import Image
 import cairosvg
 
 ROOT=Path(__file__).resolve().parent
+
+def assert_exact_rgba(actual, expected):
+    """Compare every pixel and RGBA channel (not only the alpha bbox)."""
+    assert actual.size == expected.size, (actual.size, expected.size)
+    assert actual.convert("RGBA").tobytes() == expected.convert("RGBA").tobytes(), (
+        "PNG pixels differ from exact NEAREST upscale (RGBA)"
+    )
 
 def render(name):
     src=ROOT/(name+"_320x240.svg")
@@ -18,8 +25,19 @@ def render(name):
         up.save(zoom,optimize=True)
         with Image.open(zoom) as saved:
             assert saved.size==(1280,960)
-            assert ImageChops.difference(saved.convert("RGBA"),up).getbbox() is None
-            # Explicitly verify every 4x4 pixel block equals one native pixel.
+            assert_exact_rgba(saved, up)
+            # Negative control: corrupt RGB at (1,0), outside every 4x4 origin.
+            # The alpha stays identical; the all-channel assertion MUST reject it.
+            altered = saved.convert("RGBA").copy()
+            red, green, blue, alpha = altered.getpixel((1, 0))
+            altered.putpixel((1, 0), (red ^ 1, green, blue, alpha))
+            try:
+                assert_exact_rgba(altered, up)
+            except AssertionError:
+                print(f"PASS NEGATIVE {name}: changed RGB at (1,0), alpha kept")
+            else:
+                raise AssertionError(f"FAIL NEGATIVE {name}: RGB change was missed")
+            # Additional spot-check at each native-pixel block origin.
             pix=original.convert("RGBA")
             assert all(saved.getpixel((x*4,y*4))==pix.getpixel((x,y))
                        for x in range(320) for y in range(240))
