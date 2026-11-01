@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define CHECK(c) do { if (!(c)) { \
-    fprintf(stderr, "FAIL %s:%d %s\\n", __FILE__, __LINE__, #c); \
+    fprintf(stderr, "FAIL %s:%d %s\n", __FILE__, __LINE__, #c); \
     exit(EXIT_FAILURE); \
 } } while (0)
 #define EQ(a,b) CHECK((a) == (b))
@@ -114,7 +114,6 @@ static void test_invalid(void)
     EQ(warship_solo_take_final(&session, NULL),
        WARSHIP_SOLO_BAD_ARGUMENT);
     unchanged(&session, &old);
-    CHECK(memcmp(&pair, &(WarshipBattlePair){0}, 0u) == 0); /* no read */
 }
 
 static void test_selection_and_atomic_fire(void)
@@ -306,7 +305,7 @@ static unsigned test_endings(int mode, unsigned draw_at,
         else
             water_cell(n - 16u, &x, &y);
         OK(warship_solo_select(&session, x, y));
-        WarshipBattlePair pair = {{0}};
+        WarshipBattlePair pair = {0};
         OK(warship_solo_fire(&session, sample, &rng, &pair));
         EQ(pair.round, n + 1u);
         EQ(rng.calls, n + 1u);
