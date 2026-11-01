@@ -32,12 +32,18 @@ static WarshipLifecycleStatus from_solo(WarshipSoloStatus s)
 
 static void go_home(WarshipLifecycle *game)
 {
-    /* Do not retain sensitive placements after returning home. */
-    WarshipLifecycle next;
-    memset(&next, 0, sizeof next);
-    next.magic = LIFECYCLE_MAGIC;
-    next.phase = WARSHIP_LIFECYCLE_HOME;
-    *game = next;
+    /* This operation cannot fail: wipe in place instead of creating
+     * a second full private session on the limited Xtensa call stack. */
+    memset(game, 0, sizeof *game);
+    game->magic = LIFECYCLE_MAGIC;
+    game->phase = WARSHIP_LIFECYCLE_HOME;
+}
+
+static WarshipLifecycleStatus from_fleet(WarshipFleetStatus s)
+{
+    return s == WARSHIP_FLEET_RANDOM_FAILURE ?
+        WARSHIP_LIFECYCLE_RANDOM_FAILURE :
+        WARSHIP_LIFECYCLE_INTERNAL_ERROR;
 }
 
 static int ready_fleets(const WarshipLifecycle *game)
@@ -64,10 +70,12 @@ WarshipLifecycleStatus warship_lifecycle_start(WarshipLifecycle *game,
     if (game->phase != WARSHIP_LIFECYCLE_HOME)
         return WARSHIP_LIFECYCLE_BAD_PHASE;
     WarshipFleet human, captain;
-    if (warship_fleet_generate(&human, human_rng, human_context) !=
-        WARSHIP_FLEET_OK) return WARSHIP_LIFECYCLE_RANDOM_FAILURE;
-    if (warship_fleet_generate(&captain, captain_rng, captain_context) !=
-        WARSHIP_FLEET_OK) return WARSHIP_LIFECYCLE_RANDOM_FAILURE;
+    WarshipFleetStatus fleet_status =
+        warship_fleet_generate(&human, human_rng, human_context);
+    if (fleet_status != WARSHIP_FLEET_OK) return from_fleet(fleet_status);
+    fleet_status = warship_fleet_generate(&captain, captain_rng,
+                                          captain_context);
+    if (fleet_status != WARSHIP_FLEET_OK) return from_fleet(fleet_status);
     game->human = human;
     game->captain = captain;
     game->phase = WARSHIP_LIFECYCLE_DEPLOY;
@@ -83,8 +91,9 @@ WarshipLifecycleStatus warship_lifecycle_auto(WarshipLifecycle *game,
     if (game->phase != WARSHIP_LIFECYCLE_DEPLOY)
         return WARSHIP_LIFECYCLE_BAD_PHASE;
     WarshipFleet replacement;
-    if (warship_fleet_generate(&replacement, human_rng, human_context) !=
-        WARSHIP_FLEET_OK) return WARSHIP_LIFECYCLE_RANDOM_FAILURE;
+    const WarshipFleetStatus status =
+        warship_fleet_generate(&replacement, human_rng, human_context);
+    if (status != WARSHIP_FLEET_OK) return from_fleet(status);
     game->human = replacement;
     return WARSHIP_LIFECYCLE_OK;
 }
@@ -222,8 +231,9 @@ WarshipLifecycleStatus warship_lifecycle_replay(
     /* Keep human deployment, but independently regenerate CPU placement,
      * even if its random outcome happens to coincide with the old one. */
     WarshipFleet captain;
-    if (warship_fleet_generate(&captain, captain_rng, captain_context) !=
-        WARSHIP_FLEET_OK) return WARSHIP_LIFECYCLE_RANDOM_FAILURE;
+    const WarshipFleetStatus status =
+        warship_fleet_generate(&captain, captain_rng, captain_context);
+    if (status != WARSHIP_FLEET_OK) return from_fleet(status);
     game->captain = captain;
     memset(&game->solo, 0, sizeof game->solo);
     game->verdict = WARSHIP_BATTLE_CONTINUE;
