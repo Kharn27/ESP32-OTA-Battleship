@@ -1,0 +1,26 @@
+name: G02 pixel equality regression (one-shot)
+on:
+  push:
+    branches:
+      - design/issue-30-navires-flotte
+    paths:
+      - '.github/workflows/g02-pixel-equality-recheck.yml'
+      - 'design/issue-30-navires-flotte/export_previews.py'
+permissions:
+  contents: read
+jobs:
+  exact-rgba-equality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned raster tooling
+        run: python -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
+      - name: Validate actual SVG placements
+        run: python design/issue-30-navires-flotte/validate_fleet.py
+      - name: Verify exact RGBA and negative RGB mutation
+        run: python design/issue-30-navires-flotte/export_previews.py
+      - name: Confirm canonical PNG still unchanged
+        run: git diff --exit-code -- design/issue-30-navires-flotte/*.png
