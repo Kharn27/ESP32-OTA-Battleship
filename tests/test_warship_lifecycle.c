@@ -468,6 +468,17 @@ static unsigned ending(unsigned mode, unsigned draw_at,
                WARSHIP_LIFECYCLE_REVEAL_DENIED);
         }
         completed = n + 1u;
+        if (mode == 0u) {
+            /* ACCUEIL after RESULT does not count a second result
+             * or a voluntary forfeit; private placements are wiped. */
+            OK(warship_lifecycle_leave_result(&g));
+            get(&g, &pub);
+            EQ(pub.phase, WARSHIP_LIFECYCLE_HOME);
+            EQ(pub.has_human_fleet, 0u);
+            EQ(pub.has_battle, 0u);
+            EQ(pub.can_reveal_captain, 0u);
+            break;
+        }
         const WarshipFleet human = g.human, previous_cpu = g.captain;
         FleetRng wrong = other_right_rng();
         wrong.fail_at = 2u;
@@ -487,6 +498,15 @@ static unsigned ending(unsigned mode, unsigned draw_at,
         EQ(pub.reveal_requested, 0u);
         EQ(pub.reveal_visible, 0u);
         EQ(pub.can_reveal_captain, 0u);
+        if (mode == 1u) {
+            /* REJOUER -> DEPLOY -> ACCUEIL before PRÊT: no
+             * new game and no new forfeit event. */
+            OK(warship_lifecycle_leave_deploy(&g));
+            get(&g, &pub);
+            EQ(pub.phase, WARSHIP_LIFECYCLE_HOME);
+            EQ(pub.has_battle, 0u);
+            break;
+        }
         OK(warship_lifecycle_ready(&g));
         get(&g, &pub);
         EQ(pub.battle.history.outgoing_count, 0u);
@@ -500,6 +520,48 @@ static unsigned ending(unsigned mode, unsigned draw_at,
     }
     CHECK(completed != 0u);
     return completed;
+}
+
+static void no_cheat_lifecycle(void)
+{
+    WarshipLifecycle a = initial(), b = initial();
+    FleetRng ha = left_rng(), hb = other_right_rng();
+    FleetRng ca = right_rng(), cb = right_rng();
+    OK(warship_lifecycle_start(&a, fleet_random, &ha,
+                                fleet_random, &ca));
+    OK(warship_lifecycle_start(&b, fleet_random, &hb,
+                                fleet_random, &cb));
+    CHECK(memcmp(&a.human, &b.human, sizeof a.human) != 0);
+    CHECK(memcmp(&a.captain, &b.captain, sizeof a.captain) == 0);
+    OK(warship_lifecycle_ready(&a));
+    OK(warship_lifecycle_ready(&b));
+    OK(warship_lifecycle_select(&a, 9u, 9u));
+    OK(warship_lifecycle_select(&b, 8u, 8u));
+    WarshipLifecyclePublic pa, pb;
+    get(&a, &pa);
+    get(&b, &pb);
+    CHECK(memcmp(&pa.battle.history, &pb.battle.history,
+                 sizeof pa.battle.history) == 0);
+    CHECK(memcmp(&pa.human, &pb.human, sizeof pa.human) != 0);
+    EQ(pa.can_reveal_captain, 0u);
+    EQ(pb.can_reveal_captain, 0u);
+    CpuRng ra = {0u, 0, 90342u}, rb = ra;
+    WarshipBattlePair shot_a, shot_b;
+    OK(warship_lifecycle_fire(&a, cpu_random, &ra, &shot_a));
+    OK(warship_lifecycle_fire(&b, cpu_random, &rb, &shot_b));
+    EQ(ra.calls, 1u);
+    EQ(rb.calls, 1u);
+    EQ(shot_a.captain.x, shot_b.captain.x);
+    EQ(shot_a.captain.y, shot_b.captain.y);
+    get(&a, &pa); get(&b, &pb);
+    CHECK(memcmp(&pa.battle.history, &pb.battle.history,
+                 sizeof pa.battle.history) == 0);
+    WarshipFleet hidden;
+    memset(&hidden, 0x88, sizeof hidden);
+    WarshipFleet old_hidden = hidden;
+    EQ(warship_lifecycle_copy_revealed_captain(&a, &hidden),
+       WARSHIP_LIFECYCLE_REVEAL_DENIED);
+    CHECK(memcmp(&hidden, &old_hidden, sizeof hidden) == 0);
 }
 
 static void after_result_home(void)
@@ -524,6 +586,7 @@ int main(void)
     deployment_and_errors();
     forfeiture_and_retries();
     after_result_home();
+    no_cheat_lifecycle();
     WarshipBattleShot trace[100] = {{0}};
     EQ(ending(0u, 0u, trace), 17u);
     const unsigned defeat_round = ending(1u, 0u, trace);
