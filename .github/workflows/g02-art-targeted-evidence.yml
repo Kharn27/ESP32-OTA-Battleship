@@ -1,0 +1,81 @@
+name: G02 targeted artistic corrections evidence
+on:
+  push:
+    branches:
+      - design/issue-30-navires-flotte
+    paths:
+      - '.github/workflows/g02-art-targeted-evidence.yml'
+permissions:
+  contents: write
+jobs:
+  validate-targeted-art:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/issue-30-navires-flotte
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned preview dependencies
+        run: python -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
+      - name: Validate fleet SVG occupancy
+        run: python design/issue-30-navires-flotte/validate_fleet.py
+      - name: Export canonical native and NEAREST x4 previews
+        run: python design/issue-30-navires-flotte/export_previews.py
+      - name: Check centered verticals, one salient hit and unchanged unrelated exports
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import xml.etree.ElementTree as ET
+          root=Path("design/issue-30-navires-flotte")
+          ns="{http://www.w3.org/2000/svg}"
+          for name in ("g02_orientations_320x240.svg","g02_orientations_x4.svg"):
+              doc=ET.parse(root/name).getroot()
+              uses={item.attrib["href"][5:]:item.attrib["transform"]
+                    for item in doc.iter(ns+"use")
+                    if item.attrib.get("href","").startswith("#nav-")
+                    and "rotate(-90)" in item.attrib.get("transform","")}
+              assert uses=={
+                "patrouilleur":"translate(71 161) rotate(-90) scale(1)",
+                "porte-avions":"translate(227 215) rotate(-90) scale(1)"}, (name,uses)
+              print("PASS ORIENT",name,uses)
+          with Image.open(root/"g02_etats_320x240.png") as pic:
+              pic=pic.convert("RGBA")
+              def box(x):return pic.crop((x,101,x+72,119)).tobytes()
+              intact=box(19)
+              touche=box(124)
+              coule=box(229)
+              pixels=lambda raw:[raw[i:i+4] for i in range(0,len(raw),4)]
+              lhs=pixels(intact)
+              mid=pixels(touche)
+              end=pixels(coule)
+              changed_touch=[i for i,(a,b) in enumerate(zip(lhs,mid)) if a!=b]
+              changed_coule=[i for i,(a,b) in enumerate(zip(lhs,end)) if a!=b]
+              touched_cells={i%72//18 for i in changed_touch}
+              sunk_cells={i%72//18 for i in changed_coule}
+              assert len(changed_touch)>=40, len(changed_touch)
+              assert touched_cells=={1}, (len(changed_touch),touched_cells)
+              assert sunk_cells=={0,1,2,3},sunk_cells
+              print("PASS IMPACT unique, more salient at native:",len(changed_touch),"changed pixels in cell 2")
+              print("PASS COULE distinct: four visibly changed cells")
+          with Image.open(root/"g02_orientations_320x240.png") as im:
+              assert im.size==(320,240)
+              print("PASS ORIENT PNG native dimensions",im.size)
+          PY
+          git diff --exit-code -- design/issue-30-navires-flotte/g02_grille_320x240.png design/issue-30-navires-flotte/g02_grille_x4.png design/issue-30-navires-flotte/g02_planche_flotte.png
+      - name: Commit only affected canonical PNG previews
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/issue-30-navires-flotte/g02_orientations_320x240.png
+          git add design/issue-30-navires-flotte/g02_orientations_x4.png
+          git add design/issue-30-navires-flotte/g02_etats_320x240.png
+          git add design/issue-30-navires-flotte/g02_etats_x4.png
+          if git diff --cached --quiet; then
+            echo "ERROR: expected two revised native views and x4 files"
+            exit 1
+          fi
+          git commit -m 'design(g02): version corrected canonical orientation and hit PNGs (refs #30)'
+          git push origin HEAD:design/issue-30-navires-flotte
