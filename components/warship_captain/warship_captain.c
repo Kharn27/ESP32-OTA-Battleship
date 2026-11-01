@@ -158,12 +158,92 @@ static int pursue(const WarshipBattlePublic *view,
     return 0;
 }
 
+/* Only CAPTAIN's public SUNK announcements remove ship types. The two
+ * 3-cell ships have different ids and must be accounted for separately.
+ * The smallest remaining length is sufficient for this conservative
+ * geometric exclusion: any larger ship needs at least as long a run.
+ */
+static unsigned shortest_afloat(const WarshipBattlePublic *view)
+{
+    unsigned sunk_ids = 0u;
+    unsigned shortest = GRID + 1u;
+    for (unsigned i = 0u; i < view->outgoing_count; ++i)
+        if (view->outgoing[i].impact == WARSHIP_BATTLE_SUNK)
+            sunk_ids |= 1u << view->outgoing[i].ship_id;
+    for (unsigned id = 0u; id < WARSHIP_FLEET_SHIPS; ++id) {
+        if ((sunk_ids & (1u << id)) != 0u) continue;
+        const unsigned length = warship_fleet_ship_length((uint8_t)id);
+        if (length < shortest) shortest = length;
+    }
+    return shortest; /* GRID+1 when all types are publicly sunk. */
+}
+
+/* Only public MISS and the actual SUNK impact square block a hypothetical
+ * unsunk ship. An old, unassigned HIT is traversable even though already
+ * fired upon; no neighboring squares are excluded (ships may touch).
+ */
+static int passable(unsigned pos, const uint8_t used[BOARD_CELLS],
+                    const uint8_t hit[BOARD_CELLS])
+{
+    return !used[pos] || hit[pos];
+}
+
+/* Can an untried square be part of a straight horizontal OR vertical run
+ * of at least 'length' public-passable squares? False positives are safe:
+ * unknown and ambiguous HIT squares may belong to other ships.
+ * Everything is bounded by a single 10x10 board; no fleet enumeration.
+ */
+static int plausible(unsigned pos, unsigned length,
+                     const uint8_t used[BOARD_CELLS],
+                     const uint8_t hit[BOARD_CELLS])
+{
+    const unsigned x = pos % GRID, y = pos / GRID;
+    unsigned horizontal = 1u, vertical = 1u;
+    for (unsigned col = x; col > 0u; --col) {
+        if (!passable(cell(col - 1u, y), used, hit)) break;
+        ++horizontal;
+    }
+    for (unsigned col = x + 1u; col < GRID; ++col) {
+        if (!passable(cell(col, y), used, hit)) break;
+        ++horizontal;
+    }
+    if (horizontal >= length) return 1;
+    for (unsigned row = y; row > 0u; --row) {
+        if (!passable(cell(x, row - 1u), used, hit)) break;
+        ++vertical;
+    }
+    for (unsigned row = y + 1u; row < GRID; ++row) {
+        if (!passable(cell(x, row), used, hit)) break;
+        ++vertical;
+    }
+    return vertical >= length;
+}
+
 /* Search without a useful HIT: distribute exploration over four 5x5 zones,
  * with a variable checkerboard phase and random tie-breaking. Not a
  * probability enumeration or a fixed sequence common to every game.
  */
-static unsigned explore(const uint8_t used[BOARD_CELLS], uint32_t sample)
+static unsigned explore(const WarshipBattlePublic *view,
+                        const uint8_t used[BOARD_CELLS],
+                        const uint8_t hit[BOARD_CELLS], uint32_t sample)
 {
+    uint8_t candidates[BOARD_CELLS] = {0};
+    unsigned candidate_count = 0u;
+    const unsigned shortest = shortest_afloat(view);
+    for (unsigned i = 0u; i < BOARD_CELLS; ++i) {
+        if (!used[i] && shortest <= GRID &&
+            plausible(i, shortest, used, hit)) {
+            candidates[i] = 1u;
+            ++candidate_count;
+        }
+    }
+    /* Synthetic/contradictory observations can leave no credible run.
+     * Fall back to EVERY untried square, including when all types SUNK.
+     */
+    if (candidate_count == 0u)
+        for (unsigned i = 0u; i < BOARD_CELLS; ++i)
+            if (!used[i]) candidates[i] = 1u;
+
     unsigned activity[4] = {0u, 0u, 0u, 0u};
     unsigned parity = sample & 1u;
     for (unsigned i = 0u; i < BOARD_CELLS; ++i) {
@@ -176,14 +256,14 @@ static unsigned explore(const uint8_t used[BOARD_CELLS], uint32_t sample)
     /* If a checkerboard color is exhausted, use the other. */
     unsigned viable = 0u;
     for (unsigned i = 0u; i < BOARD_CELLS; ++i)
-        if (!used[i] && ((i % GRID + i / GRID) & 1u) == parity)
+        if (candidates[i] && ((i % GRID + i / GRID) & 1u) == parity)
             ++viable;
     if (viable == 0u) parity ^= 1u;
 
     unsigned least = BOARD_CELLS + 1u;
     unsigned count = 0u;
     for (unsigned i = 0u; i < BOARD_CELLS; ++i) {
-        if (used[i] || ((i % GRID + i / GRID) & 1u) != parity)
+        if (!candidates[i] || ((i % GRID + i / GRID) & 1u) != parity)
             continue;
         const unsigned zone = (i % GRID >= GRID / 2u ? 1u : 0u) +
                               (i / GRID >= GRID / 2u ? 2u : 0u);
@@ -193,7 +273,7 @@ static unsigned explore(const uint8_t used[BOARD_CELLS], uint32_t sample)
     /* count > 0: at least one free square was checked by caller. */
     unsigned offset = (sample >> 1u) % count;
     for (unsigned i = 0u; i < BOARD_CELLS; ++i) {
-        if (used[i] || ((i % GRID + i / GRID) & 1u) != parity)
+        if (!candidates[i] || ((i % GRID + i / GRID) & 1u) != parity)
             continue;
         const unsigned zone = (i % GRID >= GRID / 2u ? 1u : 0u) +
                               (i / GRID >= GRID / 2u ? 2u : 0u);
@@ -230,7 +310,7 @@ WarshipCaptainStatus warship_captain_choose(const WarshipBattlePublic *view,
         return WARSHIP_CAPTAIN_RANDOM_FAILURE;
     unsigned chosen = 0u;
     if (!pursue(view, used, hit, sunk_hint, sample, &chosen))
-        chosen = explore(used, sample);
+        chosen = explore(view, used, hit, sample);
     WarshipCaptainTarget target = {(uint8_t)(chosen % GRID),
                                    (uint8_t)(chosen / GRID)};
     *out = target;
