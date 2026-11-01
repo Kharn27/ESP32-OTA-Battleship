@@ -63,6 +63,24 @@ static void two_and_five(uint8_t free_cells[100])
     free_cells[2u * 10u + 3u] = 1u; /* isolated two-square pocket */
     for (unsigned x = 5u; x <= 9u; ++x)
         free_cells[6u * 10u + x] = 1u; /* five-square corridor */
+    /* Isolated decoys make the impossible upper-left quadrant LESS used
+     * than the credible lower-right one. D03 alone would aim there. */
+    free_cells[0u] = 1u;
+    free_cells[4u] = 1u;
+    free_cells[40u] = 1u;
+    free_cells[44u] = 1u;
+}
+static void three_and_five(uint8_t free_cells[100])
+{
+    memset(free_cells, 0, 100u);
+    for (unsigned x = 1u; x <= 3u; ++x)
+        free_cells[2u * 10u + x] = 1u;
+    for (unsigned x = 5u; x <= 9u; ++x)
+        free_cells[6u * 10u + x] = 1u;
+    /* Equal zone activity: sample zero selects the size-3 pocket iff
+     * that distinct size-3 ship has NOT been announced sunk. */
+    free_cells[0u] = 1u;
+    free_cells[44u] = 1u;
 }
 static void test_two_square_exclusion(void)
 {
@@ -71,7 +89,7 @@ static void test_two_square_exclusion(void)
     for (int transpose = 0; transpose < 2; ++transpose) {
         WarshipBattlePublic view;
         layout(&view, free_cells, 1u << WARSHIP_SHIP_PATROL, transpose);
-        assert(view.outgoing_count == 93u);
+        assert(view.outgoing_count == 89u);
         for (uint32_t sample = 0u; sample < 64u; ++sample) {
             const WarshipCaptainTarget target = pick(&view, sample);
             const unsigned x = transpose ? target.y : target.x;
@@ -88,36 +106,42 @@ static void test_distinct_ship_types(void)
     assert(warship_fleet_ship_length(WARSHIP_SHIP_CRUISER) == 4u);
     assert(warship_fleet_ship_length(WARSHIP_SHIP_CARRIER) == 5u);
 
-    uint8_t free_cells[100] = {0};
-    for (unsigned x = 5u; x <= 7u; ++x)
-        free_cells[6u * 10u + x] = 1u;
+    uint8_t free_cells[100];
     WarshipBattlePublic view;
-    /* Patrol and ONE 3-cell ship sunk: other size-3 ship still afloat. */
+    three_and_five(free_cells);
+    /* Sinking only one of the two length-3 IDs must leave the pocket
+     * credible. With this public map and RNG=0 the target is (2,2).
+     * Without filtering, the isolated decoy (0,0) wins instead. */
     layout(&view, free_cells, (1u << WARSHIP_SHIP_PATROL) |
                               (1u << WARSHIP_SHIP_SUBMARINE), 0);
-    for (uint32_t sample = 0u; sample < 32u; ++sample) {
-        const WarshipCaptainTarget t = pick(&view, sample);
-        assert(t.y == 6u && t.x >= 5u && t.x <= 7u);
+    WarshipCaptainTarget t = pick(&view, 0u);
+    assert(t.x == 2u && t.y == 2u);
+    /* Once BOTH 3-cell IDs are sunk, the 3-cell pocket is excluded. */
+    layout(&view, free_cells, (1u << WARSHIP_SHIP_PATROL) |
+                              (1u << WARSHIP_SHIP_SUBMARINE) |
+                              (1u << WARSHIP_SHIP_DESTROYER), 0);
+    for (uint32_t sample = 0u; sample < 64u; ++sample) {
+        t = pick(&view, sample);
+        assert(t.y == 6u && t.x >= 5u && t.x <= 9u);
     }
 
-    /* If the patrol survives, the length-two pocket is credible even when
-     * every larger type is publicly sunk. No overly aggressive pruning. */
-    memset(free_cells, 0, sizeof free_cells);
-    free_cells[2u * 10u + 2u] = 1u;
-    free_cells[2u * 10u + 3u] = 1u;
-    layout(&view, free_cells, 0x1eu, 0);
-    for (uint32_t sample = 0u; sample < 32u; ++sample) {
-        const WarshipCaptainTarget t = pick(&view, sample);
-        assert(t.y == 2u && (t.x == 2u || t.x == 3u));
-    }
-
-    /* Remaining carrier length five: reject three-square pocket. */
+    /* The patrol remains afloat even when all larger ships are sunk.
+     * Two-square pocket must remain selectable, isolated singles excluded. */
     two_and_five(free_cells);
-    /* Add one isolated third square to the pocket without linking corridors. */
-    free_cells[2u * 10u + 4u] = 1u;
+    layout(&view, free_cells, 0x1eu, 0);
+    t = pick(&view, 0u);
+    assert(t.x == 2u && t.y == 2u);
+    for (uint32_t sample = 0u; sample < 64u; ++sample) {
+        t = pick(&view, sample);
+        assert((t.y == 2u && (t.x == 2u || t.x == 3u)) ||
+               (t.y == 6u && t.x >= 5u && t.x <= 9u));
+    }
+
+    /* All 2/3/3/4 publicly SUNK: only length five may guide the filter. */
+    three_and_five(free_cells);
     layout(&view, free_cells, 0x0fu, 0);
     for (uint32_t sample = 0u; sample < 64u; ++sample) {
-        const WarshipCaptainTarget t = pick(&view, sample);
+        t = pick(&view, sample);
         assert(t.y == 6u && t.x >= 5u && t.x <= 9u);
     }
 }
