@@ -238,31 +238,47 @@ def bevel(x,y,w,h,bright=True):
                     r(x+3,y+h-5,w-6,2,shade),
                     r(x,y,w,h,"none",stroke=trim,stroke_width="1")])
 
+def result_inscription(x,y,w,verdict,outcome,*,with_opponent=True,element_id="verdict-information"):
+    """Ink directly onto the sea-HUD: NOT a plate, button, touch target or frame.
+
+    Deliberately no rect/stroke/bevel here. The shared text grammar applies
+    identically to VICTOIRE, DÉFAITE and MATCH NUL, both on-screen and on
+    the reference sheet. Only real actions retain raised copper plaques.
+    """
+    accent={"victory":"#ffd48c","defeat":"#ffc0a4","draw":"#cfdfd2"}[outcome]
+    mid=x+w/2
+    marks=[t(mid,y+10,"RÉSULTAT",7.5,"#b7cdd0",700,"middle"),
+           t(mid,y+25,verdict,11.7,accent,900,"middle")]
+    if with_opponent:
+        marks.append(t(mid,y+34,"VS CAPITAINE",7.0,CREAM,650,"middle"))
+    return g(element_id,"".join(marks),
+             data_ui="information-only",data_interaction="none",
+             data_outcome=outcome)
+
+
 def topbar(verdict="VICTOIRE",outcome="victory"):
     s=[r(0,0,320,42,"#091f31"),r(0,39,320,3,"#996c52"),
        r(0,42,320,3,"#1a5b6b")]
     s.append(t(13,25,"ATTAQUE",12,CREAM,800))
-    s.append(bevel(101,4,103,34,False))
-    s.append(t(152,18,"DÉFENSE",10.5,CREAM,800,"middle"))
-    s.append(t(152,31,"RIPOSTE : RATÉ",7.1,"#aee0cc",600,"middle"))
-    # Identifiable result chip is part of the surrounding copper sea UI.
-    s.append(bevel(208,4,108,34,False))
-    accent={"victory":"#ffd48c","defeat":"#ffc0a4","draw":"#cfdfd2"}[outcome]
-    s.append(r(211,7,3,28,accent))
-    s.append(t(263,20,verdict,10.8,accent,900,"middle"))
-    s.append(t(263,31,"VS CAPITAINE",7.1,CREAM,700,"middle"))
+    s.append(g("commande-defense",bevel(101,4,103,34,False)
+               +t(152,18,"DÉFENSE",10.5,CREAM,800,"middle")
+               +t(152,31,"RIPOSTE : RATÉ",7.1,"#aee0cc",600,"middle"),
+               data_action="consulter-defense",data_ui="tactile-command"))
+    # The result is text painted into the HUD. No border or raised surface:
+    # its interaction grammar cannot be mistaken for neighbouring DÉFENSE.
+    s.append(result_inscription(208,3,108,verdict,outcome))
     return g("barre-resultat-navigation","".join(s))
 
 def actions(defeat=False):
     s=[r(208,139,112,101,"#0a3b4d",opacity=".17")]
     s.append(g("commande-rejouer",bevel(212,146,104,28,True)
-        +t(264,164,"REJOUER",11.6,"#fff0cf",800,"middle"),data_action="retour-deploiement"))
+        +t(264,164,"REJOUER",11.6,"#fff0cf",800,"middle"),data_action="retour-deploiement",data_ui="tactile-command"))
     s.append(g("commande-accueil",bevel(212,180,104,27,False)
-        +t(264,197,"ACCUEIL",11.3,CREAM,800,"middle"),data_action="sortie-sans-forfait"))
+        +t(264,197,"ACCUEIL",11.3,CREAM,800,"middle"),data_action="sortie-sans-forfait",data_ui="tactile-command"))
     if defeat:
         s.append(g("commande-revelation-reserve-g08",bevel(212,212,104,24,False)
             +t(264,227,"VOIR SA FLOTTE",9.1,"#f5dba7",800,"middle"),
-            data_action="demande-volontaire-aucun-revelation-auto"))
+            data_action="demande-volontaire-aucun-revelation-auto",data_ui="tactile-command"))
     else:
         # Empty sea remains actual illustrated sea, not a disabled faux button.
         s.append(g("eau-libre-sans-commande-revelation",
@@ -297,12 +313,14 @@ def states_sheet():
     ss.append(t(198,77,"après les deux",8.9,CREAM,600))
     ss.append(t(198,91,"impacts révélés",8.9,CREAM,600))
     ss.append(t(198,113,"Sans bouton OK",8.5,"#aee0cb",700))
-    # all possible chip messages - not three whole scenes.
+    # Three small variants, *identical* grammar to the on-scene inscription:
+    # no raised bevel, no frame, no button silhouette.
     ss.append(t(8,144,"FORMAT COMPACT PERSISTANT",9.1,CREAM,800))
-    for x,name,color in [(7,"VICTOIRE","#ffd48c"),(111,"DÉFAITE","#ffc0a4"),(215,"MATCH NUL","#cfdfd2")]:
-        ss.append(bevel(x,150,98,27,False))
-        ss.append(r(x+2,153,3,21,color))
-        ss.append(t(x+51,167,name,10.1,color,900,"middle"))
+    ss.append(t(311,144,"NON TACTILE",7.4,"#a4cbd0",700,"end"))
+    for x,name,outcome in [(7,"VICTOIRE","victory"),(111,"DÉFAITE","defeat"),
+                           (215,"MATCH NUL","draw")]:
+        ss.append(result_inscription(x,149,98,name,outcome,with_opponent=False,
+                                    element_id=f"verdict-{outcome}-non-interactif"))
     ss.append(l(8,184,312,184,"#537780",1))
     ss.append(t(8,197,"DÉFAITE SEULEMENT  ·  APRÈS FORMAT COMPACT",8.1,CREAM,800))
     ss.append(bevel(8,205,140,27,False))
@@ -339,7 +357,28 @@ def validate():
     assert "FEU" not in whole and "VOIR SA FLOTTE" not in whole
     assert "REJOUER" in whole and "ACCUEIL" in whole and "DÉFENSE" in whole
     assert "aucun-tir-post-verdict" in whole
+    # Structural affordance tests: informational states contain text only.
+    # All available actions contain the distinct raised copper bevel surface.
+    ns="{http://www.w3.org/2000/svg}"
+    ui_groups=[e for e in root.iter() if e.get("data-ui") is not None]
+    informative=[e for e in ui_groups if e.get("data-ui")=="information-only"]
+    commands=[e for e in ui_groups if e.get("data-ui")=="tactile-command"]
+    assert len(informative)==1 and informative[0].get("data-interaction")=="none"
+    assert len(commands)==3 and all(c.get("data-action") for c in commands)
+    assert len(list(informative[0].iter(ns+"rect")))==0, "Verdict looks like a button"
+    assert len(list(informative[0].iter(ns+"text")))==3
+    assert all(len(list(c.iter(ns+"rect")))>=3 for c in commands)
     variants=(D/"g07_variantes_320x240.svg").read_text(encoding="utf-8")
+    variants_root=ET.fromstring(variants)
+    status_groups=[e for e in variants_root.iter()
+                   if e.get("data-ui")=="information-only"]
+    assert len(status_groups)==3
+    assert {e.get("data-outcome") for e in status_groups}=={"victory","defeat","draw"}
+    for info in status_groups:
+        assert info.get("data-interaction")=="none"
+        assert info.get("data-action") is None
+        assert not list(info.iter(ns+"rect")), "Variant verdict looks like a button"
+    assert "NON TACTILE" in variants
     for phrase in ("VICTOIRE","DÉFAITE","MATCH NUL","VOIR SA FLOTTE","APRÈS FORMAT COMPACT"):
         assert phrase in variants,phrase
     # test the defeat rendering independently without introducing a third full-size file
@@ -347,7 +386,7 @@ def validate():
     assert "VOIR SA FLOTTE" in d and "aucun-revelation-auto" in d
     assert "VOIR SA FLOTTE" not in main("MATCH NUL","draw")
     assert "<svg" in d
-    print("PASS grid=100, hits=17, misses=27, secret=non-revealed, 3 results, post-result actions")
+    print("PASS grid=100, hits=17, misses=27, secret=non-revealed, 3 static verdicts vs raised tactile commands, no FEU")
 
 def run():
     one=main()
