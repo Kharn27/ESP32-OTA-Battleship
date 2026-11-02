@@ -48,6 +48,13 @@ jobs:
                       if 208<=x<317 and 47<=y<222: inside+=1
                       else: outside+=1
           print('PIXEL DIFF: inside-action-panels:',inside,'outside-action-panels:',outside,'bbox:',bbox)
+          import cairosvg
+          raw_png=cairosvg.svg2png(bytestring=svg.encode('utf-8'),output_width=320,output_height=240)
+          raw=Image.open(BytesIO(raw_png)).convert('RGB')
+          candidate=raw.quantize(palette=Image.open(BytesIO(original)),dither=Image.Dither.NONE).convert('RGB')
+          cp=candidate.load()
+          mismatches=sum(pxold[x,y]!=cp[x,y] for y in range(240) for x in range(320) if not (208<=x<317 and 47<=y<222))
+          print('OLD PALETTE CANDIDATE: outside differences:',mismatches)
           print('PASS separators absent, content, 5 original G02 SVG usages, 320x240 checked')
           PY
       - name: Commit PNG exports to draft branch
