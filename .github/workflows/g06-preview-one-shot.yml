@@ -1,0 +1,34 @@
+name: G06 targeted preview verification (ephemeral)
+on:
+  push:
+    branches:
+      - design/issue-47-palmares
+    paths:
+      - .github/workflows/g06-preview-one-shot.yml
+      - design/issue-47-palmares/g06_palmares_320x240.svg
+      - design/issue-47-palmares/g06_zero_partie.svg
+      - design/issue-47-palmares/export_previews.py
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install exact preview render dependencies
+        run: python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==12.3.0'
+      - name: Export and assert five counters and native pixel dimensions
+        run: python3 design/issue-47-palmares/export_previews.py
+      - name: Commit regenerated PNG previews on G06 branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/issue-47-palmares/g06_palmares_320x240.png design/issue-47-palmares/g06_palmares_x4.png design/issue-47-palmares/g06_zero_partie.png
+          if ! git diff --cached --quiet; then
+            git commit -m "design(G06): regenerer apercus natif et x4 depuis le SVG corrige"
+            git push origin HEAD:design/issue-47-palmares
+          else
+            echo "PNGs already match editable SVG sources"
+          fi
