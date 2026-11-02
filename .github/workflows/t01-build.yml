@@ -70,6 +70,7 @@ jobs:
             idf.py build &&
             idf.py size &&
             idf.py size-components &&
+            grep '^CONFIG_ESP_MAIN_TASK_STACK_SIZE=' sdkconfig &&
             sha256sum build/cyd_warship.bin
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
