@@ -140,7 +140,7 @@ def military_ship():
     s.append(r(230,106,69,5,"#223b4a"))
     s.append(r(233,104,21,3,"#415e6b"))
     s.append(r(239,102,7,3,"#7e9390"))
-    s.append(r(226,104,16,2,"#526c75"))
+    s.append(r(213,104,29,2,"#87999c"))
     s.append(r(297,102,7,4,"#506b76"))
     s.append(r(304,104,11,2,"#879c9a"))
     # Bridge stacks, radar mast, chimney and windows.
@@ -185,10 +185,10 @@ def hit_mark(cx,cy,last=False):
     return "".join(s)
 
 def miss_mark(cx,cy):
-    return "".join([r(cx-5,cy+3,10,1,"#8dc6bd"),
-       r(cx-3,cy+1,6,1,"#d6eee0"),r(cx-1,cy-3,2,2,"#cde8df"),
-       r(cx-4,cy-1,2,2,"#8ebfc3"),r(cx+3,cy-2,2,2,"#b6dce0"),
-       r(cx-5,cy+2,2,1,"#b1d5cd"),r(cx+4,cy+2,2,1,"#9fcfc2")])
+    return "".join([r(cx-5,cy+3,9,1,"#83bdb9"),
+       r(cx-2,cy+1,5,1,"#d6eee0"),r(cx+1,cy-5,2,2,"#cde8df"),
+       r(cx+3,cy-2,1,2,"#8ebfc3"),r(cx-4,cy,2,1,"#b6dce0"),
+       r(cx-5,cy+1,2,1,"#b1d5cd"),r(cx+5,cy+3,2,1,"#9fcfc2")])
 
 def battlefield():
     s=[r(20,52,181,181,"#093d50",opacity=".78"),
@@ -241,8 +241,7 @@ def bevel(x,y,w,h,bright=True):
 def topbar(verdict="VICTOIRE",outcome="victory"):
     s=[r(0,0,320,42,"#091f31"),r(0,39,320,3,"#996c52"),
        r(0,42,320,3,"#1a5b6b")]
-    s.extend([l(6,6,93,6,"#71847b"),r(7,10,3,20,"#e0a563"),
-              t(17,25,"ATTAQUE",12,CREAM,800)])
+    s.append(t(13,25,"ATTAQUE",12,CREAM,800))
     s.append(bevel(101,4,103,34,False))
     s.append(t(152,18,"DÉFENSE",10.5,CREAM,800,"middle"))
     s.append(t(152,31,"RIPOSTE : RATÉ",7.1,"#aee0cc",600,"middle"))
