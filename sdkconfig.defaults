@@ -1,0 +1,3 @@
+# T02-B Phase A CI artifact: explicitly boot guided calibration, not D09.
+# Normal Kconfig default remains D09 when this optional defaults file is absent.
+CONFIG_WARSHIP_BOOT_T02_CAL=y
