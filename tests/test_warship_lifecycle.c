@@ -564,6 +564,47 @@ static void no_cheat_lifecycle(void)
     CHECK(memcmp(&hidden, &old_hidden, sizeof hidden) == 0);
 }
 
+/* D09 P1: in-place D07 ready must initialize ALL bytes on success,
+ * preserve exact deployment and pre-existing session on validation failure,
+ * and never allow a second ready or accidental transition to COMBAT.
+ */
+static void ready_init_atomicity(void)
+{
+    WarshipLifecycle a=initial(), b=initial();
+    deployed(&a); deployed(&b);
+    memset(&a.solo,0x17,sizeof a.solo);
+    memset(&b.solo,0xd3,sizeof b.solo);
+    OK(warship_lifecycle_ready(&a));
+    OK(warship_lifecycle_ready(&b));
+    EQ(a.phase,WARSHIP_LIFECYCLE_COMBAT);
+    EQ(b.phase,WARSHIP_LIFECYCLE_COMBAT);
+    same(&a,&b);
+    EQ(warship_battle_phase(&a.solo.battle),WARSHIP_BATTLE_PREPARING);
+    WarshipLifecyclePublic pub;
+    get(&a,&pub);
+    EQ(pub.phase,WARSHIP_LIFECYCLE_COMBAT);
+    EQ(pub.battle.history.outgoing_count,0u);
+    EQ(pub.battle.history.incoming_count,0u);
+    const WarshipLifecycle saved=a;
+    EQ(warship_lifecycle_ready(&a),WARSHIP_LIFECYCLE_BAD_PHASE);
+    same(&a,&saved);
+
+    WarshipLifecycle invalid=initial();
+    deployed(&invalid);
+    memset(&invalid.solo,0xa9,sizeof invalid.solo);
+    invalid.human.ships[0].x=10u;
+    WarshipLifecycle before=invalid;
+    EQ(warship_lifecycle_ready(&invalid),WARSHIP_LIFECYCLE_INTERNAL_ERROR);
+    same(&invalid,&before);
+    invalid=initial();
+    deployed(&invalid);
+    memset(&invalid.solo,0xc5,sizeof invalid.solo);
+    invalid.captain.ships[0].x=10u;
+    before=invalid;
+    EQ(warship_lifecycle_ready(&invalid),WARSHIP_LIFECYCLE_INTERNAL_ERROR);
+    same(&invalid,&before);
+}
+
 static void after_result_home(void)
 {
     WarshipLifecycle g = initial();
@@ -586,6 +627,7 @@ int main(void)
     deployment_and_errors();
     forfeiture_and_retries();
     after_result_home();
+    ready_init_atomicity();
     no_cheat_lifecycle();
     WarshipBattleShot trace[100] = {{0}};
     EQ(ending(0u, 0u, trace), 17u);
