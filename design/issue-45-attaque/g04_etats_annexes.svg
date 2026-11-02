@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="160" viewBox="0 0 720 160" shape-rendering="crispEdges">
+<title>G04 — annotations des états, sans écrans supplémentaires</title>
+<rect x="0" y="0" width="720" height="160" fill="#07354E" stroke="none" stroke-width="1"/>
+<rect x="4" y="5" width="232" height="150" fill="#0A2337" stroke="#AA593D" stroke-width="1"/>
+<rect x="7" y="8" width="226" height="25" fill="#314E60" stroke="none" stroke-width="1"/>
+<rect x="9" y="31" width="222" height="1" fill="#30AFAB" stroke="none" stroke-width="1"/>
+<rect x="244" y="5" width="232" height="150" fill="#0A2337" stroke="#AA593D" stroke-width="1"/>
+<rect x="247" y="8" width="226" height="25" fill="#314E60" stroke="none" stroke-width="1"/>
+<rect x="249" y="31" width="222" height="1" fill="#30AFAB" stroke="none" stroke-width="1"/>
+<rect x="484" y="5" width="232" height="150" fill="#0A2337" stroke="#AA593D" stroke-width="1"/>
+<rect x="487" y="8" width="226" height="25" fill="#314E60" stroke="none" stroke-width="1"/>
+<rect x="489" y="31" width="222" height="1" fill="#30AFAB" stroke="none" stroke-width="1"/>
+<text x="15" y="24" fill="#F8CB72" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="13" font-weight="700" text-anchor="start">01  SANS CIBLE</text>
+<text x="255" y="24" fill="#F8CB72" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="13" font-weight="700" text-anchor="start">02  FEU ENGAGÉ</text>
+<text x="495" y="24" fill="#F8CB72" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="13" font-weight="700" text-anchor="start">03  APRÈS RÉVÉLATION</text>
+<text x="17" y="50" fill="#CDF5DE" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="10" font-weight="400" text-anchor="start">Aucune case sélectionnée</text>
+<rect x="20" y="65" width="201" height="48" fill="#314E60" stroke="#647F86" stroke-width="1"/>
+<text x="121" y="98" fill="#647F86" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="24" font-weight="800" text-anchor="middle">FEU</text>
+<text x="120" y="130" fill="#CDF5DE" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="11" font-weight="700" text-anchor="middle">INDISPONIBLE</text>
+<text x="120" y="145" fill="#647F86" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="9" font-weight="400" text-anchor="middle">Attendre une cible inconnue</text>
+<text x="257" y="50" fill="#CDF5DE" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="10" font-weight="400" text-anchor="start">Pendant le bref effet de tir</text>
+<rect x="260" y="65" width="201" height="48" fill="#314E60" stroke="#647F86" stroke-width="1"/>
+<text x="360" y="85" fill="#CDF5DE" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="13" font-weight="700" text-anchor="middle">FEU VERROUILLÉ</text>
+<text x="360" y="102" fill="#647F86" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="9" font-weight="700" text-anchor="middle">GRILLE / DÉFENSE / SORTIE</text>
+<text x="360" y="130" fill="#F8CB72" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="11" font-weight="700" text-anchor="middle">APPUIS IGNORÉS</text>
+<text x="360" y="145" fill="#647F86" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="9" font-weight="400" text-anchor="middle">Aucun appui différé</text>
+<text x="498" y="50" fill="#CDF5DE" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="10" font-weight="400" text-anchor="start">Deux tirs révélés ensemble</text>
+<rect x="502" y="65" width="202" height="48" fill="#314E60" stroke="#30AFAB" stroke-width="1"/>
+<path d="M519 85l4-5 2 5m-7 2h11" fill="none" stroke="#CDF5DE" stroke-width="2"/>
+<text x="535" y="90" fill="#F6F9D8" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="10" font-weight="700" text-anchor="start">ATTAQUE</text>
+<rect x="604" y="73" width="90" height="27" fill="#612D3C" stroke="#EF684C" stroke-width="1"/>
+<text x="648" y="91" fill="#F6F9D8" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="10" font-weight="700" text-anchor="middle">DÉFENSE</text>
+<text x="604" y="130" fill="#F8CB72" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="10" font-weight="700" text-anchor="start">NAVIGATION LIBRE</text>
+<text x="604" y="145" fill="#647F86" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" font-size="8" font-weight="400" text-anchor="start">Ouverture volontaire</text>
+</svg>
