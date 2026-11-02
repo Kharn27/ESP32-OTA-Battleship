@@ -128,6 +128,134 @@ static void input(void)
        WARSHIP_LIFECYCLE_DEPLOY,&out),WARSHIP_DEPLOY_BAD_ARGUMENT);
     same(&in,&saved,sizeof in); EQ(out,WARSHIP_DEPLOY_RETURN);
 }
+/* Drive the same dispatcher->D07 boundary as the ESP32 adapter. A
+ * spurious READY would mutate game.phase and fail before the memcmp. */
+static WarshipDeployAction touch_game(
+    WarshipDeployInput *in, WarshipLifecycle *game,
+    uint8_t pressed, uint8_t valid, uint16_t x, uint16_t y,
+    uint64_t ms)
+{
+    const WarshipDeployAction action = tick(in, pressed, valid, x, y, ms,
+                                           (uint8_t)game->phase);
+    if (action != WARSHIP_DEPLOY_NO_ACTION)
+        OK(warship_deploy_apply(game, action, NULL, NULL, NULL, NULL));
+    return action;
+}
+static void ready_game(WarshipLifecycle *game)
+{
+    FakeRandom human = {0u, 0u, 0u};
+    FakeRandom captain = {0u, 10u, 0u};
+    EQ(warship_lifecycle_init(game), WARSHIP_LIFECYCLE_OK);
+    OK(warship_deploy_apply(game, WARSHIP_DEPLOY_START,
+                           random_u32, &human, random_u32, &captain));
+    EQ(game->phase, WARSHIP_LIFECYCLE_DEPLOY);
+}
+static void invalid_release_bounce(void)
+{
+    WarshipLifecycle game;
+    ready_game(&game);
+    const WarshipLifecycle before = game;
+    WarshipDeployInput in;
+    const WarshipDeployLayout l = warship_deploy_default_layout();
+    OK(warship_deploy_input_init(&in, &l));
+
+    /* Exact Pilotage B01 reproduction: invalid at 100, UP only 20 ms,
+     * valid new DOWN at 140, then hold 40+ ms over PRET. */
+    EQ(touch_game(&in,&game,1u,0u,270u,119u,100u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(in.first_valid,0u);
+    EQ(in.armed,0u); /* Invalid first sample reserves the gesture. */
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,120u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,140u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,180u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,250u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(in.first_valid,0u); EQ(in.armed,0u);
+    same(&game,&before,sizeof game);
+
+    /* Even 59 ms UP followed by another press is NOT a release. */
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,300u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,359u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(in.armed,0u);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,360u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,400u),WARSHIP_DEPLOY_NO_ACTION);
+    same(&game,&before,sizeof game);
+
+    /* Continuous UP for exactly 60 ms finally arms a NEW gesture. */
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,420u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,479u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(in.armed,0u);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,480u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(in.armed,1u);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,500u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,539u),WARSHIP_DEPLOY_NO_ACTION);
+    same(&game,&before,sizeof game);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,540u),WARSHIP_DEPLOY_READY);
+    EQ(game.phase,WARSHIP_LIFECYCLE_COMBAT);
+    const WarshipLifecycle after_ready = game;
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,800u),WARSHIP_DEPLOY_NO_ACTION);
+    same(&game,&after_ready,sizeof game); /* PRET emitted once, not twice. */
+}
+
+static void invalid_midpress_bounce(void)
+{
+    WarshipLifecycle game;
+    ready_game(&game);
+    const WarshipLifecycle before = game;
+    WarshipDeployInput in;
+    const WarshipDeployLayout l = warship_deploy_default_layout();
+    OK(warship_deploy_input_init(&in, &l));
+
+    /* First point valid; a later SPI or mapping failure BEFORE 40 ms
+     * poisons that gesture. A bounced release cannot clear the latch. */
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,100u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,0u,270u,119u,120u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(in.first_valid,0u);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,139u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,140u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,150u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,190u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,250u),WARSHIP_DEPLOY_NO_ACTION);
+    same(&game,&before,sizeof game);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,260u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,320u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,330u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,370u),WARSHIP_DEPLOY_READY);
+    EQ(game.phase,WARSHIP_LIFECYCLE_COMBAT);
+}
+
+static void valid_short_release_bounce(void)
+{
+    WarshipLifecycle game;
+    ready_game(&game);
+    const WarshipLifecycle before=game;
+    WarshipDeployInput in;
+    const WarshipDeployLayout l=warship_deploy_default_layout();
+    OK(warship_deploy_input_init(&in,&l));
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,100u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,120u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,130u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,170u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,300u),WARSHIP_DEPLOY_NO_ACTION);
+    same(&game,&before,sizeof game);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,310u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,0u,1u,0u,0u,370u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,390u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(touch_game(&in,&game,1u,1u,270u,119u,430u),WARSHIP_DEPLOY_READY);
+    EQ(game.phase,WARSHIP_LIFECYCLE_COMBAT);
+
+    /* Regressive timestamp while PENIRQ is UP must not accidentally
+     * underflow the release time and rearm the dispatcher. */
+    OK(warship_deploy_input_init(&in,&l));
+    EQ(tick(&in,1u,1u,270u,119u,500u,WARSHIP_LIFECYCLE_DEPLOY),
+       WARSHIP_DEPLOY_NO_ACTION);
+    EQ(tick(&in,0u,1u,0u,0u,520u,WARSHIP_LIFECYCLE_DEPLOY),
+       WARSHIP_DEPLOY_NO_ACTION);
+    const WarshipDeployInput saved=in;
+    WarshipDeployAction out=WARSHIP_DEPLOY_RETURN;
+    EQ(warship_deploy_input_step(&in,0u,1u,0u,0u,519u,
+          WARSHIP_LIFECYCLE_DEPLOY,&out),WARSHIP_DEPLOY_BAD_ARGUMENT);
+    same(&in,&saved,sizeof in);
+    EQ(out,WARSHIP_DEPLOY_RETURN);
+}
 static void lifecycle_and_frame(void)
 {
     WarshipLifecycle game;
@@ -254,6 +382,9 @@ int main(void)
 {
     geometry();
     input();
+    invalid_release_bounce();
+    invalid_midpress_bounce();
+    valid_short_release_bounce();
     lifecycle_and_frame();
     printf("D09 PASS sizeof(frame)=%zu sizeof(input)=%zu\n",
            sizeof(WarshipDeployFrame),sizeof(WarshipDeployInput));
