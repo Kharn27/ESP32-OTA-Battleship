@@ -312,6 +312,26 @@ static void tests_corrupt_and_versions(void)
     counts(&destination, 1u, 0u, 0u, 1u, 0u);
 }
 
+static void tests_no_silent_rollback(void)
+{
+    FakeNvs storage = {0};
+    WarshipPalmares p = open_storage(&storage);
+    APPLIED(warship_palmares_apply(&p, 1u,
+            WARSHIP_LIFECYCLE_EVENT_VICTORY));
+    const FakeNvs old_snapshot = storage;
+    APPLIED(warship_palmares_apply(&p, 2u,
+            WARSHIP_LIFECYCLE_EVENT_DRAW));
+    const WarshipPalmares committed = p;
+    storage.exists = 0;
+    STATUS(warship_palmares_reload(&p), WARSHIP_PALMARES_CORRUPT);
+    same(&p, &committed, sizeof p);
+    storage = old_snapshot; /* older, individually valid blob */
+    STATUS(warship_palmares_reload(&p), WARSHIP_PALMARES_CORRUPT);
+    same(&p, &committed, sizeof p);
+    /* The caller must diagnose the erased/rolled-back backend. */
+    /* No destructive reset or recovery policy is assumed by this API. */
+}
+
 static void tests_overflow_and_large_ids(void)
 {
     FakeNvs storage = {0};
@@ -401,6 +421,7 @@ int main(void)
     tests_nominal_and_reboot();
     tests_commit_failures();
     tests_corrupt_and_versions();
+    tests_no_silent_rollback();
     tests_overflow_and_large_ids();
     tests_d07_event_contract();
     printf("D08 PASS snapshot=%u sizeof(ledger)=%zu sizeof(view)=%zu\n",
