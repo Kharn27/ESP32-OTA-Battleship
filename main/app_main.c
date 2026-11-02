@@ -1,5 +1,7 @@
 #include "esp_log.h"
 #include "t02_probe.h"
+#include "d09_probe.h"
+#include "sdkconfig.h"
 #include "warship_core.h"
 #include "warship_fleet.h"
 #include "warship_battle.h"
@@ -47,6 +49,14 @@ void app_main(void)
              (unsigned)warship_palmares_apply(NULL, 0u,
                                               WARSHIP_LIFECYCLE_EVENT_NONE),
              (unsigned)warship_palmares_reload(NULL));
-    ESP_LOGW(TAG, "T02 DIAGNOSTIC PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
+    ESP_LOGW(TAG, "WARSHIP BOOT PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
+#if CONFIG_WARSHIP_BOOT_T02
+    ESP_LOGI(TAG, "BOOT_MODE=T02 legacy diagnostic");
     t02_probe_run();
+#elif CONFIG_WARSHIP_BOOT_D09
+    ESP_LOGI(TAG, "BOOT_MODE=D09 deployment technical probe");
+    d09_probe_run();
+#else
+#error "Select exactly one WARSHIP_BOOT_MODE"
+#endif
 }
