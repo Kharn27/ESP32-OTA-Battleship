@@ -100,8 +100,20 @@ target_link_libraries(warship_palmares_nvs_host_tests PRIVATE
 target_compile_options(warship_palmares_nvs_host_tests PRIVATE
                        -Wall -Wextra -Werror -pedantic)
 
+add_library(warship_deploy_ui STATIC
+            ../components/warship_deploy_ui/warship_deploy_ui.c
+            ../components/warship_deploy_ui/warship_deploy_render.c)
+target_include_directories(warship_deploy_ui PUBLIC
+                           ../components/warship_deploy_ui/include)
+target_link_libraries(warship_deploy_ui PUBLIC warship_lifecycle)
+target_compile_options(warship_deploy_ui PRIVATE -Wall -Wextra -Werror -pedantic)
+
+add_executable(warship_deploy_ui_tests test_warship_deploy_ui.c)
+target_link_libraries(warship_deploy_ui_tests PRIVATE warship_deploy_ui)
+target_compile_options(warship_deploy_ui_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+
 if(WARSHIP_SANITIZERS)
-    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests)
+    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests warship_deploy_ui warship_deploy_ui_tests)
         target_compile_options(${target} PRIVATE -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
         target_link_options(${target} PRIVATE -fsanitize=address,undefined)
     endforeach()
@@ -119,3 +131,4 @@ add_test(NAME warship_solo_session COMMAND warship_solo_tests)
 add_test(NAME warship_lifecycle_session COMMAND warship_lifecycle_tests)
 add_test(NAME warship_palmares_persistence COMMAND warship_palmares_tests)
 add_test(NAME warship_palmares_nvs_adapter COMMAND warship_palmares_nvs_host_tests)
+add_test(NAME warship_deploy_ui_technical COMMAND warship_deploy_ui_tests)
