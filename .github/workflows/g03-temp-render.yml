@@ -1,0 +1,61 @@
+name: G03 temporary pixel rendering
+on:
+  push:
+    branches:
+      - design/issue-37-deploiement
+permissions:
+  contents: write
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install graphic dependencies
+        run: python -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
+      - name: Validate fleet and export PNGs
+        run: python design/issue-37-deploiement/export_previews.py
+      - name: Check separators, placements, bounds, and visual diff
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from io import BytesIO
+          from PIL import Image
+          import subprocess, re
+          p=Path('design/issue-37-deploiement')
+          svg=(p/'g03_deploiement_320x240.svg').read_text()
+          assert not any(re.search(r'<rect x="241" y="'+str(y)+r'" width="1"',svg) for y in (57,115,179))
+          assert all(n in svg for n in ('AUTO','PRÊT','RETOUR','Nouveau placement','Confirmer et jouer',"Revenir à l'accueil"))
+          assert svg.count('<use href="#nav-')==5
+          original=subprocess.check_output(['git','show','d0fbe0571415bcb94e83c560cac093d565339347:design/issue-37-deploiement/g03_deploiement_320x240.png'])
+          old=Image.open(BytesIO(original)).convert('RGB')
+          new=Image.open(p/'g03_deploiement_320x240.png').convert('RGB')
+          assert old.size==new.size==(320,240)
+          pxold,pxnew=old.load(),new.load()
+          outside=inside=0
+          bbox=[320,240,-1,-1]
+          for y in range(240):
+              for x in range(320):
+                  if pxold[x,y]!=pxnew[x,y]:
+                      bbox[0]=min(bbox[0],x);bbox[1]=min(bbox[1],y)
+                      bbox[2]=max(bbox[2],x);bbox[3]=max(bbox[3],y)
+                      if 208<=x<317 and 47<=y<222: inside+=1
+                      else: outside+=1
+          print('PIXEL DIFF: inside-action-panels:',inside,'outside-action-panels:',outside,'bbox:',bbox)
+          print('PASS separators absent, content, 5 original G02 SVG usages, 320x240 checked')
+          PY
+      - name: Commit PNG exports to draft branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/issue-37-deploiement/g03_deploiement_320x240.png design/issue-37-deploiement/g03_deploiement_x4.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'design(G03): actualiser exports 320x240 et NEAREST x4'
+            git push origin HEAD:design/issue-37-deploiement
+          fi
