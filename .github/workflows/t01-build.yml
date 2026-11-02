@@ -48,6 +48,16 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
           git rev-parse HEAD
+      - name: Verify unconditional D09 boot and retired mode selector
+        run: |
+          test ! -e main/Kconfig.projbuild
+          test ! -e main/t02_probe.c
+          test ! -e main/t02_probe.h
+          test ! -e sdkconfig.defaults
+          ! grep -R -q 'CONFIG_WARSHIP_BOOT_' main components
+          grep -Fq 'd09_probe_run();' main/app_main.c
+          grep -Fq '"d09_probe.c"' main/CMakeLists.txt
+          ! grep -Fq '"t02_probe.c"' main/CMakeLists.txt
       - name: Build and static memory report
         uses: espressif/esp-idf-ci-action@v1
         with:
