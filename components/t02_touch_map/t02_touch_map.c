@@ -22,21 +22,49 @@ int t02_map_axis(uint16_t raw, uint16_t zero, uint16_t end,
     return 0;
 }
 
-int t02_map_point(const T02TouchMap *map, uint16_t raw_x, uint16_t raw_y,
-                  uint16_t *x, uint16_t *y)
+static int t02_map_point_internal(const T02TouchMap *map,
+                                  uint16_t raw_x, uint16_t raw_y,
+                                  uint16_t *x, uint16_t *y, int swap)
 {
     if (map == NULL || x == NULL || y == NULL) {
         return -1;
     }
     /* Transactional: an invalid second axis does not mutate either output. */
     uint16_t local_x, local_y;
-    if (t02_map_axis(raw_x, map->x_at_left, map->x_at_right,
+    if (t02_map_axis(swap ? raw_y : raw_x, map->x_at_left, map->x_at_right,
                      map->width, &local_x) != 0 ||
-        t02_map_axis(raw_y, map->y_at_top, map->y_at_bottom,
+        t02_map_axis(swap ? raw_x : raw_y, map->y_at_top, map->y_at_bottom,
                      map->height, &local_y) != 0) {
         return -1;
     }
     *x = local_x;
     *y = local_y;
     return 0;
+}
+
+int t02_map_point(const T02TouchMap *map, uint16_t raw_x, uint16_t raw_y,
+                  uint16_t *x, uint16_t *y)
+{
+    return t02_map_point_internal(map, raw_x, raw_y, x, y, 0);
+}
+
+int t02_map_point_swapped(const T02TouchMap *map,
+                          uint16_t raw_x, uint16_t raw_y,
+                          uint16_t *x, uint16_t *y)
+{
+    return t02_map_point_internal(map, raw_x, raw_y, x, y, 1);
+}
+
+int t02_map_d09_point(uint16_t raw_x, uint16_t raw_y,
+                      uint16_t *x, uint16_t *y)
+{
+    /* Calibration from Issue #21: five targets, three taps each.
+     * Median target residual <= 2 px; does not establish edge ergonomics.
+     */
+    static const T02TouchMap d09 = {
+        .x_at_left = 215u, .x_at_right = 3799u,
+        .y_at_top = 302u, .y_at_bottom = 3865u,
+        .width = 320u, .height = 240u,
+    };
+    return t02_map_point_swapped(&d09, raw_x, raw_y, x, y);
 }
