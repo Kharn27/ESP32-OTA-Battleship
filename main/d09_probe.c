@@ -21,6 +21,14 @@
 #include "freertos/task.h"
 #include "sdkconfig.h"
 
+/* Explicit minimum required by D09 P1; sdkconfig.defaults is only used
+ * when no higher-priority local sdkconfig override exists. Fail a stale
+ * local build rather than quietly ship a 3584-byte main-task stack again.
+ */
+#if CONFIG_ESP_MAIN_TASK_STACK_SIZE < 4096
+#error "D09 needs >=4096 B app_main stack; regenerate sdkconfig (idf.py set-target esp32) or configure main task stack >=4096"
+#endif
+
 static const char *const TAG="D09";
 static WarshipLifecycle game;
 static WarshipLifecyclePublic public_view;
