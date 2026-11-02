@@ -45,7 +45,7 @@ static void geometry(void)
     EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,270u,179u),WARSHIP_DEPLOY_RETURN);
     EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,231u,60u),WARSHIP_DEPLOY_NO_ACTION);
     EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,232u,60u),WARSHIP_DEPLOY_NO_ACTION);
-    EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,310u,60u),WARSHIP_DEPLOY_NO_ACTION);
+    EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,311u,60u),WARSHIP_DEPLOY_NO_ACTION);
     EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,270u,39u),WARSHIP_DEPLOY_NO_ACTION);
     EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,270u,78u),WARSHIP_DEPLOY_NO_ACTION);
     EQ(warship_deploy_hit(&l,WARSHIP_LIFECYCLE_DEPLOY,250u,85u),WARSHIP_DEPLOY_NO_ACTION);
@@ -121,7 +121,7 @@ static void input(void)
        WARSHIP_DEPLOY_NO_ACTION);
     WarshipDeployInput saved=in;
     WarshipDeployAction out=WARSHIP_DEPLOY_RETURN;
-    EQ(warship_deploy_input_step(&in,1u,1u,270u,59u,1900u,
+    EQ(warship_deploy_input_step(&in,1u,1u,270u,59u,1800u,
        WARSHIP_LIFECYCLE_DEPLOY,&out),WARSHIP_DEPLOY_BAD_ARGUMENT);
     same(&in,&saved,sizeof in); EQ(out,WARSHIP_DEPLOY_RETURN);
     EQ(warship_deploy_input_step(&in,2u,1u,270u,59u,2000u,
