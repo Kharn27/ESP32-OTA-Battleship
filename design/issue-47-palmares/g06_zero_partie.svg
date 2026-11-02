@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="252" height="108" viewBox="0 0 252 108" shape-rendering="crispEdges">
+<title>G06 — petite variante zéro partie, sans second écran complet</title>
+<desc>État de stockage vierge : les cinq compteurs affichent 00, sans victoire/partie imaginaire.</desc>
+<rect x="0" y="0" width="252" height="108" fill="#0A2337"/>
+<rect x="2" y="2" width="248" height="104" fill="none" stroke="#AA593D" stroke-width="1"/>
+<rect x="5" y="5" width="242" height="22" fill="#314E60"/>
+<text x="12" y="20" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F8CB72" font-size="10.5" font-weight="700" text-anchor="start">ÉTAT INITIAL — AUCUNE PARTIE</text>
+<rect x="8" y="31" width="236" height="49" fill="#214659"/>
+<rect x="125" y="33" width="1" height="45" fill="#AA593D"/>
+<rect x="10" y="55" width="233" height="1" fill="#AA593D"/>
+<text x="14" y="44" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F6F9D8" font-size="9" font-weight="700" text-anchor="start">PARTIES JOUÉES</text>
+<text x="111" y="44" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F8CB72" font-size="12" font-weight="800" text-anchor="end">00</text>
+<text x="132" y="44" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F6F9D8" font-size="9" font-weight="700" text-anchor="start">VICTOIRES</text>
+<text x="229" y="44" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F8CB72" font-size="12" font-weight="800" text-anchor="end">00</text>
+<text x="14" y="69" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F6F9D8" font-size="9" font-weight="700" text-anchor="start">DÉFAITES</text>
+<text x="111" y="69" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F8CB72" font-size="12" font-weight="800" text-anchor="end">00</text>
+<text x="132" y="69" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F6F9D8" font-size="9" font-weight="700" text-anchor="start">MATCHS NULS</text>
+<text x="229" y="69" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F8CB72" font-size="12" font-weight="800" text-anchor="end">00</text>
+<rect x="8" y="85" width="236" height="16" fill="#612D3C"/>
+<text x="14" y="97" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F6F9D8" font-size="9.3" font-weight="700" text-anchor="start">FORFAITS VOLONTAIRES — GLOBAL</text>
+<text x="234" y="97" font-family="DejaVu Sans Condensed,DejaVu Sans,sans-serif" fill="#F8CB72" font-size="12" font-weight="800" text-anchor="end">00</text>
+</svg>
