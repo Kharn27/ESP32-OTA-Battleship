@@ -39,6 +39,10 @@ Origine visuelle grille `(18,42)`, pas `18×18`, 10 lignes × 10 colonnes ; rep�
 | **RETOUR** `208,167,108,54` | Revenir à **ACCUEIL**, sans forfait tant que PRÊT n'a pas été activé ; également en revanche | Disponible, secondaire | visuel pressé puis retour accueil |
 | Grille `18,42,180,180` | Afficher le placement humain automatiquement préparé ; pas d'entrée de placement manuel | Cinq coques visibles, aucune sélection | rafraîchir entièrement après AUTO, reprise flotte précédente en revanche selon Bible |
 
+**Retouche graphique G03 après revue Pilotage :** les trois filets verticaux internes à x=241 sont supprimés ; aucune barre ne sépare plus pictogramme et texte.  
+**Alignement :** pictogramme sur la partie gauche du bouton, intitulé principal centré vers x=277 sur la rangée haute, sous-libellé complet centré sur la largeur à la rangée basse ; pictogramme AUTO légèrement remonté pour libérer la ligne secondaire.  
+**Lecture native :** les sous-libellés passent à 9 px sur la prévisualisation PC ; leurs détails restent fins à 320×240 et nécessitent l'avis du PO puis l'essai TFT/stylet, sans validation matérielle présumée.
+
 Les rectangles sont des **surfaces visuelles proposées**, pas des coordonnées tactiles définitivement arrêtées. Décalage de zone active, bords de l'écran, taille réelle de la pointe du stylet et tolérances doivent être éprouvés après T02-B / S02. Le libellé **RETOUR** et les emprises doivent être soumis au PO/Pilotage ; ce document **ne les valide pas**.
 
 Aucune commande rotation, déplacement, glisser-déposer ou autre adversaire. **AUTO ne commence jamais la partie** ; PRÊT la commence. Il n'existe pas de choix intermédiaire de Capitaine. Cette maquette d'état « prête à confirmer » n'est ni une capture firmware, ni une spécification de séquencement événementiel.
