@@ -10,23 +10,23 @@
 <path d="M230 150h17m44-1h23m-73 4h22m28 0h18" fill="none" stroke="#30AFAB" stroke-width="2" opacity=".52"/>
 <!-- Coque profilée de destroyer, proue pointée vers le soleil à droite. -->
 <path d="M232 130h68l14-4-7 11-12 10h-44l-13-6z" fill="#081C30"/>
-<path d="M236 133h68l5-3-8 10-8 5h-42l-12-6z" fill="#384252"/>
-<path d="M242 136h62l-8 7h-43l-9-3z" fill="#784B48"/>
+<path d="M236 133h68l5-3-8 10-8 5h-42l-12-6z" fill="#394A5A"/>
+<path d="M242 136h62l-8 7h-43l-9-3z" fill="#52616B"/>
 <path d="M250 143h45l-4 2h-37z" fill="#152F40"/>
-<path d="M237 132h66l8-4-4 5-10 2h-59z" fill="#B26B4F"/>
-<path d="M266 136h32l-4 2h-27z" fill="#D68D58" opacity=".75"/>
+<path d="M237 132h66l8-4-4 5-10 2h-59z" fill="#AD8A72"/>
+<path d="M266 136h32l-4 2h-27z" fill="#B5A18A" opacity=".75"/>
 <!-- Pont, plages de tir et tourelles dotées de canons horizontaux. -->
 <rect x="239" y="126" width="63" height="4" fill="#081C30"/>
 <rect x="240" y="125" width="60" height="2" fill="#576573"/>
 <path d="M241 124h15v3h-15z" fill="#24384B"/>
 <rect x="244" y="122" width="9" height="3" fill="#081C30"/>
 <path d="M245 122h7l2-2h-7z" fill="#AA593D"/>
-<rect x="235" y="122" width="11" height="1" fill="#081C30"/>
-<rect x="236" y="124" width="9" height="1" fill="#081C30"/>
+<rect x="232" y="121" width="14" height="2" fill="#081C30"/>
+<rect x="233" y="124" width="13" height="1" fill="#081C30"/>
 <path d="M290 124h14v3h-14z" fill="#081C30"/>
-<path d="M292 122h9l3 2h-12z" fill="#A45D47"/>
-<rect x="300" y="122" width="12" height="1" fill="#081C30"/>
-<rect x="301" y="124" width="10" height="1" fill="#081C30"/>
+<path d="M290 121h11l4 3h-15z" fill="#B88E70"/>
+<rect x="300" y="121" width="16" height="2" fill="#081C30"/>
+<rect x="301" y="124" width="14" height="1" fill="#081C30"/>
 <!-- Superstructure à étages, passerelle vitrée, mâts et cheminée. -->
 <rect x="255" y="120" width="36" height="6" fill="#081C30"/>
 <path d="M258 118h28v5h-28z" fill="#4F5964"/>
@@ -49,7 +49,7 @@
 <rect x="284" y="108" width="5" height="1" fill="#E4A769"/>
 <rect x="261" y="125" width="2" height="3" fill="#E99453"/>
 <rect x="276" y="124" width="8" height="1" fill="#F8CB72"/>
-<!-- Hublots en bande sur le flanc éclairé, pas de symboles flottants. -->
+<!-- Détails de structure au même plan que la coque, pas de symboles flottants. -->
 <rect x="254" y="136" width="3" height="2" fill="#081C30"/>
 <rect x="264" y="136" width="3" height="2" fill="#081C30"/>
 <rect x="274" y="136" width="3" height="2" fill="#081C30"/>
