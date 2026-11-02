@@ -11,6 +11,7 @@
 #include "t02_probe.h"
 #include "t02_touch_map.h"
 #include "warship_lcd.h"
+#include "warship_touch.h"
 
 #include <inttypes.h>
 #include <stdbool.h>
@@ -18,7 +19,6 @@
 #include <stdint.h>
 
 #include "driver/gpio.h"
-#include "driver/spi_master.h"
 #include "esp_chip_info.h"
 #include "esp_err.h"
 #include "esp_flash.h"
@@ -33,28 +33,15 @@
 #define LCD_TILE_ROWS WARSHIP_LCD_BAND_ROWS
 #define LCD_DMA_BYTES WARSHIP_LCD_DMA_BYTES
 
-/* Candidate CYD XPT2046 wire mapping, not established by PENIRQ test.
- * SPI3 is physically separate from the LCD SPI2 bus.
- */
-#define TOUCH_BUS SPI3_HOST
-#define TOUCH_PIN_MOSI GPIO_NUM_32
-#define TOUCH_PIN_MISO GPIO_NUM_39
-#define TOUCH_PIN_SCLK GPIO_NUM_25
-#define TOUCH_PIN_CS GPIO_NUM_33
 #define TOUCH_PIN_IRQ GPIO_NUM_36
-#define TOUCH_CLOCK_HZ 1000000
-
 static const char *TAG = "T02";
-static spi_device_handle_t touch_dev;
 static uint32_t samples_ok, samples_invalid;
 
-/* Do NOT mistake the bounds below for calibration. They encode a linear
- * diagnostic display of the 12-bit ADC range, without confirmed orientation.
- */
+/* Uncalibrated diagnostic full ADC range, unchanged by D09. */
 static const T02TouchMap diagnostic_map = {
-    .x_at_left = 0u, .x_at_right = 4095u,
-    .y_at_top = 0u, .y_at_bottom = 4095u,
-    .width = LCD_W, .height = LCD_H,
+    .x_at_left=0u, .x_at_right=4095u,
+    .y_at_top=0u, .y_at_bottom=4095u,
+    .width=LCD_W, .height=LCD_H,
 };
 
 static void snapshot(const char *phase)
@@ -127,91 +114,25 @@ static esp_err_t draw_rect(int x, int y, int width, int height,
     return ESP_OK;
 }
 
-/* Dedicated SPI3 and CS33; NOT the LCD SPI2 bus. */
-static esp_err_t touch_init(void)
-{
-    const gpio_config_t irq = {
-        .pin_bit_mask = 1ULL << TOUCH_PIN_IRQ,
-        .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE, /* GPIO36 input-only, no pulls. */
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    esp_err_t err = gpio_config(&irq);
-    if (err != ESP_OK) return err;
-    spi_bus_config_t bus = {
-        .mosi_io_num = TOUCH_PIN_MOSI,
-        .miso_io_num = TOUCH_PIN_MISO,
-        .sclk_io_num = TOUCH_PIN_SCLK,
-        .quadwp_io_num = -1,
-        .quadhd_io_num = -1,
-        .max_transfer_sz = 3,
-    };
-    err = spi_bus_initialize(TOUCH_BUS, &bus, SPI_DMA_DISABLED);
-    if (err != ESP_OK) return err;
-    spi_device_interface_config_t device = {
-        .clock_speed_hz = TOUCH_CLOCK_HZ,
-        .mode = 0,
-        .spics_io_num = TOUCH_PIN_CS,
-        .queue_size = 1,
-    };
-    err = spi_bus_add_device(TOUCH_BUS, &device, &touch_dev);
-    ESP_LOGW(TAG, "TOUCH_SPI_CANDIDATE bus=SPI3 MOSI=32 MISO=39 SCLK=25 CS=33 IRQ=36 clock=%d raw_xy_not_verified=1 err=%s",
-             TOUCH_CLOCK_HZ, esp_err_to_name(err));
-    return err;
-}
-
-static esp_err_t xpt_read(uint8_t command, uint16_t *out)
-{
-    if (touch_dev == NULL || out == NULL) return ESP_ERR_INVALID_STATE;
-    spi_transaction_t tx = {
-        .length = 24,
-        .flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
-    };
-    tx.tx_data[0] = command;
-    tx.tx_data[1] = 0;
-    tx.tx_data[2] = 0;
-    esp_err_t err = spi_device_transmit(touch_dev, &tx);
-    if (err != ESP_OK) return err;
-    const uint16_t packed = ((uint16_t)tx.rx_data[1] << 8) | tx.rx_data[2];
-    *out = (packed >> 3) & 0x0fffu;
-    return ESP_OK;
-}
-
-static uint16_t median3(uint16_t a, uint16_t b, uint16_t c)
-{
-    if (a > b) { uint16_t t = a; a = b; b = t; }
-    if (b > c) { uint16_t t = b; b = c; c = t; }
-    if (a > b) { uint16_t t = a; a = b; b = t; }
-    return b;
-}
-
 static void touch_sample(void)
 {
-    uint16_t xs[3], ys[3];
-    /* XPT2046 command 0xD0 X; 0x90 Y (12-bit single-ended), PD=00
-     * returns low power/IRQ mode after every transaction. Not a
-     * pressure measurement; PENIRQ controls whether we request ADC data.
-     */
-    for (unsigned i = 0; i < 3u; ++i) {
-        if (xpt_read(0xd0u, &xs[i]) != ESP_OK ||
-            xpt_read(0x90u, &ys[i]) != ESP_OK) {
-            ++samples_invalid;
-            ESP_LOGE(TAG, "TOUCH_SPI_ERROR sample=%u", i);
-            return;
-        }
+    WarshipTouchSample s;
+    const esp_err_t err=warship_touch_sample(&s);
+    if (err!=ESP_OK) {
+        ++samples_invalid;
+        ESP_LOGE(TAG, "TOUCH_SPI_ERROR err=%s", esp_err_to_name(err));
+        return;
     }
-    const uint16_t rx = median3(xs[0], xs[1], xs[2]);
-    const uint16_t ry = median3(ys[0], ys[1], ys[2]);
-    uint16_t px = 0, py = 0;
-    const int mapped = t02_map_point(&diagnostic_map, rx, ry, &px, &py);
-    const bool saturating = rx == 0u || ry == 0u || rx == 4095u || ry == 4095u;
+    uint16_t px=0u,py=0u;
+    const int mapped=t02_map_point(&diagnostic_map,s.x,s.y,&px,&py);
+    const bool saturated=s.x==0u || s.y==0u ||
+                         s.x==4095u || s.y==4095u;
     ++samples_ok;
-    ESP_LOGI(TAG, "TOUCH_RAW sample=%u penirq=LOW x=%u y=%u x_triplet=%u,%u,%u y_triplet=%u,%u,%u logical_provisional=%u,%u mapped=%d saturation=%u",
-             (unsigned)samples_ok, (unsigned)rx, (unsigned)ry,
-             (unsigned)xs[0], (unsigned)xs[1], (unsigned)xs[2],
-             (unsigned)ys[0], (unsigned)ys[1], (unsigned)ys[2],
-             (unsigned)px, (unsigned)py, mapped, (unsigned)saturating);
+    ESP_LOGI(TAG,"TOUCH_RAW sample=%u penirq=LOW x=%u y=%u x_triplet=%u,%u,%u y_triplet=%u,%u,%u logical_provisional=%u,%u mapped=%d saturation=%u",
+             (unsigned)samples_ok,(unsigned)s.x,(unsigned)s.y,
+             (unsigned)s.xs[0],(unsigned)s.xs[1],(unsigned)s.xs[2],
+             (unsigned)s.ys[0],(unsigned)s.ys[1],(unsigned)s.ys[2],
+             (unsigned)px,(unsigned)py,mapped,(unsigned)saturated);
 }
 
 void t02_probe_run(void)
@@ -252,7 +173,7 @@ void t02_probe_run(void)
         return;
     }
     snapshot("screen_visible");
-    const bool have_touch = touch_init() == ESP_OK;
+    const bool have_touch = warship_touch_init() == ESP_OK;
     snapshot(have_touch ? "touch_initialized" : "touch_init_fail");
     unsigned phase = 0u;
     int64_t last_draw = esp_timer_get_time();
@@ -263,7 +184,7 @@ void t02_probe_run(void)
     for (;;) {
         const int64_t now = esp_timer_get_time();
         if (have_touch) {
-            const bool pressed = gpio_get_level(TOUCH_PIN_IRQ) == 0;
+            const bool pressed = warship_touch_pressed();
             if (pressed) {
                 if (press_confirm < 3u) ++press_confirm;
             } else {
