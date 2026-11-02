@@ -24,19 +24,23 @@ WarshipBattleStatus warship_battle_init(WarshipBattle *battle,
                                         const WarshipFleet *human,
                                         const WarshipFleet *captain)
 {
-    WarshipBattle state;
     if (battle == NULL || human == NULL || captain == NULL)
         return WARSHIP_BATTLE_BAD_ARGUMENT;
+    /* Caller contract: both fleet pointers are disjoint from destination.
+     * Validate ALL fallible inputs before the first write. After validation
+     * the remaining operations cannot fail, so a second full WarshipBattle
+     * on the already-constrained Xtensa stack is unnecessary. Failure still
+     * preserves every byte of *battle.
+     */
     if (warship_fleet_validate(human) != WARSHIP_FLEET_OK ||
         warship_fleet_validate(captain) != WARSHIP_FLEET_OK)
         return WARSHIP_BATTLE_BAD_FLEET;
-    memset(&state, 0, sizeof state);
-    state.fleets[WARSHIP_BATTLE_HUMAN] = *human;
-    state.fleets[WARSHIP_BATTLE_CAPTAIN] = *captain;
-    state.phase = WARSHIP_BATTLE_PREPARING;
-    state.verdict = WARSHIP_BATTLE_CONTINUE;
-    state.magic = BATTLE_MAGIC;
-    *battle = state;
+    memset(battle, 0, sizeof *battle);
+    battle->fleets[WARSHIP_BATTLE_HUMAN] = *human;
+    battle->fleets[WARSHIP_BATTLE_CAPTAIN] = *captain;
+    battle->phase = WARSHIP_BATTLE_PREPARING;
+    battle->verdict = WARSHIP_BATTLE_CONTINUE;
+    battle->magic = BATTLE_MAGIC;
     return WARSHIP_BATTLE_OK;
 }
 
