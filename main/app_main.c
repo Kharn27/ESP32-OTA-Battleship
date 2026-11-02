@@ -6,6 +6,8 @@
 #include "warship_captain.h"
 #include "warship_solo.h"
 #include "warship_lifecycle.h"
+#include "warship_palmares.h"
+#include "warship_palmares_nvs.h"
 
 static const char *const TAG = "CYD_WARSHIP";
 
@@ -32,6 +34,19 @@ void app_main(void)
     /* D07 link-only proof; no game is initialized or played on T02. */
     ESP_LOGI(TAG, "D07 lifecycle linked: null init rejected=%u",
              (unsigned)warship_lifecycle_init(NULL));
+    /* D08 link-only: adapter is present, but NO NVS read/write/init on
+     * this diagnostic boot. Physical persistence needs its own protocol. */
+    const WarshipPalmaresBackend storage = warship_palmares_nvs_backend();
+    ESP_LOGI(TAG, "D08 NVS backend linked: %u",
+             (unsigned)(storage.load != NULL && storage.store != NULL));
+    /* Link all C99 ledger entry points without any storage operation:
+     * NULL is rejected before the backend can read/write NVS. */
+    ESP_LOGI(TAG, "D08 core link-only: open=%u read=%u apply=%u reload=%u",
+             (unsigned)warship_palmares_open(NULL, storage, NULL),
+             (unsigned)warship_palmares_read(NULL, NULL),
+             (unsigned)warship_palmares_apply(NULL, 0u,
+                                              WARSHIP_LIFECYCLE_EVENT_NONE),
+             (unsigned)warship_palmares_reload(NULL));
     ESP_LOGW(TAG, "T02 DIAGNOSTIC PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
     t02_probe_run();
 }

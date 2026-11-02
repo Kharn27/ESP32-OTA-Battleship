@@ -73,8 +73,35 @@ add_executable(warship_lifecycle_tests test_warship_lifecycle.c)
 target_link_libraries(warship_lifecycle_tests PRIVATE warship_lifecycle)
 target_compile_options(warship_lifecycle_tests PRIVATE -Wall -Wextra -Werror -pedantic)
 
+add_library(warship_palmares STATIC ../components/warship_palmares/warship_palmares.c)
+target_include_directories(warship_palmares PUBLIC ../components/warship_palmares/include)
+target_link_libraries(warship_palmares PUBLIC warship_lifecycle)
+target_compile_options(warship_palmares PRIVATE -Wall -Wextra -Werror -pedantic)
+
+add_executable(warship_palmares_tests test_warship_palmares.c)
+target_link_libraries(warship_palmares_tests PRIVATE warship_palmares)
+target_compile_options(warship_palmares_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+
+# Compile the actual ESP-IDF NVS adapter against host-test stubs.
+# No ESP-IDF or hardware required; exercises set_blob / commit failures.
+add_library(warship_palmares_nvs_host STATIC
+            ../components/warship_palmares_nvs/warship_palmares_nvs.c)
+target_include_directories(warship_palmares_nvs_host PRIVATE nvs_fake)
+target_include_directories(warship_palmares_nvs_host PUBLIC
+                           ../components/warship_palmares_nvs/include)
+target_link_libraries(warship_palmares_nvs_host PUBLIC warship_palmares)
+target_compile_options(warship_palmares_nvs_host PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+
+add_executable(warship_palmares_nvs_host_tests test_warship_palmares_nvs.c)
+target_include_directories(warship_palmares_nvs_host_tests PRIVATE nvs_fake)
+target_link_libraries(warship_palmares_nvs_host_tests PRIVATE
+                      warship_palmares_nvs_host)
+target_compile_options(warship_palmares_nvs_host_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+
 if(WARSHIP_SANITIZERS)
-    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests)
+    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests)
         target_compile_options(${target} PRIVATE -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
         target_link_options(${target} PRIVATE -fsanitize=address,undefined)
     endforeach()
@@ -90,3 +117,5 @@ add_test(NAME warship_captain_tracks COMMAND warship_captain_tracks_tests)
 add_test(NAME warship_captain_geometry COMMAND warship_captain_geometry_tests)
 add_test(NAME warship_solo_session COMMAND warship_solo_tests)
 add_test(NAME warship_lifecycle_session COMMAND warship_lifecycle_tests)
+add_test(NAME warship_palmares_persistence COMMAND warship_palmares_tests)
+add_test(NAME warship_palmares_nvs_adapter COMMAND warship_palmares_nvs_host_tests)
