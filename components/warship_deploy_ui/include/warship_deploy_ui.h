@@ -65,9 +65,12 @@ WarshipDeployAction warship_deploy_hit(const WarshipDeployLayout *layout,
                                        uint8_t phase, uint16_t x, uint16_t y);
 WarshipDeployStatus warship_deploy_input_init(WarshipDeployInput *input,
                                               const WarshipDeployLayout *layout);
-/* pressed is PENIRQ LOW; valid=0 means SPI/mapping failure and the whole
- * gesture is suppressed, not re-evaluated on subsequent samples.
- * Output NO_ACTION on polling, bounce, hold, and release.
+/* pressed is PENIRQ LOW; valid=0 means SPI/mapping failure and the
+ * WHOLE gesture is suppressed. The first DOWN captures the only candidate
+ * point and disarms immediately; a short release/re-press cannot clear an
+ * invalid sample or create a new gesture. Stable release >=60 ms rearms.
+ * An interrupted DOWN (even initially valid) is not actionable after
+ * bounce. Output NO_ACTION on polling, bounce, hold, and release.
  * Invalid timestamps or pointers do not mutate state/output.
  */
 WarshipDeployStatus warship_deploy_input_step(
