@@ -5,6 +5,7 @@
 #include "warship_battle.h"
 #include "warship_captain.h"
 #include "warship_solo.h"
+#include "warship_lifecycle.h"
 
 static const char *const TAG = "CYD_WARSHIP";
 
@@ -28,6 +29,9 @@ void app_main(void)
     /* D06 link-only smoke; do not begin a game on this T02 hardware probe. */
     ESP_LOGI(TAG, "D06 solo session linked: null init rejected=%u",
              (unsigned)warship_solo_init(NULL, NULL, NULL));
+    /* D07 link-only proof; no game is initialized or played on T02. */
+    ESP_LOGI(TAG, "D07 lifecycle linked: null init rejected=%u",
+             (unsigned)warship_lifecycle_init(NULL));
     ESP_LOGW(TAG, "T02 DIAGNOSTIC PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
     t02_probe_run();
 }
