@@ -41,12 +41,14 @@ for forbidden in ("MOUSSE","AMIRAL","VS HUMAIN","JOUEUR 1","CLASSEMENT","EN LIGN
 groups = {e.get("id"): e for e in main.findall(f".//{SVG_NS}g") if e.get("id")}
 expected_groups = [
     "scene-maritime-originale-g01-ocean-continu",
-    "navire-decoratif-ancre-dans-la-mer",
+    "navire-guerre-illustre-ancre-dans-la-mer",
     "journal-de-bord-stats-capitaine",
     "forfaits-volontaires-globaux-distincts",
     "retour-volontaire-vers-accueil",
 ]
 check(all(g in groups for g in expected_groups), "source must preserve meaningful editable groups")
+check(groups["navire-guerre-illustre-ancre-dans-la-mer"].get("data-scene-role") == "navire-militaire", "military ship narrative identity absent")
+check("navire-decoratif-ancre-dans-la-mer" not in groups, "pleasure sailboat must be replaced")
 stats={}
 for e in main.findall(f".//{SVG_NS}g"):
     key=e.get("data-stat")
@@ -85,6 +87,6 @@ with Image.open(ZOOM) as zoom:
     check(broken.tobytes()!=exact.tobytes(),"negative RGB corruption detection")
 with Image.open(ZERO_PNG) as small:
     check(small.size==(252,108),"small zero state dimensions")
-print("PASS G06: editable SVG 320x240 + five labeled counters + separate GLOBAL + return ACCUEIL")
+print("PASS G06: navy warship scene + 320x240 + five labeled counters + separate GLOBAL + return ACCUEIL")
 print("PASS G06: illustrated fiction 12=7+3+2; forfait=01 excluded from parties/results; zero state 5×00")
 print("PASS G06: exported native 320x240 + exact RGBA NEAREST 1280x960; negative RGB control")
