@@ -9,5 +9,7 @@ menu "CYD WARSHIP boot mode"
         bool "D09 technical deployment UI prototype"
     config WARSHIP_BOOT_T02
         bool "T02 legacy diagnostic probe (RGB / raw XY)"
+    config WARSHIP_BOOT_T02_CAL
+        bool "T02-B guided five-point raw calibration (no game)"
     endchoice
 endmenu
