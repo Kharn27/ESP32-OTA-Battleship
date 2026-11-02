@@ -1,0 +1,13 @@
+menu "CYD WARSHIP boot mode"
+    choice WARSHIP_BOOT_MODE
+        prompt "Boot diagnostic mode"
+        default WARSHIP_BOOT_D09
+        help
+            Exactly one loop owns LCD SPI2 and touch SPI3.
+            D09 is an experimental, uncalibrated deployment UI.
+    config WARSHIP_BOOT_D09
+        bool "D09 technical deployment UI prototype"
+    config WARSHIP_BOOT_T02
+        bool "T02 legacy diagnostic probe (RGB / raw XY)"
+    endchoice
+endmenu
