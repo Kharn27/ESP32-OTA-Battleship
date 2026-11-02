@@ -1,0 +1,33 @@
+name: G07 PO correction preview one-shot
+on:
+  push:
+    branches:
+      - design/issue-53-g07-verdict
+    paths:
+      - '.github/workflows/g07-po-review-preview.yml'
+permissions:
+  contents: write
+jobs:
+  render-and-inspect-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/issue-53-g07-verdict
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deterministic host render deps
+        run: python -m pip install --disable-pip-version-check cairosvg==2.7.1 pillow==11.3.0
+      - name: Generate corrected editable SVGs and test PNGs
+        run: python design/issue-53-g07-verdict/build_g07.py
+      - name: Commit all native and nearest previews
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/issue-53-g07-verdict/g07_*.svg design/issue-53-g07-verdict/g07_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "G07 #53: render corrected non-interactive verdict and x4 graphics"
+            git push origin HEAD:design/issue-53-g07-verdict
+          fi
