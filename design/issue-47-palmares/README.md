@@ -16,7 +16,7 @@
 
 ## Hiérarchie et proposition artistique G01
 
-Une **page de journal de bord naval** paraît fixée au-dessus d'un océan crépusculaire **continu**. Le paysage persiste sur toute la toile : bandes de ciel au couchant, soleil, silhouettes de nuages, reflets aquatiques brisés et une petite embarcation avec sillage ancré dans l'eau. Le matériau du journal évoque une plaque de bord, entre cuivre, bois verni, rivets et encre marine. **Ce n'est ni une copie de l'accueil ni un nouveau thème produit** : reprend le langage chromatique et maritime G01, avec une densité d'information propre à PALMARÈS. L'illustration de bateau est **purement décorative**, n'est pas un navire tactique sélectionnable et ne représente aucun adversaire jouable.
+Une **page de journal de bord naval** paraît fixée au-dessus d'un océan crépusculaire **continu**. Le paysage persiste sur toute la toile : bandes de ciel au couchant, soleil, silhouettes de nuages, reflets aquatiques brisés et un bâtiment militaire de surface en silhouette pixel art, canonnerie, passerelle, cheminée, mât et sillage ancré dans l'eau. Le matériau du journal évoque une plaque de bord, entre cuivre, bois verni, rivets et encre marine. **Ce n'est ni une copie de l'accueil ni un nouveau thème produit** : reprend le langage chromatique et maritime G01, avec une densité d'information propre à PALMARÈS. La silhouette de navire de guerre, éclairée par le soleil à droite et intégrée à la houle, est **purement narrative et décorative**, n'est pas un navire tactique sélectionnable et ne représente aucun adversaire jouable.
 
 La lecture suit : **PALMARÈS** → **VS CAPITAINE** → quatre compteurs → **FORFAITS VOLONTAIRES / GLOBAL** → **ACCUEIL**. Aucune ligne technique superflue, aucun podium/classement, pas de profil ni d'éléments hors LOT 1.
 
@@ -44,7 +44,7 @@ Le cartouche **EXEMPLE** est visible dans l'entête du PNG principal. **Tous les
 | Journal `12,43,204,123` | **Lecture sans interaction** des quatre valeurs VS CAPITAINE | Hiérarchie DA proposée |
 | Plaque `12,173,204,43` | **Lecture sans interaction** du seul compteur global FORFAITS VOLONTAIRES | Séparation métier décidée, forme proposée |
 | Bouton `221,173,94,41` | **ACCUEIL / RETOUR** : retour volontaire à l'écran d'accueil | Navigation décidée par la mission ; implantation et libellés proposés |
-| Océan / embarcation à droite | Décor uniquement, aucune entrée tactile | DA proposée |
+| Océan / navire de guerre à droite | Décor narratif uniquement, aucune entrée tactile | DA proposée |
 
 **Tailles texte de maquette PC :** PALMARÈS 16 px ; VS CAPITAINE 13 px ; valeurs des 4 compteurs 24 px ; valeurs globales 21 px ; intitulés ~9,1–10,6 px ; retour ACCUEIL 13 px ; micro-libellé RETOUR 9 px. La lisibilité sur le **vrai écran 320×240**, contrastes et dimensions réelles de zones au stylet **ne sont pas validés**. Les textes sont rendus en `DejaVu Sans Condensed` du poste hôte, **pas une police firmware approuvée ou fournie**.
 
@@ -52,7 +52,7 @@ Le cartouche **EXEMPLE** est visible dans l'entête du PNG principal. **Tous les
 
 | Règle **DÉCIDÉE / mandatée** | Représentation G06 **PROPOSÉE** |
 | --- | --- |
-| ACCUEIL → PALMARÈS ; retour volontaire vers ACCUEIL | Un bouton fléché **ACCUEIL**, sous-texte « RETOUR », sur l'océan |
+| ACCUEIL → PALMARÈS ; retour volontaire vers ACCUEIL | Un bouton fléché **ACCUEIL**, sous-texte « RETOUR », sur une plaque cuivrée avec flèche de navigation vers la gauche |
 | Afficher uniquement le bilan VS CAPITAINE du LOT 1 | Un journal de bord avec **quatre chiffres à grands caractères** |
 | Un compteur **global** unique pour forfait volontaire confirmé | Plaque cuivre sombre séparée, libellé explicite **GLOBAL**, valeur `01` d'exemple |
 | PARTIES = VICTOIRES + DÉFAITES + MATCHS NULS | Chiffres inventés mais cohérents et signalés « EXEMPLE » |
@@ -61,9 +61,17 @@ Le cartouche **EXEMPLE** est visible dans l'entête du PNG principal. **Tous les
 
 **Hors mission :** changement de règles, firmware C, nouvelles API, pack d'assets individuels, conversion couleur/Flash, catégories V1.0 non jouables, création de nouveaux boutons, remaniement de G01/G02/G03/G04/G05. Le statut G04/G05 n'est **fonctionnel que provisoire**, et leurs directions d'art sont **non approuvées** ; G06 se fonde artistiquement sur G01 et sur le **concept d'accueil PO retenu (PR #8)**.
 
+## Correction artistique ciblée — PR #51 (02/11/2026)
+
+Au retour Pilotage/PO, le voilier de plaisance de la proposition initiale est **remplacé**, à emplacement comparable, par un **bâtiment de guerre** (coque profilée, pont, deux tourelles, canons, passerelle, cheminée et antennes). Les matériaux et reflets chauds du soleil sont conservés ; l'écume rejoint physiquement la ligne de flottaison. Les petites marques évoquant des oiseaux et le faux pictogramme en croix dans l'en-tête sont retirés. Les détails de coque restent justifiés par la matérialité du navire.
+
+**Invariants préservés :** cinq statistiques/valeurs et leur découpage, bloc de forfaits GLOBAL distinct, mention EXEMPLE, bouton cuivre ACCUEIL avec flèche fonctionnelle, vignette zéro, océan continu, perspective crépusculaire. Les ornements en cuivre, textures de plaques et détails navals expressifs ne sont pas retirés par principe.
+
+**Statut après correction :** proposition à contre-revoir sur le nouveau HEAD, **sans** nouvelle validation artistique PO ni preuve sur matériel CYD. G07/G08 **non démarrées**.
+
 ## Provenance et preuve PC
 
-SVG original G06, comprenant les formes, ciel/mer, embarcation, boutons, plaque, lettrage. Aucune image tierce ni reprise de pixels de G04/G05 ; pas de fonte binaire incorporée ; aucun sprite runtime. Les sources de conception éditables restent dans le dossier G06.
+SVG original G06, comprenant les formes, ciel/mer, bâtiment de guerre, boutons, plaque, lettrage. Aucune image tierce ni reprise de pixels de G04/G05 ; pas de fonte binaire incorporée ; aucun sprite runtime. Les sources de conception éditables restent dans le dossier G06.
 
 Depuis la racine du dépôt :
 
