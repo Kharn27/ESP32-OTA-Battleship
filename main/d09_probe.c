@@ -26,13 +26,6 @@ static WarshipLifecyclePublic public_view;
 static WarshipDeployFrame frame;
 static WarshipDeployInput input;
 
-/* TEMPORARY diagnostic map: not a measured or approved calibration. */
-static const T02TouchMap diagnostic_map={
-    .x_at_left=0u,.x_at_right=4095u,
-    .y_at_top=0u,.y_at_bottom=4095u,
-    .width=WARSHIP_LCD_WIDTH,.height=WARSHIP_LCD_HEIGHT,
-};
-
 static int rng_u32(void *ctx,uint32_t *out)
 {
     (void)ctx;
@@ -116,7 +109,7 @@ static esp_err_t draw_for_action(WarshipDeployAction action)
 }
 void d09_probe_run(void)
 {
-    ESP_LOGW(TAG,"BOOT probe=D09 technical only. Touch XY map RAW 0..4095 UNCALIBRATED; NOT G03");
+    ESP_LOGW(TAG,"BOOT probe=D09 technical only; PO calibration issue=21 swap=1 screen_x_raw_y=215..3799 screen_y_raw_x=302..3865 size=320x240; NOT G03");
     memory_log("startup");
     WarshipDeployLayout layout=warship_deploy_default_layout();
     if(warship_deploy_input_init(&input,&layout)!=WARSHIP_DEPLOY_OK ||
@@ -178,7 +171,7 @@ void d09_probe_run(void)
                          esp_err_to_name(spi),(unsigned)sample_errors);
             } else if(raw.x==0u || raw.y==0u ||
                       raw.x==4095u || raw.y==4095u ||
-                      t02_map_point(&diagnostic_map,raw.x,raw.y,
+                      t02_map_d09_point(raw.x,raw.y,
                                     &x,&y)!=0) {
                 valid=0u;
                 ESP_LOGW(TAG,"TOUCH_MAP_REJECT raw=%u,%u",
@@ -186,7 +179,7 @@ void d09_probe_run(void)
             }
         }
         if(down && !prev_down)
-            ESP_LOGI(TAG,"TOUCH_DOWN raw=%u,%u provisional=%u,%u valid=%u triplet_x=%u,%u,%u triplet_y=%u,%u,%u",
+            ESP_LOGI(TAG,"TOUCH_DOWN raw=%u,%u mapped=%u,%u valid=%u triplet_x=%u,%u,%u triplet_y=%u,%u,%u",
                      (unsigned)raw.x,(unsigned)raw.y,(unsigned)x,(unsigned)y,
                      (unsigned)valid,
                      (unsigned)raw.xs[0],(unsigned)raw.xs[1],
