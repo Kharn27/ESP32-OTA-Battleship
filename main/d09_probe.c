@@ -19,6 +19,7 @@
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "sdkconfig.h"
 
 static const char *const TAG="D09";
 static WarshipLifecycle game;
@@ -110,6 +111,10 @@ static esp_err_t draw_for_action(WarshipDeployAction action)
 void d09_probe_run(void)
 {
     ESP_LOGW(TAG,"BOOT probe=D09 technical only; PO calibration issue=21 swap=1 screen_x_raw_y=215..3799 screen_y_raw_x=302..3865 size=320x240; NOT G03");
+    ESP_LOGI(TAG,"STACK_CONFIG main_task_bytes=%u sizeof_solo=%u sizeof_battle=%u; MAIN task watermark is MIN FREE BYTES, not current free stack",
+             (unsigned)CONFIG_ESP_MAIN_TASK_STACK_SIZE,
+             (unsigned)sizeof(WarshipSoloSession),
+             (unsigned)sizeof(WarshipBattle));
     memory_log("startup");
     WarshipDeployLayout layout=warship_deploy_default_layout();
     if(warship_deploy_input_init(&input,&layout)!=WARSHIP_DEPLOY_OK ||
@@ -198,7 +203,7 @@ void d09_probe_run(void)
             const uint8_t was=game.phase;
             const WarshipDeployStatus applied=warship_deploy_apply(
                 &game,action,rng_u32,NULL,rng_u32,NULL);
-            ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u provisional=%u,%u from=%u to=%u result=%u",
+            ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u mapped=%u,%u from=%u to=%u result=%u",
                      (unsigned)action,(unsigned)raw.x,(unsigned)raw.y,
                      (unsigned)x,(unsigned)y,(unsigned)was,
                      (unsigned)game.phase,(unsigned)applied);
