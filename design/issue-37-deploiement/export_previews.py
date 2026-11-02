@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """G03: validate the actual SVG placement and export canonical native/nearest PNGs."""
 from pathlib import Path
+from io import BytesIO
+import subprocess
 import re
 import cairosvg
 from PIL import Image
@@ -42,11 +44,35 @@ assert any(abs(a-c)+abs(b-d)==1 for a,b in placements["sous-marin"] for c,d in p
 assert any(abs(a-c)==1 and abs(b-d)==1 for a,b in placements["patrouilleur"] for c,d in placements["croiseur"])
 assert all(label in svg for label in ("AUTO","PRÊT","RETOUR","VS CAPITAINE","Nouveau placement","Confirmer et jouer","Revenir à l'accueil"))
 cairosvg.svg2png(bytestring=svg.encode("utf-8"),write_to=str(NATIVE),output_width=320,output_height=240)
-with Image.open(NATIVE) as raw:
-    assert raw.size==(320,240)
-    pal=raw.convert("RGB").quantize(colors=256,method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE)
-    pal.save(NATIVE,optimize=True)
-    pal.resize((1280,960),Image.Resampling.NEAREST).save(ZOOM,optimize=True)
+# Surgical G03 art correction: preserve every approved pixel outside the
+# three button surfaces, including the original G02 ships/grid and ocean.
+# Immutable Git baseline is the preview approved for targeted ART correction.
+BASE_REV = "d0fbe0571415bcb94e83c560cac093d565339347"
+BASE_PATH = "design/issue-37-deploiement/g03_deploiement_320x240.png"
+RETOUCHED_AREAS = ((208,47,317,96), (208,104,317,159), (208,167,317,222))
+baseline_bytes = subprocess.check_output(
+    ["git", "show", f"{BASE_REV}:{BASE_PATH}"], cwd=HERE.parent.parent
+)
+with Image.open(BytesIO(baseline_bytes)) as original, Image.open(NATIVE) as raw:
+    assert original.size==raw.size==(320,240)
+    old=original.convert("RGB")
+    # Render the entire SVG, then retain only the three modified button areas.
+    rendered=raw.convert("RGB").quantize(
+        colors=256,method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE
+    ).convert("RGB")
+    for x0,y0,x1,y1 in RETOUCHED_AREAS:
+        old.paste(rendered.crop((x0,y0,x1,y1)),(x0,y0))
+    out=old
+    out.save(NATIVE,optimize=True)
+    out.resize((1280,960),Image.Resampling.NEAREST).save(ZOOM,optimize=True)
+    # Regression guard: all non-button pixels are EXACTLY baseline RGB.
+    baseline=original.convert("RGB")
+    p0,p1=baseline.load(),out.load()
+    assert all(p0[x,y]==p1[x,y] for y in range(240) for x in range(320)
+               if not any(x0<=x<x1 and y0<=y<y1 for x0,y0,x1,y1 in RETOUCHED_AREAS))
+    assert any(p0[x,y]!=p1[x,y] for x0,y0,x1,y1 in RETOUCHED_AREAS
+               for y in range(y0,y1) for x in range(x0,x1))
+    print("PASS pixel-preservation: all 320x240 pixels outside the three buttons identical to original")
 with Image.open(NATIVE) as native,Image.open(ZOOM) as zoom:
     assert zoom.size==(1280,960)
     expected_up=native.convert("RGBA").resize((1280,960),Image.Resampling.NEAREST)
