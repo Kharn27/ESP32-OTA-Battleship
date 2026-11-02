@@ -1,0 +1,37 @@
+name: G08 temporary revised-art previews
+on:
+  push:
+    branches: [design/issue-55-g08-inspection]
+    paths:
+      - '.github/workflows/g08-revision-temp.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render-and-prove:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install 'cairosvg>=2.7,<3' 'pillow>=11,<13'
+      - name: Test source data and export native/nearest PNG + SVG
+        run: |
+          python design/issue-55-g08-inspection/build_g08.py | tee /tmp/g08-revision-proof.txt
+          test -s design/issue-55-g08-inspection/g08_inspection_320x240.png
+          test -s design/issue-55-g08-inspection/g08_inspection_x4.png
+          test -s design/issue-55-g08-inspection/g08_variantes_320x240.png
+          cat design/issue-55-g08-inspection/generation-report.txt
+      - name: Commit updated graphics and evidence on the design branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/issue-55-g08-inspection/
+          if ! git diff --cached --quiet; then
+            git commit -m "design(G08): regenerate revised nautical 320x240 SVG/PNG and QA evidence"
+            git push
+          fi
