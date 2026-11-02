@@ -185,10 +185,10 @@ def hit_mark(cx,cy,last=False):
     return "".join(s)
 
 def miss_mark(cx,cy):
-    return "".join([r(cx-4,cy+4,8,1,"#7fc1b9"),
-       r(cx-3,cy+2,6,1,"#d6eee0"),r(cx-1,cy-4,2,6,"#b6e1df"),
-       r(cx-3,cy-1,2,3,"#86c3cb"),r(cx+2,cy,2,3,"#d1e9dd"),
-       r(cx-5,cy+3,2,1,"#adcecb"),r(cx+4,cy+3,2,1,"#9fcfc2")])
+    return "".join([r(cx-5,cy+3,10,1,"#8dc6bd"),
+       r(cx-3,cy+1,6,1,"#d6eee0"),r(cx-1,cy-3,2,2,"#cde8df"),
+       r(cx-4,cy-1,2,2,"#8ebfc3"),r(cx+3,cy-2,2,2,"#b6dce0"),
+       r(cx-5,cy+2,2,1,"#b1d5cd"),r(cx+4,cy+2,2,1,"#9fcfc2")])
 
 def battlefield():
     s=[r(20,52,181,181,"#093d50",opacity=".78"),
@@ -204,8 +204,8 @@ def battlefield():
             x=21+col*18; y=53+row*18
             cells.append(r(x,y,18,18,"#126578",opacity=".13",data_cell=f"{chr(65+col)}{row+1}"))
             # Fine division, deliberately less contrast than impacts.
-            cells.append(l(x,y,x+18,y,"#4d99a1",.75,opacity=".62"))
-            cells.append(l(x,y,x,y+18,"#4d99a1",.75,opacity=".62"))
+            cells.append(l(x,y,x+18,y,"#5da9a7",1,opacity=".86"))
+            cells.append(l(x,y,x,y+18,"#5da9a7",1,opacity=".86"))
     s.append(g("grille-10x10-100-cases","".join(cells)))
     s.append(l(201,53,201,233,"#b28f69",1))
     s.append(l(21,233,201,233,"#b28f69",1))
