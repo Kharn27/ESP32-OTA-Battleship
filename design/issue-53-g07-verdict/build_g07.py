@@ -340,7 +340,6 @@ def validate():
     assert "FEU" not in whole and "VOIR SA FLOTTE" not in whole
     assert "REJOUER" in whole and "ACCUEIL" in whole and "DÉFENSE" in whole
     assert "aucun-tir-post-verdict" in whole
-    assert "aucun" not in [c for c in []] # quiet placeholder for stable validation
     variants=(D/"g07_variantes_320x240.svg").read_text(encoding="utf-8")
     for phrase in ("VICTOIRE","DÉFAITE","MATCH NUL","VOIR SA FLOTTE","APRÈS FORMAT COMPACT"):
         assert phrase in variants,phrase
