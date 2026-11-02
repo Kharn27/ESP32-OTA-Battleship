@@ -153,6 +153,11 @@ WarshipPalmaresStatus warship_palmares_reload(WarshipPalmares *ledger)
     WarshipPalmares fresh = *ledger;
     const WarshipPalmaresStatus status = load_snapshot(&fresh);
     if (status != WARSHIP_PALMARES_APPLIED) return status;
+    /* A known committed sequence may not silently disappear or rewind.
+     * It could be an erased NVS partition, stale store, or wrong backend;
+     * never accept it as a fresh zero palmares. */
+    if (fresh.last_id < ledger->last_id)
+        return WARSHIP_PALMARES_CORRUPT;
     fresh.uncertain = 0u;
     *ledger = fresh;
     return WARSHIP_PALMARES_APPLIED;
