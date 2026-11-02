@@ -13,19 +13,19 @@ ZOOM = HERE / "g03_deploiement_x4.png"
 svg = SVG.read_text(encoding="utf-8")
 g02 = G02.read_text(encoding="utf-8")
 def definitions(text):
-    m = re.search(r"<defs>[\\s\\S]*?</defs>", text)
+    m = re.search(r"<defs>[\s\S]*?</defs>", text)
     assert m, "missing defs"
     return m.group()
 assert definitions(svg) == definitions(g02), "G02 ship symbols changed"
 assert 'viewBox="0 0 320 240"' in svg
-pattern = r'<use\\s+href="#nav-([\\w-]+)"\\s+data-col="(\\d+)"\\s+data-row="(\\d+)"\\s+data-length="(\\d+)"\\s+data-orient="([HV])"\\s+transform="([^"]+)"/>'
+pattern = r'<use\s+href="#nav-([\w-]+)"\s+data-col="(\d+)"\s+data-row="(\d+)"\s+data-length="(\d+)"\s+data-orient="([HV])"\s+transform="([^"]+)"/>'
 ships = re.findall(pattern, svg)
 expected = {"porte-avions": 5, "sous-marin": 3, "contre-torpilleur": 3, "croiseur": 4, "patrouilleur": 2}
 assert len(ships) == 5 and {name: int(n) for name,_,_,n,_,_ in ships} == expected, ships
 occupied, placements = {}, {}
 for name, sc, sr, sn, orientation, transform in ships:
     col, row, n = map(int, (sc, sr, sn))
-    m = re.fullmatch(r"translate\\((\\d+) (\\d+)\\) (rotate\\(-90\\) )?scale\\(1\\)", transform)
+    m = re.fullmatch(r"translate\((\d+) (\d+)\) (rotate\(-90\) )?scale\(1\)", transform)
     assert m, transform
     x,y = map(int, m.group(1,2))
     assert 0 <= col < 10 and 0 <= row < 10
