@@ -102,3 +102,84 @@ RETOUR/START déjà fonctionnel, ni demander des photos T02.
 
 **Pilotage** est seul responsable de la contre-revue, du verdict et
 de la fusion. L'Issue #43 reste ouverte.
+
+## Dernier ajustement P1 — 1 008 B sur CYD avec pile 3 584 B
+
+**Revue Pilotage #5740664465 / Issue #43 #6583870399 (02/11/2026).**
+Un second essai PO sur **une CYD ESP32 v3.1**, source
+`eaee93ed9460208a1020116cec6275b9d1e7270f`, ESP-IDF v5.5.6,
+`App version: eaee93e`, a confirmé le boot et PRÊT :
+`ACTION id=3 mapped=278,110 from=1 to=2 result=0`,
+`COMBAT NON INTEGRE`, erreurs SPI/LCD/DMA absentes. Le watermark
+`MEM phase=after_action stack_margin_bytes=1008` est resté stable
+en phase running, avec heap8=293432 B, largest8=163840 B.
+**L'empreinte SHA-256 du BIN local flashé n'a pas été fournie** :
+la version source et les logs ne prouvent pas une identité du BIN CI.
+
+Le gain depuis l'ancien prototype (96 → 1008 B, +912 B) valide
+l'efficacité du précédent correctif moteur, mais la marge manque
+le critère d'acceptation de **16 octets**. Aucun crash ou débordement
+n'a été rapporté. Le Pilotage exige un écart confortable, par exemple
+**>=1280 octets** de marge observée, le seuil contractuel restant
+**>=1024 octets**.
+
+### Choix technique borné
+
+Le correctif D02/D07 et la transaction D06 précédents sont **conservés
+à l'identique**. Le présent delta ne touche aucune règle, entrée tactile,
+écran, NVS, ESP-NOW ou partition. Il modifie seulement :
+
+- `sdkconfig.defaults` : **`CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096`**
+  (au lieu des 3584 B observés dans le build précédent). Le fichier
+  contient uniquement ce réglage mémoire. **Aucun sélecteur T02/D09**.
+- `main/d09_probe.c` : **erreur de compilation** si la configuration
+  effectivement prise en compte est inférieure à 4096 B. Cette garde
+  interdit qu'un ancien `sdkconfig` à 3584 B passe inaperçu.
+- `.github/workflows/t01-build.yml` : test du seul défaut mémoire,
+  et vérification **exacte** de `CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096`
+  dans le `sdkconfig` réellement utilisé par ESP-IDF.
+- Présente note de justification et de réception.
+
+**Coût théorique** : +512 B de budget de pile FreeRTOS `app_main`,
+prélevés sur RAM interne/heap de tâche, **sans accroissement attendu
+des sections DRAM/IRAM statiques**. Le coût de heap et le watermark
+doivent être **mesurés**, pas déduits de l'ancien relevé.
+À usage de pile inchangé, la projection serait 1008+512=**1520 B**
+après PRÊT, soit environ 496 B au-dessus du seuil contractuel ; cette
+projection n'est pas une preuve physique.
+
+**Reproductibilité locale :** `sdkconfig.defaults` ne remplace pas
+nécessairement un `sdkconfig` existant où une valeur a été fixée
+manuellement. Pour reconstruire depuis les défauts du projet sur
+ESP-IDF v5.5.6, utiliser `idf.py set-target esp32` (qui sauvegarde
+l'ancien `sdkconfig` en `sdkconfig.old` et régénère la configuration),
+puis `idf.py build`. Vérifier obligatoirement :
+
+```sh
+grep '^CONFIG_ESP_MAIN_TASK_STACK_SIZE=' sdkconfig
+# attendu : CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096
+sha256sum build/cyd_warship.bin
+```
+
+Si un `sdkconfig` local préexistant garde 3584 B, la compilation
+échoue **volontairement**, avec une consigne de régénération. On
+ne modifie pas le partitionnement ni la NVS.
+
+### Mini-test PO après nouvelle contre-revue uniquement
+
+Pas de répétition des autres essais validés. Sur **une seule CYD**,
+nouveau HEAD validé + BIN effectivement flashé **avec SHA-256 propre** :
+
+1. BOOT : `App version`, `BOOT_MODE=D09`,
+   `STACK_CONFIG main_task_bytes=4096`,
+   `MEM phase=ready` ; surveiller erreurs et heap libre.
+2. PRÊT : une seule `ACTION id=3 from=1 to=2 result=0`, affichage
+   `COMBAT NON INTEGRE`, sans régression.
+3. `MEM phase=after_action stack_margin_bytes` et `MEM phase=running` :
+   **critère bloquant >=1024 octets**, viser >=1280 octets comme
+   marge de confort ; relever heap8, largest8, SPI/LCD/DMA fault.
+4. Toute valeur <1024 B interdit la fusion ; aucun succès matériel
+   ne peut être attribué à ce nouveau HEAD avant ce retour.
+
+**Pilotage** décide de l'autorisation matérielle et de la fusion.
+L'Issue #43 reste ouverte.
