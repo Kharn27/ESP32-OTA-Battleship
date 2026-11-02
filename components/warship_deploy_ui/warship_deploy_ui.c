@@ -83,29 +83,39 @@ WarshipDeployStatus warship_deploy_input_step(
 {
     if (in == NULL || out == NULL || pressed > 1u || valid > 1u ||
         !warship_deploy_layout_valid(&in->layout) ||
+        now_ms < in->since_ms ||
         (in->has_action && now_ms < in->last_action_ms) ||
-        (in->raw_down && now_ms < in->since_ms) ||
         (in->has_action && now_ms - in->last_action_ms > UINT64_MAX/2u))
         return WARSHIP_DEPLOY_BAD_ARGUMENT;
     WarshipDeployAction action = WARSHIP_DEPLOY_NO_ACTION;
     if (pressed != in->raw_down) {
         in->raw_down = pressed;
         in->since_ms = now_ms;
-        if (pressed) {
+        if (pressed && in->armed) {
+            /* Reserve the gesture on its FIRST down edge, even when its
+             * first SPI/map sample is invalid. Short release bounce must
+             * not overwrite first_valid or first coordinates. */
+            in->armed = 0u;
+            in->consumed = 0u;
             in->first_x = x;
             in->first_y = y;
             in->first_valid = valid;
+        } else if (!pressed) {
+            /* A release interrupting the original down invalidates its
+             * pending action. A fresh gesture requires 60 ms continuous
+             * release; no short up/down bounce can issue READY. */
+            in->consumed = 1u;
         }
     }
     if (pressed) {
+        /* Once invalid, a gesture stays invalid until stable release. */
         if (!valid) in->first_valid = 0u;
-        if (in->armed && !in->consumed && in->first_valid &&
+        if (!in->armed && !in->consumed && in->first_valid &&
             now_ms - in->since_ms >= 40u &&
             (!in->has_action || now_ms-in->last_action_ms >= 120u)) {
             action = warship_deploy_hit(&in->layout, phase,
                                        in->first_x, in->first_y);
             in->consumed = 1u;
-            in->armed = 0u;
             if (action != WARSHIP_DEPLOY_NO_ACTION) {
                 in->last_action_ms = now_ms;
                 in->has_action = 1u;
@@ -114,6 +124,7 @@ WarshipDeployStatus warship_deploy_input_step(
     } else if (now_ms - in->since_ms >= 60u) {
         in->armed = 1u;
         in->consumed = 0u;
+        in->first_valid = 0u;
     }
     *out = action;
     return WARSHIP_DEPLOY_OK;
