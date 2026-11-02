@@ -17,16 +17,18 @@
 
 Origine visuelle grille `(18,42)`, pas `18×18`, 10 lignes × 10 colonnes ; repères lettres A–J et chiffres 1–10. Paramètres de géométrie **de preview**, non hitboxes.
 
+**Convention des cases visibles :** `lettre de ligne + numéro de colonne`, par exemple `F5`. L'axe vertical porte les lignes `A` à `J` (de haut en bas), l'axe horizontal les colonnes `1` à `10` (de gauche à droite). Dans le SVG, `data-row` et `data-col` commencent à **0** : ligne visible = `A + data-row`, colonne visible = `data-col + 1`. Pour un navire horizontal, incrémenter le **numéro** ; pour un navire vertical, incrémenter la **lettre**.
+
 | Bâtiment | Longueur | Orientation | Cases occupées |
 | --- | ---: | --- | --- |
-| Porte-avions | 5 | H | B2, C2, D2, E2, F2 |
-| Sous-marin | 3 | H | C6, D6, E6 |
-| Contre-torpilleur | 3 | V | F5, F6, F7 |
-| Croiseur | 4 | V | I4, I5, I6, I7 |
-| Patrouilleur | 2 | H | G8, H8 |
+| Porte-avions | 5 | H | B2, B3, B4, B5, B6 |
+| Sous-marin | 3 | H | F3, F4, F5 |
+| Contre-torpilleur | 3 | V | E6, F6, G6 |
+| Croiseur | 4 | V | D9, E9, F9, G9 |
+| Patrouilleur | 2 | H | H7, H8 |
 | **Total** | **17** | H/V | **17 distinctes** |
 
-**Contacts admis :** Sous-marin / Contre-torpilleur par côté `E6 / F6` ; Patrouilleur / Croiseur en diagonale `H8 / I7`. Ni collision, ni sortie de grille. Les contacts sont légaux en LOT 1, sans séparation artificielle ajoutée. Le validateur lit et vérifie les `<use data-*> ` et les transformations **réellement représentées** dans la source.
+**Contacts admis :** Sous-marin / Contre-torpilleur par côté `F5 / F6` ; Patrouilleur / Croiseur en diagonale `H8 / G9`. Ni collision, ni sortie de grille. Les contacts sont légaux en LOT 1, sans séparation artificielle ajoutée. Le validateur lit et vérifie les `<use data-*> ` et les transformations **réellement représentées** dans la source.
 
 ## Actions et mini-passation UI vers D07 #35
 
