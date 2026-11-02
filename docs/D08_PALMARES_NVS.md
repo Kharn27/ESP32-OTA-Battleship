@@ -88,7 +88,7 @@ idf.py size-components
 sha256sum build/cyd_warship.bin
 ```
 
-**Espaces mémoire :** snapshot NVS **44 octets utiles**, un buffer temporaire de 44 octets dans le réducteur et la lecture ; `sizeof(WarshipPalmares)` et `sizeof(WarshipPalmaresView)` sont reportés par les tests hôte. Le coût réel de NVS en Flash/IRAM/DRAM, ses métadonnées/piles, l'overhead par enregistrement et l'endurance ne sont **pas déduits de ces tailles**. Les métriques `idf.py size` sont à relever sur HEAD final dans la PR ; le runtime T02 ne fait qu'un test de **liaison sans lecture/écriture**. Les heap/stacks Xtensa restent **NON TESTÉS** avant intégration. La version ESP-IDF doit rester v5.5.6 comme la CI.
+**Espaces mémoire :** snapshot NVS **44 octets utiles**, un buffer temporaire de 44 octets dans le réducteur et la lecture ; `sizeof(WarshipPalmares)` et `sizeof(WarshipPalmaresView)` sont reportés par les tests hôte. Le coût réel de NVS en Flash/IRAM/DRAM, ses métadonnées/piles, l'overhead par enregistrement et l'endurance ne sont **pas déduits de ces tailles**. Les métriques `idf.py size` sont à relever sur HEAD final dans la PR ; le runtime T02 ne fait que des tests de **liaison avec arguments invalides, sans lecture/écriture**. Les heap/stacks Xtensa restent **NON TESTÉS** avant intégration. La version ESP-IDF doit rester v5.5.6 comme la CI.
 
 ### Protocole matériel ultérieur (à piloter par Pilotage)
 

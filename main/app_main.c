@@ -39,6 +39,14 @@ void app_main(void)
     const WarshipPalmaresBackend storage = warship_palmares_nvs_backend();
     ESP_LOGI(TAG, "D08 NVS backend linked: %u",
              (unsigned)(storage.load != NULL && storage.store != NULL));
+    /* Link all C99 ledger entry points without any storage operation:
+     * NULL is rejected before the backend can read/write NVS. */
+    ESP_LOGI(TAG, "D08 core link-only: open=%u read=%u apply=%u reload=%u",
+             (unsigned)warship_palmares_open(NULL, storage, NULL),
+             (unsigned)warship_palmares_read(NULL, NULL),
+             (unsigned)warship_palmares_apply(NULL, 0u,
+                                              WARSHIP_LIFECYCLE_EVENT_NONE),
+             (unsigned)warship_palmares_reload(NULL));
     ESP_LOGW(TAG, "T02 DIAGNOSTIC PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
     t02_probe_run();
 }
