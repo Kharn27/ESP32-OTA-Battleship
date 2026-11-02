@@ -1,6 +1,7 @@
 #include "esp_log.h"
 #include "t02_probe.h"
 #include "d09_probe.h"
+#include "t02_cal_probe.h"
 #include "sdkconfig.h"
 #include "warship_core.h"
 #include "warship_fleet.h"
@@ -53,6 +54,9 @@ void app_main(void)
 #if CONFIG_WARSHIP_BOOT_T02
     ESP_LOGI(TAG, "BOOT_MODE=T02 legacy diagnostic");
     t02_probe_run();
+#elif CONFIG_WARSHIP_BOOT_T02_CAL
+    ESP_LOGI(TAG, "BOOT_MODE=T02_CAL guided five-point calibration");
+    t02_cal_probe_run();
 #elif CONFIG_WARSHIP_BOOT_D09
     ESP_LOGI(TAG, "BOOT_MODE=D09 deployment technical probe");
     d09_probe_run();
