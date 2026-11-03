@@ -1,7 +1,9 @@
+> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** FIN DE PARTIE G07 (post-verdict compact). [Issue #53](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/53) · [PR #54 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/54). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+
 # G07 — FIN DE PARTIE VS Capitaine — Issue #53
 
 **Graphiste / DA — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
-**Acceptation artistique PO : en attente.** Cette livraison est une maquette PC,
+**Acceptation artistique PO : VALIDÉE pour la maquette PC (PR #54 fusionnée).** Cette livraison est une maquette PC,
 sans preuve matérielle ou contrat d'assets firmware.
 
 ## Fichiers livrés
@@ -116,7 +118,7 @@ reste à **faire juger visuellement par le PO sur PNG natif 320×240**.
 
 Depuis la racine du dépôt, avec Python / CairoSVG / Pillow :
 
-    python design/issue-53-g07-verdict/build_g07.py
+    python design/ecrans/fin-partie/build_g07.py
 
 Le script exporte les deux SVG éditables, deux PNG 320×240,
 deux PNG 1280×960 ; vérifie dimensions, zoom x4
@@ -135,5 +137,5 @@ stylet, qualité des tailles de polices sur dalle, temps de
 rendu, mémoire et intégration firmware. Statut strict
 **DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED**.
 
-**Validation en attente :** acceptation artistique PO sur
+**Validation obtenue :** acceptation artistique PO sur
 maquette PC, revue du HEAD et fusion par Pilotage exclusivement.

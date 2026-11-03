@@ -1,6 +1,8 @@
+> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** DÉPLOIEMENT G03. [Issue #37](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/37) · [PR #41 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/41). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+
 # G03 — DÉPLOIEMENT VS CAPITAINE (Issue #37)
 
-**Responsable :** Graphiste / DA · **Statut :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · **Décision PO sur cet écran :** en attente.  
+**Responsable :** Graphiste / DA · **Statut :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · **Décision PO sur cet écran :** VALIDÉ en maquette PC.  
 **Branche :** `design/issue-37-deploiement` · **Dépendances :** identité [G01 #16](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/16), flotte validée [G02 #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30) / PR #32 fusionnée.  
 **Périmètre :** composition 320×240 PC **uniquement**, sans firmware ni test stylet.
 
@@ -53,7 +55,7 @@ Reproduire depuis la racine du dépôt :
 
 ```sh
 python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
-python3 design/issue-37-deploiement/export_previews.py
+python3 design/ecrans/deploiement/export_previews.py
 ```
 
 Le script vérifie les 5 types/longueurs, 17 cellules uniques, l'absence de débordement/chevauchement, les deux contacts, la transformation des positions et **l'égalité textuelle des cinq définitions G02** avec leur source sur main. Il rasterise le SVG en 320×240 ; pour préserver strictement les graphismes déjà acceptés, il ne transpose **que les pixels des trois boutons** sur le PNG de référence immuable (commit `d0fbe0571415bcb94e83c560cac093d565339347`), puis génère le PNG 1280×960 par `NEAREST` ; égalité RGBA complète contre le zoom attendu et contrôle négatif RGB. **Dépendance de reproduction :** historique Git contenant ce commit (clone Git complet / `fetch-depth: 0`), CairoSVG et Pillow. Le PNG est un export PC, **sans décision** sur la palette ni sur le format embarqué. Le script vérifie que tous les pixels hors boutons sont **strictement identiques** au PNG source de référence.
@@ -64,4 +66,4 @@ Le script vérifie les 5 types/longueurs, 17 cellules uniques, l'absence de déb
 
 **Réception attendue :** Pilotage revoit le HEAD/diff, puis demande l'avis artistique explicite du PO. Fusion **par Pilotage uniquement**. `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`.
 
-Références : [Issue #37](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/37), [D07 #35](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/35), [Bible v0.17](../../BIBLE_PRODUIT.md), [politique de test](../../docs/TEST_POLICY.md), [workflow](../../docs/WORKFLOW_AGENTS.md).
+Références : [Issue #37](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/37), [D07 #35](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/35), [Bible v0.17](../../../BIBLE_PRODUIT.md), [politique de test](../../../docs/TEST_POLICY.md), [workflow](../../../docs/WORKFLOW_AGENTS.md).

@@ -1,3 +1,5 @@
+> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** ACCUEIL (GRAPH-ACC-001). [Issue #8](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/8) · [PR #8 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+
 # GRAPH-ACC-001 — Accueil CYD WARSHIP — remise image PO
 
 **Mission :** première maquette complète de l’accueil CYD WARSHIP, LOT 1.
@@ -24,7 +26,7 @@
 - **ASSET_EXPORT_VERIFIED (PC)** : dimensions 320 × 240 et 1280 × 960 ; réplication x4 testée au niveau des pixels ; PNG RGB décodable ; SVG XML syntaxiquement valide ; fond intégré auto-contenu et vérifié identique à l’image source.
 - **DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED** : aucun build ESP32, aucune mesure Flash/RAM, aucun test tactile ou contrôle physique du rendu CYD. Les tailles fichiers ne démontrent pas la faisabilité Flash.
 - **Écran 320 × 240** ; hypothèses de rectangles tactiles héritées des versions précédentes **invalidées pour cette nouvelle composition**. Il faudra mesurer les deux plaques dans les nouveaux exports avant tout contrat de coordonnées firmware.
-- **Statut PR : DRAFT / NON FUSIONNÉE**. La décision de fusion est réservée au Pilotage, après décision PO.
+- **Statut PR : FUSIONNÉE (#8).** Source d'accueil retenue par le PO, maquette PC uniquement.
 
 ## Histoire du changement
 

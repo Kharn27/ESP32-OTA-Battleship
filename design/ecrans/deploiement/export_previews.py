@@ -9,7 +9,7 @@ from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 SVG = HERE / "g03_deploiement_320x240.svg"
-G02 = HERE.parent / "issue-30-navires-flotte" / "g02_grille_320x240.svg"
+G02 = HERE.parents[1] / "flotte" / "g02_grille_320x240.svg"
 NATIVE = HERE / "g03_deploiement_320x240.png"
 ZOOM = HERE / "g03_deploiement_x4.png"
 svg = SVG.read_text(encoding="utf-8")
@@ -48,7 +48,7 @@ cairosvg.svg2png(bytestring=svg.encode("utf-8"),write_to=str(NATIVE),output_widt
 # three button surfaces, including the original G02 ships/grid and ocean.
 # Immutable Git baseline is the preview approved for targeted ART correction.
 BASE_REV = "d0fbe0571415bcb94e83c560cac093d565339347"
-BASE_PATH = "design/issue-37-deploiement/g03_deploiement_320x240.png"
+BASE_PATH = "design/ecrans/deploiement/g03_deploiement_320x240.png"
 RETOUCHED_AREAS = ((208,47,317,96), (208,104,317,159), (208,167,317,222))
 baseline_bytes = subprocess.check_output(
     ["git", "show", f"{BASE_REV}:{BASE_PATH}"], cwd=HERE.parent.parent

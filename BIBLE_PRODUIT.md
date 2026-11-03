@@ -777,7 +777,7 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **DÉCIDÉ :** le PO a demandé de documenter ces intentions avant de confier au **Pilotage** la coordination de la prochaine maquette avec le graphiste. Le Pilotage garde la responsabilité des missions graphiques, des revues et des fusions.
 
-**PROPOSÉ à la v0.8 / réalisé ensuite pour revue de conception :** une première composition unique, complète, **320 × 240**, avec agrandissement ×4 sans interpolation et source SVG intégrant un fond raster. La maquette retenue est versionnée dans `design/graph-acc-001/` après fusion de la PR #8. Pas de validation matérielle des zones tactiles, d'autres écrans, de sprites runtime ni de développement firmware.
+**PROPOSÉ à la v0.8 / réalisé ensuite pour revue de conception :** une première composition unique, complète, **320 × 240**, avec agrandissement ×4 sans interpolation et source SVG intégrant un fond raster. La maquette retenue est versionnée dans `design/ecrans/accueil/` après fusion de la PR #8. Pas de validation matérielle des zones tactiles, d'autres écrans, de sprites runtime ni de développement firmware.
 
 **À ARBITRER par le PO :** politique générale de conservation des ressources graphiques pour les futurs travaux. Le retrait ponctuel des **17 fichiers historiques**, autorisé le 29 octobre 2026, n'approuve pas automatiquement cette politique et ne vaut autorisation de supprimer aucun asset actif ; la mission d'accueil LOT 1 a été livrée au stade maquette de conception.
 
