@@ -44,7 +44,7 @@ void app_main(void)
              (unsigned)warship_palmares_apply(NULL, 0u,
                                               WARSHIP_LIFECYCLE_EVENT_NONE),
              (unsigned)warship_palmares_reload(NULL));
-    ESP_LOGW(TAG, "WARSHIP D09 TECHNICAL DEPLOYMENT; NOT FULL GAME UI");
+    ESP_LOGW(TAG, "WARSHIP D09 DEPLOYMENT + D10 TECHNICAL COMBAT; NOT PRODUCT UI");
     ESP_LOGI(TAG, "BOOT_MODE=D09 direct boot, no Kconfig selector");
     d09_probe_run();
 }
