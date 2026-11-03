@@ -73,6 +73,10 @@ WarshipDeployStatus warship_deploy_input_init(WarshipDeployInput *input,
  * bounce. Output NO_ACTION on polling, bounce, hold, and release.
  * Invalid timestamps or pointers do not mutate state/output.
  */
+/* On returning from combat/result, require a full 60ms release before
+ * any HOME/DEPLOY control can be activated (no inherited held tap). */
+void warship_deploy_input_discard(WarshipDeployInput *input,
+                                  uint64_t now_ms);
 WarshipDeployStatus warship_deploy_input_step(
     WarshipDeployInput *input, uint8_t pressed, uint8_t valid,
     uint16_t x, uint16_t y, uint64_t now_ms, uint8_t phase,

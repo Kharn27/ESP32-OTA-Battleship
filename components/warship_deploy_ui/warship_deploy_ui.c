@@ -76,6 +76,15 @@ WarshipDeployStatus warship_deploy_input_init(WarshipDeployInput *in,
     in->armed = 1u;
     return WARSHIP_DEPLOY_OK;
 }
+void warship_deploy_input_discard(WarshipDeployInput *in, uint64_t now_ms)
+{
+    if (in == NULL) return;
+    in->raw_down = 1u; /* previous COMBAT/RESULT button still held */
+    in->since_ms = now_ms;
+    in->armed = 0u;
+    in->consumed = 1u;
+    in->first_valid = 0u;
+}
 WarshipDeployStatus warship_deploy_input_step(
     WarshipDeployInput *in, uint8_t pressed, uint8_t valid,
     uint16_t x, uint16_t y, uint64_t now_ms, uint8_t phase,

@@ -93,12 +93,15 @@ static uint16_t button(unsigned x,unsigned y,unsigned rx,unsigned ry,
 uint16_t warship_combat_pixel(const WarshipCombatFrame *f,
                              uint16_t x, uint16_t y)
 {
-    if (f==NULL || x>=320u || y>=240u || f->view>WARSHIP_COMBAT_DEFENSE)
+    if (f==NULL || x>=320u || y>=240u || f->view>WARSHIP_COMBAT_DEFENSE ||
+        (f->phase!=WARSHIP_LIFECYCLE_COMBAT &&
+         f->phase!=WARSHIP_LIFECYCLE_CONFIRM_ABANDON &&
+         f->phase!=WARSHIP_LIFECYCLE_RESULT))
         return 0u;
     if (text_bit(f->view==WARSHIP_COMBAT_ATTACK?"ATTAQUE":"DEFENSE",
                  22u,7u,x,y))
         return 0xffffu;
-    if (text_bit("D10",273u,7u,x,y)) return 0xffe0u;
+    if (text_bit("D12",273u,7u,x,y)) return 0xffe0u;
     for (unsigned i=0u;i<10u;++i) {
         const unsigned cx=22u+i*19u+7u;
         const unsigned cy=24u+i*19u+6u;
@@ -135,23 +138,45 @@ uint16_t warship_combat_pixel(const WarshipCombatFrame *f,
         return (gx+gy)%2u ? 0x1143u : 0x0922u;
     }
 
+    /* D12: temporary navigation labels in existing D10 hitboxes.
+     * No PO-approved graphics/assets and no additional pixel buffer. */
     if (rect(x,y,225u,32u,91u,38u)) {
+        if (f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON)
+            return button(x,y,225u,32u,"CONTINUER",0x0440u);
+        if (f->phase==WARSHIP_LIFECYCLE_RESULT)
+            return button(x,y,225u,32u,"REJOUER",0x0440u);
         const int active=f->view==WARSHIP_COMBAT_ATTACK &&
-                         f->has_selection && !f->busy && !f->terminal;
+                         f->has_selection && !f->busy;
         return button(x,y,225u,32u,f->busy?"TIR...":"FEU",
                       active?0x0400u:0x2104u);
     }
     if (rect(x,y,225u,83u,91u,38u))
         return button(x,y,225u,83u,
-                      f->view==WARSHIP_COMBAT_ATTACK?"DEFENSE":"ATTAQUE",
-                      f->busy?0x2104u:0x0250u);
+            f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON?"BLOQUE":
+            f->view==WARSHIP_COMBAT_ATTACK?"DEFENSE":"ATTAQUE",
+            f->busy || f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON?
+                0x2104u:0x0250u);
     if (rect(x,y,225u,134u,91u,38u)) {
-        const char *label=f->terminal ?
-            (f->verdict==WARSHIP_BATTLE_VICTORY?"VICTOIRE":
-             f->verdict==WARSHIP_BATTLE_DEFEAT?"DEFAITE":"MATCH NUL") :
-            "ANNULER";
+        const char *label=f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON?
+            "ABANDON":f->phase==WARSHIP_LIFECYCLE_RESULT?
+            "ACCUEIL":"QUITTER";
         return button(x,y,225u,134u,label,
-                      f->terminal?0x5000u:0x2104u);
+            f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON?
+                0x7800u:f->busy?0x2104u:0x3000u);
+    }
+    if (f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON) {
+        if (text_bit("QUITTER ?",225u,185u,x,y) ||
+            text_bit("CONFIRMER",225u,201u,x,y))
+            return 0xffe0u;
+        return 0x000cu;
+    }
+    if (f->phase==WARSHIP_LIFECYCLE_RESULT) {
+        const char *label=f->verdict==WARSHIP_BATTLE_VICTORY?"VICTOIRE":
+            f->verdict==WARSHIP_BATTLE_DEFEAT?"DEFAITE":"MATCH NUL";
+        if (text_bit(label,225u,187u,x,y) ||
+            text_bit("FIN PARTIE",225u,208u,x,y))
+            return 0xffe0u;
+        /* Keep shot history/ship overlays visible for inspection. */
     }
     if (f->busy) {
         if (text_bit("FEU EN COURS",225u,188u,x,y) ||
