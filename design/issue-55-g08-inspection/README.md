@@ -1,59 +1,65 @@
-# G08 — Inspection post-défaite VS Capitaine — correction artistique
+# G08 — Inspection post-défaite VS Capitaine — reprise graphique conforme à la référence PO
 
-**Issue #55 · Branche `design/issue-55-g08-inspection` · PR Draft #56 · `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`**
+**Issue :** #55 · **PR Draft :** #56 · **Statut :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · **Périmètre :** maquette PC uniquement.
 
-## Point de départ de la correction
+## Ce qui a changé après le retour PO du 03/11/2026
 
-Le PO a rejeté les aperçus initiaux de G08 et a explicitement retenu comme **référence artistique** l'illustration fournie dans la conversation : vraie personnalité maritime, portrait expressif du Capitaine, navires lisibles, bleu nuit, cuivre/or, commandes travaillées et contraste. Cette illustration **1448 × 1086** n'était **pas une maquette matérielle**. La présente correction est une **recomposition originale native 320 × 240**, dessinée et générée par code pixel/vectoriel ; il ne s'agit ni d'un simple redimensionnement ni de l'utilisation directe de l'image HD. L'image HD de départ reste une inspiration et non un asset distribué dans le firmware.
+Toutes les images de G08 sont désormais une **recomposition graphique fidèle de l'illustration partagée par le PO dans la conversation** : capitaine pixel art au coin supérieur gauche, lune et silhouette navale à droite, mer profonde, or des cadres, encarts bleu marine, cartouche vert, coques d'acier et commandes en volume. Il ne s'agit plus de la précédente illustration dessinée avec des pictogrammes génériques. Le fond et les ornements de l'illustration de référence sont conservés, **la grille et les états ont été redessinés** pour satisfaire la défaite et les transitions imposées.
 
-Le vocabulaire G01/G07 reste présent : **la mer est le plateau**, un unique champ ATTAQUE, verdict en inscription sans surface tactile, boutons cuivre en volume, bâtiment militaire illustré, impacts sur l'eau et inspection après résultat. L'ajout du portrait du Capitaine et le traitement bleu nuit / or sont une **nouvelle proposition artistique** conforme au retour PO, mais **pas encore une validation sur ce HEAD**.
+La capture originale `reference_design_PO.png` contient un exemple graphiquement inspirant mais **non conforme au scénario de défaite** : tous les segments visibles y sont marqués touchés. Dans cette livraison, cinq segments restent **intacts** alors que la flotte humaine est hypothétiquement détruite (DÉFENSE n'est pas redessinée).
 
-## Écrans / preuves visuelles
+## Parcours livré
 
-![G08 état B — flotte volontairement révélée, natif 320×240](g08_inspection_320x240.png)
+| État | Flotte sur ATTAQUE | Cartouche | Commande réversible |
+|---|---|---|---|
+| A, après verdict compact | cachée | FLOTTE SECRÈTE | **VOIR SA FLOTTE** |
+| B, après demande volontaire | les 5 coques visibles **sous** les marques | 5 NAVIRES RÉVÉLÉS | **MASQUER** |
+| C, après masquage | cachée, tous les impacts conservés | FLOTTE MASQUÉE | **AFFICHER** |
 
-[Vue B ×4 NEAREST 1280×960](g08_inspection_x4.png) · [Planche A/B/C 320×240](g08_variantes_320x240.png) · [Planche ×4](g08_variantes_x4.png) · [A secret natif](g08_etat_a_320x240.png) · [C masqué natif](g08_etat_c_320x240.png)
+**Règles décidées, inchangées :** révélation uniquement sur **DÉFAITE VS Capitaine**, pas de confirmation, pas de fenêtre indépendante, pas de FEU, pas de modification des tirs, DÉFENSE, REJOUER et ACCUEIL accessibles. La visibilité B/C doit être conservée sur **ATTAQUE → DÉFENSE → ATTAQUE** (contrat d'intégration ; démonstration par les états, non firmware). Les cartouches vert émeraude sont **informatifs/non tactiles** et le verdict reste informatif ; seules les commandes du bas sont tactiles.
 
-Chaque image a été réellement dessinée sur une grille de coordonnées **320 × 240**, puis exportée. Les aperçus ×4 sont obtenus par **NEAREST uniquement**, chaque pixel reproduit comme un carré 4×4 exact. Ce sont des conceptions PC ; aucune validation de rendu/tactile CYD physique.
+### Scénario de démonstration (strictement fictif)
 
-## UX et états — règles DÉCIDÉES, formes PROPOSÉES
+Grille 10×10 (100 cases), 5 navires 5/4/3/3/2 = 17 cellules sans recouvrement, **12 TOUCHÉ** et **20 RATÉ** (disjoints), **5 segments ennemis intacts**. Les coordonnées de touches et de ratés sont **identiques** entre A, B et C. `scenario_G08.json` décrit l'intégralité du scénario, indépendamment des images. L'intention produit est de comprendre le résultat et les navires, pas d'ajouter un compteur d'inspection.
 
-| État | Grille ATTAQUE | Commande disponible | Transition |
-| --- | --- | --- | --- |
-| A — DÉFAITE compacte | Flotte du Capitaine **secrète**, historique des tirs seul | **VOIR SA FLOTTE** (DÉCIDÉ) | premier appui volontaire → B |
-| B — révélée | **5 navires / 17 cases** sous les impacts déjà présents | **MASQUER FLOTTE** (PROPOSÉ DA) | appui → C |
-| C — masquée après consultation | Navires de nouveau **secrets**, **même historique** | **AFFICHER FLOTTE** (PROPOSÉ DA) | appui direct → B |
+## Livrables
 
-**DÉCIDÉ :** uniquement en cas de **DÉFAITE VS Capitaine**, pas en victoire ou nul. **Aucun écran indépendant**, boîte de confirmation, clic sur une coque, nouveau tir ni compteur. L'état B/C se conserve entre **ATTAQUE → DÉFENSE → ATTAQUE**, sans redessiner DÉFENSE. **REJOUER** et **ACCUEIL** sont toujours disponibles ; le verdict n'est **pas tactile**. Le toucher de DÉFENSE ou REJOUER ne modifie pas l'état de révélation comme règle métier.
+- `g08_inspection_320x240.png` : état principal **B** (flotte révélée), aperçu natif.
+- `g08_inspection_x4.png` : état B **1280×960**, ×4 strictement `NEAREST`.
+- `g08_etat_a_320x240.png`, `g08_etat_b_320x240.png`, `g08_etat_c_320x240.png` : états A/B/C natifs indépendants.
+- `g08_etat_a_x4.png`, `g08_etat_b_x4.png`, `g08_etat_c_x4.png` : leurs agrandissements sans interpolation.
+- `g08_variantes_320x240.png` : planche côte à côte des **3 maquettes natives** (960×240) ; `g08_variantes_x4.png` : planche ×4.
+- `g08_etat_a_layers.ora`, `g08_etat_b_layers.ora`, `g08_etat_c_layers.ora` : **sources éditables multicouches OpenRaster (GIMP/Krita)**, en résolution artistique 1448×1086, couches 01 référence / 02 grille & navires / 03 commandes & état.
+- `build_g08_reference.py`, `reference_design_PO.png`, `scenario_G08.json` : source reproductible et provenance. `generation-report.txt` : empreintes et assertions de génération.
 
-## Scénario de maquette — nombres et positions FICTIFS
+### Mini-contrat UI, proposé DA (ni homologue tactile ni contrat runtime)
 
-Les cinq navires sont B2–F2 (5), I4–I7 (4), D6–F6 (3), A8–A10 (3), G9–H9 (2). **17 cellules distinctes**, aucun chevauchement ; contacts autorisés par la Bible. **12 TOUCHÉ, 27 RATÉ** ; cinq segments ennemis encore intacts : **F2, I7, F6, A10, H9**. La flotte du Capitaine n'est donc pas détruite. Simultanément, la dernière riposte du Capitaine **COULÉ** achève la flotte du joueur dans la vue DÉFENSE (non modifiée ici) : il s'agit d'un scénario cohérent de **DÉFAITE**. Le dessin B ne fabrique **aucune nouvelle marque** de tir ; seules les coques apparaissent sous les marqueurs.
+| Zone | Coordonnées en aperçu 320×240, arrondies | Rôle |
+|---|---|---|
+| En-tête (0–319, 0–39) | portrait, verdict et titre | information, non tactile |
+| Grille (27–169, 50–178) | 10×10 ; ~14,2×12,8 px/case dans l'illustration | ATTAQUE, impacts visibles, non sélectionnable après verdict |
+| État (180–301, 54–95) | vert à droite | information, non tactile |
+| Légende (176–306, 104–181) | raté/touché/navire | information, non tactile |
+| 4 boutons en bas (5–318, 194–228) | VOIR / MASQUER / AFFICHER ; REJOUER ; DÉFENSE ; ACCUEIL | commande tactile (étendue exacte à valider) |
 
-## Mini-contrat et prudence matérielle
+**Compromis explicitement non homologué :** le respect de l'illustration de référence implique ici des cases visuelles ~14×13 px et non **18×18 px** comme le langage G07. La question est soumise à Pilotage/PO ; **cette maquette ne constitue pas une autorisation de changer le contrat 18×18 ou l'expérience G07**, et ne peut être déclarée acceptable sans arbitrage/contrôle. Les marges de touches et la lisibilité réelle sur écran 2,8 pouces restent à mesurer.
 
-- **Écran :** 320×240 paysage CYD ESP32-2432S028R, tactile stylet ; non testé physiquement.
-- **ATTAQUE :** une grille 10×10 de 180×180 pixels, cases 18×18, origine `(21,53)`, repères A–J et 1–10. Une seule grande grille affichée.
-- **Bandeau haut :** ATTAQUE comme vue, **DÉFENSE** relief tactile environ `(96,5,108,30)` ; **RÉSULTAT / DÉFAITE / VS CAPITAINE** inscrit directement sur le fond, sans boîte ni bouton.
-- **Commandes fin de partie :** REJOUER `(211,149,105,26)`, ACCUEIL `(211,182,105,26)`, VOIR/MASQUER/AFFICHER FLOTTE `(211,215,105,23)` ; libellés et emplacements hors « VOIR SA FLOTTE » **PROPOSÉS DA, non homologués**.
-- **Couleurs :** bleu nuit/mer, cuivre/or, acier gris, croix cuivrées sur écume pour TOUCHÉ, anneaux crème pour RATÉ. Le contraste des petites coques et marques doit être revu sur TFT réel.
-- **Typographie PC :** DejaVu Sans, 6.6–11.5 px selon le contexte ; il ne s'agit pas d'une fonte Flash décidée. Petites légendes / zones tactiles de 23 px à vérifier au stylet et sur écran réel.
-- **Aucun asset firmware homologué :** SVG, PNG et Python sont des maquettes PC. Aucun budget Flash/RAM/PSRAM, compression ou décodeur imposé.
+Les textes des boutons, les palettes, le niveau de détail, la maquette HD/ORA et les valeurs de contraste sont des **PROPOSITIONS DA**. Les règles métier décrites ci-dessus sont **DÉCIDÉES dans la Bible §14.13**. La satisfaction artistique et le fonctionnement matériel sont **À VÉRIFIER** ; aucun budget Flash/RAM, format binaire runtime ou essai physique n'est revendiqué.
 
-## Sources, exécution et contrôles
-
-- `build_g08.py` : source Python **éditable, autonome et originale**, formes vectorielles pixel alignées (aucune image générée intégrée au rendu), contrôles de structure et export ; Python 3 + CairoSVG + Pillow.
-- `g08_inspection_320x240.svg` : vue B principale éditable ; `g08_variantes_320x240.svg` : planche éditable ; `g08_etat_a_320x240.svg` et `g08_etat_c_320x240.svg` : autres états éditables.
-- PNG 320×240 et ×4 des vues B, variantes, A et C (issus du même script).
-- `generation-report.txt` : sortie de validation reproductible et SHA256 sur les fichiers générés.
-
-Reproduire depuis la racine du dépôt :
+## Reproduire et contrôler
 
 ```bash
-python3 -m pip install 'cairosvg>=2.7,<3' 'pillow>=11,<13'
-python3 design/issue-55-g08-inspection/build_g08.py
+python3 -m pip install pillow
+python3 build_g08_reference.py
 ```
 
-**Vérifications non tautologiques :** tailles de flotte [5,4,3,3,2], 17 coordonnées distinctes, chaque coque continue sans superposition, 12 hits / 27 misses disjoints, cinq segments non touchés ; relecture XML de chaque SVG généré : 100 data-cell uniques, 39 marques avec coordonnées égales A/B/C, 5 coques seulement en B, ordre coque → impacts, verdict uniquement texte, quatre vraies actions tactiles, RIPOSTE : COULÉ et aucun FEU. Pixels PNG natifs et 4×4 NEAREST vérifiés un à un.
+Le générateur vérifie la liste des navires, l'absence de recouvrement, les sets disjoints, le scénario de défaite et l'identité pixel par pixel des x4 `NEAREST`. Il produit des PNG et des calques ORA. Les sorties sont des **maquettes PC**, pas des ressources firmware.
 
-**Provenance :** idée graphique et référence HD issues de l'illustration déjà fournie au projet dans ChatGPT ; **composition 320×240 originale, créée et éditable dans `build_g08.py`**. Le code ne réutilise aucune photo, police externe propriétaire, sprite tiers ni image HD recadrée. Pas de modification G01–G07, Bible, firmware ou CI permanente. **Validation artistique sur le nouveau HEAD requise du PO ; revue/fusion exclusivement Pilotage.**
+## Provenance
+
+- `reference_design_PO.png` : **image fournie directement par le PO dans le dialogue de travail le 03/11/2026**, reprise visuelle demandée explicitement. Auteur exact et licence externe non revendiqués ; pas de stock externe ajouté.
+- `build_g08_reference.py` : reconception des calques grille/navires, impacts, boutons et états pour le présent projet.
+- Typographie de génération : DejaVu Sans Condensed Bold installée sur l'environnement graphique de build ; **aucune police embarquée distribuée** ni contrainte firmware imposée.
+- Respect de G01/G07 : identité maritime, verdict et ATTAQUE uniques, mais **nouvel habillage demandé par le PO** à revalider explicitement sur nouveau HEAD.
+
+**Fusion et validation : exclusivement Pilotage.**
