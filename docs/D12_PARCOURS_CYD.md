@@ -25,7 +25,7 @@
 | COMBAT, ATTAQUE | FEU (si cible valide) | DÉFENSE | QUITTER |
 | COMBAT, DÉFENSE | FEU inactif | ATTAQUE | QUITTER |
 | FEU en cours | TIR… (bloqué) | Bloqué | QUITTER visuellement grisé, **bloqué** |
-| CONFIRM_ABANDON | CONTINUER | BLOQUÉ | ABANDON |
+| CONFIRM_ABANDON | CONTINUER | BLOQUÉ | ABANDONNER |
 | RESULT | REJOUER | ATTAQUE / DÉFENSE | ACCUEIL |
 | DEPLOY / HOME | D09 : AUTO / PRÊT / RETOUR | D09 : START | selon D09 |
 

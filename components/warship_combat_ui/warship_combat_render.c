@@ -158,11 +158,11 @@ uint16_t warship_combat_pixel(const WarshipCombatFrame *f,
                 0x2104u:0x0250u);
     if (rect(x,y,225u,134u,91u,38u)) {
         const char *label=f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON?
-            "ABANDON":f->phase==WARSHIP_LIFECYCLE_RESULT?
+            "ABANDONNER":f->phase==WARSHIP_LIFECYCLE_RESULT?
             "ACCUEIL":"QUITTER";
         return button(x,y,225u,134u,label,
             f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON?
-                0x7800u:f->busy?0x2104u:0x3000u);
+                0x7800u:(f->busy || f->terminal)?0x2104u:0x3000u);
     }
     if (f->phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON) {
         if (text_bit("QUITTER ?",225u,185u,x,y) ||
