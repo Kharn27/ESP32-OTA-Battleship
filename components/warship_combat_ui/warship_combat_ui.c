@@ -96,10 +96,12 @@ WarshipCombatStatus warship_combat_input_step(
 }
 
 WarshipCombatStatus warship_combat_apply(
-    WarshipCombatUi *ui, WarshipLifecycle *game, WarshipCombatHit hit,
+    WarshipCombatUi *ui, WarshipLifecycle *game,
+    const WarshipLifecyclePublic *observed, WarshipCombatHit hit,
     uint64_t ms, WarshipCaptainRandom rng, void *rng_ctx)
 {
-    if (ui == NULL || game == NULL || hit.command > WARSHIP_COMBAT_CANCEL)
+    if (ui == NULL || game == NULL || observed == NULL ||
+        hit.command > WARSHIP_COMBAT_CANCEL)
         return WARSHIP_COMBAT_BAD_ARGUMENT;
     if (ui->pending || hit.command == WARSHIP_COMBAT_NO_HIT)
         return WARSHIP_COMBAT_IGNORED;
@@ -119,26 +121,24 @@ WarshipCombatStatus warship_combat_apply(
     if (game->phase != WARSHIP_LIFECYCLE_COMBAT ||
         ui->view != WARSHIP_COMBAT_ATTACK)
         return WARSHIP_COMBAT_IGNORED;
-    WarshipLifecyclePublic snapshot;
-    if (warship_lifecycle_observe(game,&snapshot) != WARSHIP_LIFECYCLE_OK)
-        return WARSHIP_COMBAT_GAME_ERROR;
-    if (snapshot.battle.phase != WARSHIP_SOLO_SELECTING)
+    if (!observed->has_battle || observed->phase != game->phase ||
+        observed->battle.phase != WARSHIP_SOLO_SELECTING)
         return WARSHIP_COMBAT_IGNORED;
     WarshipLifecycleStatus s = WARSHIP_LIFECYCLE_BAD_ARGUMENT;
     if (hit.command == WARSHIP_COMBAT_CELL) {
         if (hit.x >= 10u || hit.y >= 10u)
             return WARSHIP_COMBAT_IGNORED;
-        if (snapshot.battle.has_selection &&
-            snapshot.battle.target_x == hit.x &&
-            snapshot.battle.target_y == hit.y)
+        if (observed->battle.has_selection &&
+            observed->battle.target_x == hit.x &&
+            observed->battle.target_y == hit.y)
             s = warship_lifecycle_cancel(game);
         else
             s = warship_lifecycle_select(game,hit.x,hit.y);
     } else if (hit.command == WARSHIP_COMBAT_CANCEL) {
-        if (!snapshot.battle.has_selection) return WARSHIP_COMBAT_IGNORED;
+        if (!observed->battle.has_selection) return WARSHIP_COMBAT_IGNORED;
         s = warship_lifecycle_cancel(game);
     } else if (hit.command == WARSHIP_COMBAT_FIRE) {
-        if (!snapshot.battle.has_selection || rng == NULL)
+        if (!observed->battle.has_selection || rng == NULL)
             return WARSHIP_COMBAT_IGNORED;
         WarshipBattlePair pair;
         s = warship_lifecycle_fire(game,rng,rng_ctx,&pair);
