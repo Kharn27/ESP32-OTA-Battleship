@@ -1,8 +1,8 @@
-PASS: SVG 320×240, board (21,53) 10×10 18px, 22 independent SVG grid vectors
-PASS: 5 RATÉ + 4 TOUCHÉ disjoint, G5 unknown/reversible, labels A..J/1..10
-PASS: FEU / DÉFENSE / ABANDON, RIPOSTE B7 RATÉ and unread COULÉ independent
-PASS: no ship reveal/placement layer in SVG
-PASS: exported RGBA PNG 320×240 / zoom 1280×960 exact NEAREST all 1,228,800 output pixels
-PASS: negative proof detects 1 altered RED pixel with unchanged alpha
-PASS: SHA256 and byte counts match shipped report
-STATUS: DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED; PO artwork approval required
+G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST
+grid x=21 y=53 size=180x180 cell=18 — 100 cells
+hit centers: C3,E3,E4,I8
+miss centers: A8,B7,D1,F9,G2,H6,J4
+selected G5; last riposte B7 RATÉ; unread COULÉ (distinct)
+negative one-channel corruption: rejected
+HD art + editable scene generator + bitmap exports SHA256: MATCH
+ON_DEVICE_UNVERIFIED — artistic PO approval still pending

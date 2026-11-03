@@ -1,190 +1,195 @@
 #!/usr/bin/env python3
-"""G04-R2 / CYD WARSHIP — 320x240 vector authoring and PNG proof builder.
-Concept inspired by the supplied 1448x1086 sunset navigation-table illustration.
-All geometric/gameplay layers are drawn natively, without any bitmap background.
-Requires: cairosvg, Pillow (host-only preview/export, not firmware tooling).
+"""G04-R2: artistic game-screen compositor in native CYD pixels.
+
+The HD concept is a painted reference and texture atlas, NOT a claimed vector source.
+The tactical layer (grid/markers/labels/state/buttons) is deterministic, native and
+individually editable in this Python source.  Preview only, no firmware assets.
 """
 from pathlib import Path
-import math, hashlib, json
-from PIL import Image
-import cairosvg
+import json, hashlib, math
+from PIL import Image, ImageDraw, ImageFont
 
-HERE=Path(__file__).resolve().parent
+ROOT=Path(__file__).resolve().parent
+REF=ROOT/'reference_concept_1448x1086.png'
 W,H=320,240
 GX,GY,CELL=21,53,18
-MISSES=['C2','H4','A9','F9','J10']
-HITS=['E7','B5','B6','I3']
+GRID=180
+MISSES=['A8','B7','D1','F9','G2','H6','J4']
+HITS=['C3','E3','E4','I8']
 TARGET='G5'
+assert set(MISSES).isdisjoint(HITS) and TARGET not in MISSES+HITS
+im=Image.new('RGB',(W,H));d=ImageDraw.Draw(im)
+ref=Image.open(REF).convert('RGB')
+assert ref.size==(1448,1086),f'incorrect HD reference {ref.size}'
 
-def el(s): pieces.append(s)
-def rect(x,y,w,h,c,rx=0,stroke=None,sw=1, extra=''):
-    el(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{c}"'+(f' stroke="{stroke}" stroke-width="{sw}"' if stroke else '')+f' {extra}/>')
-def path(d,c,stroke=None,sw=1,extra=''):
-    el(f'<path d="{d}" fill="{c}"'+(f' stroke="{stroke}" stroke-width="{sw}"' if stroke else '')+f' {extra}/>')
-def txt(x,y,t,size=9,c='#F6F9D8',weight=700,spacing=0,extra=''):
-    el(f'<text x="{x}" y="{y}" font-family="DejaVu Sans Condensed, DejaVu Sans, sans-serif" font-size="{size}" font-weight="{weight}" letter-spacing="{spacing}" fill="{c}" {extra}>{t}</text>')
-def line(x1,y1,x2,y2,c,sw=1,opacity=1):
-    el(f'<path d="M{x1} {y1}L{x2} {y2}" fill="none" stroke="{c}" stroke-width="{sw}" opacity="{opacity}" shape-rendering="crispEdges"/>')
-def dot(x,y,c,s=1):rect(x,y,s,s,c)
+def patch(bounds,dest,scale=Image.Resampling.LANCZOS):
+    x,y,w,h=dest
+    cropped=ref.crop(bounds).resize((w,h),scale)
+    im.paste(cropped,(x,y))
 
-pieces=[]
-el('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">')
-el('''<title>G04 R2 — ATTAQUE vs Capitaine — preview 320x240</title>
-<desc>Mer plateau, grille 10 par 10, cible G5, tirs passés, riposte B7 ratée, alerte ancienne coulé non lue. Aucun navire adverse visible.</desc>
-<defs>
-<linearGradient id="sky" x2="0" y2="1"><stop stop-color="#613F68"/><stop offset=".5" stop-color="#B66E70"/><stop offset="1" stop-color="#F8B66C"/></linearGradient>
-<linearGradient id="sea" x2="0" y2="1"><stop stop-color="#188E93"/><stop offset=".34" stop-color="#126E80"/><stop offset="1" stop-color="#07354E"/></linearGradient>
-<linearGradient id="fire" x2="0" y2="1"><stop stop-color="#F6B55C"/><stop offset=".4" stop-color="#DE713A"/><stop offset="1" stop-color="#893B36"/></linearGradient>
-<linearGradient id="def" x2="0" y2="1"><stop stop-color="#278892"/><stop offset=".48" stop-color="#185A6D"/><stop offset="1" stop-color="#093146"/></linearGradient>
-<clipPath id="board"><rect x="21" y="53" width="180" height="180"/></clipPath>
-</defs>''')
-# Scenic continuity: sky is compact, ocean extends under the game grid.
-rect(0,0,320,43,'url(#sky)')
-rect(0,35,320,205,'url(#sea)')
-# sunset and horizon: drawn as short pixel bands rather than glossy dashboard.
-rect(221,17,23,3,'#F8D58A');rect(217,20,31,7,'#F8CB72');rect(220,27,25,3,'#FBD998')
-rect(217,34,32,1,'#F8CB72');rect(211,37,43,1,'#D9DDB0')
-rect(198,6,18,2,'#EB9C92');rect(204,4,12,2,'#EB9C92');rect(250,12,23,2,'#DCA8B1')
-rect(263,10,15,2,'#DCA8B1');rect(169,26,25,1,'#FED79E')
-for x,y,w in [(206,40,15),(235,42,17),(257,39,26),(10,42,19),(39,37,10),(122,42,15),(155,40,18)]:rect(x,y,w,1,'#75C5B8')
-# lighthouse silhouette (non interactive) at upper left
-rect(8,14,9,17,'#EBD4A7');rect(10,16,5,10,'#FEF4D3');rect(9,20,2,3,'#AA593D');rect(15,20,2,3,'#AA593D')
-rect(7,12,11,2,'#663E48');rect(9,9,7,3,'#D87755');rect(11,6,3,3,'#F7D77A')
-path('M2 34 H20 V36 H27 V39 H0 V36 H2Z','#2E5868')
-# small distant boat far from grid: decorative, not enemy location
-path('M267 35H290L285 38H271Z','#18334C');rect(278,26,1,9,'#18334C');path('M278 27 L289 33 H279Z','#E9BF95')
-# title plate (carved wood/copper) x32-190; captain cameo x286-319.
-rect(27,3,166,34,'#382B40',3);rect(29,5,162,30,'#955E56',2)
-rect(34,7,152,1,'#F8CB72');rect(34,32,152,1,'#462B3A')
-txt(42,21,'ATTAQUE',16,'#F6F9D8',800,0.6)
-txt(43,31,'VS CAPITAINE',8,'#F9D7A6',700,0.5)
-# Captain tiny bust: detailed enough to belong, not dominate.
-rect(282,5,35,34,'#292D42',3);rect(286,29,29,9,'#982F45')
-rect(291,14,19,16,'#DFAA80',3)
-path('M290 23h21v6h-4v3h-13v-3h-4Z','#F0E9D7');rect(295,22,13,1,'#FFFFFF');rect(297,27,7,1,'#B6BBB4')
-path('M286 12h29v3h-29Z','#17283B');path('M292 9h19v4h-19Z','#17283B');path('M298 5h8v5h-8Z','#17283B');rect(301,7,2,5,'#F8CB72');rect(289,14,24,1,'#E9B56B')
-dot(298,19,'#1A2638',2);dot(306,19,'#1A2638',2);rect(297,23,10,1,'#7C5147')
-rect(285,35,33,2,'#F1BA65');rect(284,38,34,2,'#563A39')
-# one continuous maritime frame; single grid follows G08 18px grid origin.
-rect(0,45,206,195,'#163448');rect(2,46,201,189,'#73473D')
-rect(18,50,186,185,'#F7C779',1);rect(20,52,182,182,'#0A2337')
-rect(GX,GY,180,180,'url(#sea)')
-# sea texture is organic, large strokes across cell boundaries, under impact symbols
-el('<g clip-path="url(#board)" opacity=".67">')
-for i in range(23):
-    y=56+i*8; x=24+((i*43)%29)
-    path(f'M{x} {y} h{16+(i*3)%19} l5 -2 h{10+(i*7)%24} l5 2 h{18+(i*5)%17}', 'none','#3DA9A4',1.1,'opacity=".35"')
-    if i%3==0:
-        path(f'M{32+(i*17)%92} {y+3} h14 l4 -1 h21', 'none','#C0EAD1',1,'opacity=".28"')
-for x,y,w in [(38,67,14),(76,79,8),(151,96,15),(40,130,23),(81,147,14),(158,161,24),(48,198,9),(119,215,21)]:
-    rect(x,y,w,1,'#7ACBC2',extra='opacity=".35"')
-el('</g>')
-# grid strokes: absolutely 18px; no pseudo cells.
-el('<g id="grid-lines" shape-rendering="crispEdges">')
-for i in range(11):
-    line(GX+i*CELL,GY,GX+i*CELL,GY+180,'#B2E8DE',1,.45)
-    line(GX,GY+i*CELL,GX+180,GY+i*CELL,'#B2E8DE',1,.45)
-el('</g>')
-# top and left coordinate strips, navy+ivory, high readability.
-rect(20,40,183,12,'#244A58')
-rect(0,52,20,182,'#254858')
-for i,c in enumerate('ABCDEFGHIJ'):
-    txt(30+i*CELL,49,c,8.2,'#FFE4AB',800,0,extra='text-anchor="middle"')
+def txt(pos,text,size,color,stroke=0,stroke_fill=None,anchor=None):
+    font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf',size)
+    ImageDraw.Draw(im).text(pos,text,font=font,fill=color,anchor=anchor,stroke_width=stroke,stroke_fill=stroke_fill)
+
+def ink_box(rect,fill,edge,rounding=2,edgewidth=1):
+    ImageDraw.Draw(im).rounded_rectangle(rect, radius=rounding,fill=fill,outline=edge,width=edgewidth)
+
+# Atmosphere: these are ACTUAL painted textures from the approved-look HD idea;
+# not a reconstruction from uniform vector rectangles.
+patch((0,0,1448,191),(0,0,320,43))
+patch((10,180,1437,1080),(0,43,320,197))
+# Original oak / brass plate remains visible outside the gameplay grid.
+patch((85,183,850,928),(0,42,206,196))
+patch((850,184,1426,989),(206,43,114,197))
+# Protective dark trim separating ocean and tactile commands.
+d=ImageDraw.Draw(im);d.rectangle((203,44,209,239),fill='#3A1B19')
+d.line((206,45,206,235),fill='#C28B44',width=1)
+
+# Board is a 180px playable square: retain wood from the concept but
+# repaint the coordinate gutters to avoid HD-only glyphs becoming mush.
+d=ImageDraw.Draw(im)
+d.rectangle((0,40,204,52),fill='#DDA361',outline='#6A351F',width=1)
+d.rectangle((0,52,20,234),fill='#CD8A52',outline='#6A351F',width=1)
+# Beveled carved parchment coordinate cells.
 for i in range(10):
-    txt(11,65+i*CELL,str(i+1),8.2,'#FFE4AB',800,0,extra='text-anchor="middle"')
-# light amber divider at game border.
-rect(20,51,182,1,'#EEC17D');rect(20,233,183,2,'#A85D48')
+    x=GX+i*CELL; y=GY+i*CELL
+    d.rectangle((x,41,x+17,51),fill='#EFC38A',outline='#B57C3D',width=1)
+    d.line((x+2,42,x+15,42),fill='#FFF0BF')
+    d.rectangle((1,y,19,y+17),fill='#EFC38A',outline='#AE7039',width=1)
+    d.line((2,y+1,18,y+1),fill='#FFF0BF')
+    txt((x+9,47),'ABCDEFGHIJ'[i],8,'#3D221C',anchor='mm')
+    txt((10,y+9),str(i+1),8,'#3D221C',anchor='mm')
+d.rectangle((19,51,202,234),fill='#623623',outline='#F7C97D',width=2)
+d.rectangle((20,52,201,233),fill='#102D42',outline='#271C25',width=1)
 
-def center(cell):
-    cx=GX+(ord(cell[0])-65)*CELL+CELL//2
-    cy=GY+(int(cell[1:])-1)*CELL+CELL//2
-    return cx,cy
+# Reuse isolated clean water cells as native sea textures. Unlike a downscale
+# of the whole HD art, the native field contains no embedded phantom markers.
+x0,y0,x1,y1=154,248,830,900
+cw=(x1-x0)/10; ch=(y1-y0)/10
+orig_marked=[('A',8),('B',7),('D',1),('F',9),('G',2),('H',6),('J',4),('C',3),('E',3),('E',4),('I',8),('G',5)]
+marked={(ord(r)-65,c-1) for r,c in orig_marked}
+safe=[(rr,cc) for rr in range(10) for cc in range(10)
+      if all(max(abs(rr-mr),abs(cc-mc))>=2 for mr,mc in marked)]
+# Tiles with cleaner ocean and no baked symbols; 4px inset discards HD grid.
+for yrow in range(10):
+    for xcol in range(10):
+        rr,cc=safe[(xcol*29+yrow*17)%len(safe)]
+        box=(int(x0+cc*cw+5),int(y0+rr*ch+5),
+             int(x0+(cc+1)*cw-5),int(y0+(rr+1)*ch-5))
+        tex=ref.crop(box).resize((CELL,CELL),Image.Resampling.LANCZOS)
+        sea_tint=Image.new('RGB',(CELL,CELL),'#073C5E')
+        tex=Image.blend(tex,sea_tint,.14)
+        im.paste(tex,(GX+xcol*CELL,GY+yrow*CELL))
+d=ImageDraw.Draw(im)
+for i in range(11):
+    x=GX+i*CELL; y=GY+i*CELL
+    d.line((x,GY,x,GY+GRID),fill='#B9E8EE',width=1)
+    d.line((GX,y,GX+GRID,y),fill='#B9E8EE',width=1)
+d.rectangle((21,53,201,233),outline='#D6FAF2',width=1)
 
-# Miss is an organic closed splash ring, hit an anchored hot metal/spray motif.
+# Mechanic signs: miss = foam ring + bubbles; hit = explosive orange bloom with
+# ink-dark water contact; prepared target = four gold square brackets + cross.
+def center(k):
+    return GX+(ord(k[0])-65)*CELL+CELL//2, GY+(int(k[1:])-1)*CELL+CELL//2
 for key in MISSES:
     x,y=center(key)
-    el(f'<g id="miss-{key}" shape-rendering="crispEdges">')
-    rect(x-4,y+2,9,2,'#092C46');rect(x-6,y,3,3,'#E5F9DF');rect(x+4,y,3,3,'#E5F9DF')
-    rect(x-4,y-1,9,2,'#C4F4E5');rect(x-2,y-2,5,1,'#E5F9DF')
-    dot(x-4,y-5,'#D2F8E7');dot(x+3,y-6,'#C8F8E6');dot(x,y-7,'#E5F9DF')
-    el('</g>')
+    d=ImageDraw.Draw(im)
+    d.ellipse((x-6,y-2,x+5,y+4),fill='#06395F',outline='#D8FAFF',width=2)
+    d.arc((x-4,y-1,x+3,y+2),0,180,fill='#72DDE9',width=1)
+    for xx,yy in [(-3,-5),(1,-7),(4,-4)]:
+        d.rectangle((x+xx,y+yy,x+xx+1,y+yy+1),fill='#F2FFFF')
 for key in HITS:
-    x,y=center(key)
-    el(f'<g id="hit-{key}" shape-rendering="crispEdges">')
-    rect(x-5,y+4,11,2,'#0A2538')
-    path(f'M{x-1} {y-7}h3v5h4v3h-4v5h-3v-5h-5v-3h5Z','#FFD078')
-    path(f'M{x-6} {y-5}h3v3h3v3h-3v3h-3v-3h2v-3h-2Z','#FF813F')
-    dot(x+5,y-5,'#FDE9BA',2);dot(x-6,y+5,'#F5B967',2)
-    el('</g>')
-# selection must be pure target (not result!) : four turquoise corners.
-x,y=center(TARGET)
-el('<g id="target-G5" shape-rendering="crispEdges">')
-for sx,sy in [(-1,-1),(1,-1),(-1,1),(1,1)]:
-    bx=x+(-7 if sx<0 else 4);by=y+(-7 if sy<0 else 4)
-    rect(bx,by,4,2,'#FDF3B3');rect(bx,by,2,4,'#79F8F3')
-rect(x-1,y-1,3,3,'#79F8F3');el('</g>')
-# RIGHT - no overdraw on 10x10 board; illustrated copper and cloth controls.
-rect(205,46,115,194,'#2D263A');rect(207,48,111,189,'#69453F')
-# navigation strip top / hairline to keep hierarchy.
-rect(210,52,106,1,'#DCA871')
-# FEU active: dominates with 35px high / 105px wide
-rect(210,56,107,38,'#342638',3);rect(212,58,103,34,'#F8C776',2);rect(214,60,99,30,'url(#fire)',2)
-rect(216,61,95,2,'#FFD58A');rect(216,88,95,2,'#7F332D')
-# cannon icon left x219..237, no firing trajectory on sea
-rect(220,71,12,5,'#3C3440');rect(222,69,12,4,'#E1B970');rect(226,76,2,5,'#3C3440');rect(221,80,15,2,'#42313F')
-dot(228,81,'#E1B970',2);dot(218,68,'#FBD77C',2)
-txt(260,80,'FEU',18.5,'#FDF6CE',800,0,extra='text-anchor="middle"')
-txt(294,87,'G5',7.5,'#FEEDB7',800)
-# defense fabric/copper
-rect(210,98,107,31,'#332D3A',3);rect(212,100,103,27,'#F7C67F',2);rect(214,102,99,23,'url(#def)',2)
-path('M222 106h8v8l-4 4-4-4Z','#F1D39A');path('M225 109h2v6h-2Z','#153A50')
-txt(234,118,'DÉFENSE',11.3,'#F8F5D3',800)
-# unread marker is ! only, not a number
-rect(302,101,12,12,'#692E40',2);rect(305,103,2,5,'#FFDE9A');dot(305,109,'#FFDE9A',2)
-# abandonment subordinate
-rect(210,132,107,21,'#382C3C',2);rect(212,134,103,17,'#BF956B',2);rect(213,135,101,15,'#765A54',2)
-rect(221,137,1,10,'#F2DDB5');path('M223 138h8v5h-8Z','#EEE3BC')
-txt(235,146,'ABANDON',9,'#FFF3C8',800)
-# history: copper parchment but compact; text >=7px
-rect(210,156,107,34,'#463240',2);rect(212,158,103,30,'#E4BC86',1)
-rect(213,159,101,8,'#8A5B4F');txt(217,166,'TIRS RÉCENTS',7.2,'#FDF4D4',800,0.15)
-txt(217,176,'E7  TOUCHÉ',8,'#682F3F',800)
-txt(217,185,'C2  RATÉ',8,'#173F53',800)
-# last riposte is a separate neutral slate, not coupled to red alert
-rect(210,193,107,18,'#18364E',2);rect(212,195,103,14,'#DDEAD5',1)
-txt(215,201,'RIPOSTE :',6.5,'#174156',800)
-txt(215,207,'B7  RATÉ',7.8,'#174156',800)
-# historical gravity unread should remain separate, no counter
-rect(210,214,107,20,'#482638',2);rect(212,216,103,16,'#9B3C43',1)
-path('M215 228L219 219L223 228Z','#F7CE78');rect(218,221,1,4,'#623442');dot(218,226,'#623442')
-txt(226,227,'NON LUE : COULÉ',7.2,'#FFF4CE',800)
-# crisp corners / hand-crafted timber seams; no overloaded overlays
-rect(205,235,115,5,'#3A2938')
-el('</svg>')
-svg='\n'.join(pieces)+'\n'
-(HERE/'g04_r2_attaque.svg').write_text(svg,encoding='utf-8')
-out=HERE/'g04_r2_attaque_320x240.png'
-cairosvg.svg2png(bytestring=svg.encode(),write_to=str(out),output_width=320,output_height=240)
-image=Image.open(out).convert('RGBA')
-assert image.size==(320,240)
-zoom=image.resize((1280,960),Image.Resampling.NEAREST)
-zoom.save(HERE/'g04_r2_attaque_x4.png',optimize=True)
-assert [zoom.getpixel((j,0)) for j in range(4)]==[image.getpixel((0,0))]*4
-# validate true nearest by checking one tile block and the inverse every 4px
-assert zoom.resize((320,240),Image.Resampling.NEAREST).tobytes()==image.tobytes()
+    x,y=center(key); d=ImageDraw.Draw(im)
+    d.ellipse((x-7,y+3,x+7,y+6),fill='#062E48')
+    # Starburst body with navy/warm edges, distinct from water even in low contrast.
+    poly=[(x,y-8),(x+2,y-4),(x+7,y-6),(x+4,y-1),(x+8,y+2),(x+3,y+3),
+          (x+5,y+8),(x,y+5),(x-5,y+8),(x-4,y+2),(x-8,y),
+          (x-3,y-2),(x-6,y-7),(x-1,y-4)]
+    d.polygon(poly,fill='#E63920')
+    d.line([(x,y-6),(x,y+5)],fill='#FFEBA1',width=2)
+    d.line([(x-5,y),(x+5,y)],fill='#FFC34F',width=2)
+    d.point((x,y),fill='#FFFFFF')
+x,y=center(TARGET);d=ImageDraw.Draw(im)
+for dx in [-7,5]:
+ for dy in [-7,5]:
+    sx=1 if dx<0 else -1; sy=1 if dy<0 else -1
+    d.line([(x+dx,y+dy+sy*4),(x+dx,y+dy),(x+dx+sx*4,y+dy)],fill='#281A15',width=4)
+    d.line([(x+dx,y+dy+sy*4),(x+dx,y+dy),(x+dx+sx*4,y+dy)],fill='#FFE66A',width=2)
+d.ellipse((x-2,y-2,x+2,y+2),fill='#0B3E5F',outline='#FFE978',width=1)
+
+# Three illustrated commands: source-painted metal frames, bevels and sheen.
+# Fill gaps with oak so HD text underneath never bleeds between controls.
+d=ImageDraw.Draw(im)
+for ya,yb in [(51,54),(94,98),(128,132),(153,157),(191,195),(213,216)]:
+    d.rectangle((209,ya,319,yb),fill='#5A3024')
+    d.line((210,ya,318,ya),fill='#A66E42',width=1)
+# Text is re-lettered at native pixel count so the original richness survives.
+patch((879,198,1380,334),(210,54,107,41))
+patch((880,339,1380,446),(210,98,107,31))
+patch((904,450,1377,526),(210,132,107,21))
+# Keep source-painted brass/wood frame; cover HD labels with matching
+# native-size metal insets to avoid doubled, illegible glyph edges.
+d=ImageDraw.Draw(im)
+d.rounded_rectangle((245,62,310,88),radius=3,fill='#A92625',outline='#D86F38',width=1)
+d.line((247,64,308,64),fill='#DF6E47',width=1)
+d.line((247,86,308,86),fill='#632019',width=1)
+d.rounded_rectangle((232,102,310,123),radius=2,fill='#124C6C',outline='#448AA3',width=1)
+d.line((234,103,308,103),fill='#89C5D4',width=1)
+d.rounded_rectangle((238,136,309,148),radius=2,fill='#E9B17E',outline='#975B3D',width=1)
+txt((276,76),'FEU',19,'#FFF3D9',stroke=1,stroke_fill='#65251E',anchor='mm')
+txt((271,113),'DÉFENSE',12,'#FFF5DC',stroke=1,stroke_fill='#142A47',anchor='mm')
+txt((273,142),'ABANDON',9,'#421B10',anchor='mm')
+# small unread alert badge, without any fictional counter.
+d.ellipse((300,97,316,113),fill='#AF2926',outline='#FFD26C',width=1)
+txt((308,105),'!',12,'#FFF8E8',stroke=0,anchor='mm')
+
+# Colored parchment/history is text, not tiny pre-rendered unreadable HD type.
+# Use the HD paper's natural texture from a comparatively blank area.
+d=ImageDraw.Draw(im)
+d.rounded_rectangle((210,156,317,191),radius=2,fill='#EAC48E',outline='#B46D36',width=2)
+for i in range(24):
+    px=213+(i*41)%99;py=159+(i*13)%30
+    d.line((px,py,px+1+(i%3),py),fill=('#E0AA70' if i%2 else '#F6D7A4'))
+
+d.rectangle((212,158,315,167),fill='#C99859')
+txt((215,163),'HISTORIQUE',8,'#3D201B',anchor='lm')
+txt((215,173),'I8 : TOUCHÉ !',8,'#9B261D',anchor='lm')
+txt((215,184),'J4 : RATÉ',8,'#1B3046',anchor='lm')
+# Last captain shot and max unread gravity are separate pieces of gameplay.
+patch((876,791,1383,864),(210,195,107,18))
+d=ImageDraw.Draw(im)
+d.rounded_rectangle((210,195,317,212),radius=2,fill='#DEE5DA',outline='#285271',width=2)
+txt((214,203),'RIPOSTE : B7',8,'#183F5A',anchor='lm')
+txt((214,209),'RATÉ',7,'#183F5A',anchor='lm')
+patch((874,878,1393,968),(210,215,107,20))
+d=ImageDraw.Draw(im)
+d.rounded_rectangle((210,216,317,235),radius=2,fill='#A62221',outline='#FFCC52',width=2)
+d.polygon([(215,230),(219,220),(223,230)],fill='#FFE365',outline='#622F22')
+txt((219,227),'!',7,'#63201E',anchor='mm')
+txt((225,226),'NON LUE : COULÉ',7,'#FFEEA0',stroke=0,anchor='lm')
+
+# Hardware framing; text in the right strip intentionally limited.
+d=ImageDraw.Draw(im)
+d.line((207,234,319,234),fill='#301A18',width=2)
+d.line((0,238,319,238),fill='#2D211D',width=2)
+
+out=ROOT/'g04_r2_attaque_320x240.png'
+im.save(out,optimize=True)
+zoom=im.resize((1280,960),Image.Resampling.NEAREST)
+zoom.save(ROOT/'g04_r2_attaque_x4.png',optimize=True)
 report={
  'status':'DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED',
- 'dimensions_native':[320,240], 'dimensions_zoom':[1280,960],
- 'grid':{'origin':[GX,GY], 'cell':CELL, 'rows':10,'columns':10,'width':180,'height':180},
- 'selected':TARGET,'selected_not_fired': TARGET not in MISSES+HITS,
- 'misses':MISSES,'hits':HITS,'enemy_ships_visible':False,
- 'riposte_latest':'B7 RATÉ','unread_max_severity':'COULÉ',
- 'buttons':['FEU','DÉFENSE','ABANDON'],'styles':'sunset sea / timber / bronze',
- 'font':'DejaVu Sans Condensed (host), not approved for firmware',
+ 'concept_provenance':'source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval',
+ 'authoring':'Editable Python scene composition, 10x10 geometry and native lettering/impacts',
+ 'native':[W,H], 'x4':[1280,960],
+ 'grid':{'x':GX,'y':GY,'cell':CELL,'width':180,'height':180},
+ 'axis':'columns A-J; rows 1-10',
+ 'target':TARGET,'misses':MISSES,'hits':HITS,'enemy_ships_visible':False,
+ 'last_reply':'B7 RATÉ','unread_severity':'COULÉ',
  'files':{}
 }
-for filename in ['g04_r2_attaque.svg','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png']:
-    p=HERE/filename
-    report['files'][filename]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(), 'bytes':p.stat().st_size}
-(HERE/'generation-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-print(json.dumps(report,indent=2,ensure_ascii=False))
+for name in ['reference_concept_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png']:
+ p=ROOT/name
+ report['files'][name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
+(ROOT/'generation-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+print(json.dumps(report,ensure_ascii=False,indent=2))

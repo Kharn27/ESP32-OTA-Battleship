@@ -1,61 +1,58 @@
 {
   "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
-  "dimensions_native": [
+  "concept_provenance": "source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval",
+  "authoring": "Editable Python scene composition, 10x10 geometry and native lettering/impacts",
+  "native": [
     320,
     240
   ],
-  "dimensions_zoom": [
+  "x4": [
     1280,
     960
   ],
   "grid": {
-    "origin": [
-      21,
-      53
-    ],
+    "x": 21,
+    "y": 53,
     "cell": 18,
-    "rows": 10,
-    "columns": 10,
     "width": 180,
     "height": 180
   },
-  "selected": "G5",
-  "selected_not_fired": true,
+  "axis": "columns A-J; rows 1-10",
+  "target": "G5",
   "misses": [
-    "C2",
-    "H4",
-    "A9",
+    "A8",
+    "B7",
+    "D1",
     "F9",
-    "J10"
+    "G2",
+    "H6",
+    "J4"
   ],
   "hits": [
-    "E7",
-    "B5",
-    "B6",
-    "I3"
+    "C3",
+    "E3",
+    "E4",
+    "I8"
   ],
   "enemy_ships_visible": false,
-  "riposte_latest": "B7 RATÉ",
-  "unread_max_severity": "COULÉ",
-  "buttons": [
-    "FEU",
-    "DÉFENSE",
-    "ABANDON"
-  ],
-  "styles": "sunset sea / timber / bronze",
-  "font": "DejaVu Sans Condensed (host), not approved for firmware",
+  "last_reply": "B7 RATÉ",
+  "unread_severity": "COULÉ",
   "files": {
-    "g04_r2_attaque.svg": {
-      "sha256": "8d08895ee4d879751795d3485ad5b3129770aa30399bedb68cb2d0e3b5d0d619",
-      "bytes": 24769
+    "reference_concept_1448x1086.png": {
+      "sha256": "75cdb7bdfd1bd588f6ba1682bfd750c9119e7c114238ccf1008c3cd3010a13ab",
+      "bytes": 2423167
+    },
+    "build_g04_r2.py": {
+      "sha256": "0453c4c0146cfe640a9be7950bc33442f66541bc10068350919c58127912f3e4",
+      "bytes": 9588
     },
     "g04_r2_attaque_320x240.png": {
-      "sha256": "4e3bf2512bc34556ecdf59fb488f8510d97e9bc5d0d38cbbaabbd0904b249d7f",
-      "bytes": 21523
+      "sha256": "2cffe31f26894b59d14217ec43d3fc19a1aae5cc485c48cdb72adde8c13a7256",
+      "bytes": 115709
     },
     "g04_r2_attaque_x4.png": {
-      "sha256": "668fcd4ea8763ec7efa94f68ab9538c55e156aed37972af1aebe4d49003b2359",
-      "bytes": 35935
+      "sha256": "e51bb01835d4545fdecbdf088346a72d75803a9d7bb2f79be6bab090be24469a",
+      "bytes": 174085
     }
   }
 }
