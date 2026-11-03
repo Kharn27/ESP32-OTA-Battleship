@@ -261,6 +261,47 @@ static void test_pre_ready_and_forfeit(void)
     EQ(store.delivered,1u);
     EQ(store.score.stores,1u);
 }
+/* The actual runtime disarms at command time (while DOWN), NOT after
+ * the test helper's artificial release. Confirm no QUITTER hold becomes
+ * a second CONFIRM/CONTINUER/ABANDONNER event across a phase change. */
+static void test_held_transition_boundary(void)
+{
+    boot_storage();
+    start(0u);ready();
+    WarshipCombatHit t;
+    WarshipEventStatus persisted=WARSHIP_EVENT_NO_CHANGE;
+    sample(0u,1u,0u,0u,10u,&t);
+    sample(0u,1u,0u,0u,80u,&t);
+    sample(1u,1u,230u,150u,120u,&t);
+    sample(1u,1u,230u,150u,160u,&t);
+    EQ(t.command,WARSHIP_COMBAT_CANCEL);
+    NAV_OK(warship_journey_apply(&game,&combat,t,NULL,NULL,
+        deliver,&store,&persisted));
+    EQ(game.phase,WARSHIP_LIFECYCLE_CONFIRM_ABANDON);
+    warship_combat_input_discard(&touch); /* actual D09 right after nav */
+    sample(1u,1u,230u,50u,200u,&t);
+    EQ(t.command,WARSHIP_COMBAT_NO_HIT);
+    sample(1u,1u,230u,50u,260u,&t);
+    EQ(t.command,WARSHIP_COMBAT_NO_HIT);
+    sample(0u,1u,0u,0u,270u,&t);
+    sample(0u,1u,0u,0u,330u,&t);
+    EQ(store.delivered,0u);
+
+    sample(1u,1u,230u,50u,360u,&t);
+    sample(1u,1u,230u,50u,400u,&t);
+    EQ(t.command,WARSHIP_COMBAT_FIRE);
+    NAV_OK(warship_journey_apply(&game,&combat,t,NULL,NULL,
+        deliver,&store,&persisted));
+    EQ(game.phase,WARSHIP_LIFECYCLE_COMBAT);
+    warship_combat_input_discard(&touch);
+    sample(1u,1u,230u,150u,460u,&t);
+    EQ(t.command,WARSHIP_COMBAT_NO_HIT);
+    sample(0u,1u,0u,0u,470u,&t);
+    sample(0u,1u,0u,0u,530u,&t);
+    EQ(game.phase,WARSHIP_LIFECYCLE_COMBAT);
+    EQ(store.delivered,0u);
+    EQ(store.seq.stores,0u);
+}
 static void test_fire_lock_no_deferred_quit(void)
 {
     start(0u);ready();observe();
@@ -438,6 +479,7 @@ static void test_uncertain_persistence(void)
 int main(void)
 {
     test_pre_ready_and_forfeit();
+    test_held_transition_boundary();
     test_fire_lock_no_deferred_quit();
     test_result_replay_return();
     test_uncertain_persistence();
