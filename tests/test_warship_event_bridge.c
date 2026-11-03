@@ -288,6 +288,11 @@ static void test_fail_closed(void)
     EQ(warship_event_bridge_open(NULL,score_backend,&score,
        id_backend,&ids),WARSHIP_EVENT_BAD_ARGUMENT);
     CHECK(memcmp(&old,&b,sizeof b)==0);
+    ids.exists=1;ids.value=0u;
+    EQ(warship_event_bridge_open(&b,score_backend,&score,
+       id_backend,&ids),WARSHIP_EVENT_CORRUPT);
+    CHECK(memcmp(&old,&b,sizeof b)==0);
+    ids.exists=0;
     ids.read_failure=-3;
     EQ(warship_event_bridge_open(&b,score_backend,&score,
        id_backend,&ids),WARSHIP_EVENT_INCOMPATIBLE_VERSION);

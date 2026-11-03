@@ -110,6 +110,8 @@ void d11_runtime_init(void)
         const WarshipEventStatus s=warship_event_bridge_receive(
             &bridge,WARSHIP_LIFECYCLE_EVENT_VICTORY);
         report("bench_first_write",s);
+        if(warship_event_bridge_has_pending(&bridge))
+            next_retry_us=esp_timer_get_time()+RETRY_PERIOD_US;
     } else if(last_id==1u && last==WARSHIP_LIFECYCLE_EVENT_VICTORY) {
         const WarshipPalmaresStatus dedup=warship_palmares_apply(
             &bridge.ledger,1u,WARSHIP_LIFECYCLE_EVENT_VICTORY);

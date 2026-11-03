@@ -54,7 +54,7 @@ WarshipEventStatus warship_event_bridge_open(
     uint64_t reservation_id = 0u;
     const int rc = identity_backend.load(identity_context, &reservation_id);
     if (rc != 0 && rc != 1) return map_id_load(rc);
-    if (rc == 0 && reservation_id < ledger_id)
+    if (rc == 0 && (reservation_id == 0u || reservation_id < ledger_id))
         return WARSHIP_EVENT_CORRUPT;
     candidate.reserved_id =
         rc == 0 && reservation_id > ledger_id ? reservation_id : ledger_id;

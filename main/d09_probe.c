@@ -305,13 +305,6 @@ void d09_probe_run(void)
                     ESP_LOGE(TAG,"D10_ACK_FAIL_AFTER_PRESENTATION");
                     return;
                 }
-                /* D11 consumes only the event emitted AFTER the LCD
-                 * composite returned ESP_OK and D07 ACK succeeded.
-                 * Do not perform NVS inside any DMA callback.
-                 */
-                d11_runtime_event(emitted);
-                if(emitted!=WARSHIP_LIFECYCLE_EVENT_NONE)
-                    memory_log("after_nvs_event");
                 ESP_LOGI(TAG,
                     "D10_PAIR_VISIBLE_ACK round=%u human=%u,%u impact=%u ship=%u captain=%u,%u impact=%u ship=%u event=%u",
                     (unsigned)combat.pending_pair.round,
@@ -324,6 +317,12 @@ void d09_probe_run(void)
                     (unsigned)combat.pending_pair.captain.impact,
                     (unsigned)combat.pending_pair.captain.ship_id,
                     (unsigned)emitted);
+                /* The LCD composite and D07 ACK have BOTH succeeded.
+                 * Keep the observable D10 ACK log before any NVS call,
+                 * outside all SPI/LCD DMA callbacks. */
+                d11_runtime_event(emitted);
+                if(emitted!=WARSHIP_LIFECYCLE_EVENT_NONE)
+                    memory_log("after_nvs_event");
                 if(warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK) {
                     ESP_LOGE(TAG,"D10_POST_ACK_OBSERVE_FAIL");
                     return;

@@ -8,7 +8,9 @@
 extern "C" {
 #endif
 
-/* NVS namespace "warship", one blob key "palmares".
+/* Default NVS namespace "warship", one blob key "palmares".
+ * Context namespace_name optionally selects an isolated diagnostic bench.
+ * NULL always means production. No automatic erase or migration.
  * Caller owns the diagnostics context, which must outlive the ledger.
  * No erase, factory reset, migration or automatic flash recovery.
  * No reading or writing takes place until init/open/apply are invoked.
