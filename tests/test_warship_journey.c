@@ -304,6 +304,7 @@ static void test_held_transition_boundary(void)
 }
 static void test_fire_lock_no_deferred_quit(void)
 {
+    boot_storage();
     start(0u);ready();observe();
     UI_OK(warship_combat_apply(&combat,&game,&pub,
         h(WARSHIP_COMBAT_CELL,1u,1u),150u,shoot_rng,NULL));
@@ -338,7 +339,7 @@ static void test_fire_lock_no_deferred_quit(void)
     sample(0u,1u,0u,0u,450u,&t);
     sample(0u,1u,0u,0u,520u,&t);
     EQ(game.phase,WARSHIP_LIFECYCLE_COMBAT);
-    EQ(store.delivered,1u); /* previous test's forfeit only */
+    EQ(store.delivered,0u); /* FEU/ACK alone must not emit a forfait */
     /* Next independent tap is allowed after release, no queued QUIT. */
     t=tap(550u,230u,150u);
     EQ(t.command,WARSHIP_COMBAT_CANCEL);
