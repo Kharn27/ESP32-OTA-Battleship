@@ -1,8 +1,8 @@
-> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** FIN DE PARTIE G07 (post-verdict compact). [Issue #53](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/53) · [PR #54 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/54). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+> **ATTENTION — G07 R1 OBSOLÈTE / REFUSÉE ARTISTIQUEMENT PAR LE PO LE 03/11/2026.** Les images qui suivent sont conservées **temporairement pour la traçabilité fonctionnelle** de l'ancienne [PR #54 fusionnée historiquement](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/54). **NE PAS les réutiliser comme référence de style ni comme maquette graphique validée.** Nouvelle mission : [G07-R2 / Issue #53](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/53), après G04-R2 et G05-R2. Aucune nouvelle version artistique approuvée pour le moment. `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`.
 
 # G07 — FIN DE PARTIE VS Capitaine — Issue #53
 
-## Aperçus intégrés — FIN DE PARTIE G07
+## Aperçus historiques intégrés — G07 R1 REFUSÉE (NE PAS RÉUTILISER)
 
 | Verdict sur ATTAQUE — 320 × 240 | Planche des variantes — 320 × 240 |
 | :---: | :---: |
@@ -25,7 +25,7 @@ Sources : [verdict SVG](g07_verdict_320x240.svg) · [variantes SVG](g07_variante
 
 
 **Graphiste / DA — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
-**Acceptation artistique PO : VALIDÉE pour la maquette PC (PR #54 fusionnée).** Cette livraison est une maquette PC,
+**Acceptation artistique PO : RETIRÉE pour le rendu R1 (03/11/2026).** Cette livraison est une maquette PC,
 sans preuve matérielle ou contrat d'assets firmware.
 
 ## Fichiers livrés
