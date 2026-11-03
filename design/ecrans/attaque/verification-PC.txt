@@ -1,4 +1,9 @@
 G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST
+BEFORE/AFTER each full 320x240, one-to-one: inside grid changed=27577, outside changed=0
+clean 181x181 grid: 3861 correct RGB line pixels; NO extra grid-coloured pixels
+continuous ocean: max luma=109.4 (threshold 125), max 18px-boundary seam=4.84 (threshold 8)
+negative phantom water seam (synthetic horizontal 1px): rejected
+native 640x260 side-by-side + x4 comparison: pixel-identical source halves and exact NEAREST
 grid PNG: 121 crossings + 220 line segments checked at x=21..201/y=53..233, 100 cells of 18px
 negative grid-line corruption: rejected
 4 state vignettes: native + strict x4 NEAREST PASS

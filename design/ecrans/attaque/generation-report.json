@@ -48,22 +48,25 @@
   "enemy_ships_visible": false,
   "last_reply": "B7 RATÉ",
   "unread_severity": "COULÉ",
+  "sea_render": "continuous 180x180 deterministic ocean; zero 18px tile seams",
+  "grid_render": "one authoritative set of 11+11 integer-aligned 1px lines",
+  "comparative": "two complete 320x240 native images pasted pixel-for-pixel at x=0 and x=320",
   "files": {
     "reference_concept_1448x1086.png": {
       "sha256": "75cdb7bdfd1bd588f6ba1682bfd750c9119e7c114238ccf1008c3cd3010a13ab",
       "bytes": 2423167
     },
     "build_g04_r2.py": {
-      "sha256": "4498f99a2c55b93892d44050b69a8f28b6d722c0a540531880ff1bb6abf61be5",
-      "bytes": 13768
+      "sha256": "cfd5885dba9fca1ebbb9b6290775724152b93ba17704ec68553c1e8833f0b0fe",
+      "bytes": 17023
     },
     "g04_r2_attaque_320x240.png": {
-      "sha256": "7be1719d1876b6fe4fe82517117b3ead0433640a6f3571a1a19a35ca3de26ad8",
-      "bytes": 116048
+      "sha256": "d0113e3d82c7f947d7ee3d699514cd6edfd6dda2f365abc8e3db39e206968556",
+      "bytes": 72449
     },
     "g04_r2_attaque_x4.png": {
-      "sha256": "fc42bd8d1174eed1b1d0faa6a81d649d7e26e80d325a94665f898d6de4f430f3",
-      "bytes": 174491
+      "sha256": "ce3b6d04b055d34d69be85eafe7723aba7935f1ac3247b31d98774650a8711d9",
+      "bytes": 110593
     },
     "g04_r2_etats_320x240.png": {
       "sha256": "6a326383281a9322fc79f131649e68e455029eba9ab0bb9589b6f2b9d491c872",
@@ -72,6 +75,26 @@
     "g04_r2_etats_x4.png": {
       "sha256": "827049e035e9e07bdd2769f6924b41f7507a7d437f9a786c362a85a91da6b1a7",
       "bytes": 49953
+    },
+    "g04_r2_avant_quadrillage_320x240.png": {
+      "sha256": "7be1719d1876b6fe4fe82517117b3ead0433640a6f3571a1a19a35ca3de26ad8",
+      "bytes": 116048
+    },
+    "g04_r2_comparaison_avant_apres_640x260.png": {
+      "sha256": "964e3a9288fb9df9267162bce930bff26eb80434f51c86e8b5c4bf370098e18e",
+      "bytes": 138919
+    },
+    "g04_r2_comparaison_x4.png": {
+      "sha256": "f499d1b003748c37aa681f7d6ff427e22af1afa9862d1bae07c20008faa86ce2",
+      "bytes": 214801
+    },
+    "g04_r2_mer_continue_180x180.png": {
+      "sha256": "ebb48cbf2ef74710e50b1914a80b0d677f8592d51a70f34376ee3b6de69d23b7",
+      "bytes": 10748
+    },
+    "g04_r2_plateau_sans_impacts_181x181.png": {
+      "sha256": "46f7f65362d5393e22bf14caca78258f1404242b9c038bae7359b70610475444",
+      "bytes": 11117
     }
   }
 }

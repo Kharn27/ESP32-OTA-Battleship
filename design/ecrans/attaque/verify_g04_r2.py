@@ -9,6 +9,85 @@ zoom=Image.open(ROOT/'g04_r2_attaque_x4.png').convert('RGB')
 state_native=Image.open(ROOT/'g04_r2_etats_320x240.png').convert('RGB')
 state_zoom=Image.open(ROOT/'g04_r2_etats_x4.png').convert('RGB')
 report=json.loads((ROOT/'generation-report.json').read_text())
+old=Image.open(ROOT/'g04_r2_avant_quadrillage_320x240.png').convert('RGB')
+comparative=Image.open(ROOT/'g04_r2_comparaison_avant_apres_640x260.png').convert('RGB')
+comparative_zoom=Image.open(ROOT/'g04_r2_comparaison_x4.png').convert('RGB')
+sea=Image.open(ROOT/'g04_r2_mer_continue_180x180.png').convert('RGB')
+board_clean=Image.open(ROOT/'g04_r2_plateau_sans_impacts_181x181.png').convert('RGB')
+assert old.size==(320,240) and comparative.size==(640,260)
+assert comparative_zoom.size==(2560,1040)
+assert sea.size==(180,180) and board_clean.size==(181,181)
+# Rejected reference is immutable: prevents re-labelling an after image as BEFORE.
+assert hashlib.sha256((ROOT/'g04_r2_avant_quadrillage_320x240.png').read_bytes()).hexdigest()==    '7be1719d1876b6fe4fe82517117b3ead0433640a6f3571a1a19a35ca3de26ad8'
+# This is an ACTUAL visual before/after: two intact 320x240 screenshots at 1:1.
+assert comparative.crop((0,20,320,260)).tobytes()==old.tobytes()
+assert comparative.crop((320,20,640,260)).tobytes()==native.tobytes()
+assert comparative.resize((2560,1040),Image.Resampling.NEAREST).tobytes()==comparative_zoom.tobytes()
+# Targeted retouch proof: no pixel outside the 181x181 grid including the
+# outer authoritative boundary has changed from the previously reviewed art.
+inside_changes=outside_changes=0
+for yy in range(240):
+    for xx in range(320):
+        if native.getpixel((xx,yy)) != old.getpixel((xx,yy)):
+            if 21<=xx<=201 and 53<=yy<=233:
+                inside_changes+=1
+            else:
+                outside_changes+=1
+assert inside_changes>=18000,(inside_changes,'ocean not actually corrected')
+assert outside_changes==0,(outside_changes,'unapproved change outside grid')
+
+# Diagnostic image shows the full grid with NO markers. We assert not merely
+# the presence of all 22 intended lines but their exclusive colour: none of
+# the remaining 100 interiors can be mistaken for a second white grid line.
+GRID_RGB=(185,232,238)
+FRAME_RGB=(214,250,242)
+count_grid_pixels=0
+for yy in range(181):
+    for xx in range(181):
+        pxy=board_clean.getpixel((xx,yy))
+        intended=(xx%18==0 or yy%18==0)
+        if intended:
+            expect=FRAME_RGB if (xx in (0,180) or yy in (0,180)) else GRID_RGB
+            assert pxy==expect,('authoritative grid pixel missing',xx,yy,pxy,expect)
+            count_grid_pixels+=1
+        else:
+            assert pxy not in (GRID_RGB,FRAME_RGB),('ghost grid-coloured pixel',xx,yy)
+assert count_grid_pixels==11*181*2-11*11
+
+# A separate ocean-only pixel check makes false separations measurable even
+# when they use colours OTHER than the real grid.  Its maximum luminance stays
+# well BELOW the grid; at every former 18px tile boundary, the mean first
+# derivative must be modest (no discontinuous 100-tile copy/paste seam).
+def lum(rgb):
+    r,g,b=rgb
+    return r*0.2126+g*0.7152+b*0.0722
+
+def check_ocean_only(img):
+    max_lum=0
+    for yy in range(180):
+        for xx in range(180):
+            max_lum=max(max_lum,lum(img.getpixel((xx,yy))))
+    assert max_lum<125,('water visually competes with white cell boundaries',max_lum)
+    seams=[]
+    for offset in range(18,180,18):
+        vert=sum(abs(lum(img.getpixel((offset,yy)))-lum(img.getpixel((offset-1,yy)))) for yy in range(180))/180
+        hori=sum(abs(lum(img.getpixel((xx,offset)))-lum(img.getpixel((xx,offset-1)))) for xx in range(180))/180
+        assert vert<8,('vertical false seam',offset,vert)
+        assert hori<8,('horizontal false seam',offset,hori)
+        seams.append((vert,hori))
+    return max_lum,max(max(v,h) for v,h in seams)
+ocean_max_luma,ocean_max_seam=check_ocean_only(sea)
+# Negative proof: a 1px-high synthetic false seam on water is detected even
+# though the 11 actual gameplay-grid lines are unchanged.
+phantom=sea.copy()
+from PIL import ImageDraw
+ImageDraw.Draw(phantom).line((0,90,179,90),fill=(145,182,190),width=1)
+try:
+    check_ocean_only(phantom)
+except AssertionError:
+    pass
+else:
+    raise AssertionError('water-only false-separation negative test accepted')
 assert native.size==(320,240),native.size
 assert zoom.size==(1280,960),zoom.size
 assert state_native.size==(320,240) and state_zoom.size==(1280,960)
@@ -95,6 +174,11 @@ for name,info in report['files'].items():
     assert hashlib.sha256(p.read_bytes()).hexdigest()==info['sha256'],name
     assert p.stat().st_size==info['bytes']
 print('G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST')
+print(f'BEFORE/AFTER each full 320x240, one-to-one: inside grid changed={inside_changes}, outside changed={outside_changes}')
+print(f'clean 181x181 grid: {count_grid_pixels} correct RGB line pixels; NO extra grid-coloured pixels')
+print(f'continuous ocean: max luma={ocean_max_luma:.1f} (threshold 125), max 18px-boundary seam={ocean_max_seam:.2f} (threshold 8)')
+print('negative phantom water seam (synthetic horizontal 1px): rejected')
+print('native 640x260 side-by-side + x4 comparison: pixel-identical source halves and exact NEAREST')
 print('grid PNG: 121 crossings + 220 line segments checked at x=21..201/y=53..233, 100 cells of 18px')
 print('negative grid-line corruption: rejected')
 print('4 state vignettes: native + strict x4 NEAREST PASS')

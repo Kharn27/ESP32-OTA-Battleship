@@ -66,30 +66,70 @@ for i in range(10):
 d.rectangle((19,51,202,234),fill='#623623',outline='#F7C97D',width=2)
 d.rectangle((20,52,201,233),fill='#102D42',outline='#271C25',width=1)
 
-# Reuse isolated clean water cells as native sea textures. Unlike a downscale
-# of the whole HD art, the native field contains no embedded phantom markers.
-x0,y0,x1,y1=154,248,830,900
-cw=(x1-x0)/10; ch=(y1-y0)/10
-orig_marked=[('A',8),('B',7),('D',1),('F',9),('G',2),('H',6),('J',4),('C',3),('E',3),('E',4),('I',8),('G',5)]
-marked={(ord(r)-65,c-1) for r,c in orig_marked}
-safe=[(rr,cc) for rr in range(10) for cc in range(10)
-      if all(max(abs(rr-mr),abs(cc-mc))>=2 for mr,mc in marked)]
-# Tiles with cleaner ocean and no baked symbols; 4px inset discards HD grid.
-for yrow in range(10):
-    for xcol in range(10):
-        rr,cc=safe[(xcol*29+yrow*17)%len(safe)]
-        box=(int(x0+cc*cw+5),int(y0+rr*ch+5),
-             int(x0+(cc+1)*cw-5),int(y0+(rr+1)*ch-5))
-        tex=ref.crop(box).resize((CELL,CELL),Image.Resampling.LANCZOS)
-        sea_tint=Image.new('RGB',(CELL,CELL),'#073C5E')
-        tex=Image.blend(tex,sea_tint,.14)
-        im.paste(tex,(GX+xcol*CELL,GY+yrow*CELL))
+# A single continuous, deterministic ocean artwork (G04-R2 grid readability correction).
+# The previous version used 100 independently cropped water tiles, generating
+# bright internal seams and phantom cell boundaries.  This replacement paints
+# a unified 180x180 ocean without tiles or any 18px-periodic operation.
+# The texture is deliberately SUBORDINATE to the 1px authoritative grid and
+# to game markers. Every swell is an isolated low-contrast motif, not a line.
+from random import Random
+RNG=Random(20261103)
+
+def make_continuous_ocean():
+    ocean=Image.new('RGB',(GRID,GRID))
+    px=ocean.load()
+    # Correlated colour variation at non-periodic scales. This is a continuous
+    # value field over the whole playable water, NOT a 10x10 tiled surface.
+    seeds=[(7,9,7),(17,14,5),(39,29,3)]
+    bands=[]
+    for wid,hei,amp in seeds:
+        field=Image.new('L',(wid,hei))
+        vals=field.load()
+        for yy in range(hei):
+            for xx in range(wid):
+                vals[xx,yy]=RNG.randint(85,170)
+        field=field.resize((GRID,GRID),Image.Resampling.BILINEAR)
+        bands.append((field.load(),amp))
+    for y in range(GRID):
+        depth=y/(GRID-1)
+        for x in range(GRID):
+            swell=sum(int((field[x,y]-128)*amp/64) for field,amp in bands)
+            # Teal-lit surface fading into a deeper midnight-blue ocean.
+            px[x,y]=(max(0,min(255,round(12-5*depth+swell*.38))),
+                     max(0,min(255,round(76-24*depth+swell))),
+                     max(0,min(255,round(103-23*depth+swell))))
+    dw=ImageDraw.Draw(ocean)
+    # Only short, broken crests: soft enough to sit BELOW actual grid lines.
+    # No continuous horizontal bars, no hard 18px tile edges or repeated stamps.
+    for idx in range(79):
+        x=RNG.randrange(3,GRID-18)
+        y=RNG.randrange(4,GRID-5)
+        span=RNG.randrange(4,10)
+        tone=RNG.choice(['#1B647B','#1B657A','#1D6980','#286A7C','#145A74'])
+        dw.line([(x,y),(x+span//2,y),(x+span//2+2,y-1),
+                 (x+span+2,y-1)],fill=tone,width=1)
+        # A few sunlit highpoints, NEVER pure white or grid-coloured.
+        if idx%6==0:
+            dw.point((x+span//2+2,y-2),fill='#2B7E8D')
+    # Mild smoothing prevents individual crests from becoming false straight
+    # cell borders; keep the authored 1px game grid as the sharpest signal.
+    return ocean
+
+sea_layer=make_continuous_ocean()
+sea_layer.save(ROOT/'g04_r2_mer_continue_180x180.png',optimize=True)
+im.paste(sea_layer,(GX,GY))
 d=ImageDraw.Draw(im)
+# The one-and-only gameplay grid, authored AFTER the ocean at exact coordinates.
+# Palette is reserved: the water generator NEVER emits these RGB values.
 for i in range(11):
     x=GX+i*CELL; y=GY+i*CELL
     d.line((x,GY,x,GY+GRID),fill='#B9E8EE',width=1)
     d.line((GX,y,GX+GRID,y),fill='#B9E8EE',width=1)
 d.rectangle((21,53,201,233),outline='#D6FAF2',width=1)
+# Proof-only view of the authoritative 11x11 lines on continuous sea before
+# marks are added; 181x181 includes both outer boundaries.
+im.crop((GX,GY,GX+GRID+1,GY+GRID+1)).save(
+    ROOT/'g04_r2_plateau_sans_impacts_181x181.png',optimize=True)
 
 # Mechanic signs: miss = foam ring + bubbles; hit = explosive orange bloom with
 # ink-dark water contact; prepared target = four gold square brackets + cross.
@@ -246,6 +286,24 @@ slabel((171,208),'Résumé et alerte acquittés','#D6F1E7',S8)
 
 states.save(ROOT/'g04_r2_etats_320x240.png',optimize=True)
 states.resize((1280,960),Image.Resampling.NEAREST).save(ROOT/'g04_r2_etats_x4.png',optimize=True)
+
+# True 1:1 PC acceptance comparison. Each 320x240 screenshot is pasted
+# WITHOUT resampling. The previous rejected image is an immutable input.
+old_path=ROOT/'g04_r2_avant_quadrillage_320x240.png'
+old=Image.open(old_path).convert('RGB')
+assert old.size==(320,240),'ancienne image native indisponible'
+compare=Image.new('RGB',(640,260),'#29202D')
+cd=ImageDraw.Draw(compare)
+cd.rectangle((0,0,319,19),fill='#713C3C')
+cd.rectangle((320,0,639,19),fill='#205F65')
+headfont=ImageFont.truetype(str(FONT_PATH),10)
+cd.text((9,5),'AVANT : 100 TEXTURES DISJOINTES',font=headfont,fill='#FFF5E3')
+cd.text((329,5),'APRÈS : 1 MER CONTINUE + GRILLE',font=headfont,fill='#FFF5E3')
+compare.paste(old,(0,20))
+compare.paste(im,(320,20))
+compare.save(ROOT/'g04_r2_comparaison_avant_apres_640x260.png',optimize=True)
+compare.resize((2560,1040),Image.Resampling.NEAREST).save(
+    ROOT/'g04_r2_comparaison_x4.png',optimize=True)
 report={
  'status':'DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED',
  'concept_provenance':'source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval',
@@ -256,9 +314,12 @@ report={
  'axis':'columns A-J; rows 1-10',
  'target':TARGET,'misses':MISSES,'hits':HITS,'enemy_ships_visible':False,
  'last_reply':'B7 RATÉ','unread_severity':'COULÉ',
+ 'sea_render':'continuous 180x180 deterministic ocean; zero 18px tile seams',
+ 'grid_render':'one authoritative set of 11+11 integer-aligned 1px lines',
+ 'comparative':'two complete 320x240 native images pasted pixel-for-pixel at x=0 and x=320',
  'files':{}
 }
-for name in ['reference_concept_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png']:
+for name in ['reference_concept_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png','g04_r2_avant_quadrillage_320x240.png','g04_r2_comparaison_avant_apres_640x260.png','g04_r2_comparaison_x4.png','g04_r2_mer_continue_180x180.png','g04_r2_plateau_sans_impacts_181x181.png']:
  p=ROOT/name
  report['files'][name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
 (ROOT/'generation-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

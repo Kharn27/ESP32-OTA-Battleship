@@ -1,6 +1,6 @@
 # G04-R2 — ATTAQUE VS Capitaine — contre-revue corrective
 
-> **`DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · `CORRECTIONS_REQUISES` de Pilotage traitées sur PC · accord artistique PO non reçu.**  
+> **`DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · `CORRECTIONS_REQUISES — REFUS_ARTISTIQUE_PO_G04-R2` · nouveau correctif soumis pour contre-revue · accord artistique PO non reçu.**  
 > Issue [#45](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/45) · PR Draft [#64](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/64) · Branche `design/g04-r2-attaque`. **Seul Pilotage fusionne.**
 
 ## Proposition principale 320 × 240 native
@@ -12,6 +12,30 @@
 ![Écran ATTAQUE agrandi sans interpolation](g04_r2_attaque_x4.png)
 
 </details>
+
+## Nouveau correctif : lisibilité des 100 cases (prescription Pilotage du 03/11/2026)
+
+> Source du refus : [commentaire Pilotage #6609534686](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/64#issuecomment-6609534686), suivant l'arbitrage artistique du PO. Les contrôles anciens prouvaient les coordonnées, **pas la lecture immédiate de 100 cases**.
+
+**Comparatif direct avant/après à résolution native (deux captures de 320×240 pixels non redimensionnées, juxtaposition 640×260 avec bandeaux de 20 px) :**
+
+![Avant : cent carreaux de mer distincts / Après : mer continue, quadrillage unique — deux images 320×240 natives](g04_r2_comparaison_avant_apres_640x260.png)
+
+<details><summary>Zoom de contrôle ×4 NEAREST strict — 2560×1040</summary>
+
+![Comparaison ×4 sans interpolation](g04_r2_comparaison_x4.png)
+
+</details>
+
+**Le seul changement pictural se situe dans le plateau 180×180 :** 27 577 pixels différents à l'intérieur des coordonnées `(21,53)…(201,233)` ; **zéro pixel modifié en dehors du plateau** par rapport au PNG de la livraison refusée. Le bandeau du capitaine, la perspective, le bois, les boutons, les textes, les impacts et le réticule **G5** sont conservés. L'ancienne image est conservée dans `g04_r2_avant_quadrillage_320x240.png` comme preuve exacte, pas comme référence active.
+
+**Rendu proposé :** la précédente mosaïque de **100 crops indépendants de 18×18** est supprimée. `build_g04_r2.py` génère une **surface unique de 180×180**, à teinte et variations d'éclairage continues. Des rides courtes, irrégulières et peu contrastées évoquent l'océan, sans bordures artificielles aux multiples de 18 px. Au-dessus, **une seule grille autoritaire** de 11 verticales + 11 horizontales, épaisseur 1 px, coordonnées entières exactes. Les effets de coups sont dessinés ensuite **au-dessus** du quadrillage, à leurs positions initiales. La couche décorative reste subordonnée à la lisibilité.
+
+**Diagnostic sans coups (pas une deuxième interface jouable) :** [mer continue nue 180×180](g04_r2_mer_continue_180x180.png) et [plateau 181×181 avec toutes les bordures, sans impacts](g04_r2_plateau_sans_impacts_181x181.png). La dimension de ce dernier est **181** pour inclure le pixel de bord x/y=180, tandis que la **surface des 100 cases reste 180×180**.
+
+**Preuve PC en plus des anciens tests :** `verify_g04_r2.py` vérifie les **3 861 pixels de lignes uniques** dans le diagnostic sans impacts, l'absence de couleur de ligne ailleurs, le contraste de la mer, les ruptures moyennes aux anciens raccords de 18 px, la constance des 100 cases, la correspondance bit à bit des deux moitiés de la comparaison native, le zoom ×4, et l'absence de changement hors plateau. Contrôles négatifs : injection d'une **fausse ligne d'eau** détectée, suppression d'un pixel de grille détectée et altération d'un canal du PNG ×4 détectée. Mesures recueillies : luminance maximale de la mer **109,4** (<125) ; contraste/raccord moyen maximal **4,84** (<8) ; 0 modification hors plateau. Les tests sont des **garde-fous**, et **non une acceptation artistique automatique** : seule l'observation à 320×240 par le PO tranche le point « 100 cases immédiatement reconnaissables ».
+
+**Status :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`, **non validé PO**. Aucune modification à G05/G07/G08, Bible, firmware ou charte générale. La dette CYD reste reportée à l'intégration matérielle.
 
 ## Annexe visuelle ciblée — quatre états demandés (§2.5, Issue #45)
 
