@@ -12,6 +12,11 @@ static WarshipCombatFrame frame;
 static uint32_t human_rng=0x12345678u, cpu_fleet_rng=0x87654321u;
 static uint32_t attack_rng=0x13572468u;
 
+static int random_fail(void *ctx, uint32_t *out)
+{
+    (void)ctx; (void)out;
+    return -1;
+}
 static int random_u32(void *ctx, uint32_t *out)
 {
     uint32_t *seed=(uint32_t *)ctx;
@@ -72,6 +77,8 @@ static void input_tests(void)
     assert(warship_combat_input_step(&g,1,1,240,98,800,0,0,&h)==WARSHIP_COMBAT_OK);
     assert(warship_combat_input_step(&g,1,1,240,98,840,0,0,&h)==WARSHIP_COMBAT_OK);
     assert(h.command==WARSHIP_COMBAT_SWITCH);
+    warship_combat_input_discard(&g);
+    assert(!g.armed && g.consumed);
     assert(warship_combat_input_step(&g,0,1,0,0,850,0,0,&h)==WARSHIP_COMBAT_OK);
     assert(warship_combat_input_step(&g,0,1,0,0,910,0,0,&h)==WARSHIP_COMBAT_OK);
     assert(warship_combat_input_step(&g,1,0,240,98,940,0,0,&h)==WARSHIP_COMBAT_OK);
@@ -146,6 +153,14 @@ static void combat_tests(void)
     assert(warship_combat_make_frame(&pub,&ui,0,&frame)==WARSHIP_COMBAT_OK);
     for (unsigned i=0;i<100;i++) assert(frame.ships[i]==0u);
     assert(frame.has_selection && frame.target_x==1 && frame.target_y==1);
+    /* RNG failure cannot advance D07, the private session or UI. */
+    static WarshipLifecycle before;
+    before=game;
+    const WarshipCombatUi before_ui=ui;
+    assert(warship_combat_apply(&ui,&game,&pub,hit(WARSHIP_COMBAT_FIRE,0,0),
+                                1790u,random_fail,NULL)==WARSHIP_COMBAT_GAME_ERROR);
+    assert(memcmp(&before,&game,sizeof game)==0);
+    assert(memcmp(&before_ui,&ui,sizeof ui)==0);
     assert(act(WARSHIP_COMBAT_FIRE,0,0,1800)==WARSHIP_COMBAT_OK);
     assert(ui.pending && ui.view==WARSHIP_COMBAT_ATTACK && !ui.reveals);
     observe();
