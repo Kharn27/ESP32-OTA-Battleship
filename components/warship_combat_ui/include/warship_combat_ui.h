@@ -74,6 +74,8 @@ typedef struct {
 void warship_combat_init(WarshipCombatUi *ui, WarshipCombatInput *in,
                         uint64_t now_ms);
 WarshipCombatHit warship_combat_hit(uint8_t view, uint16_t x, uint16_t y);
+/* Disarm for any press that began while synchronous LCD DMA blocked sampling. */
+void warship_combat_input_discard(WarshipCombatInput *in);
 WarshipCombatStatus warship_combat_input_step(
     WarshipCombatInput *in, uint8_t down, uint8_t valid,
     uint16_t x, uint16_t y, uint64_t now_ms, uint8_t blocked,
