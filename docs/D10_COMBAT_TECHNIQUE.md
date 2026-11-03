@@ -29,7 +29,7 @@ Les `history.incoming[]` publics dessinent les impacts sur la flotte **humaine**
 
 Écran **320×240 paysage** ; grille **(22,24,190,190)** ; FEU **(225,32,91,38)** ; bascule DÉFENSE/ATTAQUE **(225,83,91,38)** ; ANNULER/verdict technique **(225,134,91,38)**. Bord intérieur de boutons : 2 px non interactifs. Aucune de ces coordonnées ne reprend ou valide les hitboxes G04/G05. La grille présente un tir par case et non une liste de cases d'épave. Le texte 5×7 et les couleurs restent des sondes techniques à mesurer au stylet sur le vrai TFT.
 
-Le rendu reconstruit l'écran à partir du frame public et le transmet par **bandes de 8 lignes** sur l'unique buffer DMA existant, sans framebuffer complet. Le protocole de rendu est déterministe et borné ; les rafraîchissements sont bandés, mais **les rectangles d'optimisation supplémentaires ne sont pas encore implémentés**. Toute latence élevée ou scintillement nécessitera une correction après mesure réelle, pas une hypothèse de fluidité.
+Le rendu reconstruit l'écran à partir du frame public et le transmet par **bandes de 8 lignes** sur l'unique buffer DMA existant, sans framebuffer complet. Sur sélection, remplacement ou annulation, **seules l'ancienne case, la nouvelle case (19×19 chacune) et la commande FEU (91×38)** sont rafraîchies. Les changements de vue, FEU et révélation demandent un redraw complet bandé (une seule grille de 320×240, non un framebuffer). Le protocole reste déterministe et borné. Les latences et scintillements doivent être mesurés sur la vraie CYD.
 
 ## Pile et métriques obligatoires
 
