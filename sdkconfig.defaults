@@ -1,0 +1,3 @@
+# D09 P1: 3584 B main-task stack left 1008 B after PRET on PO CYD.
+# Reserve 512 B more on the app_main FreeRTOS task; no boot modes.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096

@@ -104,11 +104,15 @@ WarshipLifecycleStatus warship_lifecycle_ready(WarshipLifecycle *game)
     if (game->phase != WARSHIP_LIFECYCLE_DEPLOY)
         return WARSHIP_LIFECYCLE_BAD_PHASE;
     if (!ready_fleets(game)) return WARSHIP_LIFECYCLE_INTERNAL_ERROR;
-    WarshipSoloSession session;
+    /* D06 init preserves its destination on failure, and human/captain
+     * are distinct from solo. Commit directly to game->solo: a full
+     * WarshipSoloSession temporary here would remain live while D06 and
+     * D02 also allocate initialization state on the app_main stack.
+     * Phase changes only after successful initialization.
+     */
     const WarshipSoloStatus st =
-        warship_solo_init(&session, &game->human, &game->captain);
+        warship_solo_init(&game->solo, &game->human, &game->captain);
     if (st != WARSHIP_SOLO_OK) return from_solo(st);
-    game->solo = session;
     game->phase = WARSHIP_LIFECYCLE_COMBAT;
     return WARSHIP_LIFECYCLE_OK;
 }

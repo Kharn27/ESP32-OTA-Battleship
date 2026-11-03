@@ -19,19 +19,21 @@
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "sdkconfig.h"
+
+/* Explicit minimum required by D09 P1; sdkconfig.defaults is only used
+ * when no higher-priority local sdkconfig override exists. Fail a stale
+ * local build rather than quietly ship a 3584-byte main-task stack again.
+ */
+#if CONFIG_ESP_MAIN_TASK_STACK_SIZE < 4096
+#error "D09 needs >=4096 B app_main stack; regenerate sdkconfig (idf.py set-target esp32) or configure main task stack >=4096"
+#endif
 
 static const char *const TAG="D09";
 static WarshipLifecycle game;
 static WarshipLifecyclePublic public_view;
 static WarshipDeployFrame frame;
 static WarshipDeployInput input;
-
-/* TEMPORARY diagnostic map: not a measured or approved calibration. */
-static const T02TouchMap diagnostic_map={
-    .x_at_left=0u,.x_at_right=4095u,
-    .y_at_top=0u,.y_at_bottom=4095u,
-    .width=WARSHIP_LCD_WIDTH,.height=WARSHIP_LCD_HEIGHT,
-};
 
 static int rng_u32(void *ctx,uint32_t *out)
 {
@@ -116,7 +118,11 @@ static esp_err_t draw_for_action(WarshipDeployAction action)
 }
 void d09_probe_run(void)
 {
-    ESP_LOGW(TAG,"BOOT probe=D09 technical only. Touch XY map RAW 0..4095 UNCALIBRATED; NOT G03");
+    ESP_LOGW(TAG,"BOOT probe=D09 technical only; PO calibration issue=21 swap=1 screen_x_raw_y=215..3799 screen_y_raw_x=302..3865 size=320x240; NOT G03");
+    ESP_LOGI(TAG,"STACK_CONFIG main_task_bytes=%u sizeof_solo=%u sizeof_battle=%u; MAIN task watermark is MIN FREE BYTES, not current free stack",
+             (unsigned)CONFIG_ESP_MAIN_TASK_STACK_SIZE,
+             (unsigned)sizeof(WarshipSoloSession),
+             (unsigned)sizeof(WarshipBattle));
     memory_log("startup");
     WarshipDeployLayout layout=warship_deploy_default_layout();
     if(warship_deploy_input_init(&input,&layout)!=WARSHIP_DEPLOY_OK ||
@@ -178,7 +184,7 @@ void d09_probe_run(void)
                          esp_err_to_name(spi),(unsigned)sample_errors);
             } else if(raw.x==0u || raw.y==0u ||
                       raw.x==4095u || raw.y==4095u ||
-                      t02_map_point(&diagnostic_map,raw.x,raw.y,
+                      t02_map_d09_point(raw.x,raw.y,
                                     &x,&y)!=0) {
                 valid=0u;
                 ESP_LOGW(TAG,"TOUCH_MAP_REJECT raw=%u,%u",
@@ -186,7 +192,7 @@ void d09_probe_run(void)
             }
         }
         if(down && !prev_down)
-            ESP_LOGI(TAG,"TOUCH_DOWN raw=%u,%u provisional=%u,%u valid=%u triplet_x=%u,%u,%u triplet_y=%u,%u,%u",
+            ESP_LOGI(TAG,"TOUCH_DOWN raw=%u,%u mapped=%u,%u valid=%u triplet_x=%u,%u,%u triplet_y=%u,%u,%u",
                      (unsigned)raw.x,(unsigned)raw.y,(unsigned)x,(unsigned)y,
                      (unsigned)valid,
                      (unsigned)raw.xs[0],(unsigned)raw.xs[1],
@@ -205,7 +211,7 @@ void d09_probe_run(void)
             const uint8_t was=game.phase;
             const WarshipDeployStatus applied=warship_deploy_apply(
                 &game,action,rng_u32,NULL,rng_u32,NULL);
-            ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u provisional=%u,%u from=%u to=%u result=%u",
+            ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u mapped=%u,%u from=%u to=%u result=%u",
                      (unsigned)action,(unsigned)raw.x,(unsigned)raw.y,
                      (unsigned)x,(unsigned)y,(unsigned)was,
                      (unsigned)game.phase,(unsigned)applied);
