@@ -2,6 +2,28 @@
 
 # G07 — FIN DE PARTIE VS Capitaine — Issue #53
 
+## Aperçus intégrés — FIN DE PARTIE G07
+
+| Verdict sur ATTAQUE — 320 × 240 | Planche des variantes — 320 × 240 |
+| :---: | :---: |
+| ![G07 — écran principal de verdict compact](g07_verdict_320x240.png) | ![G07 — planche des variantes de verdict](g07_variantes_320x240.png) |
+
+<details>
+<summary>Voir les zooms ×4 (1280 × 960, NEAREST)</summary>
+
+**Verdict principal :**
+
+![G07 — verdict, zoom ×4](g07_verdict_x4.png)
+
+**Planche des variantes :**
+
+![G07 — variantes, zoom ×4](g07_variantes_x4.png)
+
+</details>
+
+Sources : [verdict SVG](g07_verdict_320x240.svg) · [variantes SVG](g07_variantes_320x240.svg) · [générateur](build_g07.py).
+
+
 **Graphiste / DA — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
 **Acceptation artistique PO : VALIDÉE pour la maquette PC (PR #54 fusionnée).** Cette livraison est une maquette PC,
 sans preuve matérielle ou contrat d'assets firmware.
