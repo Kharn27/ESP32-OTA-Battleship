@@ -1,5 +1,14 @@
 {
-  "scenario": "Fictif — défaite contre Capitaine",
+  "scenario": "FICTION — DÉFAITE VS Capitaine",
+  "board": {
+    "col_count": 10,
+    "row_count": 10,
+    "cell_px": 18,
+    "width_px": 180,
+    "height_px": 180,
+    "x": 21,
+    "y": 53
+  },
   "fleet": {
     "PORTE_AVIONS": [
       "B5",
@@ -73,10 +82,10 @@
     "J4"
   ],
   "states": {
-    "A": "flotte secrète",
-    "B": "flotte révélée",
-    "C": "flotte masquée après inspection"
+    "A": "secret, VOIR SA FLOTTE",
+    "B": "revealed, MASQUER",
+    "C": "hidden again, AFFICHER"
   },
-  "historical_shots_unchanged": true,
-  "source": "Illustration PO transmise en conversation le 03/11/2026"
+  "navigation_visibility": "B/C conserved across ATTAQUE > DEFENSE > ATTAQUE (UX contract only)",
+  "source": "Image de référence artistique fournie par le PO"
 }
