@@ -2,6 +2,58 @@
 
 # G08 / Issue #55 — inspection volontaire après DÉFAITE VS Capitaine
 
+## Aperçus intégrés — INSPECTION G08
+
+**États natifs, 320 × 240 px :** les impacts sont identiques en A/B/C, les coques ennemies n'apparaissent qu'en B.
+
+| A — flotte secrète | B — flotte révélée | C — flotte remasquée |
+| :---: | :---: | :---: |
+| ![G08 A — flotte secrète, VOIR SA FLOTTE](g08_etat_a_320x240.png) | ![G08 B — flotte révélée, MASQUER](g08_etat_b_320x240.png) | ![G08 C — flotte remasquée, AFFICHER](g08_etat_c_320x240.png) |
+
+**Planche A/B/C, 320 × 240 px :**
+
+![G08 — planche de comparaison A/B/C](g08_variantes_320x240.png)
+
+<details>
+<summary>Voir les zooms ×4 des trois états et de la planche (1280 × 960, NEAREST)</summary>
+
+**État A :**
+
+![G08 A — zoom ×4](g08_etat_a_x4.png)
+
+**État B :**
+
+![G08 B — zoom ×4](g08_etat_b_x4.png)
+
+**État C :**
+
+![G08 C — zoom ×4](g08_etat_c_x4.png)
+
+**Planche des variantes :**
+
+![G08 — planche A/B/C, zoom ×4](g08_variantes_x4.png)
+
+</details>
+
+<details>
+<summary>Voir l'alias du rendu principal : état B (fichiers identiques à B ci-dessus)</summary>
+
+![G08 — alias de l'état B, natif 320×240](g08_inspection_320x240.png)
+
+![G08 — alias de l'état B, zoom ×4](g08_inspection_x4.png)
+
+</details>
+
+<details>
+<summary>Voir la référence d'intention artistique du PO — ce n'est pas la maquette finale 320×240</summary>
+
+![G08 — illustration HD de référence artistique du PO, non homologuée comme asset firmware](reference_design_PO.png)
+
+</details>
+
+Sources : [ORA A](g08_etat_a_layers.ora) · [ORA B](g08_etat_b_layers.ora) · [ORA C](g08_etat_c_layers.ora) · [générateur](build_g08_reference.py).
+
+
 **Reprise OPTION A validée par le PO — Direction artistique préservée, géométrie du G07 rétablie.** Statut : `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`. Pour relecture du PO et contre-revue du Pilotage uniquement. Aucun changement dans G07, la Bible ou le firmware.
 
 ## Composition graphique native

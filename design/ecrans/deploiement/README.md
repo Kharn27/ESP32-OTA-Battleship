@@ -2,6 +2,22 @@
 
 # G03 — DÉPLOIEMENT VS CAPITAINE (Issue #37)
 
+## Aperçus intégrés — DÉPLOIEMENT G03
+
+**Maquette approuvée, 320 × 240 px :**
+
+![G03 — déploiement, commandes AUTO, PRÊT, RETOUR](g03_deploiement_320x240.png)
+
+<details>
+<summary>Voir le zoom ×4 (1280 × 960, NEAREST)</summary>
+
+![G03 — déploiement, zoom ×4](g03_deploiement_x4.png)
+
+</details>
+
+[Source SVG éditable](g03_deploiement_320x240.svg) · [Générateur](export_previews.py).
+
+
 **Responsable :** Graphiste / DA · **Statut :** `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · **Décision PO sur cet écran :** VALIDÉ en maquette PC.  
 **Branche :** `design/issue-37-deploiement` · **Dépendances :** identité [G01 #16](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/16), flotte validée [G02 #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30) / PR #32 fusionnée.  
 **Périmètre :** composition 320×240 PC **uniquement**, sans firmware ni test stylet.

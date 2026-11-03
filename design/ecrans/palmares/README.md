@@ -2,6 +2,26 @@
 
 # G06 — PALMARÈS VS CAPITAINE · Issue #47
 
+## Aperçus intégrés — PALMARÈS G06
+
+**Écran principal approuvé, 320 × 240 px :**
+
+![G06 — palmarès VS Capitaine, statistiques d'exemple et forfait global](g06_palmares_320x240.png)
+
+**État zéro partie : vignette pédagogique, pas un deuxième écran complet.**
+
+![G06 — vignette zéro partie, tous les compteurs à 00](g06_zero_partie.png)
+
+<details>
+<summary>Voir le zoom ×4 du palmarès (1280 × 960, NEAREST)</summary>
+
+![G06 — palmarès, zoom ×4](g06_palmares_x4.png)
+
+</details>
+
+Sources : [SVG principal](g06_palmares_320x240.svg) · [SVG zéro partie](g06_zero_partie.svg) · [générateur](export_previews.py).
+
+
 **Graphiste / DA · LOT 1 · `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`.**  
 **Arbitrage artistique PO : VALIDÉ au niveau de la maquette PC.** PR #51 fusionnée par Pilotage.  
 **Branche :** `design/issue-47-palmares`. **Base au lancement :** `main` `0642e7abc1d4285d978586042df66edcbff5b4ec`.

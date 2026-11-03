@@ -2,6 +2,22 @@
 
 # GRAPH-ACC-001 — Accueil CYD WARSHIP — remise image PO
 
+## Aperçus intégrés — ACCUEIL
+
+**Maquette approuvée, 320 × 240 px :**
+
+![Accueil CYD WARSHIP — JOUER et PALMARÈS, maquette native](accueil_cyd_warship_320x240.png)
+
+<details>
+<summary>Voir le zoom ×4 (1280 × 960, NEAREST)</summary>
+
+![Accueil CYD WARSHIP — zoom ×4](accueil_cyd_warship_x4.png)
+
+</details>
+
+La [source SVG](accueil_cyd_warship.svg) encapsule une image HD, pas des éléments vectoriels indépendants.
+
+
 **Mission :** première maquette complète de l’accueil CYD WARSHIP, LOT 1.
 **Origine :** dernière image générée et explicitement retenue par le PO dans la conversation, avec deux boutons de même taille, libellés **JOUER** et **PALMARÈS**, titre **CYD WARSHIP**, navire au premier plan tirant vers les bâtiments ennemis éloignés. Aucun changement artistique effectué lors de l’export.
 
