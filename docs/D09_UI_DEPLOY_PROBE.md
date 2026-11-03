@@ -21,17 +21,31 @@ La future UI de combat, les finales, le NVS D08, l'ESP-NOW, les effets et le men
 | Projection publique | `warship_lifecycle_observe()` | `WarshipLifecyclePublic`, flotte humaine uniquement |
 | C99 sans matériel | `components/warship_deploy_ui/` | hit-test paramétré, debounce, décisions D07 autorisées, raster déterministe |
 | LCD | `components/warship_lcd/` de T02 | **Cas 10**, séquence `MV=0, MX=0, MY=1`, **320×240**, une bande **5120 o DMA** |
-| Tactile | `components/warship_touch/` partagé T02/D09 | **SPI3 exclusif**, PENIRQ36, XPT2046 médiane de trois lectures X/Y ; **non calibré** |
+| Tactile | `components/warship_touch/` | **SPI3 exclusif**, PENIRQ36, XPT2046 médiane de trois lectures X/Y ; projection issue des mesures PO #21 |
 | Adaptateur matériel D09 | `main/d09_probe.c` | une seule tâche, propriétaire D07, LCD et toucher ; journalise temps, erreurs, mémoire |
-| Diagnostic original | `main/t02_probe.c` | conserve mire T02, rafraîchissement et échantillonnage raw, réutilise le même pilote XPT2046 ; **jamais simultané** |
 
 Aucun framebuffer plein écran : un `WarshipDeployFrame` de **100 octets de cases + un octet mode**, dérivé de l'observation publique D07, est alimenté par la flotte humaine. La fonction `warship_deploy_pixel()` fournit les couleurs RGB565 à la demande ; `d09_probe.c` remplit la bande **8 lignes × largeur × 2** du pilote LCD puis appelle `warship_lcd_send()` **synchrone / DMA terminé** avant de modifier le buffer. Le bloc reste alloué et **n'est jamais réutilisé après erreur ou timeout LCD**. Il n'existe aucune allocation graphique proportionnelle à 320×240 ; aucune PSRAM/LVGL/microSD. Les deux images complètes (boot et RETOUR/START) nécessitent 30 bandes DMA, et AUTO ne redessine que la région de grille `(0,0,220,240)` ; PRÊT seulement le panneau `(220,0,100,240)`. Les temps réels sont consignés en `DRAW ... us=...`, **non inventés**.
 
 Les structures `WarshipLifecycle` et `WarshipLifecyclePublic` sont statiques (BSS) au niveau de la tâche de sonde et non dupliquées sur sa pile. `MEM phase=...` journalise heap libre/plus grand bloc/minimum, bloc DMA, stack watermark FreeRTOS, nombre de bandes/erreurs, tailles de structures. **Le watermark pile doit être mesuré réellement sur l'appareil**, et `idf.py size` ne le prouve pas. L'ordonnanceur est utilisé seulement par la boucle de polling `vTaskDelay(20ms)` ; aucun traitement graphique dans une IRQ.
 
-## Tactile non calibré et dispatcher
+## Projection tactile mesurée et dispatcher B01 inchangé
 
-Le transport XPT2046 T02 a été extrait sans changer le protocole matériel : `SPI3_HOST MOSI32/MISO39/SCLK25/CS33/IRQ36`, `1 MHz`, mode 0, trois requêtes `0xD0 X` et `0x90 Y`, médiane de chaque triplet. **La fiabilité des ADC et les inversions d'axes restent NON VÉRIFIÉES par cette PR.** Le mapping `T02TouchMap` convertit provisoirement l'ADC 12-bit `[0..4095]` vers l'écran 320×240, sans calibration. Une valeur saturée (0 ou 4095), un échec SPI ou un mapping erroné supprime **la totalité du geste** et l'erreur apparaît dans les logs ; aucune commande n'est interprétée en cas d'échec.
+La campagne T02-B physique approuvée par Pilotage (Issue #21) a produit
+15 gestes indépendants sur cinq cibles, avec permutation des axes :
+**écran X ← raw Y 215..3799 ; écran Y ← raw X 302..3865**, écran 320×240,
+bornage sur les pixels [0..319]×[0..239]. Les cinq médianes donnent au
+plus **2 px d'écart** par axe, somme des carrés 15 px². Ce résultat ne
+garantit pas la répétabilité de chaque geste ni les bords : l'UX D09
+reste à confirmer physiquement. Le point PRÊT PO `raw=(2092,3346)`
+est désormais projeté vers **(279,120)**, dans la zone PRÊT.
+
+La conversion reste pure C99 dans `t02_touch_map` (fonction
+`t02_map_d09_point()`), le transport XPT2046 conserve
+`SPI3_HOST MOSI32/MISO39/SCLK25/CS33/IRQ36`, 1 MHz, mode 0,
+trois requêtes `0xD0 X` et `0x90 Y`, médiane par axe.
+Une valeur saturée ADC (0 ou 4095), une erreur SPI ou une
+projection invalide annulent le geste entier. Aucune modification du
+dispatcher **B01** n'a été faite dans ce correctif.
 
 Le dispatcher C99 `WarshipDeployInput` réalise :
 - Appui stable pendant **40 ms** avant émission ; relâchement stable **60 ms** pour réarmer, garde supplémentaire **120 ms** entre actions acceptées. La fréquence de lecture ciblée est 20 ms, hors temps de dessin.
@@ -39,15 +53,20 @@ Le dispatcher C99 `WarshipDeployInput` réalise :
 - Trois zones `AUTO (231,39,82,40)`, `PRÊT (231,99,82,40)`, `RETOUR (231,159,82,40)`, et `START (231,99,82,40)` **en HOME seulement**, avec une bordure non interactive de 2 px. La grille `(23,24,190,190)` contient 10×10 cases de 19×19. Les dimensions/recouvrements sont validés ; `warship_deploy_hit()` refuse les phases non attendues.
 - `warship_deploy_apply()` est limité aux cinq transitions autorisées de D07 : START, AUTO, READY et RETURN (aucun FEU ni abandon). Aucun événement D07 terminal/forfait n'est consommé ni stocké par D09.
 
-Les logs de D09 comprennent : `TOUCH_DOWN raw=... provisional=... valid=... triplet`, `TOUCH_UP`, `TOUCH_SPI_ERROR`, `TOUCH_MAP_REJECT`, `ACTION id=... raw=... provisional=... from=... to=... result=...`, `FRAME ... public_human`, `DRAW ... us`, `MEM phase`, et les compteurs. Cette instrumentation doit permettre au PO et Pilotage de constater les inversions et les fausses zones sans attribuer à ce mapping une précision non testée.
+Les logs de D09 comprennent : `TOUCH_DOWN raw=... mapped=... valid=... triplet`, `TOUCH_UP`, `TOUCH_SPI_ERROR`, `TOUCH_MAP_REJECT`, `ACTION id=... raw=... mapped=... from=... to=... result=...`, `FRAME ... public_human`, `DRAW ... us`, `MEM phase`, et les compteurs. Cette instrumentation doit permettre au PO et Pilotage de constater les inversions et les fausses zones sans attribuer à ce mapping une précision non testée.
 
-### Mode de démarrage T02 ou D09
+### Démarrage D09 direct (décision Pilotage du 02/11/2026)
 
-**Choix Kconfig** dans `main/Kconfig.projbuild`, menu **CYD WARSHIP boot mode** :
-- `CONFIG_WARSHIP_BOOT_D09=y` **par défaut** : prototype déploiement interactif, boot `BOOT_MODE=D09`.
-- `CONFIG_WARSHIP_BOOT_T02=y` : diagnostic T02 original (mire, corners, logs raw), boot `BOOT_MODE=T02`.
-
-Un choix unique empêche la boucle infinie `t02_probe_run()` de tourner avec `d09_probe_run()`. Les bus SPI2/3 ne sont initialisés que par la branche choisie ; pas de second driver touch concurrent ni réinitialisation LCD sur AUTO/PRÊT/RETOUR. Les binaires de chaque mode ont **un SHA firmware distinct** si la configuration varie : un build/artefact D09 ne prouve pas implicitement le fonctionnement T02 configuré autrement. Le code T02 est compilé dans le build D09 mais **son exécution en mode T02 nécessite encore preuve sur carte**.
+Le sélecteur `main/Kconfig.projbuild` et l'ancienne sonde
+`main/t02_probe.c/.h` ont été supprimés. La sonde temporaire T02_CAL
+de la PR #49 n'est jamais entrée dans `main` (PR fermée sans fusion).
+L'application compile seulement `app_main.c` et `d09_probe.c`
+dans le composant principal ; `app_main()` appelle
+**inconditionnellement `d09_probe_run()`**, sans aucune référence
+`CONFIG_WARSHIP_BOOT_*`. Un ancien `sdkconfig` ne sélectionne
+donc plus de sonde au démarrage. Les pilotes LCD/XPT2046 restent
+initialisés une seule fois. `BOOT_MODE=D09 direct boot` permet
+d'identifier le chemin dans l'UART.
 
 ## Validation
 
@@ -62,14 +81,13 @@ done
 
 # ESP-IDF v5.5.6 / cible esp32 Xtensa (depuis checkout du HEAD)
 idf.py set-target esp32
-idf.py menuconfig # CYD WARSHIP boot mode -> D09, sauvegarder
 idf.py build
 idf.py size
 idf.py size-components
 sha256sum build/cyd_warship.bin
 ```
 
-Voir également `docs/D09_FLASH_TEST.md` pour commandes et scénario de validation physique reproductible. Les mesures statiques Flash/IRAM/DRAM et hash de l'application sont associés à la **CI du HEAD final**, distincte d'un test physique. Toute compilation cible est `TARGET_BUILD_VERIFIED` et **n'est pas** `ON_DEVICE_VERIFIED`. Avant le retour PO sur les coins haut droit/bas gauche et la grille 320×240 réelle, le statut est **ON_DEVICE_UNVERIFIED**.
+Voir également `docs/D09_FLASH_TEST.md` pour commandes et scénario de validation physique reproductible. Les mesures statiques Flash/IRAM/DRAM et hash de l'application sont associés à la **CI du HEAD final**, distincte d'un test physique. Toute compilation cible est `TARGET_BUILD_VERIFIED` et **n'est pas** `ON_DEVICE_VERIFIED`. La calibration T02-B est acquise séparément sur les cinq médianes, mais la **réception des commandes D09 PRÊT/RETOUR/START sur le nouveau firmware** reste `ON_DEVICE_UNVERIFIED` jusqu’à un nouveau retour PO.
 
 **Caveat ergonomique :** sur CYD 320×240, le rendu et les hitboxes sont encore *techniques*. Le texte affiché est `PRET` ASCII (faute d'accent bitmap dans cette police technique), sans décider l'orthographe/design final validé par le PO. Les couleurs/rectangles/tailles sont des paramètres de banc technique. Le passage au graphisme G03 nécessitera une validation artistique distincte.
 

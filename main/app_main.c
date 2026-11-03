@@ -1,7 +1,5 @@
 #include "esp_log.h"
-#include "t02_probe.h"
 #include "d09_probe.h"
-#include "sdkconfig.h"
 #include "warship_core.h"
 #include "warship_fleet.h"
 #include "warship_battle.h"
@@ -21,23 +19,20 @@ void app_main(void)
         return;
     }
     ESP_LOGI(TAG, "%s", banner);
-    /* Link-time integration only; preserve the existing T02 hardware probe.
-     * No battle session, target selection or CPU decision is started.
-     */
+    /* Link-time checks only: D09 owns the sole hardware runtime below. */
     ESP_LOGI(TAG, "D01 fleet component linked: carrier length=%u",
              (unsigned)warship_fleet_ship_length(WARSHIP_SHIP_CARRIER));
     ESP_LOGI(TAG, "D02 battle component linked: invalid state fails closed=%u",
              (unsigned)warship_battle_phase(NULL));
     ESP_LOGI(TAG, "D03 captain component linked: null input rejected=%u",
              (unsigned)warship_captain_choose(NULL, NULL, NULL, NULL));
-    /* D06 link-only smoke; do not begin a game on this T02 hardware probe. */
+    /* D06 link-only smoke; no battle is started by this check. */
     ESP_LOGI(TAG, "D06 solo session linked: null init rejected=%u",
              (unsigned)warship_solo_init(NULL, NULL, NULL));
-    /* D07 link-only proof; no game is initialized or played on T02. */
+    /* D07 link-only proof; D09 initializes its technical deployment. */
     ESP_LOGI(TAG, "D07 lifecycle linked: null init rejected=%u",
              (unsigned)warship_lifecycle_init(NULL));
-    /* D08 link-only: adapter is present, but NO NVS read/write/init on
-     * this diagnostic boot. Physical persistence needs its own protocol. */
+    /* D08 link-only: NO NVS read/write/init on this D09 boot. */
     const WarshipPalmaresBackend storage = warship_palmares_nvs_backend();
     ESP_LOGI(TAG, "D08 NVS backend linked: %u",
              (unsigned)(storage.load != NULL && storage.store != NULL));
@@ -49,14 +44,7 @@ void app_main(void)
              (unsigned)warship_palmares_apply(NULL, 0u,
                                               WARSHIP_LIFECYCLE_EVENT_NONE),
              (unsigned)warship_palmares_reload(NULL));
-    ESP_LOGW(TAG, "WARSHIP BOOT PROBE, NOT A GAME OR CALIBRATED TOUCH UI");
-#if CONFIG_WARSHIP_BOOT_T02
-    ESP_LOGI(TAG, "BOOT_MODE=T02 legacy diagnostic");
-    t02_probe_run();
-#elif CONFIG_WARSHIP_BOOT_D09
-    ESP_LOGI(TAG, "BOOT_MODE=D09 deployment technical probe");
+    ESP_LOGW(TAG, "WARSHIP D09 TECHNICAL DEPLOYMENT; NOT FULL GAME UI");
+    ESP_LOGI(TAG, "BOOT_MODE=D09 direct boot, no Kconfig selector");
     d09_probe_run();
-#else
-#error "Select exactly one WARSHIP_BOOT_MODE"
-#endif
 }

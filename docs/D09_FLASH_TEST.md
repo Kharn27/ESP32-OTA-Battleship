@@ -1,44 +1,95 @@
-# D09 — Mode de compilation, flash et protocole PO (une CYD)
+# D09 — Boot direct et réception tactile ciblée (Issue #43)
 
-**Mission** : Issue #43. Lire aussi [docs/D09_UI_DEPLOY_PROBE.md](D09_UI_DEPLOY_PROBE.md) et [docs/TEST_POLICY.md](TEST_POLICY.md).
+**Mandat Pilotage P1 du 02/11/2026.** Ce document remplace l'ancien
+protocole avec sélecteur de modes T02/D09. La campagne T02-B (15 mesures)
+est terminée et archivées dans [Issue #21](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/21#issuecomment-6578800263).
+**Aucun nouvel étalonnage ou photo de l'ancienne sonde n'est demandé.**
+Le diagnostic T02 et T02_CAL ne font plus partie du firmware applicatif.
+La PR #49 a été fermée sans fusion.
 
-## Préparation — configuration exacte et non destructive
+## Firmware et préparation (après accord Pilotage seulement)
 
-Matériel cible : **ESP32-2432S028R classique**, CYD 320×240 paysage, ILI9341, écran à stylet résistif XPT2046 candidat. **1 seule CYD** et câble USB données. ESP-IDF **v5.5.6**, cible `esp32`, composants du dépôt courant. Aucune PSRAM ni carte microSD requises. **Ne jamais utiliser `erase-flash` ni effacer la partition NVS du palmarès pour cette mission.**
+- 1 × ESP32-2432S028R classique, LCD ILI9341 320×240 cas 10,
+  XPT2046 SPI3, câble données, UART accessible.
+- C natif ESP-IDF **v5.5.6**, cible **esp32**.
+- **Démarrage D09 direct** : pas de `main/Kconfig.projbuild`,
+  pas de `CONFIG_WARSHIP_BOOT_*`, aucun ancien `sdkconfig` requis pour
+  choisir le mode. `app_main()` appelle `d09_probe_run()` sans condition.
+- Le profil LCD, la DMA 5120 octets, le partitionnement et le dispatcher
+  anti-rebond B01 sont inchangés. Il n'y a aucune écriture NVS en D09.
 
-À faire **seulement après revue et accord du Pilotage** :
+L'artefact de la **CI du HEAD accepté** est l'option privilégiée : vérifier
+le SHA-256 réel du `cyd_warship.bin` et employer les binaires bootloader,
+partitions, application **avec les offsets contenus dans son
+`flasher_args.json`**. Ne pas inventer les offsets. Comparer le
+partitionnement avec la carte avant de flasher et préserver les données NVS.
+**Ne jamais exécuter `erase-flash`.**
+
+Si une compilation locale est nécessaire :
 
 ```sh
-git clone https://github.com/Kharn27/ESP32-OTA-Battleship
-cd ESP32-OTA-Battleship
-git fetch origin feat/issue-43-d09-deploy-ui-probe
-git checkout feat/issue-43-d09-deploy-ui-probe
-git rev-parse HEAD              # comparer au HEAD validé de la PR
-idf.py --version                # doit indiquer ESP-IDF v5.5.6
+git fetch origin
+git checkout fix/issue-43-d09-direct-boot-touch-map
+git rev-parse HEAD               # doit correspondre au HEAD approuvé
+idf.py --version                 # ESP-IDF v5.5.6
 idf.py set-target esp32
-idf.py menuconfig               # CYD WARSHIP boot mode -> D09 technical deployment
-idf.py build
+idf.py build                     # pas de menuconfig ni de mode à choisir
 idf.py size
 idf.py size-components
 sha256sum build/cyd_warship.bin
 idf.py -p <PORT_SERIE> flash monitor
 ```
 
-L'artefact GitHub Actions du HEAD inclut bootloader/partition/firmware et `flasher_args.json` : utiliser **la configuration complète** propre à cette CI si flashage manuel ; ne pas flasher uniquement `cyd_warship.bin` à une adresse supposée. Sauvegarder un palmarès NVS existant avant toute manipulation pouvant écraser la partition et éviter `idf.py erase-flash`. L'outil `flash` normal réécrit l'application/bootloader/partition de l'image, **pas une commande de remise à zéro** ; vérifier cependant que le partitionnement de l'artefact ne détruit pas vos données.
+Attention : un BIN reconstruit localement possède **son propre hash**,
+même si le commit source est identique. Consigner le hash du BIN
+effectivement flashé. Ne jamais attribuer le hash CI à un autre fichier.
 
-**Alternative pour la mire T02 (contrôle séparé)** : `idf.py menuconfig` → `CYD WARSHIP boot mode` → `T02 legacy diagnostic probe` puis reconstruire et relever **le SHA du nouveau binaire T02**, différent de celui D09, pour éviter de mêler leurs preuves. Ne pas lancer T02 et D09 simultanément.
+## Projection retenue
 
-## Fiche d'essai à retourner au Pilotage
+Résultat réel PO (5 cibles, 3 gestes par cible), contre-analyse Pilotage #21 :
 
-Consigner numéro/type de carte (dont USB-C ou micro-USB), port, OS, outil, `git rev-parse HEAD` complet, SHA-256 réel du .bin flashé, mode Kconfig, logs UART boot complets et photos écran. **Au moins une vidéo courte** peut aider à détecter un appui maintenu ou un rafraîchissement inattendu.
+```text
+screen X <- raw Y, bornes 215..3799, pixels 0..319
+screen Y <- raw X, bornes 302..3865, pixels 0..239
+```
 
-1. **Boot initial / LCD** : confirmer `BOOT_MODE=D09`, `LCD_PROFILE_PASS case=10`, `FRAME mode=1`, écran plein 320×240. Photographie globale de la grille et des 3 boutons, **aucun pixel fantôme**, cadrage, couleurs, légende lisible. Si l'image est incomplète, ne pas poursuivre les coordonnées ; fournir photo/log et STOP.
-2. **Tactile étalonnage T02-B à confirmer** : relever `TOUCH_DOWN raw=(x,y)` et `provisional=(x,y)` aux **cinq points** : haut-gauche, **haut-droit**, centre, **bas-gauche**, bas-droit. Vérifier si axes inversés/décalés ; **ne pas conclure que les coordonnées sont calibrées**. Pour tout appui non détecté ou dangereux, ne pas forcer une hitbox en devinant.
-3. **AUTO** : stylet au centre de AUTO, répéter au moins 5 fois en **relâchant complètement** entre chaque. Vérifier chaque ligne `ACTION id=2 from=1 to=1 result=0`, chaque `FRAME mode=1`, compte de **17 cases** et 5 navires sur la grille, pas de nouveau combat. Deux placements identiques par hasard sont valides. Maintenir AUTO appuyé plusieurs secondes et vérifier **exactement une** commande (pas de boucle de regeneration).
-4. **Zones mortes/bords** : appui à l'extérieur des boutons, sur bordures, grille ; **aucune action**. Faire un glissé commencé hors de la zone AUTO puis terminer sur AUTO : aucune génération. Tester un appui rapide/rebond/relâchement puis répéter et consigner les éventuelles actions non voulues.
-5. **RETOUR** : pendant déploiement, appuyer puis relâcher. Vérifier `ACTION id=4 from=1 to=0 result=0`, affichage technique HOME avec START. Aucun forfait ni partie comptabilisée, aucune écriture NVS. START relance un **nouveau déploiement** `ACTION id=1 from=0 to=1 result=0`.
-6. **PRÊT** : appuyer une fois sur PRÊT et vérifier `ACTION id=3 from=1 to=2 result=0`, affichage **COMBAT NON INTEGRE**, grille humaine encore visible, aucun FEU ni partie fictive. Toucher AUTO/RETOUR dans cette phase : aucune commande, **aucun abandon forcé**.
-7. **Reset / power cycle** : redémarrer ; un nouveau déploiement apparaît, non une reprise de partie ni un forfait. Vérifier logs `MEM phase=startup/lcd_ready/ready/after_action/running`, heap/plus grand bloc, DMA 5120 o, watermark pile, `DRAW ... us`, nombre de bandes et tout `TOUCH_SPI_ERROR`, `TOUCH_MAP_REJECT`, `LCD_REFRESH_STOP`.
-8. **Diagnostic T02** si demandé séparément par Pilotage : reconstruire **mode T02**, noter SHA/firmware exact, vérifier mire et raw XPT2046. Le résultat T02 ne remplace pas le jalon D09.
+En dehors des bornes, la projection est bornée aux pixels valides.
+Un raw ADC saturé (0 ou 4095), une erreur SPI ou un map invalide
+continuent d'invalider le geste entier (anti-rebond B01 inchangé).
+Sur les cinq **médianes physiques** : écart maximum 2 pixels par axe,
+SSE 15 px². Ce n'est pas une garantie sur chaque pression ou bord de
+l'écran. Ancien geste PRÊT `raw=(2092,3346)` → **`mapped=(279,120)`**.
 
-Un résultat `PASS` doit distinguer **observations PO** de vérification indépendante ; `ON_DEVICE_PO_REPORTED_PASS` uniquement sur rapport réel. Si la calibration échoue, classifier précisément `TOUCH_UNCALIBRATED` ou `LCD_FAIL` et conserver le jalon **ON_DEVICE_UNVERIFIED** pour la fonctionnalité tactile. Ne pas attribuer les temps d'animation/rendu ou les budgets mémoire à une estimation hôte.
+## Protocole PO — un seul parcours D09 ciblé
+
+Noter modèle/révision de CYD, port UART, HEAD source complet, SHA-256 du
+BIN flashé, date, comportement et extraits de logs. Aucun autre essai
+d'étalonnage n'est demandé.
+
+1. **BOOT** : après reset, relever `BOOT_MODE=D09 direct boot`,
+   `LCD_PROFILE_PASS case=10`, `FRAME ... mode=1`. Constater
+   l'écran de déploiement avec grille 10×10 / 17 cases,
+   boutons AUTO / PRET / RETOUR. Si LCD incomplet ou erreur SPI,
+   arrêter et transmettre les logs.
+2. **PRÊT** : toucher le centre visuel, tenir le stylet suffisamment
+   pour franchir le seuil de 40 ms, puis relâcher. Vérifier
+   `TOUCH_DOWN raw=... mapped=... valid=1` et une seule
+   `ACTION id=3 ... from=1 to=2 result=0`. L'écran affiche
+   **COMBAT NON INTEGRE** sans lancer de combat, FEU, NVS ou forfait.
+   Vérifier l'absence d'un second PRÊT sur appui maintenu.
+3. **START** : redémarrer la carte (PRÊT arrête volontairement la
+   démonstration, il n'y a pas de START dans cette phase).
+   Depuis DEPLOY, toucher **RETOUR** :
+   `ACTION id=4 ... from=1 to=0 result=0`, écran HOME technique.
+   Toucher **START** : `ACTION id=1 ... from=0 to=1 result=0`,
+   nouveau déploiement à 17 cases, sans résultat/forfait.
+4. Joindre les lignes UART `ACTION`, `TOUCH_DOWN`, `TOUCH_UP`,
+   `MEM`, `DRAW`, `COUNTERS` et les erreurs éventuelles
+   `TOUCH_SPI_ERROR` / `TOUCH_MAP_REJECT` / `LCD_REFRESH_STOP`.
+   Toute différence entre le point physique et la zone calculée
+   doit être signalée, sans modifier les constantes pendant la campagne.
+
+**Statuts :** tests C99 `HOST_TESTED`, compilation `TARGET_BUILD_VERIFIED`,
+CI `CI_PASSED` sont indépendants. Pour cette nouvelle intégration D09,
+`ON_DEVICE_UNVERIFIED` jusqu'au retour matériel PO. Pilotage décide de
+la réception, de la fusion, et de la suite de #43.

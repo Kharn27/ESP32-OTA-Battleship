@@ -62,6 +62,27 @@ static void invalid_init(void)
  CHECK(memcmp(&b.fleets[WARSHIP_BATTLE_HUMAN],&before.fleets[WARSHIP_BATTLE_HUMAN],sizeof(WarshipFleet))==0);
 }
 
+/* Stack reduction regression: D02 now initializes in-place ONLY after
+ * both fleet validations, with the same full-byte result as staged init.
+ */
+static void init_reuse_is_atomic(void)
+{
+ WarshipBattle a,b;
+ memset(&a,0x17,sizeof a);
+ memset(&b,0xe2,sizeof b);
+ OK(warship_battle_init(&a,&fleet0,&fleet1));
+ OK(warship_battle_init(&b,&fleet0,&fleet1));
+ CHECK(memcmp(&a,&b,sizeof a)==0); /* independent of stale destination */
+ const WarshipBattle before=a;
+ WarshipFleet invalid=fleet1;
+ invalid.ships[0].x=10u;
+ EQ(warship_battle_init(&a,&fleet0,&invalid),WARSHIP_BATTLE_BAD_FLEET);
+ CHECK(memcmp(&a,&before,sizeof a)==0);
+ EQ(warship_battle_init(&a,&invalid,&fleet1),WARSHIP_BATTLE_BAD_FLEET);
+ CHECK(memcmp(&a,&before,sizeof a)==0);
+ EQ(warship_battle_phase(&a),WARSHIP_BATTLE_PREPARING);
+}
+
 static void selection_and_secrecy(void)
 {
  WarshipBattle b=new_battle(&fleet0,&fleet1);
@@ -294,7 +315,7 @@ static void hostile_input(void)
 
 int main(void)
 {
- invalid_init();selection_and_secrecy();lock_order();
+ invalid_init();init_reuse_is_atomic();selection_and_secrecy();lock_order();
  endings(1u);endings(2u);endings(3u);
  confidentiality();hundred_rounds();hostile_input();
  printf("D02 PASS sizeof(battle)=%zu sizeof(public)=%zu sizeof(pair)=%zu\n",sizeof(WarshipBattle),sizeof(WarshipBattlePublic),sizeof(WarshipBattlePair));

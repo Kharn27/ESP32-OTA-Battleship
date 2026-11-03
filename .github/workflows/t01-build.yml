@@ -48,6 +48,19 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
           git rev-parse HEAD
+      - name: Verify unconditional D09 boot and retired mode selector
+        run: |
+          test ! -e main/Kconfig.projbuild
+          test ! -e main/t02_probe.c
+          test ! -e main/t02_probe.h
+          test -f sdkconfig.defaults
+          test "$(grep -Ec '^CONFIG_' sdkconfig.defaults)" -eq 1
+          grep -Fxq 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig.defaults
+          ! grep -Eq 'CONFIG_WARSHIP_BOOT_|CONFIG_WARSHIP_BOOT_' sdkconfig.defaults
+          ! grep -R -q 'CONFIG_WARSHIP_BOOT_' main components
+          grep -Fq 'd09_probe_run();' main/app_main.c
+          grep -Fq '"d09_probe.c"' main/CMakeLists.txt
+          ! grep -Fq '"t02_probe.c"' main/CMakeLists.txt
       - name: Build and static memory report
         uses: espressif/esp-idf-ci-action@v1
         with:
@@ -60,6 +73,7 @@ jobs:
             idf.py build &&
             idf.py size &&
             idf.py size-components &&
+            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
