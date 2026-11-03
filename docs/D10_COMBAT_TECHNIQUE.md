@@ -38,6 +38,23 @@ Le rendu reconstruit l'écran à partir du frame public et le transmet par **ban
 - D10 journalise `MEM phase=after_feu`, `after_reveal`, `after_rounds`, `running` : minimum historique `uxTaskGetStackHighWaterMark(NULL)` **en octets** ; `heap8`, `largest8`, `minimum8`, `dma_free`, `dma_largest` ; compteurs `bands`, `timeouts`, `lcd_fault`. Il est **interdit de valider** le critère de **1024 octets minimum** sans un vrai relevé CYD après FEU et plusieurs manches.
 - Le binaire/empreinte, les tailles Flash/IRAM/DRAM et les logs de compilateurs résultent du job ESP-IDF v5.5.6, cible `esp32`, exécuté sur le **SHA exact de la PR**. Une CI verte ne prouve pas le fonctionnement physique.
 
+## Correction P1 — retour CYD PO du 03/11/2026
+
+**État du binaire initial sur CYD (HEAD source `75eb0ffc95081311460bffc60de4396e733bc553`, boot `75eb0ff` ; SHA du BIN effectivement flashé non fourni) :** deux manches, deux `D10_PAIR_VISIBLE_ACK`, entrée COMBAT `stack_margin_bytes=1464`, après FEU/révélation/deux manches **936 octets**, soit **88 octets SOUS le seuil 1024**. Heap8=292624 B, largest8=163840 B stables, zéro erreur SPI/DMA/tactile rapportée. **Verdict : CORRECTIONS_REQUISES — gate pile P1 FAIL.**
+
+**Correctif ciblé D06, sans nouvelle règle ni RAM statique :** `warship_solo_fire` ne conserve plus à la fois la grande copie transactionnelle de `WarshipBattle` et la projection publique de Capitaine. Deux fonctions C99 `noinline` sont exécutées **séquentiellement**, jamais avec leurs frames imbriquées :
+
+1. `choose_public_target` construit exclusivement `warship_battle_observe(..., WARSHIP_BATTLE_CAPTAIN)`, demande **une** valeur RNG à l'IA et rend sa cible ; aucune donnée secrète ni cible humaine non publiée ne passe à l'IA et aucune mutation de session n'a lieu. RNG/observation en échec : état et sortie inchangés.
+2. **Après retour** de cette fonction, `commit_resolved_pair` prépare sa seule copie `WarshipBattle staged`, verrouille les deux tirs, les résout simultanément, puis **seulement en succès** remplace la session et restitue la paire. Échec de sélection/résolution : ni session ni sortie affectées.
+
+`noinline` est activé uniquement pour compilateurs GCC/Clang (ESP-IDF Xtensa et CI hôte), avec repli C99 portable. Ce découpage limite le chevauchement de frames au lieu de déplacer les secrets vers un buffer global, un heap ou le rendu. `CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096` et le buffer DMA 5120 B sont **inchangés**. Aucun changement à Capitaine, D02, D07, tactile, palettes, NVS ou géométries.
+
+**Preuve complémentaire de compilation cible :** `-fstack-usage` limité à `warship_solo`; le job ESP32 publie les tailles des frames `warship_solo_fire`, `choose_public_target` et `commit_resolved_pair` en fichier `.su`. Il s'agit d'une **estimation statique par fonction**, qui **ne démontre pas** la marge cumulée durant les appels imbriqués. Seul le vrai watermark `uxTaskGetStackHighWaterMark(NULL)` après FEU et plusieurs manches peut lever le blocage.
+
+**Réception P1 à renouveler sur le nouveau HEAD/BIN**, après contre-revue Pilotage : conserver le même protocole à deux manches, reporter `App version`, SHA-256 **du BIN réellement flashé** et les quatre phases `MEM` (after_action/after_feu/after_reveal/after_rounds). Exiger **>=1024 octets** sur toute la séquence, idéalement >=1280 pour marge de confort, heap8 et largest8 stables et aucune faute SPI/DMA. Ancien `ON_DEVICE_PO_REPORTED` : parcours fonctionnel, **gate pile FAIL** ; nouveau `ON_DEVICE` : **NON TESTÉ** tant que l'essai n'a pas été réalisé.
+
+**Retour UX PO** (FEU vs onglet ATTAQUE ; ANNULER vs QUITTER) enregistré pour une **US UI/UX distincte** : aucune permutation de boutons ni parcours d'abandon ajouté par ce correctif P1.
+
 ## Tests hôte et CI
 
 Suite `d10_combat_ui_technical` : gestes B01 (READY non réémis, tenue, rebond, invalidité, appui bloqué consommé, nouvelle pression), bornes de 10×10, annulation/remplacement/FEU sans cible, selection conservée en navigation, projection de la seule flotte humaine DÉFENSE, cache CPU vide ATTAQUE, paire non révélée avant composition, ACK unique, tirs répétés refusés, suite de manches CPU réelles jusqu'au verdict terminal, décision d'arrêt. Simulation de `HIT → SUNK → MISS` via `warship_combat_max_alert` et la projection du résumé ; ne se substitue pas à une observation matérielle.
@@ -57,4 +74,4 @@ Reproduction : `cmake -S tests -B build-gcc -G Ninja -DCMAKE_C_COMPILER=gcc -DWA
 
 ## Limites explicites
 
-**Hors D10 :** actifs G04/G05/G07/G08 définitifs, effets de fin produit, révélation volontaire de la flotte CPU après défaite, REJOUER/ACCUEIL en production, demande d'abandon / forfait / NVS D08, PALMARÈS, radio ESP-NOW et deuxième CYD. La phase RESULT reste un arrêt technique inspectable ; le D07 terminal n'est **pas** persisté. Le seuil de pile, la lisibilité au stylet, les latences d'écran et l'identité du binaire réel restent **NON TESTÉS sur matériel** avant retour PO.
+**Hors D10 :** actifs G04/G05/G07/G08 définitifs, effets de fin produit, révélation volontaire de la flotte CPU après défaite, REJOUER/ACCUEIL en production, demande d'abandon / forfait / NVS D08, PALMARÈS, radio ESP-NOW et deuxième CYD. La phase RESULT reste un arrêt technique inspectable ; le D07 terminal n'est **pas** persisté. Le **premier essai PO du binaire D10 initial** a documenté un parcours fonctionnel mais **gate pile FAIL (936 B)** ; la correction ci-dessus et l'identité du **nouveau BIN flashé** restent **NON TESTÉES sur CYD** jusqu'à la nouvelle réception.

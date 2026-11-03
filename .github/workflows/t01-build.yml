@@ -74,7 +74,11 @@ jobs:
             idf.py size &&
             idf.py size-components &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
-            sha256sum build/cyd_warship.bin
+            sha256sum build/cyd_warship.bin &&
+            test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
+            grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
+            grep -F 'commit_resolved_pair' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
+            grep -F 'warship_solo_fire' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
         with:
@@ -86,6 +90,7 @@ jobs:
             build/partition_table/partition-table.bin
             build/flasher_args.json
             build/cyd_warship.map
+            build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su
             sdkconfig
             dependencies.lock
           if-no-files-found: error
