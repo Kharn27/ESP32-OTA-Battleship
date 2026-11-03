@@ -25,6 +25,15 @@ void warship_combat_init(WarshipCombatUi *ui, WarshipCombatInput *in,
     }
 }
 
+void warship_combat_input_discard(WarshipCombatInput *in)
+{
+    if (in != NULL) {
+        in->armed=0u;
+        in->consumed=1u;
+        in->first_valid=0u;
+    }
+}
+
 WarshipCombatHit warship_combat_hit(uint8_t view, uint16_t x, uint16_t y)
 {
     WarshipCombatHit hit = {WARSHIP_COMBAT_NO_HIT,0u,0u};
