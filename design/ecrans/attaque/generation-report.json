@@ -1,0 +1,61 @@
+{
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "dimensions_native": [
+    320,
+    240
+  ],
+  "dimensions_zoom": [
+    1280,
+    960
+  ],
+  "grid": {
+    "origin": [
+      21,
+      53
+    ],
+    "cell": 18,
+    "rows": 10,
+    "columns": 10,
+    "width": 180,
+    "height": 180
+  },
+  "selected": "G5",
+  "selected_not_fired": true,
+  "misses": [
+    "C2",
+    "H4",
+    "A9",
+    "F9",
+    "J10"
+  ],
+  "hits": [
+    "E7",
+    "B5",
+    "B6",
+    "I3"
+  ],
+  "enemy_ships_visible": false,
+  "riposte_latest": "B7 RATÉ",
+  "unread_max_severity": "COULÉ",
+  "buttons": [
+    "FEU",
+    "DÉFENSE",
+    "ABANDON"
+  ],
+  "styles": "sunset sea / timber / bronze",
+  "font": "DejaVu Sans Condensed (host), not approved for firmware",
+  "files": {
+    "g04_r2_attaque.svg": {
+      "sha256": "8d08895ee4d879751795d3485ad5b3129770aa30399bedb68cb2d0e3b5d0d619",
+      "bytes": 24769
+    },
+    "g04_r2_attaque_320x240.png": {
+      "sha256": "4e3bf2512bc34556ecdf59fb488f8510d97e9bc5d0d38cbbaabbd0904b249d7f",
+      "bytes": 21523
+    },
+    "g04_r2_attaque_x4.png": {
+      "sha256": "668fcd4ea8763ec7efa94f68ab9538c55e156aed37972af1aebe4d49003b2359",
+      "bytes": 35935
+    }
+  }
+}

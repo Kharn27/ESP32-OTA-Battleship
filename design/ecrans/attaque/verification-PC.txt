@@ -1,0 +1,8 @@
+PASS: SVG 320×240, board (21,53) 10×10 18px, 22 independent SVG grid vectors
+PASS: 5 RATÉ + 4 TOUCHÉ disjoint, G5 unknown/reversible, labels A..J/1..10
+PASS: FEU / DÉFENSE / ABANDON, RIPOSTE B7 RATÉ and unread COULÉ independent
+PASS: no ship reveal/placement layer in SVG
+PASS: exported RGBA PNG 320×240 / zoom 1280×960 exact NEAREST all 1,228,800 output pixels
+PASS: negative proof detects 1 altered RED pixel with unchanged alpha
+PASS: SHA256 and byte counts match shipped report
+STATUS: DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED; PO artwork approval required
