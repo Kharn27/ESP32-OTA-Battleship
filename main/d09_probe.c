@@ -1,8 +1,8 @@
-/* D09: technical deployment UI, NOT product UI or battle gameplay.
- * One task owns LCD SPI2 and touch SPI3. No NVS, FEU, RTC, ESP-NOW.
- */
+/* D09 deployment plus D10 technical combat. A single task owns both
+ * SPI buses, the sole private lifecycle, and the DMA band. No NVS/radio. */
 #include "d09_probe.h"
 #include "warship_deploy_ui.h"
+#include "warship_combat_ui.h"
 #include "warship_lcd.h"
 #include "warship_touch.h"
 #include "t02_touch_map.h"
@@ -34,6 +34,9 @@ static WarshipLifecycle game;
 static WarshipLifecyclePublic public_view;
 static WarshipDeployFrame frame;
 static WarshipDeployInput input;
+static WarshipCombatUi combat;
+static WarshipCombatInput combat_input;
+static WarshipCombatFrame combat_frame;
 
 static int rng_u32(void *ctx,uint32_t *out)
 {
@@ -76,8 +79,12 @@ static esp_err_t draw_region(int x,int y,int w,int h)
                        (y+h-top):(int)WARSHIP_LCD_BAND_ROWS;
         for(int r=0;r<rows;++r) {
             for(int col=0;col<w;++col) {
-                const uint16_t color=warship_deploy_pixel(
-                    &frame,&input.layout,(uint16_t)(x+col),(uint16_t)(top+r));
+                const uint16_t color=(game.phase==WARSHIP_LIFECYCLE_COMBAT ||
+                                      game.phase==WARSHIP_LIFECYCLE_RESULT) ?
+                    warship_combat_pixel(&combat_frame,(uint16_t)(x+col),
+                                          (uint16_t)(top+r)) :
+                    warship_deploy_pixel(&frame,&input.layout,
+                                         (uint16_t)(x+col),(uint16_t)(top+r));
                 const size_t at=2u*((size_t)r*(size_t)w+(size_t)col);
                 band[at]=(uint8_t)(color>>8);
                 band[at+1u]=(uint8_t)color;
@@ -95,8 +102,49 @@ static esp_err_t draw_region(int x,int y,int w,int h)
              x,y,w,h,sent,esp_timer_get_time()-begin);
     return ESP_OK;
 }
+static esp_err_t draw_combat(uint8_t include_pending)
+{
+    if (warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK ||
+        warship_combat_make_frame(&public_view,&combat,include_pending,
+                                  &combat_frame)!=WARSHIP_COMBAT_OK) {
+        ESP_LOGE(TAG,"D10_PUBLIC_FRAME_FAIL pending=%u",
+                 (unsigned)include_pending);
+        return ESP_FAIL;
+    }
+    ESP_LOGI(TAG,"COMBAT_FRAME view=%u busy=%u reveal=%u round=%u terminal=%u alert=%u",
+             (unsigned)combat_frame.view,(unsigned)combat_frame.busy,
+             (unsigned)include_pending,(unsigned)combat_frame.rounds,
+             (unsigned)combat_frame.terminal,(unsigned)combat_frame.alert);
+    return draw_region(0,0,320,240);
+}
+/* Refresh only the previous/new 19px cell and FEU button for a
+ * selection toggle/replacement. Full frame reserved for view/FEU/reveal.
+ */
+static esp_err_t draw_combat_selection(uint8_t had, uint8_t old_x,
+                                      uint8_t old_y)
+{
+    if(warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK ||
+       warship_combat_make_frame(&public_view,&combat,0u,
+                                 &combat_frame)!=WARSHIP_COMBAT_OK)
+        return ESP_FAIL;
+    if(had) {
+        const esp_err_t e=draw_region(22+(int)old_x*19,24+(int)old_y*19,19,19);
+        if(e!=ESP_OK) return e;
+    }
+    if(combat_frame.has_selection &&
+       (!had || old_x!=combat_frame.target_x ||
+        old_y!=combat_frame.target_y)) {
+        const esp_err_t e=draw_region(
+            22+(int)combat_frame.target_x*19,
+            24+(int)combat_frame.target_y*19,19,19);
+        if(e!=ESP_OK) return e;
+    }
+    return draw_region(225,32,91,38);
+}
 static esp_err_t draw_for_action(WarshipDeployAction action)
 {
+    if (game.phase==WARSHIP_LIFECYCLE_COMBAT)
+        return draw_combat(0u);
     if(warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK) {
         ESP_LOGE(TAG,"D07_OBSERVE_FAIL");
         return ESP_FAIL;
@@ -200,34 +248,118 @@ void d09_probe_run(void)
                      (unsigned)raw.ys[1],(unsigned)raw.ys[2]);
         if(!down && prev_down) ESP_LOGI(TAG,"TOUCH_UP");
         prev_down=down;
-        WarshipDeployAction action=WARSHIP_DEPLOY_NO_ACTION;
-        const WarshipDeployStatus dispatch=warship_deploy_input_step(
-            &input,(uint8_t)down,valid,x,y,ms,(uint8_t)game.phase,&action);
-        if(dispatch!=WARSHIP_DEPLOY_OK) {
-            ESP_LOGE(TAG,"TOUCH_DISPATCH_ERROR status=%u",(unsigned)dispatch);
-            return;
-        }
-        if(action!=WARSHIP_DEPLOY_NO_ACTION) {
-            const uint8_t was=game.phase;
-            const WarshipDeployStatus applied=warship_deploy_apply(
-                &game,action,rng_u32,NULL,rng_u32,NULL);
-            ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u mapped=%u,%u from=%u to=%u result=%u",
-                     (unsigned)action,(unsigned)raw.x,(unsigned)raw.y,
-                     (unsigned)x,(unsigned)y,(unsigned)was,
-                     (unsigned)game.phase,(unsigned)applied);
-            if(applied==WARSHIP_DEPLOY_OK) {
-                ++action_count;
-                err=draw_for_action(action);
+        if (game.phase==WARSHIP_LIFECYCLE_COMBAT ||
+            game.phase==WARSHIP_LIFECYCLE_RESULT) {
+            WarshipCombatHit hit={WARSHIP_COMBAT_NO_HIT,0u,0u};
+            const WarshipCombatStatus got=warship_combat_input_step(
+                &combat_input,(uint8_t)down,valid,x,y,ms,
+                combat.pending,combat.view,&hit);
+            if(got!=WARSHIP_COMBAT_OK) {
+                ESP_LOGE(TAG,"D10_TOUCH_INVALID status=%u",(unsigned)got);
+                return;
+            }
+            if(hit.command!=WARSHIP_COMBAT_NO_HIT) {
+                const uint8_t had_selection=public_view.battle.has_selection;
+                const uint8_t old_x=public_view.battle.target_x;
+                const uint8_t old_y=public_view.battle.target_y;
+                const WarshipCombatStatus applied=warship_combat_apply(
+                    &combat,&game,&public_view,hit,ms,rng_u32,NULL);
+                ESP_LOGI(TAG,"D10_ACTION id=%u cell=%u,%u view=%u result=%u",
+                         (unsigned)hit.command,(unsigned)hit.x,(unsigned)hit.y,
+                         (unsigned)combat.view,(unsigned)applied);
+                if(applied==WARSHIP_COMBAT_OK) {
+                    ++action_count;
+                    /* Bounded DMA regions; never reinit SPI/touch. */
+                    err=(hit.command==WARSHIP_COMBAT_CELL ||
+                         hit.command==WARSHIP_COMBAT_CANCEL) ?
+                        draw_combat_selection(had_selection,old_x,old_y) :
+                        draw_combat(0u);
+                    if(err!=ESP_OK) {
+                        ESP_LOGE(TAG,"D10_DRAW_STOP err=%s",esp_err_to_name(err));
+                        memory_log("d10_draw_fault");
+                        return;
+                    }
+                    if(combat.pending) memory_log("after_feu");
+                } else if(applied==WARSHIP_COMBAT_GAME_ERROR) {
+                    ESP_LOGE(TAG,"D10_CONTROLLER_ERROR");
+                }
+            }
+            if(warship_combat_reveal_due(&combat,ms)) {
+                /* B01 consumed every gesture while busy before this point.
+                 * Entire public pair is drawn in one composite, then ACK.
+                 * Any LCD fault stops without acknowledging the resolution.
+                 */
+                /* A touch may start while SPI display blocks polling.
+                 * Require a fresh release/down after the visual ACK. */
+                warship_combat_input_discard(&combat_input);
+                err=draw_combat(1u);
                 if(err!=ESP_OK) {
-                    ESP_LOGE(TAG,"LCD_REFRESH_STOP err=%s",esp_err_to_name(err));
-                    memory_log("draw_fault");
+                    ESP_LOGE(TAG,"D10_PAIR_DRAW_FAIL_NO_ACK err=%s",
+                             esp_err_to_name(err));
+                    memory_log("d10_reveal_fault");
                     return;
                 }
-                if(action==WARSHIP_DEPLOY_READY)
-                    ESP_LOGW(TAG,"DEMO_STOP COMBAT NON INTEGRE: no FEU, no abandon, no NVS");
-                memory_log("after_action");
+                WarshipLifecycleEvent emitted=WARSHIP_LIFECYCLE_EVENT_NONE;
+                if(warship_combat_presented(&combat,&game,&emitted)!=WARSHIP_COMBAT_OK) {
+                    ESP_LOGE(TAG,"D10_ACK_FAIL_AFTER_PRESENTATION");
+                    return;
+                }
+                /* D07 terminal event is observed ONCE and NOT persisted:
+                 * NVS / result UX are in later missions.
+                 */
+                ESP_LOGI(TAG,
+                    "D10_PAIR_VISIBLE_ACK round=%u human=%u,%u impact=%u ship=%u captain=%u,%u impact=%u ship=%u event=%u",
+                    (unsigned)combat.pending_pair.round,
+                    (unsigned)combat.pending_pair.human.x,
+                    (unsigned)combat.pending_pair.human.y,
+                    (unsigned)combat.pending_pair.human.impact,
+                    (unsigned)combat.pending_pair.human.ship_id,
+                    (unsigned)combat.pending_pair.captain.x,
+                    (unsigned)combat.pending_pair.captain.y,
+                    (unsigned)combat.pending_pair.captain.impact,
+                    (unsigned)combat.pending_pair.captain.ship_id,
+                    (unsigned)emitted);
+                if(warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK) {
+                    ESP_LOGE(TAG,"D10_POST_ACK_OBSERVE_FAIL");
+                    return;
+                }
+                memory_log("after_reveal");
+                if(combat.reveals>=2u) memory_log("after_rounds");
             }
-        }
+        } else {
+            WarshipDeployAction action=WARSHIP_DEPLOY_NO_ACTION;
+            const WarshipDeployStatus dispatch=warship_deploy_input_step(
+                &input,(uint8_t)down,valid,x,y,ms,(uint8_t)game.phase,&action);
+            if(dispatch!=WARSHIP_DEPLOY_OK) {
+                ESP_LOGE(TAG,"TOUCH_DISPATCH_ERROR status=%u",(unsigned)dispatch);
+                return;
+            }
+            if(action!=WARSHIP_DEPLOY_NO_ACTION) {
+                const uint8_t was=game.phase;
+                const WarshipDeployStatus applied=warship_deploy_apply(
+                    &game,action,rng_u32,NULL,rng_u32,NULL);
+                ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u mapped=%u,%u from=%u to=%u result=%u",
+                         (unsigned)action,(unsigned)raw.x,(unsigned)raw.y,
+                         (unsigned)x,(unsigned)y,(unsigned)was,
+                         (unsigned)game.phase,(unsigned)applied);
+                if(applied==WARSHIP_DEPLOY_OK) {
+                    ++action_count;
+                    if(action==WARSHIP_DEPLOY_READY) {
+                        warship_combat_init(&combat,&combat_input,ms);
+                        ESP_LOGI(TAG,"D10_COMBAT_ENTER view=ATTAQUE technical_geometry=1");
+                    }
+                    err=draw_for_action(action);
+                    if(err!=ESP_OK) {
+                        ESP_LOGE(TAG,"LCD_REFRESH_STOP err=%s",esp_err_to_name(err));
+                        memory_log("draw_fault");
+                        return;
+                    }
+                    if(action==WARSHIP_DEPLOY_READY)
+                        ESP_LOGI(TAG,"D10_COMBAT_READY no NVS, no ESP-NOW");
+                    memory_log("after_action");
+                }
+            }
+            }
         if(ms-last_mem>=10000u) {
             memory_log("running");
             ESP_LOGI(TAG,"COUNTERS actions=%u touch_spi_errors=%u",

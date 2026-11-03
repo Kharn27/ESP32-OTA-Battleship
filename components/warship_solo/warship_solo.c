@@ -70,39 +70,49 @@ WarshipSoloStatus warship_solo_cancel(WarshipSoloSession *session)
                                             WARSHIP_BATTLE_HUMAN));
 }
 
-WarshipSoloStatus warship_solo_fire(WarshipSoloSession *session,
-                                    WarshipCaptainRandom rng,
-                                    void *rng_context,
-                                    WarshipBattlePair *pair)
-{
-    if (!valid(session) || rng == NULL || pair == NULL)
-        return WARSHIP_SOLO_BAD_ARGUMENT;
-    if (session->phase == WARSHIP_SOLO_AWAIT_REVEAL)
-        return WARSHIP_SOLO_ALREADY_FIRED;
-    if (session->phase != WARSHIP_SOLO_SELECTING)
-        return WARSHIP_SOLO_BAD_PHASE;
-    if (session->battle.selected[WARSHIP_BATTLE_HUMAN] == 0u)
-        return WARSHIP_SOLO_NO_SELECTION;
+/* On Xtensa the long-lived fire frame used to contain BOTH the full
+ * WarshipBattle staging copy and Captain's public observation at once.
+ * Keep the phases in distinct no-inline frames to bound the peak stack,
+ * without heap/static scratch, a larger main-task stack or weaker rollback.
+ * The production ESP-IDF and host CI compilers both support this attribute.
+ */
+#if defined(__GNUC__) || defined(__clang__)
+#define WARSHIP_FIRE_NOINLINE __attribute__((noinline))
+#else
+#define WARSHIP_FIRE_NOINLINE
+#endif
 
-    /* Work on temporary state. Neither an RNG failure nor a downstream
-     * engine failure can leave a locked human attack or a partial pair.
-     * The CPU sees an observation BEFORE ANY fire/lock of this round.
-     * In particular, the pending HUMAN target is not in this snapshot.
-     */
-    WarshipBattle staged = session->battle;
+/* Read only the CAPTAIN-visible D02 projection, before selecting/locking
+ * either side. In particular, no direct human fleet or pending human target
+ * reaches Captain. The caller's battle is not modified on any failure.
+ */
+static WARSHIP_FIRE_NOINLINE WarshipSoloStatus choose_public_target(
+    const WarshipBattle *battle, WarshipCaptainRandom rng,
+    void *rng_context, WarshipCaptainTarget *target)
+{
     WarshipBattlePublic public_cpu;
-    if (warship_battle_observe(&staged, WARSHIP_BATTLE_CAPTAIN,
+    if (warship_battle_observe(battle, WARSHIP_BATTLE_CAPTAIN,
                                &public_cpu) != WARSHIP_BATTLE_OK)
         return WARSHIP_SOLO_INTERNAL_ERROR;
-    WarshipCaptainTarget target;
     const WarshipCaptainStatus cpu =
-        warship_captain_choose(&public_cpu, rng, rng_context, &target);
+        warship_captain_choose(&public_cpu, rng, rng_context, target);
     if (cpu == WARSHIP_CAPTAIN_RANDOM_FAILURE)
         return WARSHIP_SOLO_RANDOM_FAILURE;
-    if (cpu != WARSHIP_CAPTAIN_OK) return WARSHIP_SOLO_INTERNAL_ERROR;
+    return cpu == WARSHIP_CAPTAIN_OK ?
+        WARSHIP_SOLO_OK : WARSHIP_SOLO_INTERNAL_ERROR;
+}
 
+/* Transaction remains entirely local until BOTH shots were resolved. This
+ * helper runs only AFTER the public CPU choice frame returned, so the
+ * large staging copy cannot overlap its public observation on the stack.
+ */
+static WARSHIP_FIRE_NOINLINE WarshipSoloStatus commit_resolved_pair(
+    WarshipSoloSession *session, const WarshipCaptainTarget *target,
+    WarshipBattlePair *pair)
+{
+    WarshipBattle staged = session->battle;
     if (warship_battle_select(&staged, WARSHIP_BATTLE_CAPTAIN,
-                              target.x, target.y) != WARSHIP_BATTLE_OK ||
+                              target->x, target->y) != WARSHIP_BATTLE_OK ||
         warship_battle_fire(&staged, WARSHIP_BATTLE_HUMAN) !=
                               WARSHIP_BATTLE_OK ||
         warship_battle_fire(&staged, WARSHIP_BATTLE_CAPTAIN) !=
@@ -117,6 +127,28 @@ WarshipSoloStatus warship_solo_fire(WarshipSoloSession *session,
     session->phase = WARSHIP_SOLO_AWAIT_REVEAL;
     *pair = resolved;
     return WARSHIP_SOLO_OK;
+}
+
+WarshipSoloStatus warship_solo_fire(WarshipSoloSession *session,
+                                    WarshipCaptainRandom rng,
+                                    void *rng_context,
+                                    WarshipBattlePair *pair)
+{
+    if (!valid(session) || rng == NULL || pair == NULL)
+        return WARSHIP_SOLO_BAD_ARGUMENT;
+    if (session->phase == WARSHIP_SOLO_AWAIT_REVEAL)
+        return WARSHIP_SOLO_ALREADY_FIRED;
+    if (session->phase != WARSHIP_SOLO_SELECTING)
+        return WARSHIP_SOLO_BAD_PHASE;
+    if (session->battle.selected[WARSHIP_BATTLE_HUMAN] == 0u)
+        return WARSHIP_SOLO_NO_SELECTION;
+
+    WarshipCaptainTarget target;
+    const WarshipSoloStatus choice =
+        choose_public_target(&session->battle, rng, rng_context, &target);
+    if (choice != WARSHIP_SOLO_OK) return choice;
+
+    return commit_resolved_pair(session, &target, pair);
 }
 
 WarshipSoloStatus warship_solo_ack_reveal(WarshipSoloSession *session)

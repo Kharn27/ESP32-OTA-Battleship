@@ -217,6 +217,66 @@ static void test_selection_and_atomic_fire(void)
     OK(warship_solo_ack_reveal(&session));
 }
 
+/* D10 P1 regression: the RNG is called while D06 is still SELECTING,
+ * with the entire private session unchanged. A failure leaves both the
+ * selected target and caller's output intact; the successful retry commits
+ * exactly one atomic pair. This is about semantics, NOT a host stack proof.
+ */
+typedef struct {
+    const WarshipSoloSession *active;
+    const WarshipSoloSession *before;
+    unsigned calls;
+    int fail;
+} AuditRng;
+
+static int audit_rng(void *context, uint32_t *out)
+{
+    AuditRng *a = (AuditRng *)context;
+    CHECK(a != NULL && out != NULL);
+    CHECK(a->active->phase == WARSHIP_SOLO_SELECTING);
+    CHECK(memcmp(a->active, a->before, sizeof *a->active) == 0);
+    ++a->calls;
+    if (a->fail) return -1;
+    *out = UINT32_C(0x7420aacc);
+    return 0;
+}
+
+static void test_choice_then_atomic_commit(void)
+{
+    WarshipSoloSession session = init(&fleet_left, &fleet_right);
+    OK(warship_solo_select(&session, 3u, 8u));
+    WarshipSoloSession before = session;
+    WarshipBattlePair pair;
+    memset(&pair, 0x77, sizeof pair);
+    const WarshipBattlePair original_pair = pair;
+    AuditRng rng = {&session, &before, 0u, 1};
+    EQ(warship_solo_fire(&session, audit_rng, &rng, &pair),
+       WARSHIP_SOLO_RANDOM_FAILURE);
+    EQ(rng.calls, 1u);
+    unchanged(&session, &before);
+    CHECK(memcmp(&pair, &original_pair, sizeof pair) == 0);
+    rng.fail = 0;
+    OK(warship_solo_fire(&session, audit_rng, &rng, &pair));
+    EQ(rng.calls, 2u);
+    EQ(session.phase, WARSHIP_SOLO_AWAIT_REVEAL);
+    EQ(pair.round, 1u);
+    EQ(pair.human.x, 3u);
+    EQ(pair.human.y, 8u);
+    const WarshipBattlePair committed = pair;
+    EQ(warship_solo_fire(&session, audit_rng, &rng, &pair),
+       WARSHIP_SOLO_ALREADY_FIRED);
+    EQ(rng.calls, 2u);
+    CHECK(memcmp(&pair, &committed, sizeof pair) == 0);
+    WarshipSoloPublic public_state;
+    OK(warship_solo_observe(&session, &public_state));
+    EQ(public_state.history.incoming_count, 0u);
+    EQ(public_state.history.outgoing_count, 0u);
+    OK(warship_solo_ack_reveal(&session));
+    OK(warship_solo_observe(&session, &public_state));
+    EQ(public_state.history.incoming_count, 1u);
+    EQ(public_state.history.outgoing_count, 1u);
+}
+
 static void test_no_cheat(void)
 {
     WarshipSoloSession a = init(&fleet_left, &fleet_right);
@@ -385,6 +445,7 @@ int main(void)
 {
     test_invalid();
     test_selection_and_atomic_fire();
+    test_choice_then_atomic_commit();
     test_no_cheat();
     test_multiround_and_terminal();
     printf("D06 PASS sizeof(session)=%zu sizeof(public)=%zu\\n",
