@@ -209,19 +209,22 @@ static void test_pre_ready_and_forfeit(void)
     EQ(persisted,WARSHIP_EVENT_NO_CHANGE);
     CHECK(memcmp(&prior,&game.solo,sizeof prior)==0);
     EQ(store.delivered,0u);
-    warship_combat_input_discard(&touch);
     observe();
     UI_OK(warship_combat_make_frame(&pub,&combat,0u,&frame));
     EQ(frame.phase,WARSHIP_LIFECYCLE_CONFIRM_ABANDON);
     EQ(frame.view,WARSHIP_COMBAT_DEFENSE);
+    unsigned public_occupied=0u;
     for(unsigned i=0u;i<100u;++i)
-        EQ(frame.ships[i],0u+(frame.ships[i])); /* public-only raster */
+        public_occupied += frame.ships[i]!=0u;
+    EQ(public_occupied,17u); /* DEFENSE shows HUMAN fleet only */
     CHECK(warship_combat_pixel(&frame,240u,50u)!=0u);
     EQ(navigate(WARSHIP_COMBAT_SWITCH,NULL,&persisted),WARSHIP_JOURNEY_IGNORED);
     EQ(navigate(WARSHIP_COMBAT_CELL,NULL,&persisted),WARSHIP_JOURNEY_IGNORED);
 
     /* CONTINUER preserves the complete private D06 session and selection.
      * A double tap while still held cannot become ABANDONNER. */
+    /* The helper has already simulated full release; real runtime
+     * discards the gesture at action time, not after release. */
     t=tap(460u,230u,50u);
     EQ(t.command,WARSHIP_COMBAT_FIRE);
     NAV_OK(warship_journey_apply(&game,&combat,t,NULL,NULL,
@@ -232,7 +235,6 @@ static void test_pre_ready_and_forfeit(void)
     CHECK(pub.battle.has_selection && pub.battle.target_x==3u &&
           pub.battle.target_y==6u);
     EQ(store.delivered,0u);
-    warship_combat_input_discard(&touch);
 
     /* QUITTER again -> user confirms ABANDONNER exactly once. */
     t=tap(680u,230u,150u);
@@ -245,7 +247,6 @@ static void test_pre_ready_and_forfeit(void)
     CHECK(warship_journey_apply(&game,&combat,h(WARSHIP_COMBAT_CANCEL,0u,0u),
           NULL,NULL,NULL,NULL,&persisted)==WARSHIP_JOURNEY_BAD_ARGUMENT);
     CHECK(memcmp(&saved,&game,sizeof game)==0 && persisted==old);
-    warship_combat_input_discard(&touch);
     t=tap(900u,230u,150u);
     EQ(t.command,WARSHIP_COMBAT_CANCEL);
     NAV_OK(warship_journey_apply(&game,&combat,t,NULL,NULL,
@@ -287,8 +288,8 @@ static void test_fire_lock_no_deferred_quit(void)
     CHECK(frame.busy);
     UI_OK(warship_combat_make_frame(&pub,&combat,1u,&frame));
     EQ(frame.ships[0],0u);
-    WarshipLifecycleEvent event=WARSHIP_LIFECYCLE_EVENT_VOLUNTARY_FORFEIT;
     warship_combat_input_discard(&touch);
+    WarshipLifecycleEvent event=WARSHIP_LIFECYCLE_EVENT_VOLUNTARY_FORFEIT;
     UI_OK(warship_combat_presented(&combat,&game,&event));
     EQ(event,WARSHIP_LIFECYCLE_EVENT_NONE);
     sample(1u,1u,230u,150u,430u,&t);
