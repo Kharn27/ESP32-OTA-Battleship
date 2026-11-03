@@ -259,6 +259,9 @@ void d09_probe_run(void)
                  * Entire public pair is drawn in one composite, then ACK.
                  * Any LCD fault stops without acknowledging the resolution.
                  */
+                /* A touch may start while SPI display blocks polling.
+                 * Require a fresh release/down after the visual ACK. */
+                warship_combat_input_discard(&combat_input);
                 err=draw_combat(1u);
                 if(err!=ESP_OK) {
                     ESP_LOGE(TAG,"D10_PAIR_DRAW_FAIL_NO_ACK err=%s",
