@@ -113,6 +113,13 @@ def draw_miss(d,cx,cy):
 
 def panel_layer(state:str):
     l=Image.new('RGBA',(W,H),(0,0,0,0));d=ImageDraw.Draw(l,'RGBA')
+    # Recouvre intégralement les textes et le cartouche de la référence HD avant
+    # de dessiner les états. Aucun ancien texte ne doit dépasser à droite.
+    d.rectangle((788,200,1420,446),fill=(3,26,51,255))
+    frame=[(811,202),(1378,202),(1405,224),(1405,423),(1381,441),(814,441),(790,423),(790,225)]
+    d.polygon(frame,fill=(4,30,58,255),outline=(248,211,141,255),width=6)
+    inner=[(818,211),(1374,211),(1396,230),(1396,417),(1377,431),(817,431),(801,417),(801,231)]
+    d.polygon(inner,fill=(4,27,52,255),outline=(19,71,103,255),width=4)
     # Information non-tactile. Le contour vert reprend littéralement la capture PO.
     x0,y0,x1,y1=815,245,1367,366
     outside=[(x0+20,y0),(x1-13,y0),(x1,y0+12),(x1,y1-14),(x1-14,y1),(x0+17,y1),(x0,y1-16),(x0,y0+18)]
@@ -142,10 +149,10 @@ def panel_layer(state:str):
     center_text(d,(816,372,1365,423),subtitle,32,'#d8e5f3',stroke=2)
     # Quatre commandes de fin de partie, toutes dans les cadres vitrés et cuivrés
     # de la capture. Nécessaire pour conserver DÉFENSE et ACCUEIL sans sous-menu.
-    d.rectangle((0,856,1448,1040),fill=(4,31,58,255))
+    d.rectangle((0,854,1448,1086),fill=(4,31,58,255))
     water=random.Random(82055)
-    for _ in range(130):
-        ox=water.randrange(0,1448);oy=water.randrange(860,1039)
+    for _ in range(260):
+        ox=water.randrange(0,1448);oy=water.randrange(860,1085)
         d.line((ox,oy,min(1447,ox+water.randrange(8,40)),oy),fill=(16,72,111,water.randrange(90,220)),width=2)
     def button(x0,x1,kind,label,icon):
         y0,y1=879,1021
