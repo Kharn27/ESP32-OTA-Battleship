@@ -1,5 +1,8 @@
 G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST
-grid x=21 y=53 size=180x180 cell=18 — 100 cells
+grid PNG: 121 crossings + 220 line segments checked at x=21..201/y=53..233, 100 cells of 18px
+negative grid-line corruption: rejected
+4 state vignettes: native + strict x4 NEAREST PASS
+RIPOSTE B7 : RATÉ fully on one baseline / NON LUE COULÉ increased to 9px (visual check)
 hit centers: C3,E3,E4,I8
 miss centers: A8,B7,D1,F9,G2,H6,J4
 selected G5; last riposte B7 RATÉ; unread COULÉ (distinct)

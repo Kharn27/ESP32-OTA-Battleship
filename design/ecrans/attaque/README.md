@@ -1,56 +1,60 @@
-# G04-R2 — ATTAQUE vs Capitaine — recomposition picturale
+# G04-R2 — ATTAQUE VS Capitaine — contre-revue corrective
 
-> **DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED** · **Non validé artistiquement par le PO** · PR Draft **Refs #45** · branche `design/g04-r2-attaque`.
->
-> Nouvelle version destinée à remplacer la reconstruction vectorielle trop plate de la première remise, **sans reprendre G07 R1** (rejetée artistiquement). Cette image conserve volontairement le concept artistique expressif de l'illustration HD et sa cohérence d'usage / géométrie avec G08.
+> **`DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` · `CORRECTIONS_REQUISES` de Pilotage traitées sur PC · accord artistique PO non reçu.**  
+> Issue [#45](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/45) · PR Draft [#64](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/64) · Branche `design/g04-r2-attaque`. **Seul Pilotage fusionne.**
 
-## Maquette principale : 320 × 240 pixels NATIFS
+## Proposition principale 320 × 240 native
 
-![G04-R2 ATTAQUE — maquette native 320×240, décor peint et interface recomposée](g04_r2_attaque_320x240.png)
+![Écran ATTAQUE VS Capitaine 320×240](g04_r2_attaque_320x240.png)
 
 <details><summary>Zoom ×4 NEAREST strict — 1280 × 960</summary>
 
-![G04-R2 ATTAQUE ×4 NEAREST](g04_r2_attaque_x4.png)
+![Écran ATTAQUE agrandi sans interpolation](g04_r2_attaque_x4.png)
 
 </details>
 
-## Référence artistique HD : concept, non écran firmware
+## Annexe visuelle ciblée — quatre états demandés (§2.5, Issue #45)
 
-![Concept illustré — intention maritime et matières](reference_concept_1448x1086.png)
+**Vignettes, pas quatre écrans concurrents :** A / sans cible → FEU indisponible ; B / FEU engagé → sélection, DÉFENSE et ABANDON verrouillés pendant l'animation ; C / résultats **des deux tirs révélés ensemble** (exemple illustratif G5 touché + B7 raté, non verdict séparé) ; D / consultation DÉFENSE puis retour ATTAQUE → cible G5 conservée avant FEU, résumé et alerte acquittés, impacts inchangés.
 
-L'**image HD de ChatGPT** est fournie **comme référence picturale et atlas de matières**. La maquette PC native est une **recomposition** de fragments peints de mer, bois, laiton, ciel et boutons avec **grille/labels/impacts/cible/alertes dessinés à 320×240**, et non le résultat de la réduction globale de l'illustration HD. Le résultat combine peinture source et retouche déterministe ; le master de peinture n'est **pas vectoriel ni rééditable élément par élément**. La **mise en page, les cases, les marqueurs, les coordonnées et les textes sont éditables dans `build_g04_r2.py`**. L'ancien SVG vectoriel plat a été **retiré de la branche**, car il ne décrivait plus les nouveaux PNG : la source actuelle est le compositeur Python.
+![Quatre vignettes ciblées des états UI à 320×240](g04_r2_etats_320x240.png)
 
-## Cadrage, interactions et contenu
+<details><summary>Vignettes ×4 NEAREST strict — 1280 × 960</summary>
 
-- **Seule grille ATTAQUE** de 100 cases, 18×18 px, origine `(21,53)`, surface `(180×180)` : colonne **A–J** en haut, ligne **1–10** à gauche. Alignement géométrique strict avec G08, qui reste valide pour son écran sans imposer le rendu rejeté de G07 R1.
-- La mer compose les cases ; **aucun navire ennemi n'est visible**. Impacts antérieurs **TOUCHÉ** en gerbes orange ancrées dans l'eau et **RATÉ** en anneaux d'écume clairs. Exemple cohérent, positions modifiables en source : `C3/E3/E4/I8` touchés, `A8/B7/D1/F9/G2/H6/J4` ratés. Le réticule **G5 jaune** désigne une case encore inconnue et n'est pas un impact.
-- **FEU** : bouton cuivre/rouge le plus saillant, activable avec cible inconnue. Sélection réversible avant validation ; case déjà tirée indisponible ; au tir les commandes sont verrouillées durant l'animation, puis deux résultats révélés synchronisés. Tous ces comportements sont des **états du firmware à représenter**, pas des nouvelles mécaniques.
-- **DÉFENSE** : bouton bleu avec `!` non numérique. Navigation volontaire ; conserve la cible lors du retour si FEU n'a pas été déclenché. L'ouverture de DÉFENSE acquitte résumé et alerte, jamais les impacts.
-- **ABANDON** secondaire : ouvre la confirmation existante **CONTINUER / ABANDONNER**, sans abandon immédiat.
-- **HISTORIQUE** : deux exemples de tirs affichés ; ils ne résument pas les marques cumulées de toute la grille. **Dernière riposte : `B7 RATÉ`** ; **alerte maximale non consultée : `COULÉ`** — volontairement séparées, sans compteur inventé.
+![Vignettes agrandies sans interpolation](g04_r2_etats_x4.png)
 
-## Preuves de génération PC
+</details>
 
-```bash
-python3 -m pip install Pillow
+## Corrections suite à la contre-revue [#6606077196](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/64#issuecomment-6606077196)
+
+1. **Lisibilité RIPOSTE** : un seul libellé **`RIPOSTE B7 : RATÉ`**, 9px, centré verticalement dans le cartouche, sans deuxième ligne écrasée en bas. La boîte typographique est vérifiée dans le générateur (x214–299, y197–207, strictement dans la zone visible). **`NON LUE : COULÉ`** passe de **7 à 9px** et tient entièrement dans la zone d'alerte (x225–304, y220–230). L'alerte et la dernière riposte restent distinctes, sans compteur inventé.
+2. **États visuels** : les quatre mini-vignettes ci-dessus sont des **PNG réels**, dessinés dans la source éditable Python. Aucune mécanique ajoutée : FEU sans cible, FEU engagé, résolution simultanée et consultation-retour DÉFENSE sont ceux de la Bible.
+3. **Contrôle physique du quadrillage sur les PNG** : le vérificateur lit le fichier PNG réel et sonde indépendamment des métadonnées du rapport **121 intersections et 220 segments** sur les 11 lignes verticales et 11 horizontales de la grille, origine **(21,53)**, pas **18**, 100 cases de **18×18**, cadre **180×180**. Une mutation d'un pixel d'une ligne déclenche volontairement un échec ; la mutation d'un seul canal rouge du zoom ×4 reste également rejetée.
+4. **Reproductibilité** : `Pillow==12.3.0`, police système `DejaVuSansCondensed-Bold.ttf` du paquet Debian/Ubuntu `fonts-dejavu-core` (chemin `/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf`). Source Python éditable, sans prétention de source picturale vectorielle : l'illustration de fond est raster.
+
+## Règles et périmètre
+
+- Une **seule grille 10×10 ATTAQUE**, colonnes **A–J** et lignes **1–10** en continuité géométrique avec G08. La mer texturée est le plateau ; aucun navire ennemi ni silhouette de flotte révélée.
+- Tir préparé en **G5** : réversible avant FEU et conservé au retour de DÉFENSE si FEU non engagé. Les tirs passés TOUCHÉ (`C3 E3 E4 I8`) et RATÉ (`A8 B7 D1 F9 G2 H6 J4`) sont des exemples fictifs, marqués par **formes** différentes (explosion / anneau d'écume), pas la couleur seule.
+- **FEU** est dominant seulement avec une cible valide. **DÉFENSE** est une navigation volontaire ; l'indicateur `!` désigne une notification non consultée, **sans nombre**. La riposte **B7 RATÉ** et la gravité maximale plus ancienne **COULÉ** restent deux informations séparées ; consulter DÉFENSE les acquitte sans effacer l'historique des impacts.
+- **ABANDON** ouvre **CONTINUER / ABANDONNER**, ne déclenche pas de sortie directe. FEU engage les deux tirs puis révèle leurs résultats synchronisés, sans interaction pendant l'animation.
+- Ambiance illustration maritime riche (soleil/capitaine, bois/laiton, mer, éclairage) inspirée de la direction G01, **pas** des anciens habillages G04/G05/G07 R1 rejetés. G08 demeure approuvée pour son écran propre ; aucun fichier G08 n'est modifié ici.
+
+## Source, provenance et reproduction PC
+
+- `reference_concept_1448x1086.png` : illustration maritime **générée par ChatGPT**, référence picturale / atlas de matières **raster**, non asset firmware ni source vectorielle élément par élément.
+- `build_g04_r2.py` : **source réellement éditable** du compositing, texte, pastiches de métal/bois, grille, cibles, effets, alertes et quatre vignettes ; tous les paramètres d'implantation sont dans le code.
+- `g04_r2_attaque_320x240.png` / `_x4.png` : maquette native et zoom. `g04_r2_etats_320x240.png` / `_x4.png` : vignettes natives et zoom.
+- `verify_g04_r2.py` : contrôle indépendant des **pixels des PNG relus**, du zoom NEAREST, des marques, des variantes, des rapports SHA256 et deux preuves négatives ; `generation-report.json` et `verification-PC.txt` : traces des exports réellement livrés.
+
+Sur Linux avec Python 3 et le paquet système `fonts-dejavu-core` :
+
+```sh
+python3 -m pip install 'Pillow==12.3.0'
 python3 design/ecrans/attaque/build_g04_r2.py
 python3 design/ecrans/attaque/verify_g04_r2.py
 ```
 
-- **Source éditable :** `build_g04_r2.py` (paramètres, positions, composition native, sources de textures, marqueurs/axes/textes). L'illustration HD est **une ressource raster** appartenant à ce flux de production, pas un sprite firmware homologué.
-- **Exports :** `g04_r2_attaque_320x240.png` et `g04_r2_attaque_x4.png` (NEAREST strict, 1280×960).
-- **Rapport :** `generation-report.json` avec SHA256, positions et origine des données ; `verification-PC.txt` avec contrôles sur fichiers réels et essai négatif d'un pixel altéré.
-- **Limites de la preuve :** géométrie 100 cases, échantillonnage NEAREST, positions/types d'impacts et hashes prouvables ; jugement « agréable et lisible à 320×240 », lisibilité TFT, taille tactile, contraste physique et profondeur visuelle relèvent de la contre-revue du PO et du test sur vraie CYD.
+**Preuves PC uniquement** : les contrôles ne valident ni visuellement le style auprès du PO ni matériellement le TFT, le contraste, les hitboxes stylet, la mémoire Flash/RAM et le contrat d'assets avec le Développeur. Aucune certification `ON_DEVICE_VERIFIED` revendiquée. Le matériel n'est **pas une condition de réception de cette maquette PC** ; cette dette demeure tracée pour l'intégration firmware.
 
-## Statuts et provenance
-
-| Élément | Statut |
-| --- | --- |
-| Mer comme plateau ; profondeur maritime ; règles FEU / DÉFENSE / alerte | **DÉCIDÉ** G01 / Bible |
-| Style matériel et composition du nouvel écran ATTAQUE | **PROPOSÉ PAR LE GRAPHISTE**, à juger par le PO |
-| Grille `(21,53)` / 18 px conservée pour continuité G08 | **CONTRAINTE TECHNIQUE DE MISSION** |
-| Référence HD originale | Génération ChatGPT, aucune ressource externe ni police transmise |
-| PNG / source Python / zoom / vérifications PC | **VÉRIFIÉS PC seulement** |
-| Touch/stylet, rendu TFT réel, Flash/RAM, décodage de textures | **À VÉRIFIER CYD avec Développeur** |
-
-**G05-R2, G07-R2, G08, Bible et firmware sont hors périmètre de cette PR. Pas de validation PO ni de fusion par le Graphiste.**
+**Décision attendue :** nouvelle contre-revue Pilotage sur le HEAD exact, puis présentation PO pour acceptation artistique, sans passage en Ready ni fusion par le Graphiste.

@@ -8,8 +8,12 @@ individually editable in this Python source.  Preview only, no firmware assets.
 from pathlib import Path
 import json, hashlib, math
 from PIL import Image, ImageDraw, ImageFont
+import PIL
 
 ROOT=Path(__file__).resolve().parent
+FONT_PATH=Path('/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf')
+assert FONT_PATH.is_file(), 'Police requise : fonts-dejavu-core (Debian/Ubuntu)'
+assert PIL.__version__ == '12.3.0', f'Pillow 12.3.0 requis pour export reproductible, obtenu {PIL.__version__}'
 REF=ROOT/'reference_concept_1448x1086.png'
 W,H=320,240
 GX,GY,CELL=21,53,18
@@ -28,7 +32,7 @@ def patch(bounds,dest,scale=Image.Resampling.LANCZOS):
     im.paste(cropped,(x,y))
 
 def txt(pos,text,size,color,stroke=0,stroke_fill=None,anchor=None):
-    font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf',size)
+    font=ImageFont.truetype(str(FONT_PATH),size)
     ImageDraw.Draw(im).text(pos,text,font=font,fill=color,anchor=anchor,stroke_width=stroke,stroke_fill=stroke_fill)
 
 def ink_box(rect,fill,edge,rounding=2,edgewidth=1):
@@ -159,14 +163,23 @@ txt((215,184),'J4 : RATÉ',8,'#1B3046',anchor='lm')
 patch((876,791,1383,864),(210,195,107,18))
 d=ImageDraw.Draw(im)
 d.rounded_rectangle((210,195,317,212),radius=2,fill='#DEE5DA',outline='#285271',width=2)
-txt((214,203),'RIPOSTE : B7',8,'#183F5A',anchor='lm')
-txt((214,209),'RATÉ',7,'#183F5A',anchor='lm')
+# One single optically centered baseline, inside the 18px frame. Never clipped.
+txt((214,203),'RIPOSTE B7 : RATÉ',9,'#183F5A',anchor='lm')
 patch((874,878,1393,968),(210,215,107,20))
 d=ImageDraw.Draw(im)
 d.rounded_rectangle((210,216,317,235),radius=2,fill='#A62221',outline='#FFCC52',width=2)
 d.polygon([(215,230),(219,220),(223,230)],fill='#FFE365',outline='#622F22')
 txt((219,227),'!',7,'#63201E',anchor='mm')
-txt((225,226),'NON LUE : COULÉ',7,'#FFEEA0',stroke=0,anchor='lm')
+txt((225,226),'NON LUE : COULÉ',9,'#FFEEA0',stroke=0,anchor='lm')
+
+# Check textual bounding boxes inside the visible cards at authoring time.
+# These are real font bounds, not claimed optical sizes from a screenshot.
+for pos,label,size,area in [
+    ((214,203),'RIPOSTE B7 : RATÉ',9,(213,196,314,211)),
+    ((225,226),'NON LUE : COULÉ',9,(224,218,314,232)),
+]:
+    bounds=ImageDraw.Draw(im).textbbox(pos,label,font=ImageFont.truetype(str(FONT_PATH),size),anchor='lm')
+    assert area[0]<=bounds[0] and area[1]<=bounds[1] and bounds[2]<=area[2] and bounds[3]<=area[3],(label,bounds,area)
 
 # Hardware framing; text in the right strip intentionally limited.
 d=ImageDraw.Draw(im)
@@ -177,18 +190,75 @@ out=ROOT/'g04_r2_attaque_320x240.png'
 im.save(out,optimize=True)
 zoom=im.resize((1280,960),Image.Resampling.NEAREST)
 zoom.save(ROOT/'g04_r2_attaque_x4.png',optimize=True)
+
+# Four *focused* interaction vignettes: not four competing full game screens.
+# Cards are genuinely authored at 320x240, with painted portions from the same
+# source as the primary screenshot. Labels and game-state markers are native pixels.
+states=Image.new('RGB',(320,240),'#301E26')
+sd=ImageDraw.Draw(states)
+wood=ref.crop((878,187,1398,966)).resize((320,240),Image.Resampling.LANCZOS)
+states.paste(Image.blend(wood,states,.54))
+sd=ImageDraw.Draw(states)
+sd.rectangle((0,0,319,27),fill='#34242B')
+sd.line((0,26,319,26),fill='#D59A5E',width=1)
+SF=ImageFont.truetype(str(FONT_PATH),9)
+S8=ImageFont.truetype(str(FONT_PATH),8)
+S7=ImageFont.truetype(str(FONT_PATH),7)
+def slabel(pos,t,color='#FFF0C9',font=None,anchor=None):
+    ImageDraw.Draw(states).text(pos,t,font=font or SF,fill=color,anchor=anchor)
+def card(x,y,title):
+    dd=ImageDraw.Draw(states)
+    dd.rounded_rectangle((x,y,x+153,y+99),radius=3,fill='#392A35',outline='#FFC780',width=2)
+    dd.rounded_rectangle((x+3,y+3,x+150,y+97),radius=2,fill='#123F56',outline='#BA8B5C',width=1)
+    dd.rectangle((x+4,y+4,x+149,y+18),fill='#A86542')
+    dd.line((x+5,y+5,x+147,y+5),fill='#F1CB85',width=1)
+    slabel((x+9,y+13),title,'#FFF2C7',SF,anchor='lm')
+
+def plate(x,y,w,h,color='#B54429',disabled=False):
+    dd=ImageDraw.Draw(states)
+    dd.rounded_rectangle((x,y,x+w,y+h),radius=3,fill='#C79A51' if not disabled else '#716D6B',outline='#FFF0B7' if not disabled else '#A2A4A4',width=2)
+    dd.rounded_rectangle((x+3,y+3,x+w-3,y+h-3),radius=2,fill=color if not disabled else '#666C70',outline='#6F2D2B' if not disabled else '#454C52',width=1)
+
+# 320x240 native, 2x2 cropped state demonstrations; all preserve G04 art grammar.
+slabel((8,5),'ATTAQUE · ÉTATS VISUELS','#FBE1A9',ImageFont.truetype(str(FONT_PATH),11))
+slabel((8,19),'Quatre vignettes ciblées — règles métier inchangées','#E9D6B7',S7)
+card(4,29,'A · SANS CIBLE')
+plate(14,57,135,29,'#797D81',True)
+slabel((81,71),'FEU INDISPONIBLE','#E0E3DD',SF,anchor='mm')
+slabel((14,109),'Aucune case préparée','#F5D9AA',S8)
+card(163,29,'B · FEU ENGAGÉ')
+plate(173,53,133,25,'#8E3734')
+slabel((238,66),'FEU · TIR EN COURS','#FFF0C9',SF,anchor='mm')
+plate(173,81,65,18,'#64727B',True); plate(241,81,65,18,'#64727B',True)
+slabel((206,90),'DÉFENSE','#E4E4DF',S8,anchor='mm'); slabel((273,90),'ABANDON','#E4E4DF',S8,anchor='mm')
+slabel((172,115),'Sélection et commandes verrouillées','#F5D9AA',S7)
+card(4,137,'C · RÉSULTATS ENSEMBLE')
+slabel((14,157),'Même résolution, deux tirs révélés :','#F7D9A8',S8)
+plate(14,174,135,25,'#345D70')
+slabel((19,186),'G5 TOUCHÉ','#FFDA8C',SF,anchor='lm')
+slabel((137,186),'+ B7 RATÉ','#DBF4EC',S8,anchor='rm')
+slabel((14,212),'Aucune révélation différée','#F2D2A1',S8)
+card(163,137,'D · RETOUR DÉFENSE')
+plate(173,161,133,25,'#1B6580')
+slabel((239,174),'DÉFENSE  ⇄  ATTAQUE','#FFF0CB',S8,anchor='mm')
+slabel((171,196),'G5 reste sélectionnée','#FFE1A8',SF)
+slabel((171,208),'Résumé et alerte acquittés','#D6F1E7',S8)
+
+states.save(ROOT/'g04_r2_etats_320x240.png',optimize=True)
+states.resize((1280,960),Image.Resampling.NEAREST).save(ROOT/'g04_r2_etats_x4.png',optimize=True)
 report={
  'status':'DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED',
  'concept_provenance':'source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval',
  'authoring':'Editable Python scene composition, 10x10 geometry and native lettering/impacts',
- 'native':[W,H], 'x4':[1280,960],
+ 'native':[W,H], 'x4':[1280,960], 'vignettes':['SANS CIBLE','FEU ENGAGÉ','RÉSULTATS ENSEMBLE','RETOUR DÉFENSE'],
+ 'font_dependency':{'package':'fonts-dejavu-core','path':str(FONT_PATH),'pillow_exact':PIL.__version__},
  'grid':{'x':GX,'y':GY,'cell':CELL,'width':180,'height':180},
  'axis':'columns A-J; rows 1-10',
  'target':TARGET,'misses':MISSES,'hits':HITS,'enemy_ships_visible':False,
  'last_reply':'B7 RATÉ','unread_severity':'COULÉ',
  'files':{}
 }
-for name in ['reference_concept_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png']:
+for name in ['reference_concept_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png']:
  p=ROOT/name
  report['files'][name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
 (ROOT/'generation-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
