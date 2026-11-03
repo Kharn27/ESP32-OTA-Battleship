@@ -69,6 +69,24 @@ static void report(const char *stage,WarshipEventStatus result)
         v.games,v.victories,v.defeats,v.draws,v.voluntary_forfeits,
         last_id,(unsigned)last_event);
 }
+#ifdef WARSHIP_D11_NVS_BENCH
+static int bench_is_pristine(void)
+{
+    /* Only an ABSENT score key AND an ABSENT ID key may trigger the
+     * deliberately compiled-in diagnostic transaction. A valid
+     * pre-existing zero-value snapshot also counts as occupied. */
+    const WarshipPalmaresBackend score=warship_palmares_nvs_backend();
+    const WarshipEventIdBackend ids=warship_event_id_nvs_backend();
+    uint8_t snapshot[WARSHIP_PALMARES_WIRE_SIZE];
+    size_t used=0u;
+    uint64_t id=0u;
+    const int a=score.load(&score_nvs,snapshot,sizeof snapshot,&used);
+    const int b=ids.load(&id_nvs,&id);
+    ESP_LOGI(TAG,"D11_BENCH_KEYS score_load=%d seq_load=%d",
+             a,b);
+    return a==1 && b==1;
+}
+#endif
 void d11_runtime_init(void)
 {
 #ifdef WARSHIP_D11_NVS_BENCH
@@ -89,6 +107,9 @@ void d11_runtime_init(void)
         report("init_fail",WARSHIP_EVENT_READ_ERROR);
         return;
     }
+#ifdef WARSHIP_D11_NVS_BENCH
+    const int bench_fresh=bench_is_pristine();
+#endif
     const WarshipEventStatus opened=warship_event_bridge_open(
         &bridge,warship_palmares_nvs_backend(),&score_nvs,
         warship_event_id_nvs_backend(),&id_nvs);
@@ -105,7 +126,7 @@ void d11_runtime_init(void)
     uint64_t last_id=0u;
     WarshipLifecycleEvent last=WARSHIP_LIFECYCLE_EVENT_NONE;
     if(warship_event_bridge_last(&bridge,&last_id,&last)==WARSHIP_EVENT_APPLIED &&
-       last_id==0u && bridge.reserved_id==0u) {
+       last_id==0u && bridge.reserved_id==0u && bench_fresh) {
         ESP_LOGW(TAG,"D11_BENCH_FIRST_FLASH: explicit isolated VICTORY id=1");
         const WarshipEventStatus s=warship_event_bridge_receive(
             &bridge,WARSHIP_LIFECYCLE_EVENT_VICTORY);

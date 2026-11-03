@@ -173,7 +173,15 @@ static unsigned finish(WarshipEventBridge *bridge,unsigned mode,
         EOK(warship_event_bridge_receive(bridge,event));
         EQ(warship_lifecycle_ack_reveal(&g,&event),
            WARSHIP_LIFECYCLE_BAD_PHASE);
-        LOK(warship_lifecycle_leave_result(&g));
+        if(mode==0u) {
+            /* After a definitive result, REJOUER followed by leaving
+             * deployment before PRET must NOT credit another game. */
+            FleetRng r={{10u,30u,50u,70u,90u},0u};
+            LOK(warship_lifecycle_replay(&g,fleet_rng,&r));
+            LOK(warship_lifecycle_leave_deploy(&g));
+            EQ(warship_event_bridge_receive(bridge,
+               WARSHIP_LIFECYCLE_EVENT_NONE),WARSHIP_EVENT_NO_CHANGE);
+        } else LOK(warship_lifecycle_leave_result(&g));
         return n+1u;
     }
     CHECK(0);
@@ -242,6 +250,8 @@ static void test_retry_and_ambiguous_commits(void)
     EQ(warship_event_bridge_receive(&b,
        WARSHIP_LIFECYCLE_EVENT_VICTORY),WARSHIP_EVENT_PENDING);
     EQ(b.pending_id,1u);
+    EQ(warship_event_bridge_receive(&b,
+       WARSHIP_LIFECYCLE_EVENT_NONE),WARSHIP_EVENT_NO_CHANGE);
     ids.write_before_fail=0;
     EOK(warship_event_bridge_retry(&b));
     EQ(ids.value,1u);EQ(score.stores,1u);
