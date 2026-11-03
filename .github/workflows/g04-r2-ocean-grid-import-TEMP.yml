@@ -1,0 +1,56 @@
+name: G04-R2 clean ocean GRID PC proof (TEMPORARY)
+on:
+  push:
+    branches:
+      - design/g04-r2-attaque
+    paths:
+      - .github/workflows/g04-r2-ocean-grid-import-TEMP.yml
+permissions:
+  contents: write
+jobs:
+  import-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and verify exact scoped artistic correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --max-time 120 -o /tmp/g04-r2-ocean-grid.zip 'https://at.adobe.com/M7MSiI5biXNuKgYk'
+          echo '03b49443062c11b672fc2d414620b010a1c5dfd51310ef0ed13cc18a844e93b7  /tmp/g04-r2-ocean-grid.zip' | sha256sum -c -
+          python3 - <<'PY'
+          from pathlib import PurePosixPath
+          from zipfile import ZipFile
+          z=ZipFile('/tmp/g04-r2-ocean-grid.zip')
+          names=z.namelist()
+          assert len(names)==15,names
+          for name in names:
+              path=PurePosixPath(name)
+              assert name.startswith('design/ecrans/attaque/'),name
+              assert '..' not in path.parts and not name.startswith('/'),name
+          z.extractall('.')
+          print('15 scoped PC artwork, source and proof files extracted')
+          PY
+      - name: Generate actual preview files and run negative probes
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-dejavu-core
+          python3 -m pip install --quiet --disable-pip-version-check 'Pillow==12.3.0'
+          python3 design/ecrans/attaque/build_g04_r2.py > /tmp/g04_r2_generator_output.json
+          python3 design/ecrans/attaque/verify_g04_r2.py | tee design/ecrans/attaque/verification-PC.txt
+      - name: Commit ONLY the G04-R2 changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- design/ecrans/attaque/
+          git diff --cached --stat
+          if ! git diff --cached --quiet; then
+            git commit -m 'design(g04-r2): continuous ocean, unique grid and native before-after PC proofs (Refs #45)'
+            git push origin HEAD:design/g04-r2-attaque
+          fi
