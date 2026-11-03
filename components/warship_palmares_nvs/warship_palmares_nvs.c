@@ -19,7 +19,7 @@ static int nvs_load(void *ctx, uint8_t *data, size_t capacity, size_t *actual)
     if (c == NULL || data == NULL || actual == NULL) return -1;
     *actual = 0u;
     nvs_handle_t handle;
-    esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READONLY, &handle);
+    esp_err_t err = nvs_open(c->namespace_name != NULL ? c->namespace_name : NVS_NAMESPACE, NVS_READONLY, &handle);
     if (err == ESP_ERR_NVS_NOT_FOUND) {
         c->last_error = ESP_OK;
         return 1;
@@ -65,7 +65,7 @@ static int nvs_store(void *ctx, const uint8_t *data, size_t size)
     if (c == NULL || data == NULL || size != WARSHIP_PALMARES_WIRE_SIZE)
         return -1;
     nvs_handle_t handle;
-    esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READWRITE, &handle);
+    esp_err_t err = nvs_open(c->namespace_name != NULL ? c->namespace_name : NVS_NAMESPACE, NVS_READWRITE, &handle);
     if (err != ESP_OK) {
         c->last_error = err;
         return -1;

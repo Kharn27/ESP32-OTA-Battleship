@@ -117,7 +117,7 @@ static WarshipPalmaresView stats(WarshipPalmares *p)
 static void test_lifecycle(void)
 {
     reset_fake();
-    WarshipPalmaresNvsContext ctx = {ESP_FAIL};
+    WarshipPalmaresNvsContext ctx = {.last_error = ESP_FAIL};
     fake.init_error = ESP_ERR_NVS_NO_FREE_PAGES;
     EQ(warship_palmares_nvs_init(), ESP_ERR_NVS_NO_FREE_PAGES);
     fake.init_error = ESP_ERR_NVS_NEW_VERSION_FOUND;

@@ -15,6 +15,9 @@ extern "C" {
  */
 typedef struct {
     esp_err_t last_error;
+    /* NULL selects the production namespace warship. A dedicated bench
+     * can opt into warship_d11lab WITHOUT altering production scores. */
+    const char *namespace_name;
 } WarshipPalmaresNvsContext;
 
 /* Calls nvs_flash_init() ONLY; propagates errors unchanged, including
