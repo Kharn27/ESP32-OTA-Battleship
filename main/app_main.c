@@ -1,5 +1,6 @@
 #include "esp_log.h"
 #include "d09_probe.h"
+#include "d11_runtime.h"
 #include "warship_core.h"
 #include "warship_fleet.h"
 #include "warship_battle.h"
@@ -32,7 +33,7 @@ void app_main(void)
     /* D07 link-only proof; D09 initializes its technical deployment. */
     ESP_LOGI(TAG, "D07 lifecycle linked: null init rejected=%u",
              (unsigned)warship_lifecycle_init(NULL));
-    /* D08 link-only: NO NVS read/write/init on this D09 boot. */
+    /* D08 link-smoke below is NULL-only; D11 opens NVS explicitly later. */
     const WarshipPalmaresBackend storage = warship_palmares_nvs_backend();
     ESP_LOGI(TAG, "D08 NVS backend linked: %u",
              (unsigned)(storage.load != NULL && storage.store != NULL));
@@ -44,7 +45,9 @@ void app_main(void)
              (unsigned)warship_palmares_apply(NULL, 0u,
                                               WARSHIP_LIFECYCLE_EVENT_NONE),
              (unsigned)warship_palmares_reload(NULL));
-    ESP_LOGW(TAG, "WARSHIP D09 DEPLOYMENT + D10 TECHNICAL COMBAT; NOT PRODUCT UI");
+    ESP_LOGW(TAG, "WARSHIP D09+D10 TECHNICAL + D11 PALMARES NVS EVENTS; NOT PRODUCT UI");
     ESP_LOGI(TAG, "BOOT_MODE=D09 direct boot, no Kconfig selector");
+    /* D11 reads storage at app entry; no write/format on a normal boot. */
+    d11_runtime_init();
     d09_probe_run();
 }

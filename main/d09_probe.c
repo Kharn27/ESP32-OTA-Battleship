@@ -1,6 +1,7 @@
-/* D09 deployment plus D10 technical combat. A single task owns both
- * SPI buses, the sole private lifecycle, and the DMA band. No NVS/radio. */
+/* D09+D10 technical presentation, D11 post-ACK NVS event handoff. A
+ * single task owns both SPI buses, lifecycle, DMA and NVS writes. No radio. */
 #include "d09_probe.h"
+#include "d11_runtime.h"
 #include "warship_deploy_ui.h"
 #include "warship_combat_ui.h"
 #include "warship_lcd.h"
@@ -171,7 +172,7 @@ void d09_probe_run(void)
              (unsigned)CONFIG_ESP_MAIN_TASK_STACK_SIZE,
              (unsigned)sizeof(WarshipSoloSession),
              (unsigned)sizeof(WarshipBattle));
-    memory_log("startup");
+    memory_log("startup_after_nvs_read");
     WarshipDeployLayout layout=warship_deploy_default_layout();
     if(warship_deploy_input_init(&input,&layout)!=WARSHIP_DEPLOY_OK ||
        warship_lifecycle_init(&game)!=WARSHIP_LIFECYCLE_OK) {
@@ -304,9 +305,13 @@ void d09_probe_run(void)
                     ESP_LOGE(TAG,"D10_ACK_FAIL_AFTER_PRESENTATION");
                     return;
                 }
-                /* D07 terminal event is observed ONCE and NOT persisted:
-                 * NVS / result UX are in later missions.
+                /* D11 consumes only the event emitted AFTER the LCD
+                 * composite returned ESP_OK and D07 ACK succeeded.
+                 * Do not perform NVS inside any DMA callback.
                  */
+                d11_runtime_event(emitted);
+                if(emitted!=WARSHIP_LIFECYCLE_EVENT_NONE)
+                    memory_log("after_nvs_event");
                 ESP_LOGI(TAG,
                     "D10_PAIR_VISIBLE_ACK round=%u human=%u,%u impact=%u ship=%u captain=%u,%u impact=%u ship=%u event=%u",
                     (unsigned)combat.pending_pair.round,
@@ -355,7 +360,7 @@ void d09_probe_run(void)
                         return;
                     }
                     if(action==WARSHIP_DEPLOY_READY)
-                        ESP_LOGI(TAG,"D10_COMBAT_READY no NVS, no ESP-NOW");
+                        ESP_LOGI(TAG,"D10_COMBAT_READY D11=NVS_events_after_ACK; no ESP-NOW");
                     memory_log("after_action");
                 }
             }
@@ -366,6 +371,9 @@ void d09_probe_run(void)
                      (unsigned)action_count,(unsigned)sample_errors);
             last_mem=ms;
         }
+        /* At most one bounded NVS retry per 10 seconds, outside LCD/SPI
+         * rendering. Never busy-loop on a failing/uncertain commit. */
+        d11_runtime_poll();
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }
