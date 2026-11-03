@@ -18,7 +18,7 @@
 
 ![Concept illustré — intention maritime et matières](reference_concept_1448x1086.png)
 
-L'**image HD de ChatGPT** est fournie **comme référence picturale et atlas de matières**. La maquette PC native est une **recomposition** de fragments peints de mer, bois, laiton, ciel et boutons avec **grille/labels/impacts/cible/alertes dessinés à 320×240**, et non le résultat de la réduction globale de l'illustration HD. Le résultat combine peinture source et retouche déterministe ; le master de peinture n'est **pas vectoriel ni rééditable élément par élément**. La **mise en page, les cases, les marqueurs, les coordonnées et les textes sont éditables dans `build_g04_r2.py`**. L'ancien SVG vectoriel plat `g04_r2_attaque.svg` est une **archive dépassée** qui ne décrit plus les nouveaux PNG : ne pas le présenter comme source de cette version.
+L'**image HD de ChatGPT** est fournie **comme référence picturale et atlas de matières**. La maquette PC native est une **recomposition** de fragments peints de mer, bois, laiton, ciel et boutons avec **grille/labels/impacts/cible/alertes dessinés à 320×240**, et non le résultat de la réduction globale de l'illustration HD. Le résultat combine peinture source et retouche déterministe ; le master de peinture n'est **pas vectoriel ni rééditable élément par élément**. La **mise en page, les cases, les marqueurs, les coordonnées et les textes sont éditables dans `build_g04_r2.py`**. L'ancien SVG vectoriel plat a été **retiré de la branche**, car il ne décrivait plus les nouveaux PNG : la source actuelle est le compositeur Python.
 
 ## Cadrage, interactions et contenu
 
