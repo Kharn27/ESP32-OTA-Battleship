@@ -163,8 +163,23 @@ target_link_libraries(warship_event_id_nvs_tests PRIVATE
 target_compile_options(warship_event_id_nvs_tests PRIVATE
                        -Wall -Wextra -Werror -pedantic)
 
+# D12: real D07 lifecycle + D10 tactile/technical UI + D11 ledger.
+add_library(warship_journey STATIC
+            ../components/warship_journey/warship_journey.c)
+target_include_directories(warship_journey PUBLIC
+                           ../components/warship_journey/include)
+target_link_libraries(warship_journey PUBLIC
+                      warship_combat_ui warship_event_bridge)
+target_compile_options(warship_journey PRIVATE -Wall -Wextra -Werror -pedantic)
+
+add_executable(warship_journey_tests test_warship_journey.c)
+target_link_libraries(warship_journey_tests PRIVATE
+                      warship_journey warship_deploy_ui)
+target_compile_options(warship_journey_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+
 if(WARSHIP_SANITIZERS)
-    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_event_bridge warship_event_bridge_tests warship_event_id_nvs_host warship_event_id_nvs_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests warship_deploy_ui warship_deploy_ui_tests d09_touch_mapping_tests warship_combat_ui warship_combat_ui_tests)
+    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_event_bridge warship_event_bridge_tests warship_event_id_nvs_host warship_event_id_nvs_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests warship_deploy_ui warship_deploy_ui_tests d09_touch_mapping_tests warship_combat_ui warship_combat_ui_tests warship_journey warship_journey_tests)
         target_compile_options(${target} PRIVATE -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
         target_link_options(${target} PRIVATE -fsanitize=address,undefined)
     endforeach()
@@ -190,3 +205,5 @@ add_test(NAME d10_combat_ui_technical COMMAND warship_combat_ui_tests)
 
 add_test(NAME d11_event_bridge_and_d07 COMMAND warship_event_bridge_tests)
 add_test(NAME d11_nvs_id_reservation COMMAND warship_event_id_nvs_tests)
+
+add_test(NAME d12_technical_journey COMMAND warship_journey_tests)
