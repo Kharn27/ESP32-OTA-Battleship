@@ -117,6 +117,30 @@ static esp_err_t draw_combat(uint8_t include_pending)
              (unsigned)combat_frame.terminal,(unsigned)combat_frame.alert);
     return draw_region(0,0,320,240);
 }
+/* Refresh only the previous/new 19px cell and FEU button for a
+ * selection toggle/replacement. Full frame reserved for view/FEU/reveal.
+ */
+static esp_err_t draw_combat_selection(uint8_t had, uint8_t old_x,
+                                      uint8_t old_y)
+{
+    if(warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK ||
+       warship_combat_make_frame(&public_view,&combat,0u,
+                                 &combat_frame)!=WARSHIP_COMBAT_OK)
+        return ESP_FAIL;
+    if(had) {
+        const esp_err_t e=draw_region(22+(int)old_x*19,24+(int)old_y*19,19,19);
+        if(e!=ESP_OK) return e;
+    }
+    if(combat_frame.has_selection &&
+       (!had || old_x!=combat_frame.target_x ||
+        old_y!=combat_frame.target_y)) {
+        const esp_err_t e=draw_region(
+            22+(int)combat_frame.target_x*19,
+            24+(int)combat_frame.target_y*19,19,19);
+        if(e!=ESP_OK) return e;
+    }
+    return draw_region(225,32,91,38);
+}
 static esp_err_t draw_for_action(WarshipDeployAction action)
 {
     if (game.phase==WARSHIP_LIFECYCLE_COMBAT)
@@ -235,6 +259,9 @@ void d09_probe_run(void)
                 return;
             }
             if(hit.command!=WARSHIP_COMBAT_NO_HIT) {
+                const uint8_t had_selection=public_view.battle.has_selection;
+                const uint8_t old_x=public_view.battle.target_x;
+                const uint8_t old_y=public_view.battle.target_y;
                 const WarshipCombatStatus applied=warship_combat_apply(
                     &combat,&game,&public_view,hit,ms,rng_u32,NULL);
                 ESP_LOGI(TAG,"D10_ACTION id=%u cell=%u,%u view=%u result=%u",
@@ -242,8 +269,11 @@ void d09_probe_run(void)
                          (unsigned)combat.view,(unsigned)applied);
                 if(applied==WARSHIP_COMBAT_OK) {
                     ++action_count;
-                    /* Rerender only the technical regions; never reinit SPI. */
-                    err=draw_combat(0u);
+                    /* Bounded DMA regions; never reinit SPI/touch. */
+                    err=(hit.command==WARSHIP_COMBAT_CELL ||
+                         hit.command==WARSHIP_COMBAT_CANCEL) ?
+                        draw_combat_selection(had_selection,old_x,old_y) :
+                        draw_combat(0u);
                     if(err!=ESP_OK) {
                         ESP_LOGE(TAG,"D10_DRAW_STOP err=%s",esp_err_to_name(err));
                         memory_log("d10_draw_fault");
