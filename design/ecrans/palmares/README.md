@@ -1,7 +1,9 @@
+> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** PALMARÈS G06. [Issue #47](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/47) · [PR #51 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/51). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+
 # G06 — PALMARÈS VS CAPITAINE · Issue #47
 
 **Graphiste / DA · LOT 1 · `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`.**  
-**Arbitrage artistique PO : en attente.** Fusion et acceptation finale **Pilotage uniquement**.  
+**Arbitrage artistique PO : VALIDÉ au niveau de la maquette PC.** PR #51 fusionnée par Pilotage.  
 **Branche :** `design/issue-47-palmares`. **Base au lancement :** `main` `0642e7abc1d4285d978586042df66edcbff5b4ec`.
 
 ## Livrables
@@ -77,11 +79,11 @@ Depuis la racine du dépôt :
 
 ```bash
 python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==12.3.0'
-python3 design/issue-47-palmares/export_previews.py
+python3 design/ecrans/palmares/export_previews.py
 ```
 
 Le validateur lit le **SVG réellement rendu** : cinq groupes de données/valeurs uniques, libellés et lien ACCUEIL, absence de catégories fictives ou supplémentaires, somme d'exemple 12=7+3+2, plaque globale séparée, état zéro `5×00`, dimensions natives, PNG **1280×960 RGBA égal octet pour octet au zoom NEAREST**, avec contrôle négatif RGB. Il contrôle aussi la taille de la vignette 252×108. Il ne remplace **pas** une revue artistique/ergonomique sur écran CYD.
 
 **Non testés :** TFT/stylet réel (T02-B/D09), rendu police embarquée, lisibilité aux angles, consommation Flash/RAM, vitesse de rendu, comportement NVS ou redémarrage. Aucun budget mémoire, compression, schéma d'API ou format de pixel runtime imposé. La fusion et l'acceptation artistique attendent **avis explicite du PO**, puis décision Pilotage.
 
-Références : [Issue G06 #47](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/47), [Bible v0.17](../../BIBLE_PRODUIT.md) §14.1/14.8/15.2, [G01](../issue-16-direction-lot1/CONTRAT_GRAPHIQUE.md), [accueil retenu](../graph-acc-001/README.md), [D08 #36](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/36), [politique de test](../../docs/TEST_POLICY.md).
+Références : [Issue G06 #47](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/47), [Bible v0.17](../../../BIBLE_PRODUIT.md) §14.1/14.8/15.2, [G01](../../fondations/CONTRAT_GRAPHIQUE.md), [accueil retenu](../accueil/README.md), [D08 #36](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/36), [politique de test](../../../docs/TEST_POLICY.md).

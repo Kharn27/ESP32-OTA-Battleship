@@ -1,3 +1,5 @@
+> **Contrat G01 — identité visuelle acceptée par le PO ([Issue #16](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/16), [PR #19 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/19)).** Ce document conserve la pensée artistique, **pas une maquette ATTAQUE active**. Les anciennes variantes G01 / V2 / V2.1 / recomposition sont retirées de `main`, conservées dans [l'historique Git pré-nettoyage](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1). Pour ATTAQUE en jeu, G04 est **en cours et non approuvée** ; pour le post-verdict, consulter G07 et G08. `ON_DEVICE_UNVERIFIED`.
+
 # G01 — Contrat graphique provisoire consolidé du LOT 1
 
 **Issue #16 · PR #19 (DRAFT) · 30/10/2026**  
@@ -19,8 +21,8 @@
 ### D'où viennent ces principes
 
 1. **Accueil GRAPH-ACC-001 / [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) — RETENU PAR LE PO en conception seulement :** horizon maritime, coucher de soleil, navires et action, titre discret et JOUER/PALMARÈS ; **aucune modification de l'accueil**, aucun statut runtime.
-2. **Trois premières planches illustrées 1448 × 1086 — RÉFÉRENCE D'INTENTION retenue :** ambition de bataille navale illustrée rétro riche, presque spectaculaire, mer turquoise, crépuscule, coques expressives, impacts et cuivre. **Ni gabarits 320 × 240, ni règles de positionnement, ni assets validés.** Les intentions sont documentées dans l'Issue #16 et la [note ATTAQUE](ATTAQUE_RECOMPOSITION_NOTE.md) ; leurs originaux ne sont pas présents ici comme sources comparables pixel à pixel.
-3. **Recomposition actuelle « La mer est le plateau » — PROPOSITION ACTIVE :** [rendu 320 × 240](attaque_recomposition_320x240.png), [zoom x4](attaque_recomposition_x4.png), [source Python](attaque_recomposition.py), [OpenRaster 4 calques](attaque_recomposition_layers.ora) et [note détaillée](ATTAQUE_RECOMPOSITION_NOTE.md). L'horizon et la mer sont continus, le bateau est illustratif **hors grille** et ne renseigne pas sur l'ennemi. Cette image exprime le **langage graphique**, **pas** une implantation d'écran approuvée.
+2. **Trois premières planches illustrées 1448 × 1086 — RÉFÉRENCE D'INTENTION retenue :** ambition de bataille navale illustrée rétro riche, presque spectaculaire, mer turquoise, crépuscule, coques expressives, impacts et cuivre. **Ni gabarits 320 × 240, ni règles de positionnement, ni assets validés.** Les intentions sont documentées dans l'Issue #16 et la [note ATTAQUE](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/ATTAQUE_RECOMPOSITION_NOTE.md) ; leurs originaux ne sont pas présents ici comme sources comparables pixel à pixel.
+3. **Recomposition G01 historique « La mer est le plateau » — CONCEPT NON VALIDÉ COMME ÉCRAN :** [rendu 320 × 240](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition_320x240.png), [zoom x4](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition_x4.png), [source Python](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition.py), [OpenRaster 4 calques](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition_layers.ora) et [note détaillée](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/ATTAQUE_RECOMPOSITION_NOTE.md). L'horizon et la mer sont continus, le bateau est illustratif **hors grille** et ne renseigne pas sur l'ennemi. Cette image exprime le **langage graphique**, **pas** une implantation d'écran approuvée.
 
 ### Séparer références, archives et ouvertures
 
@@ -28,13 +30,13 @@
 | --- | --- | --- |
 | **RETENU : intention** | Pixel art illustré maritime, 3 premières planches | Garder ambition, matière, climat, personnalité ; **pas** leur disposition HD |
 | **RETENU : conception accueil** | GRAPH-ACC-001, PR #8 | Continuité d'univers ; accueil inchangé et non testé matériellement |
-| **PROPOSÉ : actif** | Recomposition ATTAQUE, sources 320 × 240 | Exemple visuel de G01 à soumettre ; **pas** un écran final |
+| **HISTORIQUE : témoin non validé comme écran** | Recomposition ATTAQUE, sources 320 × 240 | Exemple visuel de G01 à soumettre ; **pas** un écran final |
 | **REJETÉ ARTISTIQUEMENT / ARCHIVE** | G01 initiale, V2, V2.1 | Ne pas conserver leur géométrie dashboard/vignette comme direction ; utiles à l'historique et aux états métier |
 | **NON RETENU / ARCHIVE GIT** | Anciens habillages A/B/C, agencements D/E/F, scènes narratives et SVG UX obsolètes | Voir [MAQUETTES.md](../../MAQUETTES.md) ; **A/B/C ne sont pas les trois premières planches illustrées** ; ne pas réactiver ces thèmes |
 | **OUVERT : missions d'écran** | Haut d'ATTAQUE trop dense, grille chargée, position du bateau/décor, taille des commandes | Corriger dans les missions d'écran **sans refaire G01** |
 | **OUVERT : missions d'écran / Développeur / S02** | Composition finale, formats, police, tactile, contrastes et performances | L'acceptation du socle artistique ne vaut ni approbation d'écran ni validation CYD |
 
-La comparaison V2.1/recomposition est dans [ATTAQUE_RECOMPOSITION_NOTE.md](ATTAQUE_RECOMPOSITION_NOTE.md). Les vieilles previews DÉFENSE/conventions du dossier sont **des témoins historiques**, non des maquettes actuelles à généraliser.
+La comparaison V2.1/recomposition est dans [ATTAQUE_RECOMPOSITION_NOTE.md](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/ATTAQUE_RECOMPOSITION_NOTE.md). Les vieilles previews DÉFENSE/conventions du dossier sont **des témoins historiques**, non des maquettes actuelles à généraliser.
 
 ## 2 — Couleurs : palette de travail, pas palette firmware
 
@@ -127,7 +129,7 @@ La recomposition **illustre** des cases **18×18 pixels**, FEU proche de x205–
 | **ui.feedback / ui.verdict / ui.inspect / ui.stats** | **Besoins futurs, non assets G01 livrés** | dimensions et composants à concevoir en G02–G04 |
 | **font.ui** | DejaVu **hôte** seulement | police embarquée et glyphes à choisir, coûts à mesurer |
 
-**Sources de conception** : [attaque_recomposition.py](attaque_recomposition.py), [attaque_recomposition_layers.ora](attaque_recomposition_layers.ora), PNG natif, zoom x4 nearest et [SVG vectorisé auxiliaire](attaque_recomposition_trace_editable.svg). Le SVG tracé n'est pas une source sémantique de composants ; l'ORA et le code sont éditables. Dessins pixel originaux ; **aucune image tierce incorporée**. Adobe Firefly seulement pour étude d'ambiance non intégrée ; fonte DejaVu du poste **non livrée**.
+**Sources de conception** : [attaque_recomposition.py](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition.py), [attaque_recomposition_layers.ora](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition_layers.ora), PNG natif, zoom x4 nearest et [SVG vectorisé auxiliaire](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/dab6e891657078b65229b4f2de33edd995309498/design/issue-16-direction-lot1/attaque_recomposition_trace_editable.svg). Le SVG tracé n'est pas une source sémantique de composants ; l'ORA et le code sont éditables. Dessins pixel originaux ; **aucune image tierce incorporée**. Adobe Firefly seulement pour étude d'ambiance non intégrée ; fonte DejaVu du poste **non livrée**.
 
 **Fiche à fournir lors de la préparation firmware :** ID final, rôle/états, dimensions, transparence et masque, palette/profondeur **si approuvée**, source/export, taille binaire mesurée, licence/provenance, stratégie de dessin/décodage, consommation Flash/RAM/piles/buffers et latence observée. **Ne pas imposer maintenant RGB565, RLE, nombre de couleurs, atlas, bibliothèque ou framebuffer entier**. Aucune PSRAM/microSD garanties ; assets destinés à la Flash.
 

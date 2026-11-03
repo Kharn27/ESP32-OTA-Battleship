@@ -1,3 +1,5 @@
+> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** INSPECTION DE LA FLOTTE ADVERSE G08 (A/B/C). [Issue #55](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/55) · [PR #56 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/56). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+
 # G08 / Issue #55 — inspection volontaire après DÉFAITE VS Capitaine
 
 **Reprise OPTION A validée par le PO — Direction artistique préservée, géométrie du G07 rétablie.** Statut : `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`. Pour relecture du PO et contre-revue du Pilotage uniquement. Aucun changement dans G07, la Bible ou le firmware.
@@ -39,11 +41,11 @@ Exécuter depuis le dossier de la maquette (Linux, Python 3 et Pillow ; font `De
 
 ```sh
 python3 -m pip install Pillow
-python3 design/issue-55-g08-inspection/build_g08_reference.py
+python3 design/ecrans/inspection-flotte/build_g08_reference.py
 ```
 
 **Contrôles positifs réels :** plateau x21,y53, 10×10 cellules espacées de **18 pixels** (contrôle des positions de traits), cinq navires alignés en 5/4/3/3/2 et 17 cases uniques, 12 touches et 20 ratés disjoints, 5 segments intacts ; ORA à 5 calques et calques d'impacts lus et **identiques byte-à-byte** A/B/C, coques absentes A/C ; dimensions PNG lus depuis fichier ; **RGBA des pixels du PNG ×4 relu exactement égaux au NEAREST attendu** pour chaque état et la planche.
 
 **Contrôle négatif obligatoire :** une copie d'un vrai PNG ×4 est modifiée sur **le canal R d'un seul pixel** sans modifier son alpha, enregistrée puis relue ; la même fonction de vérification doit la **rejeter**. Un échec à rejeter invalide le build. Le rapport trace ce test. Il ne s'agit pas d'une comparaison de BBox alpha ni d'un auto-contrôle mémoire tautologique.
 
-**Preuves = PC seulement**, aucun test sur CYD physique, aucune homologation de taille de zone tactile ni de format d'asset embarqué. Décision esthétique finale PO **EN ATTENTE** ; contre-revue et fusion **exclusivement Pilotage**. Ne pas fusionner cette PR Draft sans sa décision.
+**Preuves = PC seulement**, aucun test sur CYD physique, aucune homologation de taille de zone tactile ni de format d'asset embarqué. Décision esthétique finale **VALIDÉE PAR LE PO** ; PR #56 **FUSIONNÉE** par Pilotage au commit `dab6e891657078b65229b4f2de33edd995309498`. Les limitations matérielles restent ouvertes.

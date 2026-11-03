@@ -1,7 +1,9 @@
+> **RÉFÉRENCE ACTIVE — VALIDÉE PAR LE PO (maquette PC).** FLOTTE des cinq navires G02. [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30) · [PR #32 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32). `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : ni rendu TFT, ni hitbox, ni assets firmware homologués.
+
 # G02 — Design des cinq navires classiques (Issue #30)
 
-**Responsable :** Graphiste / DA · **Statut :** DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED · **Avis artistique PO G02 :** en attente.  
-**Branche / PR :** `design/issue-30-navires-flotte` · [PR Draft #32](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32) · Refs #30 (pas Closes).
+**Responsable :** Graphiste / DA · **Statut :** DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED · **Avis artistique PO G02 :** VALIDÉ en maquette PC (PR #32 fusionnée).  
+**Branche / PR :** `design/issue-30-navires-flotte` · [PR #32 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32) · Refs #30 (pas Closes).
 
 ## Les livrables canoniques dans le dépôt
 
@@ -36,8 +38,8 @@ Depuis la racine du dépôt :
 
 ```sh
 python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
-python3 design/issue-30-navires-flotte/validate_fleet.py
-python3 design/issue-30-navires-flotte/export_previews.py
+python3 design/flotte/validate_fleet.py
+python3 design/flotte/export_previews.py
 ```
 
 `export_previews.py` contrôle **la taille réelle 320×240**, **1280×960**, **l'égalité exacte du raster agrandi à l'image native redimensionnée en NEAREST**, et un échantillon correspondant pour chaque pixel natif. Les sept PNG sont **versionnés dans cette PR**.
@@ -48,8 +50,8 @@ python3 design/issue-30-navires-flotte/export_previews.py
 
 Identité G01 acceptée par le PO : **« La mer est le plateau »**, mer turquoise continue, reflets organiques, cuivre et ambre, encrage froid, éclairage cohérent. Une proposition principale de cinq coques distinctes : Patrouilleur = vedette courte ; Sous-marin = fuseau avec kiosque ; Contre-torpilleur = étrave/tourelles ; Croiseur = plusieurs groupes d'artillerie ; Porte-avions = longue piste et îlot asymétrique. Les deux modèles de trois cases ne reposent pas sur la seule couleur.
 
-**Proposé, NON validé G02 :** personnalité, détails, lisibilité réelle, impact et état coulé. Les états de dommages illustrent **la propre flotte du joueur** (DÉFENSE), sans silhouette/épave de Capitaine sur ATTAQUE. **Non testé sur CYD :** stylet, contraste TFT, formats, masques, Flash/RAM, latence, police. T02/S02 et le Développeur établiront l'interface runtime sans présumer d'un budget ou d'un format.
+**Validé au niveau des silhouettes G02, non homologué sur CYD :** personnalité, détails, lisibilité réelle, impact et état coulé. Les états de dommages illustrent **la propre flotte du joueur** (DÉFENSE), sans silhouette/épave de Capitaine sur ATTAQUE. **Non testé sur CYD :** stylet, contraste TFT, formats, masques, Flash/RAM, latence, police. T02/S02 et le Développeur établiront l'interface runtime sans présumer d'un budget ou d'un format.
 
 **Provenance :** dessin original G02, sans image tierce ni police embarquée livrée ; fonte sans-serif hôte comme substitution de preview. **Aucun changement métier, firmware, accueil ou G01.**
 
-Références : [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [revue Pilotage](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32#pullrequestreview-5724899315), [contrat G01](../issue-16-direction-lot1/CONTRAT_GRAPHIQUE.md) et [politique de preuve](../../docs/TEST_POLICY.md).
+Références : [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [revue Pilotage](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32#pullrequestreview-5724899315), [contrat G01](../fondations/CONTRAT_GRAPHIQUE.md) et [politique de preuve](../../docs/TEST_POLICY.md).
