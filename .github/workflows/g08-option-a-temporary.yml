@@ -1,0 +1,42 @@
+name: G08 Option A — temporary native design delivery
+on:
+  push:
+    branches: [design/issue-55-g08-inspection]
+    paths: ['.github/workflows/g08-option-a-temporary.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  option-a-design:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch exact approved G08 local payload uploaded to Adobe CC
+        run: |
+          curl --fail --location --retry 2 --max-time 80 --silent --show-error \
+            -o /tmp/g08-option-a.zip 'https://at.adobe.com/HqOaRs68EXwlpTVw'
+          echo '80ef12a707e992079e2cb4e89c1481c1db0b3c40d548962f7278c476bc710943  /tmp/g08-option-a.zip' | sha256sum -c -
+          unzip -t /tmp/g08-option-a.zip | tail -2
+      - name: Replace all 17 G08 source/export files
+        run: |
+          unzip -oq /tmp/g08-option-a.zip -d .
+          python -m pip install --quiet Pillow
+          python design/issue-55-g08-inspection/build_g08_reference.py | tee /tmp/g08-option-a.log
+          grep -q 'negative RGB-only corruption.*REJECTED' /tmp/g08-option-a.log
+          grep -q 'board x21..201 y53..233' /tmp/g08-option-a.log
+          test -f design/issue-55-g08-inspection/g08_etat_b_layers.ora
+          cat design/issue-55-g08-inspection/generation-report.txt | head -14
+      - name: Commit exact G08 source, three ORA and generated previews
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/issue-55-g08-inspection/
+          if ! git diff --cached --quiet; then
+            git commit -m 'design(G08): restore G07 18px grid with PO naval art and RGB-negative QA'
+            git push
+          fi
