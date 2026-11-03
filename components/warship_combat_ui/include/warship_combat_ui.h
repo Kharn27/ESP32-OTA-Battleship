@@ -83,7 +83,8 @@ WarshipCombatStatus warship_combat_input_step(
  * FEU is a single atomic D07/D06/D02 transaction. No ACK here.
  */
 WarshipCombatStatus warship_combat_apply(
-    WarshipCombatUi *ui, WarshipLifecycle *game, WarshipCombatHit hit,
+    WarshipCombatUi *ui, WarshipLifecycle *game,
+    const WarshipLifecyclePublic *observed, WarshipCombatHit hit,
     uint64_t now_ms, WarshipCaptainRandom rng, void *rng_ctx);
 int warship_combat_reveal_due(const WarshipCombatUi *ui, uint64_t now_ms);
 /* Snapshot hides unresolved pair; include_pending explicitly adds BOTH
