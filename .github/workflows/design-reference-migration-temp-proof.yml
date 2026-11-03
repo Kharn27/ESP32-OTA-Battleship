@@ -1,0 +1,43 @@
+name: design-reference-migration-temp-proof
+on:
+  push:
+    branches: [maintenance/design-references-canonique]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-generators:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history (historical G03 baseline)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-dejavu-core libcairo2-dev libffi-dev
+          python3 -m pip install 'Pillow==11.3.0' 'CairoSVG==2.7.1'
+      - name: Validate moved design sources and previews
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 design/flotte/validate_fleet.py
+          python3 design/flotte/export_previews.py
+          python3 design/ecrans/deploiement/export_previews.py
+          python3 design/ecrans/palmares/export_previews.py
+          python3 design/ecrans/fin-partie/build_g07.py
+          python3 design/ecrans/inspection-flotte/build_g08_reference.py
+          echo "PASS: G02, G03, G06, G07, G08 source checks executed from canonical directories"
+      - name: Audit current tree and generated diffs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(find design -type d -name 'issue-*' -print -quit)"
+          test -f design/README.md
+          git diff --stat || true
+          echo "PASS: no issue-XX directories in active design"
