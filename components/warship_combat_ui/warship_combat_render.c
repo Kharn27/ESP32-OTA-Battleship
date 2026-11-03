@@ -176,7 +176,9 @@ uint16_t warship_combat_pixel(const WarshipCombatFrame *f,
         if (text_bit(label,225u,187u,x,y) ||
             text_bit("FIN PARTIE",225u,208u,x,y))
             return 0xffe0u;
-        /* Keep shot history/ship overlays visible for inspection. */
+        /* Prevent old RIPOSTE or ALERTE from overlapping the verdict.
+         * Shot history stays visible on the left battlefield. */
+        if (x>=225u && y>=175u) return 0x000cu;
     }
     if (f->busy) {
         if (text_bit("FEU EN COURS",225u,188u,x,y) ||

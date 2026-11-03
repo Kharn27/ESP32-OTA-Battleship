@@ -4,6 +4,7 @@
 #include "d11_runtime.h"
 #include "warship_deploy_ui.h"
 #include "warship_combat_ui.h"
+#include "warship_journey.h"
 #include "warship_lcd.h"
 #include "warship_touch.h"
 #include "t02_touch_map.h"
@@ -38,6 +39,13 @@ static WarshipDeployInput input;
 static WarshipCombatUi combat;
 static WarshipCombatInput combat_input;
 static WarshipCombatFrame combat_frame;
+
+/* Same app_main writer as D10+D11; no extra ledger or private game copy. */
+static WarshipEventStatus persist_forfeit(void *ctx, WarshipLifecycleEvent event)
+{
+    (void)ctx;
+    return d11_runtime_event(event);
+}
 
 static int rng_u32(void *ctx,uint32_t *out)
 {
@@ -81,6 +89,7 @@ static esp_err_t draw_region(int x,int y,int w,int h)
         for(int r=0;r<rows;++r) {
             for(int col=0;col<w;++col) {
                 const uint16_t color=(game.phase==WARSHIP_LIFECYCLE_COMBAT ||
+                                      game.phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON ||
                                       game.phase==WARSHIP_LIFECYCLE_RESULT) ?
                     warship_combat_pixel(&combat_frame,(uint16_t)(x+col),
                                           (uint16_t)(top+r)) :
@@ -144,7 +153,9 @@ static esp_err_t draw_combat_selection(uint8_t had, uint8_t old_x,
 }
 static esp_err_t draw_for_action(WarshipDeployAction action)
 {
-    if (game.phase==WARSHIP_LIFECYCLE_COMBAT)
+    if (game.phase==WARSHIP_LIFECYCLE_COMBAT ||
+        game.phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON ||
+        game.phase==WARSHIP_LIFECYCLE_RESULT)
         return draw_combat(0u);
     if(warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK) {
         ESP_LOGE(TAG,"D07_OBSERVE_FAIL");
@@ -250,11 +261,11 @@ void d09_probe_run(void)
         if(!down && prev_down) ESP_LOGI(TAG,"TOUCH_UP");
         prev_down=down;
         if (game.phase==WARSHIP_LIFECYCLE_COMBAT ||
+            game.phase==WARSHIP_LIFECYCLE_CONFIRM_ABANDON ||
             game.phase==WARSHIP_LIFECYCLE_RESULT) {
             WarshipCombatHit hit={WARSHIP_COMBAT_NO_HIT,0u,0u};
-            const WarshipCombatStatus got=warship_combat_input_step(
-                &combat_input,(uint8_t)down,valid,x,y,ms,
-                combat.pending,combat.view,&hit);
+            const WarshipCombatStatus got=warship_journey_input_step(
+                &combat_input,&combat,(uint8_t)down,valid,x,y,ms,&hit);
             if(got!=WARSHIP_COMBAT_OK) {
                 ESP_LOGE(TAG,"D10_TOUCH_INVALID status=%u",(unsigned)got);
                 return;
@@ -263,26 +274,62 @@ void d09_probe_run(void)
                 const uint8_t had_selection=public_view.battle.has_selection;
                 const uint8_t old_x=public_view.battle.target_x;
                 const uint8_t old_y=public_view.battle.target_y;
-                const WarshipCombatStatus applied=warship_combat_apply(
-                    &combat,&game,&public_view,hit,ms,rng_u32,NULL);
-                ESP_LOGI(TAG,"D10_ACTION id=%u cell=%u,%u view=%u result=%u",
-                         (unsigned)hit.command,(unsigned)hit.x,(unsigned)hit.y,
-                         (unsigned)combat.view,(unsigned)applied);
-                if(applied==WARSHIP_COMBAT_OK) {
+                WarshipEventStatus ledger=WARSHIP_EVENT_NO_CHANGE;
+                const uint8_t from=game.phase;
+                const WarshipJourneyStatus nav=warship_journey_apply(
+                    &game,&combat,hit,rng_u32,NULL,
+                    persist_forfeit,NULL,&ledger);
+                if(nav==WARSHIP_JOURNEY_DONE ||
+                   nav==WARSHIP_JOURNEY_SCORE_UNCONFIRMED) {
                     ++action_count;
-                    /* Bounded DMA regions; never reinit SPI/touch. */
-                    err=(hit.command==WARSHIP_COMBAT_CELL ||
-                         hit.command==WARSHIP_COMBAT_CANCEL) ?
-                        draw_combat_selection(had_selection,old_x,old_y) :
-                        draw_combat(0u);
+                    /* D12 never reuses the tap that changed phase, even
+                     * if it remains physically down during TFT refresh. */
+                    warship_combat_input_discard(&combat_input);
+                    if(game.phase==WARSHIP_LIFECYCLE_HOME ||
+                       game.phase==WARSHIP_LIFECYCLE_DEPLOY)
+                        warship_deploy_input_discard(&input,ms);
+                    ESP_LOGI(TAG,
+                        "D12_NAV from=%u to=%u command=%u status=%u nvs_status=%u",
+                        (unsigned)from,(unsigned)game.phase,
+                        (unsigned)hit.command,(unsigned)nav,(unsigned)ledger);
+                    if(nav==WARSHIP_JOURNEY_SCORE_UNCONFIRMED)
+                        ESP_LOGE(TAG,
+                            "D12_FORFEIT_NOT_CONFIRMED_NVS status=%u no_fake_credit",
+                            (unsigned)ledger);
+                    err=draw_for_action(WARSHIP_DEPLOY_START);
                     if(err!=ESP_OK) {
-                        ESP_LOGE(TAG,"D10_DRAW_STOP err=%s",esp_err_to_name(err));
-                        memory_log("d10_draw_fault");
+                        ESP_LOGE(TAG,"D12_DRAW_STOP err=%s",esp_err_to_name(err));
+                        memory_log("d12_draw_fault");
                         return;
                     }
-                    if(combat.pending) memory_log("after_feu");
-                } else if(applied==WARSHIP_COMBAT_GAME_ERROR) {
-                    ESP_LOGE(TAG,"D10_CONTROLLER_ERROR");
+                    memory_log("after_d12_nav");
+                } else if(nav==WARSHIP_JOURNEY_NOT_HANDLED) {
+                    const WarshipCombatStatus applied=warship_combat_apply(
+                        &combat,&game,&public_view,hit,ms,rng_u32,NULL);
+                    ESP_LOGI(TAG,"D10_ACTION id=%u cell=%u,%u view=%u result=%u",
+                             (unsigned)hit.command,(unsigned)hit.x,(unsigned)hit.y,
+                             (unsigned)combat.view,(unsigned)applied);
+                    if(applied==WARSHIP_COMBAT_OK) {
+                        ++action_count;
+                        /* Bounded DMA regions; no new pixel buffers. */
+                        err=(hit.command==WARSHIP_COMBAT_CELL ||
+                             hit.command==WARSHIP_COMBAT_CANCEL) ?
+                            draw_combat_selection(had_selection,old_x,old_y) :
+                            draw_combat(0u);
+                        if(err!=ESP_OK) {
+                            ESP_LOGE(TAG,"D10_DRAW_STOP err=%s",
+                                     esp_err_to_name(err));
+                            memory_log("d10_draw_fault");
+                            return;
+                        }
+                        if(combat.pending) memory_log("after_feu");
+                    } else if(applied==WARSHIP_COMBAT_GAME_ERROR) {
+                        ESP_LOGE(TAG,"D10_CONTROLLER_ERROR");
+                    }
+                } else if(nav==WARSHIP_JOURNEY_GAME_ERROR ||
+                          nav==WARSHIP_JOURNEY_BAD_ARGUMENT) {
+                    ESP_LOGE(TAG,"D12_NAV_REJECT from=%u command=%u status=%u",
+                             (unsigned)from,(unsigned)hit.command,(unsigned)nav);
                 }
             }
             if(warship_combat_reveal_due(&combat,ms)) {
@@ -329,6 +376,18 @@ void d09_probe_run(void)
                 }
                 memory_log("after_reveal");
                 if(combat.reveals>=2u) memory_log("after_rounds");
+                if(game.phase==WARSHIP_LIFECYCLE_RESULT) {
+                    /* The pair was fully visible and already acknowledged.
+                     * Now expose REJOUER/ACCUEIL technical controls. */
+                    err=draw_combat(0u);
+                    if(err!=ESP_OK) {
+                        ESP_LOGE(TAG,"D12_RESULT_DRAW_FAIL err=%s",
+                                 esp_err_to_name(err));
+                        memory_log("d12_result_draw_fault");
+                        return;
+                    }
+                    memory_log("after_d12_result");
+                }
             }
         } else {
             WarshipDeployAction action=WARSHIP_DEPLOY_NO_ACTION;
