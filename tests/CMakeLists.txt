@@ -120,8 +120,22 @@ target_link_libraries(d09_touch_mapping_tests PRIVATE
 target_compile_options(d09_touch_mapping_tests PRIVATE
                        -Wall -Wextra -Werror -pedantic)
 
+add_library(warship_combat_ui STATIC
+            ../components/warship_combat_ui/warship_combat_ui.c
+            ../components/warship_combat_ui/warship_combat_render.c)
+target_include_directories(warship_combat_ui PUBLIC
+                           ../components/warship_combat_ui/include)
+target_link_libraries(warship_combat_ui PUBLIC warship_lifecycle)
+target_compile_options(warship_combat_ui PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+
+add_executable(warship_combat_ui_tests test_warship_combat_ui.c)
+target_link_libraries(warship_combat_ui_tests PRIVATE warship_combat_ui)
+target_compile_options(warship_combat_ui_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+
 if(WARSHIP_SANITIZERS)
-    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests warship_deploy_ui warship_deploy_ui_tests d09_touch_mapping_tests)
+    foreach(target warship_core warship_core_tests t02_touch_map t02_touch_map_tests warship_fleet warship_fleet_tests warship_battle warship_battle_tests warship_captain warship_captain_tests warship_captain_tracks_tests warship_captain_geometry_tests warship_solo warship_solo_tests warship_lifecycle warship_lifecycle_tests warship_palmares warship_palmares_tests warship_palmares_nvs_host warship_palmares_nvs_host_tests warship_deploy_ui warship_deploy_ui_tests d09_touch_mapping_tests warship_combat_ui warship_combat_ui_tests)
         target_compile_options(${target} PRIVATE -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
         target_link_options(${target} PRIVATE -fsanitize=address,undefined)
     endforeach()
@@ -142,3 +156,5 @@ add_test(NAME warship_palmares_nvs_adapter COMMAND warship_palmares_nvs_host_tes
 add_test(NAME warship_deploy_ui_technical COMMAND warship_deploy_ui_tests)
 
 add_test(NAME d09_touch_calibrated_commands COMMAND d09_touch_mapping_tests)
+
+add_test(NAME d10_combat_ui_technical COMMAND warship_combat_ui_tests)
