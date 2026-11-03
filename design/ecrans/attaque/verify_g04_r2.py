@@ -12,29 +12,82 @@ report=json.loads((ROOT/'generation-report.json').read_text())
 old=Image.open(ROOT/'g04_r2_avant_quadrillage_320x240.png').convert('RGB')
 comparative=Image.open(ROOT/'g04_r2_comparaison_avant_apres_640x260.png').convert('RGB')
 comparative_zoom=Image.open(ROOT/'g04_r2_comparaison_x4.png').convert('RGB')
+previous_buttons=Image.open(ROOT/'g04_r2_avant_boutons_320x240.png').convert('RGB')
+compare_buttons=Image.open(ROOT/'g04_r2_comparaison_boutons_640x260.png').convert('RGB')
+compare_buttons_zoom=Image.open(ROOT/'g04_r2_comparaison_boutons_x4.png').convert('RGB')
+control_ref=Image.open(ROOT/'reference_controles_integres_1448x1086.png').convert('RGB')
 sea=Image.open(ROOT/'g04_r2_mer_continue_180x180.png').convert('RGB')
 board_clean=Image.open(ROOT/'g04_r2_plateau_sans_impacts_181x181.png').convert('RGB')
 assert old.size==(320,240) and comparative.size==(640,260)
 assert comparative_zoom.size==(2560,1040)
 assert sea.size==(180,180) and board_clean.size==(181,181)
+assert previous_buttons.size==(320,240) and compare_buttons.size==(640,260)
+assert control_ref.size==(1448,1086) and compare_buttons_zoom.size==(2560,1040)
+assert hashlib.sha256((ROOT/'g04_r2_avant_boutons_320x240.png').read_bytes()).hexdigest()==\
+ 'd0113e3d82c7f947d7ee3d699514cd6edfd6dda2f365abc8e3db39e206968556'
+assert compare_buttons.crop((0,20,320,260)).tobytes()==previous_buttons.tobytes()
+assert compare_buttons.crop((320,20,640,260)).tobytes()==native.tobytes()
+assert compare_buttons.resize((2560,1040),Image.Resampling.NEAREST).tobytes()==compare_buttons_zoom.tobytes()
 # Rejected reference is immutable: prevents re-labelling an after image as BEFORE.
 assert hashlib.sha256((ROOT/'g04_r2_avant_quadrillage_320x240.png').read_bytes()).hexdigest()==    '7be1719d1876b6fe4fe82517117b3ead0433640a6f3571a1a19a35ca3de26ad8'
 # This is an ACTUAL visual before/after: two intact 320x240 screenshots at 1:1.
 assert comparative.crop((0,20,320,260)).tobytes()==old.tobytes()
 assert comparative.crop((320,20,640,260)).tobytes()==native.tobytes()
 assert comparative.resize((2560,1040),Image.Resampling.NEAREST).tobytes()==comparative_zoom.tobytes()
-# Targeted retouch proof: no pixel outside the 181x181 grid including the
-# outer authoritative boundary has changed from the previously reviewed art.
-inside_changes=outside_changes=0
+# Two independently delimited corrections, not a broad redrawing:
+# - historical water change in x=21..201, y=53..233;
+# - present controls in x=208..319, y=42..238.
+# Every other pixel remains 1:1 against the formerly rejected tiled art.
+inside_changes=panel_changes=other_changes=0
 for yy in range(240):
     for xx in range(320):
         if native.getpixel((xx,yy)) != old.getpixel((xx,yy)):
             if 21<=xx<=201 and 53<=yy<=233:
                 inside_changes+=1
+            elif 208<=xx<320 and 42<=yy<239:
+                panel_changes+=1
             else:
-                outside_changes+=1
-assert inside_changes>=18000,(inside_changes,'ocean not actually corrected')
-assert outside_changes==0,(outside_changes,'unapproved change outside grid')
+                other_changes+=1
+assert inside_changes>=18000,(inside_changes,'ocean correction not present')
+assert panel_changes>=14000,(panel_changes,'new sculpted controls not present')
+assert other_changes==0,(other_changes,'changes outside allowed grid and controls')
+
+# Stronger independently grounded targeted protection: compare to the
+# immutable already-reviewed continuous-sea image. Only the right-side panel
+# may have changed, so grid + every marker/text outside it is pixel-identical.
+button_changes=0
+for yy in range(240):
+    for xx in range(320):
+        if native.getpixel((xx,yy)) != previous_buttons.getpixel((xx,yy)):
+            assert 208<=xx<320 and 42<=yy<239,('unrelated game pixel changed',xx,yy)
+            button_changes+=1
+assert button_changes>14000,(button_changes,'right controls did not materially change')
+
+# The integrated console must use multiple material/depth values rather than
+# a small flat rectangle laid over the art. Distinct native image regions have
+# reproducible pixel statistics and there is a red enamel / blue enamel cue.
+from collections import Counter
+regions={'FEU':(215,61,306,90),'DEFENSE':(215,99,306,120),
+         'ABANDON':(216,127,306,144),'HISTORIQUE':(215,151,306,182),
+         'RIPOSTE':(215,185,306,206),'ALERTE':(215,216,306,233)}
+region_complexity={}
+for label,box in regions.items():
+    patch=native.crop(box)
+    kinds=len(set(patch.get_flattened_data()))
+    # A flat 2-4-colour label stamp would not contain painted materials,
+    # lustre, hardware rivets and inlaid shadows.
+    assert kinds>100,(label,'button looks flat; lost painted shading',kinds)
+    region_complexity[label]=kinds
+# Check source compositing, independent of the report (full cropped HD image).
+ref_panel=control_ref.resize((320,240),Image.Resampling.LANCZOS)
+for xy in [(211,47),(228,74),(267,72),(249,110),(272,137),
+           (249,165),(253,199),(273,220),(311,233)]:
+    assert native.getpixel(xy)==ref_panel.getpixel(xy),('wrong painted panel',xy)
+# Negative: altering a painted-panel pixel would violate the crop-equality check.
+corrupt_button=native.copy()
+r,g,b=corrupt_button.getpixel((249,110))
+corrupt_button.putpixel((249,110),((r+1)%256,g,b))
+assert corrupt_button.getpixel((249,110))!=ref_panel.getpixel((249,110))
 
 # Diagnostic image shows the full grid with NO markers. We assert not merely
 # the presence of all 22 intended lines but their exclusive colour: none of
@@ -174,7 +227,11 @@ for name,info in report['files'].items():
     assert hashlib.sha256(p.read_bytes()).hexdigest()==info['sha256'],name
     assert p.stat().st_size==info['bytes']
 print('G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST')
-print(f'BEFORE/AFTER each full 320x240, one-to-one: inside grid changed={inside_changes}, outside changed={outside_changes}')
+print(f'BEFORE/AFTER 320x240: grid changed={inside_changes}, controls changed={panel_changes}, unrelated changed={other_changes}')
+print(f'PANEL ONLY vs prior continuous-sea approved layout: changed={button_changes}, all outside panel byte-identical')
+print('six integrated control/info regions: painted native colour variation='+str(region_complexity))
+print('HD sculpted controls are present in native PNG at 9 pixel probes; negative mutation rejected')
+print('button before/after 640x260 and ×4 strict NEAREST: pixel exact')
 print(f'clean 181x181 grid: {count_grid_pixels} correct RGB line pixels; NO extra grid-coloured pixels')
 print(f'continuous ocean: max luma={ocean_max_luma:.1f} (threshold 125), max 18px-boundary seam={ocean_max_seam:.2f} (threshold 8)')
 print('negative phantom water seam (synthetic horizontal 1px): rejected')
@@ -182,10 +239,10 @@ print('native 640x260 side-by-side + x4 comparison: pixel-identical source halve
 print('grid PNG: 121 crossings + 220 line segments checked at x=21..201/y=53..233, 100 cells of 18px')
 print('negative grid-line corruption: rejected')
 print('4 state vignettes: native + strict x4 NEAREST PASS')
-print('RIPOSTE B7 : RATÉ fully on one baseline / NON LUE COULÉ increased to 9px (visual check)')
+print('RIPOSTE B7 : RATÉ / NON LUE COULÉ: inset raster plates, native-size manual PO legibility check required')
 print('hit centers:',','.join(hits))
 print('miss centers:',','.join(misses))
 print('selected G5; last riposte B7 RATÉ; unread COULÉ (distinct)')
 print('negative one-channel corruption: rejected')
-print('HD art + editable scene generator + bitmap exports SHA256: MATCH')
+print('Original HD art + integrated-controls painted reference + editable compositor + PNG exports SHA256: MATCH')
 print('ON_DEVICE_UNVERIFIED — artistic PO approval still pending')

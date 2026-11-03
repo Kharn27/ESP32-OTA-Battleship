@@ -50,23 +50,50 @@
   "unread_severity": "COULÉ",
   "sea_render": "continuous 180x180 deterministic ocean; zero 18px tile seams",
   "grid_render": "one authoritative set of 11+11 integer-aligned 1px lines",
-  "comparative": "two complete 320x240 native images pasted pixel-for-pixel at x=0 and x=320",
+  "comparative": "two 320x240 1:1 comparisons: grid water fix and integrated buttons",
+  "button_panel": {
+    "bbox": [
+      208,
+      42,
+      320,
+      239
+    ],
+    "source": "reference_controles_integres_1448x1086.png",
+    "master_kind": "raster",
+    "gameplay_board_unchanged": true
+  },
   "files": {
     "reference_concept_1448x1086.png": {
       "sha256": "75cdb7bdfd1bd588f6ba1682bfd750c9119e7c114238ccf1008c3cd3010a13ab",
       "bytes": 2423167
     },
-    "build_g04_r2.py": {
-      "sha256": "cfd5885dba9fca1ebbb9b6290775724152b93ba17704ec68553c1e8833f0b0fe",
-      "bytes": 17023
+    "reference_controles_integres_1448x1086.png": {
+      "sha256": "80ad861cef0a4408c5797c10cbe29ed0d4d12fc8ac6a2960a2336cc066cc626a",
+      "bytes": 2101479
     },
-    "g04_r2_attaque_320x240.png": {
+    "g04_r2_avant_boutons_320x240.png": {
       "sha256": "d0113e3d82c7f947d7ee3d699514cd6edfd6dda2f365abc8e3db39e206968556",
       "bytes": 72449
     },
+    "g04_r2_comparaison_boutons_640x260.png": {
+      "sha256": "4f720ac327fe19382c3fc9e3a173eda5e705bc7855d27a444e080dea58bfedc8",
+      "bytes": 128203
+    },
+    "g04_r2_comparaison_boutons_x4.png": {
+      "sha256": "61ba54271e14bfc1f28bd820d3033b47f1ed164a3129b0ee961ca6a04f65e20d",
+      "bytes": 202869
+    },
+    "build_g04_r2.py": {
+      "sha256": "4d524dd31060ee9fea29bc8f69598a5dc70068f9a4b3b7d6f4dc2607545edc10",
+      "bytes": 15859
+    },
+    "g04_r2_attaque_320x240.png": {
+      "sha256": "0a2e446da655d561ece9d8daf8fcc5bf461f0b33ab7f104392cd8b398e1a0232",
+      "bytes": 98529
+    },
     "g04_r2_attaque_x4.png": {
-      "sha256": "ce3b6d04b055d34d69be85eafe7723aba7935f1ac3247b31d98774650a8711d9",
-      "bytes": 110593
+      "sha256": "8b5457c5d6ce8c3224b3c2c51f1da6b4f2aa8c7db859787769dcde3f35baecd4",
+      "bytes": 150810
     },
     "g04_r2_etats_320x240.png": {
       "sha256": "6a326383281a9322fc79f131649e68e455029eba9ab0bb9589b6f2b9d491c872",
@@ -81,12 +108,12 @@
       "bytes": 116048
     },
     "g04_r2_comparaison_avant_apres_640x260.png": {
-      "sha256": "964e3a9288fb9df9267162bce930bff26eb80434f51c86e8b5c4bf370098e18e",
-      "bytes": 138919
+      "sha256": "e0c8d4fcae047bc0d5a28768fadc9cee4da75c57038c72ceae73dd18e1cc7f08",
+      "bytes": 185938
     },
     "g04_r2_comparaison_x4.png": {
-      "sha256": "f499d1b003748c37aa681f7d6ff427e22af1afa9862d1bae07c20008faa86ce2",
-      "bytes": 214801
+      "sha256": "e1e3f9300b03af774b6de90146b79dde6342b13b4f261ee340c418eaa33614b8",
+      "bytes": 284254
     },
     "g04_r2_mer_continue_180x180.png": {
       "sha256": "ebb48cbf2ef74710e50b1914a80b0d677f8592d51a70f34376ee3b6de69d23b7",

@@ -161,69 +161,25 @@ for dx in [-7,5]:
     d.line([(x+dx,y+dy+sy*4),(x+dx,y+dy),(x+dx+sx*4,y+dy)],fill='#FFE66A',width=2)
 d.ellipse((x-2,y-2,x+2,y+2),fill='#0B3E5F',outline='#FFE978',width=1)
 
-# Three illustrated commands: source-painted metal frames, bevels and sheen.
-# Fill gaps with oak so HD text underneath never bleeds between controls.
-d=ImageDraw.Draw(im)
-for ya,yb in [(51,54),(94,98),(128,132),(153,157),(191,195),(213,216)]:
-    d.rectangle((209,ya,319,yb),fill='#5A3024')
-    d.line((210,ya,318,ya),fill='#A66E42',width=1)
-# Text is re-lettered at native pixel count so the original richness survives.
-patch((879,198,1380,334),(210,54,107,41))
-patch((880,339,1380,446),(210,98,107,31))
-patch((904,450,1377,526),(210,132,107,21))
-# Keep source-painted brass/wood frame; cover HD labels with matching
-# native-size metal insets to avoid doubled, illegible glyph edges.
-d=ImageDraw.Draw(im)
-d.rounded_rectangle((245,62,310,88),radius=3,fill='#A92625',outline='#D86F38',width=1)
-d.line((247,64,308,64),fill='#DF6E47',width=1)
-d.line((247,86,308,86),fill='#632019',width=1)
-d.rounded_rectangle((232,102,310,123),radius=2,fill='#124C6C',outline='#448AA3',width=1)
-d.line((234,103,308,103),fill='#89C5D4',width=1)
-d.rounded_rectangle((238,136,309,148),radius=2,fill='#E9B17E',outline='#975B3D',width=1)
-txt((276,76),'FEU',19,'#FFF3D9',stroke=1,stroke_fill='#65251E',anchor='mm')
-txt((271,113),'DÉFENSE',12,'#FFF5DC',stroke=1,stroke_fill='#142A47',anchor='mm')
-txt((273,142),'ABANDON',9,'#421B10',anchor='mm')
-# small unread alert badge, without any fictional counter.
-d.ellipse((300,97,316,113),fill='#AF2926',outline='#FFD26C',width=1)
-txt((308,105),'!',12,'#FFF8E8',stroke=0,anchor='mm')
-
-# Colored parchment/history is text, not tiny pre-rendered unreadable HD type.
-# Use the HD paper's natural texture from a comparatively blank area.
-d=ImageDraw.Draw(im)
-d.rounded_rectangle((210,156,317,191),radius=2,fill='#EAC48E',outline='#B46D36',width=2)
-for i in range(24):
-    px=213+(i*41)%99;py=159+(i*13)%30
-    d.line((px,py,px+1+(i%3),py),fill=('#E0AA70' if i%2 else '#F6D7A4'))
-
-d.rectangle((212,158,315,167),fill='#C99859')
-txt((215,163),'HISTORIQUE',8,'#3D201B',anchor='lm')
-txt((215,173),'I8 : TOUCHÉ !',8,'#9B261D',anchor='lm')
-txt((215,184),'J4 : RATÉ',8,'#1B3046',anchor='lm')
-# Last captain shot and max unread gravity are separate pieces of gameplay.
-patch((876,791,1383,864),(210,195,107,18))
-d=ImageDraw.Draw(im)
-d.rounded_rectangle((210,195,317,212),radius=2,fill='#DEE5DA',outline='#285271',width=2)
-# One single optically centered baseline, inside the 18px frame. Never clipped.
-txt((214,203),'RIPOSTE B7 : RATÉ',9,'#183F5A',anchor='lm')
-patch((874,878,1393,968),(210,215,107,20))
-d=ImageDraw.Draw(im)
-d.rounded_rectangle((210,216,317,235),radius=2,fill='#A62221',outline='#FFCC52',width=2)
-d.polygon([(215,230),(219,220),(223,230)],fill='#FFE365',outline='#622F22')
-txt((219,227),'!',7,'#63201E',anchor='mm')
-txt((225,226),'NON LUE : COULÉ',9,'#FFEEA0',stroke=0,anchor='lm')
-
-# Check textual bounding boxes inside the visible cards at authoring time.
-# These are real font bounds, not claimed optical sizes from a screenshot.
-for pos,label,size,area in [
-    ((214,203),'RIPOSTE B7 : RATÉ',9,(213,196,314,211)),
-    ((225,226),'NON LUE : COULÉ',9,(224,218,314,232)),
-]:
-    bounds=ImageDraw.Draw(im).textbbox(pos,label,font=ImageFont.truetype(str(FONT_PATH),size),anchor='lm')
-    assert area[0]<=bounds[0] and area[1]<=bounds[1] and bounds[2]<=area[2] and bounds[3]<=area[3],(label,bounds,area)
+# G04-R2 / PO correction: the control stack belongs to the ship's built-in
+# wooden dashboard. Do not paint flat type-background rectangles over hand-
+# painted frames ("labels scotchés"). The new HD reference has integrated,
+# shaded red/blue enamel controls, brass rims, rivets, carved oak and inset
+# information plaques. Crop ONLY the right-hand panel at native 320x240.
+# This intentionally preserves the established 10x10 grid, targets, impact
+# marks, sea and all sky/captain pixels. The painted panel labels are raster
+# in the editable reference; the crop coordinates are editable in this source.
+CONTROL_REF=ROOT/'reference_controles_integres_1448x1086.png'
+control_master=Image.open(CONTROL_REF).convert('RGB')
+assert control_master.size==(1448,1086),control_master.size
+native_control=control_master.resize((W,H),Image.Resampling.LANCZOS)
+PANEL_BOX=(208,42,320,239)
+im.paste(native_control.crop(PANEL_BOX), PANEL_BOX[:2])
 
 # Hardware framing; text in the right strip intentionally limited.
 d=ImageDraw.Draw(im)
-d.line((207,234,319,234),fill='#301A18',width=2)
+# Panel's final brass border and oak trim are part of the reference crop.
+d.line((207,234,207,235),fill='#301A18',width=1)  # Preserve the 2 original pixels left of the panel.
 d.line((0,238,319,238),fill='#2D211D',width=2)
 
 out=ROOT/'g04_r2_attaque_320x240.png'
@@ -304,6 +260,21 @@ compare.paste(im,(320,20))
 compare.save(ROOT/'g04_r2_comparaison_avant_apres_640x260.png',optimize=True)
 compare.resize((2560,1040),Image.Resampling.NEAREST).save(
     ROOT/'g04_r2_comparaison_x4.png',optimize=True)
+# Targeted artist review: EXACT native 320x240 before/after button integration.
+old_controls=Image.open(ROOT/'g04_r2_avant_boutons_320x240.png').convert('RGB')
+assert old_controls.size==(320,240)
+buttons_cmp=Image.new('RGB',(640,260),'#29202D')
+bcd=ImageDraw.Draw(buttons_cmp)
+bcd.rectangle((0,0,319,19),fill='#713C3C')
+bcd.rectangle((320,0,639,19),fill='#205F65')
+bcd.text((8,5),'AVANT : ETIQUETTES PLATES',font=headfont,fill='#FFF0C4')
+bcd.text((328,5),'APRES : COMMANDES ENCASTREES',font=headfont,fill='#FFF0C4')
+buttons_cmp.paste(old_controls,(0,20))
+buttons_cmp.paste(im,(320,20))
+buttons_cmp.save(ROOT/'g04_r2_comparaison_boutons_640x260.png',optimize=True)
+buttons_cmp.resize((2560,1040),Image.Resampling.NEAREST).save(
+ ROOT/'g04_r2_comparaison_boutons_x4.png',optimize=True)
+
 report={
  'status':'DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED',
  'concept_provenance':'source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval',
@@ -316,10 +287,12 @@ report={
  'last_reply':'B7 RATÉ','unread_severity':'COULÉ',
  'sea_render':'continuous 180x180 deterministic ocean; zero 18px tile seams',
  'grid_render':'one authoritative set of 11+11 integer-aligned 1px lines',
- 'comparative':'two complete 320x240 native images pasted pixel-for-pixel at x=0 and x=320',
+ 'comparative':'two 320x240 1:1 comparisons: grid water fix and integrated buttons',
+ 'button_panel':{'bbox':[208,42,320,239], 'source':'reference_controles_integres_1448x1086.png',
+                 'master_kind':'raster', 'gameplay_board_unchanged': True},
  'files':{}
 }
-for name in ['reference_concept_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png','g04_r2_avant_quadrillage_320x240.png','g04_r2_comparaison_avant_apres_640x260.png','g04_r2_comparaison_x4.png','g04_r2_mer_continue_180x180.png','g04_r2_plateau_sans_impacts_181x181.png']:
+for name in ['reference_concept_1448x1086.png','reference_controles_integres_1448x1086.png','g04_r2_avant_boutons_320x240.png','g04_r2_comparaison_boutons_640x260.png','g04_r2_comparaison_boutons_x4.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png','g04_r2_avant_quadrillage_320x240.png','g04_r2_comparaison_avant_apres_640x260.png','g04_r2_comparaison_x4.png','g04_r2_mer_continue_180x180.png','g04_r2_plateau_sans_impacts_181x181.png']:
  p=ROOT/name
  report['files'][name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
 (ROOT/'generation-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

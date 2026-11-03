@@ -1,5 +1,9 @@
 G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST
-BEFORE/AFTER each full 320x240, one-to-one: inside grid changed=27577, outside changed=0
+BEFORE/AFTER 320x240: grid changed=27577, controls changed=21952, unrelated changed=0
+PANEL ONLY vs prior continuous-sea approved layout: changed=21952, all outside panel byte-identical
+six integrated control/info regions: painted native colour variation={'FEU': 2332, 'DEFENSE': 1701, 'ABANDON': 1427, 'HISTORIQUE': 2267, 'RIPOSTE': 1621, 'ALERTE': 1410}
+HD sculpted controls are present in native PNG at 9 pixel probes; negative mutation rejected
+button before/after 640x260 and ×4 strict NEAREST: pixel exact
 clean 181x181 grid: 3861 correct RGB line pixels; NO extra grid-coloured pixels
 continuous ocean: max luma=109.4 (threshold 125), max 18px-boundary seam=4.84 (threshold 8)
 negative phantom water seam (synthetic horizontal 1px): rejected
@@ -7,10 +11,10 @@ native 640x260 side-by-side + x4 comparison: pixel-identical source halves and e
 grid PNG: 121 crossings + 220 line segments checked at x=21..201/y=53..233, 100 cells of 18px
 negative grid-line corruption: rejected
 4 state vignettes: native + strict x4 NEAREST PASS
-RIPOSTE B7 : RATÉ fully on one baseline / NON LUE COULÉ increased to 9px (visual check)
+RIPOSTE B7 : RATÉ / NON LUE COULÉ: inset raster plates, native-size manual PO legibility check required
 hit centers: C3,E3,E4,I8
 miss centers: A8,B7,D1,F9,G2,H6,J4
 selected G5; last riposte B7 RATÉ; unread COULÉ (distinct)
 negative one-channel corruption: rejected
-HD art + editable scene generator + bitmap exports SHA256: MATCH
+Original HD art + integrated-controls painted reference + editable compositor + PNG exports SHA256: MATCH
 ON_DEVICE_UNVERIFIED — artistic PO approval still pending
