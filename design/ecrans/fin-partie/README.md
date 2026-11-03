@@ -159,5 +159,4 @@ stylet, qualité des tailles de polices sur dalle, temps de
 rendu, mémoire et intégration firmware. Statut strict
 **DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED**.
 
-**Validation obtenue :** acceptation artistique PO sur
-maquette PC, revue du HEAD et fusion par Pilotage exclusivement.
+**Statut historique :** la PR #54 a été fusionnée après une acceptation PO passée, **mais son apparence R1 a ensuite été explicitement refusée par le PO le 03/11/2026** ; la nouvelle réception esthétique concerne uniquement **G07-R2** (Issue #53). Le présent dossier est une trace fonctionnelle, non une direction artistique en vigueur.
