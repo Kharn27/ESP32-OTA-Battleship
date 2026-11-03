@@ -179,7 +179,10 @@ static void combat_tests(void)
     assert(!warship_combat_reveal_due(&ui,1979));
     assert(warship_combat_reveal_due(&ui,1980));
     assert(act(WARSHIP_COMBAT_SWITCH,0,0,1980)==WARSHIP_COMBAT_IGNORED);
-    assert(ui.view==WARSHIP_COMBAT_ATTACK);
+    assert(act(WARSHIP_COMBAT_FIRE,0,0,1980)==WARSHIP_COMBAT_IGNORED);
+    assert(act(WARSHIP_COMBAT_CELL,2,2,1980)==WARSHIP_COMBAT_IGNORED);
+    assert(act(WARSHIP_COMBAT_CANCEL,0,0,1980)==WARSHIP_COMBAT_IGNORED);
+    assert(ui.view==WARSHIP_COMBAT_ATTACK && ui.pending_pair.round==1u);
     WarshipLifecycleEvent event=WARSHIP_LIFECYCLE_EVENT_NONE;
     assert(warship_combat_presented(&ui,&game,&event)==WARSHIP_COMBAT_OK);
     assert(!ui.pending && ui.reveals==1);
@@ -188,6 +191,18 @@ static void combat_tests(void)
     assert(pub.battle.history.outgoing_count==1);
     assert(pub.battle.history.incoming_count==1);
     assert(act(WARSHIP_COMBAT_CELL,1,1,2000)==WARSHIP_COMBAT_IGNORED);
+    /* A previously attacked square cannot replace a valid new target. */
+    assert(act(WARSHIP_COMBAT_CELL,2,2,2010)==WARSHIP_COMBAT_OK);
+    observe();
+    assert(pub.battle.has_selection && pub.battle.target_x==2 &&
+           pub.battle.target_y==2);
+    assert(act(WARSHIP_COMBAT_CELL,1,1,2020)==WARSHIP_COMBAT_IGNORED);
+    observe();
+    assert(pub.battle.has_selection && pub.battle.target_x==2 &&
+           pub.battle.target_y==2);
+    assert(act(WARSHIP_COMBAT_CANCEL,0,0,2030)==WARSHIP_COMBAT_OK);
+    observe();
+    assert(!pub.battle.has_selection);
     assert(act(WARSHIP_COMBAT_SWITCH,0,0,2100)==WARSHIP_COMBAT_OK);
     assert(!ui.has_summary && !ui.alert);
     observe();
