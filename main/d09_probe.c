@@ -57,6 +57,44 @@ static int rng_u32(void *ctx,uint32_t *out)
     *out=esp_random();
     return 0;
 }
+/* Explicitly opt-in D13 reception fixture: real D01/D02/D05/D07
+ * algorithms receive deterministic random values, NOT private fleet
+ * data, fake verdicts or injected scores. ALL normal builds still use
+ * esp_random(). Mandatory D11 isolated namespace on the test image. */
+#ifdef WARSHIP_D13_CYD_SCENARIO
+#ifndef WARSHIP_D11_NVS_BENCH
+#error "D13 reception scenario requires isolated D11 bench NVS"
+#endif
+typedef struct {uint32_t values[5];unsigned next;} D13FleetRng;
+static D13FleetRng d13_human={{0u,20u,40u,60u,80u},0u};
+static D13FleetRng d13_captain={{10u,30u,50u,70u,90u},0u};
+static int d13_fleet_rng(void *ctx,uint32_t *out)
+{
+    D13FleetRng *const r=(D13FleetRng *)ctx;
+    if(out==NULL||r==NULL)return -1;
+    *out=r->values[r->next++%5u];
+    return 0;
+}
+static int d13_shot_rng(void *ctx,uint32_t *out)
+{
+    (void)ctx;
+    if(out==NULL)return -1;
+    *out=0u; /* CPU logic still sees ONLY public battle state */
+    return 0;
+}
+#define D13_HUMAN_RNG d13_fleet_rng
+#define D13_HUMAN_CTX (&d13_human)
+#define D13_CPU_FLEET_RNG d13_fleet_rng
+#define D13_CPU_FLEET_CTX (&d13_captain)
+#define D13_SHOT_RNG d13_shot_rng
+#else
+#define D13_HUMAN_RNG rng_u32
+#define D13_HUMAN_CTX NULL
+#define D13_CPU_FLEET_RNG rng_u32
+#define D13_CPU_FLEET_CTX NULL
+#define D13_SHOT_RNG rng_u32
+#endif
+
 static void memory_log(const char *phase)
 {
     WarshipLcdInfo lcd={0};
@@ -191,6 +229,14 @@ void d09_probe_run(void)
              (unsigned)CONFIG_ESP_MAIN_TASK_STACK_SIZE,
              (unsigned)sizeof(WarshipSoloSession),
              (unsigned)sizeof(WarshipBattle));
+#ifdef WARSHIP_D13_CYD_SCENARIO
+    ESP_LOGW(TAG,"D13_SCENARIO=ARMED deterministic_rng=1 NVS=warship_d11lab TEST_ONLY");
+#else
+    ESP_LOGI(TAG,"D13_SCENARIO=OFF normal_random_gameplay=1");
+#endif
+    ESP_LOGI(TAG,"D13_BUFFERS sizeof_captain_temp=%u sizeof_combat_frame=%u allocations=0",
+             (unsigned)sizeof(WarshipFleet),
+             (unsigned)sizeof combat_frame);
     memory_log("startup_after_nvs_read");
     WarshipDeployLayout layout=warship_deploy_default_layout();
     if(warship_deploy_input_init(&input,&layout)!=WARSHIP_DEPLOY_OK ||
@@ -201,7 +247,8 @@ void d09_probe_run(void)
     /* Initial entry is already deployed (LOT1-PL-001); START button
      * is a TECHNICAL restart after RETOUR, not the product home UI. */
     if(warship_deploy_apply(&game,WARSHIP_DEPLOY_START,
-                            rng_u32,NULL,rng_u32,NULL)!=WARSHIP_DEPLOY_OK) {
+                            D13_HUMAN_RNG,D13_HUMAN_CTX,
+                            D13_CPU_FLEET_RNG,D13_CPU_FLEET_CTX)!=WARSHIP_DEPLOY_OK) {
         ESP_LOGE(TAG,"D09_FLEET_GENERATION_FAIL");
         return;
     }
@@ -312,7 +359,7 @@ void d09_probe_run(void)
                 WarshipEventStatus ledger=WARSHIP_EVENT_NO_CHANGE;
                 const uint8_t from=game.phase;
                 const WarshipJourneyStatus nav=warship_journey_apply(
-                    &game,&combat,hit,rng_u32,NULL,
+                    &game,&combat,hit,D13_CPU_FLEET_RNG,D13_CPU_FLEET_CTX,
                     persist_forfeit,NULL,&ledger);
                 if(nav==WARSHIP_JOURNEY_DONE ||
                    nav==WARSHIP_JOURNEY_SCORE_UNCONFIRMED) {
@@ -343,7 +390,7 @@ void d09_probe_run(void)
                     memory_log("after_d12_nav");
                 } else if(nav==WARSHIP_JOURNEY_NOT_HANDLED) {
                     const WarshipCombatStatus applied=warship_combat_apply(
-                        &combat,&game,&public_view,hit,ms,rng_u32,NULL);
+                        &combat,&game,&public_view,hit,ms,D13_SHOT_RNG,NULL);
                     ESP_LOGI(TAG,"D10_ACTION id=%u cell=%u,%u view=%u result=%u",
                              (unsigned)hit.command,(unsigned)hit.x,(unsigned)hit.y,
                              (unsigned)combat.view,(unsigned)applied);
@@ -438,7 +485,8 @@ void d09_probe_run(void)
             if(action!=WARSHIP_DEPLOY_NO_ACTION) {
                 const uint8_t was=game.phase;
                 const WarshipDeployStatus applied=warship_deploy_apply(
-                    &game,action,rng_u32,NULL,rng_u32,NULL);
+                    &game,action,D13_HUMAN_RNG,D13_HUMAN_CTX,
+                    D13_CPU_FLEET_RNG,D13_CPU_FLEET_CTX);
                 ESP_LOGI(TAG,"ACTION id=%u raw=%u,%u mapped=%u,%u from=%u to=%u result=%u",
                          (unsigned)action,(unsigned)raw.x,(unsigned)raw.y,
                          (unsigned)x,(unsigned)y,(unsigned)was,

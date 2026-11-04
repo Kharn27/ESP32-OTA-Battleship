@@ -12,3 +12,16 @@ option(WARSHIP_D11_NVS_BENCH "Isolated D11 persistent-NVS reception probe" OFF)
 if(WARSHIP_D11_NVS_BENCH)
   target_compile_definitions(${COMPONENT_LIB} PRIVATE WARSHIP_D11_NVS_BENCH=1)
 endif()
+
+# D13 reception-only deterministic CPU/fleet RNG scenario. Never enabled
+# in the production build. Requires D11's isolated test NVS namespace.
+option(WARSHIP_D13_CYD_SCENARIO
+       "Explicit D13 deterministic CYD test fixture, NO normal gameplay" OFF)
+if(WARSHIP_D13_CYD_SCENARIO)
+  if(NOT WARSHIP_D11_NVS_BENCH)
+    message(FATAL_ERROR
+      "D13 scenario must use isolated D11 NVS bench to protect real scores")
+  endif()
+  target_compile_definitions(${COMPONENT_LIB} PRIVATE
+                             WARSHIP_D13_CYD_SCENARIO=1)
+endif()

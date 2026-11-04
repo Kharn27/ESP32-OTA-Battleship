@@ -103,6 +103,37 @@ jobs:
             build-d11-bench/cyd_warship.map
             sdkconfig
           if-no-files-found: error
+      - name: Build D13 isolated deterministic reception scenario
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            idf.py -B build-d13-reception
+            -D WARSHIP_D11_NVS_BENCH=ON
+            -D WARSHIP_D13_CYD_SCENARIO=ON set-target esp32 &&
+            idf.py -B build-d13-reception
+            -D WARSHIP_D11_NVS_BENCH=ON
+            -D WARSHIP_D13_CYD_SCENARIO=ON build &&
+            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
+            strings build-d13-reception/cyd_warship.elf |
+              grep -Fq 'D13_SCENARIO=ARMED' &&
+            strings build-d13-reception/cyd_warship.elf |
+              grep -Fq 'warship_d11lab' &&
+            sha256sum build-d13-reception/cyd_warship.bin
+      - name: D13 CYD reception TEST ONLY firmware (isolated NVS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: warship-d13-RECEPTION-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-d13-reception/cyd_warship.bin
+            build-d13-reception/cyd_warship.elf
+            build-d13-reception/bootloader/bootloader.bin
+            build-d13-reception/partition_table/partition-table.bin
+            build-d13-reception/flasher_args.json
+            build-d13-reception/cyd_warship.map
+            sdkconfig
+          if-no-files-found: error
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
         with:
