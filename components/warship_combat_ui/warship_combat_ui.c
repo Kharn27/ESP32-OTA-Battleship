@@ -114,7 +114,10 @@ WarshipCombatStatus warship_combat_apply(
     if (ui == NULL || game == NULL || observed == NULL ||
         hit.command > WARSHIP_COMBAT_INSPECT)
         return WARSHIP_COMBAT_BAD_ARGUMENT;
-    if (ui->pending || hit.command == WARSHIP_COMBAT_NO_HIT)
+    /* D13 inspection belongs to its own D07-gated controller, never
+     * to the D10 shot/selection machine (even if called directly). */
+    if (ui->pending || hit.command == WARSHIP_COMBAT_NO_HIT ||
+        hit.command == WARSHIP_COMBAT_INSPECT)
         return WARSHIP_COMBAT_IGNORED;
     /* RESULT is technically inspectable but cannot select or FIRE. */
     if (game->phase != WARSHIP_LIFECYCLE_COMBAT &&

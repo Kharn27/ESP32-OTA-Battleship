@@ -26,8 +26,12 @@ WarshipJourneyStatus warship_journey_apply(
     WarshipEventStatus *ledger_status)
 {
     if (game==NULL || ui==NULL || ledger_status==NULL ||
-        hit.command>WARSHIP_COMBAT_CANCEL)
+        hit.command>WARSHIP_COMBAT_INSPECT)
         return WARSHIP_JOURNEY_BAD_ARGUMENT;
+    /* Separate D13 handler intercepts this gesture in the same B01
+     * input stream. No D12 navigation or NVS side effect. */
+    if (hit.command==WARSHIP_COMBAT_INSPECT)
+        return WARSHIP_JOURNEY_NOT_HANDLED;
     if (hit.command==WARSHIP_COMBAT_NO_HIT)
         return WARSHIP_JOURNEY_IGNORED;
     /* No transition during an unresolved pair, even if the touch

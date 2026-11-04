@@ -380,7 +380,14 @@ static void invalid_guards(void)
        WARSHIP_COMBAT_NO_HIT);
     WarshipCombatHit t={WARSHIP_COMBAT_INSPECT,0u,0u};
     EQ(warship_inspection_toggle(&game,&ui,t),WARSHIP_INSPECTION_IGNORED);
+    observe();
     const WarshipLifecycle before=game;
+    EQ(warship_combat_apply(&ui,&game,&observation,t,1u,cpu_rng,NULL),
+       WARSHIP_COMBAT_IGNORED);
+    WarshipEventStatus untouched=WARSHIP_EVENT_NO_CHANGE;
+    EQ(warship_journey_apply(&game,&ui,t,NULL,NULL,no_score,NULL,
+                            &untouched),WARSHIP_JOURNEY_NOT_HANDLED);
+    EQ(untouched,WARSHIP_EVENT_NO_CHANGE);
     EQ(warship_lifecycle_set_captain_visible(&game,1u),
        WARSHIP_LIFECYCLE_REVEAL_DENIED);
     CHECK(memcmp(&before,&game,sizeof game)==0);
