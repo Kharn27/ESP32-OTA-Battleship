@@ -51,6 +51,8 @@ WarshipCombatHit warship_combat_hit(uint8_t view, uint16_t x, uint16_t y)
             hit.command = WARSHIP_COMBAT_FIRE;
         else if (in_button(x,y,225u,134u))
             hit.command = WARSHIP_COMBAT_CANCEL;
+        else if (x>=227u && x<314u && y>=205u && y<232u)
+            hit.command = WARSHIP_COMBAT_INSPECT;
     }
     return hit;
 }
@@ -110,7 +112,7 @@ WarshipCombatStatus warship_combat_apply(
     uint64_t ms, WarshipCaptainRandom rng, void *rng_ctx)
 {
     if (ui == NULL || game == NULL || observed == NULL ||
-        hit.command > WARSHIP_COMBAT_CANCEL)
+        hit.command > WARSHIP_COMBAT_INSPECT)
         return WARSHIP_COMBAT_BAD_ARGUMENT;
     if (ui->pending || hit.command == WARSHIP_COMBAT_NO_HIT)
         return WARSHIP_COMBAT_IGNORED;
