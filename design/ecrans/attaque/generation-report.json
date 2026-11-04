@@ -50,6 +50,7 @@
   "unread_severity": "COULÉ",
   "sea_render": "continuous 180x180 deterministic ocean; zero 18px tile seams",
   "grid_render": "one authoritative set of 11+11 integer-aligned 1px lines",
+  "po_artistic_approval": "2026-11-04 / PR #64 comment 6626211912 / PC-only",
   "button_panel": {
     "bbox": [
       208,
@@ -90,6 +91,5 @@
       "sha256": "827049e035e9e07bdd2769f6924b41f7507a7d437f9a786c362a85a91da6b1a7",
       "bytes": 49953
     }
-  },
-  "po_artistic_approval": "2026-11-04 / PR #64 comment 6626211912 / PC-only"
+  }
 }
