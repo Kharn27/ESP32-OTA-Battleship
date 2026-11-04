@@ -30,7 +30,7 @@ static FleetRng human_rng(void){FleetRng r={{0u,20u,40u,60u,80u},0u,0};return r;
 static FleetRng captain_rng(void){FleetRng r={{10u,30u,50u,70u,90u},0u,0};return r;}
 static FleetRng replay_rng(void){FleetRng r={{12u,32u,52u,72u,92u},0u,0};return r;}
 static int cpu_rng(void *ctx,uint32_t *out){(void)ctx;*out=0u;return 0;}
-static int no_score(void *ctx,WarshipLifecycleEvent event)
+static WarshipEventStatus no_score(void *ctx,WarshipLifecycleEvent event)
 {
     (void)ctx;(void)event;CHECK(0);return WARSHIP_EVENT_CONFLICT;
 }
@@ -255,9 +255,15 @@ static void inspect_defeat(void)
     EQ(ui.view,WARSHIP_COMBAT_DEFENSE);
     EQ(count_ships(),17u);
     EQ(observation.reveal_visible,1u);
-    for(unsigned i=0u;i<100u;++i)
-        EQ(frame.attacks[i],observation.battle.history.incoming_count?
-           frame.attacks[i]:0u);
+    for(unsigned i=0u;i<100u;++i) {
+        const WarshipSoloPublic *history=&observation.battle;
+        uint8_t expected=0u;
+        for(unsigned j=0u;j<history->history.incoming_count;++j) {
+            const WarshipBattleShot hit=history->history.incoming[j];
+            if(hit.y*10u+hit.x==i) expected=(uint8_t)(hit.impact+1u);
+        }
+        EQ(frame.attacks[i],expected);
+    }
     EQ(warship_inspection_toggle(&game,&ui,h),WARSHIP_INSPECTION_IGNORED);
     UOK(warship_combat_apply(&ui,&game,&observation,sw,70100u,cpu_rng,NULL));
     project();
