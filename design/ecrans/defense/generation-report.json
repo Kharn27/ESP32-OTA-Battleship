@@ -1,0 +1,53 @@
+{
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "artistic_po_approval": "PENDING",
+  "pillow_version": "12.3.0",
+  "render": "Lanczos HD-to-native; integer x4 exactly NEAREST",
+  "outputs": {
+    "reference_defense_1448x1086_lossless.webp": {
+      "sha256": "974a12ca3d531bc813c06754fccb2b23edc6f843640cdef08644b8f12184d756",
+      "bytes": 2386966
+    },
+    "build_g05_r2.py": {
+      "sha256": "d6b43dd75be9839345c17a1afc8c954fab14ca0638b51aac644baa25b7b53b03",
+      "bytes": 7686
+    },
+    "verify_g05_r2.py": {
+      "sha256": "4ff9975a3ce8f2783006c442e6ceb1a101e4a67dd35a631fb96cc19bcd97640d",
+      "bytes": 4521
+    },
+    "layout.json": {
+      "sha256": "6c720a92eff15bf2ad698a9e0adf6da3a68ca75fedab67ac7e01958949647802",
+      "bytes": 983
+    },
+    "g05_r2_defense_320x240.png": {
+      "sha256": "c1ebda29677e663eeda2ae5953bd860884c1186a1c4066b922410d7f384a5c01",
+      "bytes": 169998
+    },
+    "g05_r2_defense_x4.png": {
+      "sha256": "b40fee84e1dca6e027c7bc21ee232b2d8b277cbf92dcb710c6c49112f77763b6",
+      "bytes": 252961
+    },
+    "g05_r2_etats_320x240.png": {
+      "sha256": "4d1a68455a4d74caf536751f3def69995e5d3cb85dd96ef7c877b70fcc7e45a0",
+      "bytes": 25514
+    },
+    "g05_r2_etats_x4.png": {
+      "sha256": "c6986b6c27998532dae41911c92b52b6fd4e6be2230541eb5f3112ee4ac7e5c4",
+      "bytes": 42438
+    },
+    "g05_r2_defense_layers.ora": {
+      "sha256": "0e76a6b6698dd4ba6831f8d7ebacaa6c725fed1bb3d965b2d25d9723b53a2fc1",
+      "bytes": 478687
+    }
+  },
+  "source_original_png": {
+    "sha256": "c9123b2363366aa6e478e6612e55e5844a5ce0fb405077f42427bcac0297f494",
+    "bytes": 3944009,
+    "alpha": "255 everywhere",
+    "conversion": "lossless WebP RGB pixels checked identical to supplied PNG"
+  },
+  "external_resources": [
+    "User-provided original raster, CC asset stored separately; no stock asset / font redistributed"
+  ]
+}
