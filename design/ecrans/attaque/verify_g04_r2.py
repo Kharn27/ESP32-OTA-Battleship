@@ -58,7 +58,8 @@ for yy in range(181):
         if xx%18==0 or yy%18==0:
             # The selected target's 4px dark outline may cover the nearest
             # 1px grid border, correctly: skip only marked neighborhoods.
-            if is_marker(21+xx,53+yy):
+            # Only the gold G5 bracket is thick enough to reach its borders.
+            if abs((21+xx)-138)<=9 and abs((53+yy)-134)<=9:
                 continue
             expected=FRAME_RGB if xx in (0,180) or yy in (0,180) else GRID_RGB
             assert pxy==expected,('missing/wrong grid line',xx,yy,pxy,expected)
