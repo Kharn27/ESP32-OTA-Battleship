@@ -1,0 +1,95 @@
+{
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "concept_provenance": "source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval",
+  "authoring": "Editable Python scene composition, 10x10 geometry and native lettering/impacts",
+  "native": [
+    320,
+    240
+  ],
+  "x4": [
+    1280,
+    960
+  ],
+  "vignettes": [
+    "SANS CIBLE",
+    "FEU ENGAGÉ",
+    "RÉSULTATS ENSEMBLE",
+    "RETOUR DÉFENSE"
+  ],
+  "font_dependency": {
+    "package": "fonts-dejavu-core",
+    "path": "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf",
+    "pillow_exact": "12.3.0"
+  },
+  "grid": {
+    "x": 21,
+    "y": 53,
+    "cell": 18,
+    "width": 180,
+    "height": 180
+  },
+  "axis": "columns A-J; rows 1-10",
+  "target": "G5",
+  "misses": [
+    "A8",
+    "B7",
+    "D1",
+    "F9",
+    "G2",
+    "H6",
+    "J4"
+  ],
+  "hits": [
+    "C3",
+    "E3",
+    "E4",
+    "I8"
+  ],
+  "enemy_ships_visible": false,
+  "last_reply": "B7 RATÉ",
+  "unread_severity": "COULÉ",
+  "sea_render": "continuous 180x180 deterministic ocean; zero 18px tile seams",
+  "grid_render": "one authoritative set of 11+11 integer-aligned 1px lines",
+  "po_artistic_approval": "2026-11-04 / PR #64 comment 6626211912 / PC-only",
+  "button_panel": {
+    "bbox": [
+      208,
+      42,
+      320,
+      239
+    ],
+    "source": "reference_controles_integres_1448x1086.png",
+    "master_kind": "raster",
+    "gameplay_board_unchanged": true
+  },
+  "files": {
+    "reference_concept_1448x1086.png": {
+      "sha256": "75cdb7bdfd1bd588f6ba1682bfd750c9119e7c114238ccf1008c3cd3010a13ab",
+      "bytes": 2423167
+    },
+    "reference_controles_integres_1448x1086.png": {
+      "sha256": "80ad861cef0a4408c5797c10cbe29ed0d4d12fc8ac6a2960a2336cc066cc626a",
+      "bytes": 2101479
+    },
+    "build_g04_r2.py": {
+      "sha256": "bac6bfabcc876cfef39ac9e13dc8e715139b3a8f6ddca9413ac0ee90fc9feb37",
+      "bytes": 13544
+    },
+    "g04_r2_attaque_320x240.png": {
+      "sha256": "0a2e446da655d561ece9d8daf8fcc5bf461f0b33ab7f104392cd8b398e1a0232",
+      "bytes": 98529
+    },
+    "g04_r2_attaque_x4.png": {
+      "sha256": "8b5457c5d6ce8c3224b3c2c51f1da6b4f2aa8c7db859787769dcde3f35baecd4",
+      "bytes": 150810
+    },
+    "g04_r2_etats_320x240.png": {
+      "sha256": "6a326383281a9322fc79f131649e68e455029eba9ab0bb9589b6f2b9d491c872",
+      "bytes": 31701
+    },
+    "g04_r2_etats_x4.png": {
+      "sha256": "827049e035e9e07bdd2769f6924b41f7507a7d437f9a786c362a85a91da6b1a7",
+      "bytes": 49953
+    }
+  }
+}

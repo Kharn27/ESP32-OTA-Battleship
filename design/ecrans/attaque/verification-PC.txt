@@ -1,0 +1,8 @@
+G04-R2 — DOSSIER DE PREUVES CONSOLIDÉ APRÈS NETTOYAGE
+STATUT : VALIDÉ PO ARTISTIQUEMENT LE 04/11/2026 (PC 320×240) ; ON_DEVICE_UNVERIFIED
+SOURCE HISTORIQUE : génération/relecture PC GitHub Actions #41701593193 SUCCESS (avant nettoyage, visuels identiques)
+La comparaison des anciens essais et les diagnostics intermédiaires se retrouvent dans Git au commit e5d97f97a06efd0bab93b1fbebf3a973b9fb5ac1.
+CONSERVÉ : natif 320×240, zoom ×4 strict NEAREST, quatre vignettes natives et zoom, deux masters HD raster, source Python, rapport SHA256, vérificateur.
+VÉRIFICATIONS AU NIVEAU DES PNG ACTIFS : géométrie 10×10, 3861 pixels de lignes, luminosité/ruptures sur la mer visible, faux trait injecté et rejeté, 121 intersections, 220 segments, couleurs/contrastes des impacts, quatre états, 6 zones picturales et SHA256.
+NOTE : le run #41701593193 précède le nettoyage des scripts ; il ne vaut PAS un nouveau run du vérificateur révisé. CI générale C99/ESP-IDF à confirmer au HEAD final.
+MATÉRIEL CYD (TFT, stylet, mémoire, assets firmware) : NON TESTÉ.
