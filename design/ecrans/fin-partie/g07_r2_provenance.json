@@ -1,0 +1,45 @@
+{
+  "issue": 53,
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "source": {
+    "file": "g07_r2_source_1448x1086.png",
+    "dimensions": [
+      1448,
+      1086
+    ],
+    "mode": "RGBA",
+    "sha256": "7fef4e00f67bb2d204afbe7b39b5ed62bd497d110b1ec54186edf6457149ae32",
+    "kind": "flattened user-supplied PNG, not editable scene layers",
+    "provenance": "Graphiste illustration forwarded in chat, 2026-11-04"
+  },
+  "exports": [
+    {
+      "file": "g07_r2_defaite_320x240.png",
+      "dimensions": [
+        320,
+        240
+      ],
+      "resampling": "LANCZOS",
+      "sha256": "de78ef5f1ae55cbda201b43df4177e37447a67d6098e0b239ecc1b1e3f110db0"
+    },
+    {
+      "file": "g07_r2_defaite_x4.png",
+      "dimensions": [
+        1280,
+        960
+      ],
+      "resampling": "NEAREST",
+      "sha256": "9d3dcc03b64e9a7880b0093739c555b2e64e2cbe0e0fae2b925056809ecf1996"
+    }
+  ],
+  "checks_pc": {
+    "native_size": "PASS",
+    "x4_size": "PASS",
+    "strict_nearest_zoom": "PASS",
+    "grid_10x10": "VISUAL_ONLY",
+    "grid_geometry_21_53_18px": "NON_CONFORMANT (image only)",
+    "simultaneous_last_shots": "NOT_PROVEN",
+    "victoire_nul_initial_compact": "NOT_DELIVERED",
+    "on_device": "UNVERIFIED"
+  }
+}
