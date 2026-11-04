@@ -69,6 +69,7 @@ typedef struct {
     uint8_t view, busy, has_selection, target_x, target_y;
     uint8_t has_cpu, has_human, alert, verdict, terminal;
     uint8_t rounds;
+    uint8_t phase; /* public D07 phase; D12 technical navigation labels */
 } WarshipCombatFrame;
 
 void warship_combat_init(WarshipCombatUi *ui, WarshipCombatInput *in,

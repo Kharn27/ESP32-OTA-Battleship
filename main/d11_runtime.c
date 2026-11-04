@@ -146,13 +146,13 @@ void d11_runtime_init(void)
     }
 #endif
 }
-void d11_runtime_event(WarshipLifecycleEvent event)
+WarshipEventStatus d11_runtime_event(WarshipLifecycleEvent event)
 {
-    if(event==WARSHIP_LIFECYCLE_EVENT_NONE)return;
+    if(event==WARSHIP_LIFECYCLE_EVENT_NONE)return WARSHIP_EVENT_NO_CHANGE;
     if(!active) {
         ESP_LOGE(TAG,"D11_EVENT_NOT_RECORDED event=%u NVS_UNAVAILABLE",
                  (unsigned)event);
-        return;
+        return WARSHIP_EVENT_READ_ERROR;
     }
     const WarshipEventStatus s=warship_event_bridge_receive(&bridge,event);
     report("post_d07_ack",s);
@@ -161,6 +161,7 @@ void d11_runtime_event(WarshipLifecycleEvent event)
                  (unsigned)event,name(s));
     if(warship_event_bridge_has_pending(&bridge))
         next_retry_us=esp_timer_get_time()+RETRY_PERIOD_US;
+    return s;
 }
 void d11_runtime_poll(void)
 {

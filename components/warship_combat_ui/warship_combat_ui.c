@@ -197,6 +197,7 @@ WarshipCombatStatus warship_combat_make_frame(
         ui->view > WARSHIP_COMBAT_DEFENSE ||
         (include_pending && (!ui->pending || ui->view != WARSHIP_COMBAT_ATTACK)) ||
         (p->phase != WARSHIP_LIFECYCLE_COMBAT &&
+         p->phase != WARSHIP_LIFECYCLE_CONFIRM_ABANDON &&
          p->phase != WARSHIP_LIFECYCLE_RESULT) ||
         !p->has_battle || !p->has_human_fleet ||
         p->battle.history.outgoing_count > 100u ||
@@ -206,6 +207,7 @@ WarshipCombatStatus warship_combat_make_frame(
     WarshipCombatFrame f;
     memset(&f,0,sizeof f);
     f.view = ui->view;
+    f.phase = p->phase;
     f.busy = (uint8_t)(ui->pending && !include_pending);
     f.verdict = p->battle.history.verdict;
     f.terminal = (uint8_t)(p->phase == WARSHIP_LIFECYCLE_RESULT);
