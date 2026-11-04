@@ -268,8 +268,10 @@ static void inspect_defeat(void)
     UOK(warship_combat_apply(&ui,&game,&observation,sw,70100u,cpu_rng,NULL));
     project();
     EQ(count_ships(),17u);EQ(ui.view,WARSHIP_COMBAT_ATTACK);
-    for(unsigned i=0u;i<100u;++i)
+    for(unsigned i=0u;i<100u;++i) {
         EQ(frame.attacks[i],original_frame.attacks[i]);
+        EQ(frame.ships[i],revealed_frame.ships[i]);
+    }
 
     /* HIDE purges the presentation copy IMMEDIATELY and does not
      * revoke permission. No CPU pixels accessible after frame clear. */
