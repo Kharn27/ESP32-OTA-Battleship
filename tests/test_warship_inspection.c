@@ -201,7 +201,7 @@ static void inspect_defeat(void)
     EQ(out.command,WARSHIP_COMBAT_NO_HIT);
     UOK(warship_journey_input_step(&input,&ui,1u,1u,270u,220u,60140u,&out));
     EQ(out.command,WARSHIP_COMBAT_INSPECT);
-    IOK(warship_inspection_toggle(&game,&ui,out));
+    IOK(warship_inspection_toggle(&game,&observation,&ui,out));
     warship_inspection_clear_frame(&frame);
     UOK(warship_journey_input_step(&input,&ui,1u,1u,270u,220u,60220u,&out));
     EQ(out.command,WARSHIP_COMBAT_NO_HIT);
@@ -264,7 +264,7 @@ static void inspect_defeat(void)
         }
         EQ(frame.attacks[i],expected);
     }
-    EQ(warship_inspection_toggle(&game,&ui,h),WARSHIP_INSPECTION_IGNORED);
+    EQ(warship_inspection_toggle(&game,&observation,&ui,h),WARSHIP_INSPECTION_IGNORED);
     UOK(warship_combat_apply(&ui,&game,&observation,sw,70100u,cpu_rng,NULL));
     project();
     EQ(count_ships(),17u);EQ(ui.view,WARSHIP_COMBAT_ATTACK);
@@ -275,7 +275,7 @@ static void inspect_defeat(void)
 
     /* HIDE purges the presentation copy IMMEDIATELY and does not
      * revoke permission. No CPU pixels accessible after frame clear. */
-    IOK(warship_inspection_toggle(&game,&ui,h));
+    IOK(warship_inspection_toggle(&game,&observation,&ui,h));
     warship_inspection_clear_frame(&frame);
     for(unsigned i=0u;i<100u;++i)
         EQ(frame.ships[i],0u);
@@ -286,7 +286,7 @@ static void inspect_defeat(void)
     assert_ledger_unchanged();
 
     /* SHOW again: no new game/score; then result->REJOUER must purge. */
-    IOK(warship_inspection_toggle(&game,&ui,h));
+    IOK(warship_inspection_toggle(&game,&observation,&ui,h));
     project();EQ(count_ships(),17u);
     WarshipEventStatus persist=WARSHIP_EVENT_PENDING;
     FleetRng next=replay_rng();
@@ -299,13 +299,13 @@ static void inspect_defeat(void)
     for(unsigned i=0u;i<100u;++i)EQ(frame.ships[i],0u);
     observe();EQ(observation.can_reveal_captain,0u);
     EQ(observation.reveal_requested,0u);EQ(observation.reveal_visible,0u);
-    EQ(warship_inspection_toggle(&game,&ui,h),WARSHIP_INSPECTION_IGNORED);
+    EQ(warship_inspection_toggle(&game,&observation,&ui,h),WARSHIP_INSPECTION_IGNORED);
     EQ(warship_lifecycle_copy_revealed_captain(&game,&expected),
        WARSHIP_LIFECYCLE_REVEAL_DENIED);
     assert_ledger_unchanged();
     LOK(warship_lifecycle_leave_deploy(&game));
     EQ(game.phase,WARSHIP_LIFECYCLE_HOME);
-    EQ(warship_inspection_toggle(&game,&ui,h),WARSHIP_INSPECTION_IGNORED);
+    EQ(warship_inspection_toggle(&game,&observation,&ui,h),WARSHIP_INSPECTION_IGNORED);
     assert_ledger_unchanged();
     /* A fresh game cannot inherit an opt-in reveal or stale frame. */
     LOK(warship_lifecycle_init(&game));
@@ -319,7 +319,7 @@ static void inspect_other_verdicts(unsigned mode,unsigned draw_at)
     const WarshipLifecycle original=game;
     const WarshipCombatUi before_ui=ui;
     const WarshipCombatHit h=inspect();
-    EQ(warship_inspection_toggle(&game,&ui,h),WARSHIP_INSPECTION_IGNORED);
+    EQ(warship_inspection_toggle(&game,&observation,&ui,h),WARSHIP_INSPECTION_IGNORED);
     CHECK(memcmp(&original,&game,sizeof game)==0);
     CHECK(memcmp(&before_ui,&ui,sizeof ui)==0);
     WarshipFleet leak;
@@ -354,13 +354,15 @@ static void invalid_guards(void)
 {
     start();
     WarshipCombatHit h=inspect();
-    EQ(warship_inspection_toggle(&game,&ui,h),WARSHIP_INSPECTION_IGNORED);
-    WarshipInspectionStatus s=warship_inspection_toggle(NULL,&ui,h);
+    EQ(warship_inspection_toggle(&game,&observation,&ui,h),WARSHIP_INSPECTION_IGNORED);
+    WarshipInspectionStatus s=warship_inspection_toggle(NULL,&observation,&ui,h);
     EQ(s,WARSHIP_INSPECTION_BAD_ARGUMENT);
-    s=warship_inspection_toggle(&game,NULL,h);
+    s=warship_inspection_toggle(&game,&observation,NULL,h);
+    EQ(s,WARSHIP_INSPECTION_BAD_ARGUMENT);
+    s=warship_inspection_toggle(&game,NULL,&ui,h);
     EQ(s,WARSHIP_INSPECTION_BAD_ARGUMENT);
     h.command=255u;
-    EQ(warship_inspection_toggle(&game,&ui,h),
+    EQ(warship_inspection_toggle(&game,&observation,&ui,h),
        WARSHIP_INSPECTION_BAD_ARGUMENT);
     EQ(warship_inspection_overlay(NULL,&observation,&ui,&frame),
        WARSHIP_INSPECTION_BAD_ARGUMENT);
@@ -379,7 +381,7 @@ static void invalid_guards(void)
     EQ(warship_combat_hit(WARSHIP_COMBAT_ATTACK,270u,234u).command,
        WARSHIP_COMBAT_NO_HIT);
     WarshipCombatHit t={WARSHIP_COMBAT_INSPECT,0u,0u};
-    EQ(warship_inspection_toggle(&game,&ui,t),WARSHIP_INSPECTION_IGNORED);
+    EQ(warship_inspection_toggle(&game,&observation,&ui,t),WARSHIP_INSPECTION_IGNORED);
     observe();
     const WarshipLifecycle before=game;
     EQ(warship_combat_apply(&ui,&game,&observation,t,1u,cpu_rng,NULL),

@@ -12,23 +12,27 @@ void warship_inspection_clear_frame(WarshipCombatFrame *frame)
     if(frame!=NULL)wipe(frame,sizeof *frame);
 }
 WarshipInspectionStatus warship_inspection_toggle(
-    WarshipLifecycle *game,const WarshipCombatUi *ui,WarshipCombatHit hit)
+    WarshipLifecycle *game,const WarshipLifecyclePublic *observed,
+    const WarshipCombatUi *ui,WarshipCombatHit hit)
 {
-    if(game==NULL || ui==NULL || hit.command>WARSHIP_COMBAT_INSPECT)
+    if(game==NULL || observed==NULL || ui==NULL ||
+       hit.command>WARSHIP_COMBAT_INSPECT)
         return WARSHIP_INSPECTION_BAD_ARGUMENT;
     if(hit.command!=WARSHIP_COMBAT_INSPECT)
         return WARSHIP_INSPECTION_NOT_HANDLED;
     if(ui->pending || ui->view!=WARSHIP_COMBAT_ATTACK)
         return WARSHIP_INSPECTION_IGNORED;
-    WarshipLifecyclePublic view;
-    if(warship_lifecycle_observe(game,&view)!=WARSHIP_LIFECYCLE_OK)
-        return WARSHIP_INSPECTION_GAME_ERROR;
-    if(view.phase!=WARSHIP_LIFECYCLE_RESULT || !view.has_battle ||
-       !view.can_reveal_captain ||
-       view.battle.history.verdict!=WARSHIP_BATTLE_DEFEAT)
+    /* The D09 owner refreshes observed through D07 before dispatching.
+     * Avoid a second WarshipLifecyclePublic local variable: D07 observe
+     * itself owns a full temporary projection on the same 4096B stack. */
+    if(observed->phase!=WARSHIP_LIFECYCLE_RESULT ||
+       !observed->has_battle || !observed->can_reveal_captain ||
+       observed->battle.history.verdict!=WARSHIP_BATTLE_DEFEAT)
         return WARSHIP_INSPECTION_IGNORED;
+    if(observed->reveal_visible && !observed->reveal_requested)
+        return WARSHIP_INSPECTION_BAD_ARGUMENT;
     const WarshipLifecycleStatus st=warship_lifecycle_set_captain_visible(
-        game,(uint8_t)!view.reveal_visible);
+        game,(uint8_t)!observed->reveal_visible);
     return st==WARSHIP_LIFECYCLE_OK?WARSHIP_INSPECTION_APPLIED:
            WARSHIP_INSPECTION_GAME_ERROR;
 }

@@ -327,7 +327,7 @@ void d09_probe_run(void)
             }
             if(hit.command==WARSHIP_COMBAT_INSPECT) {
                 const WarshipInspectionStatus result=
-                    warship_inspection_toggle(&game,&combat,hit);
+                    warship_inspection_toggle(&game,&public_view,&combat,hit);
                 if(result==WARSHIP_INSPECTION_APPLIED) {
                     ++action_count;
                     /* Wipe the last transient CPU overlay immediately,

@@ -15,12 +15,14 @@ typedef enum {
     WARSHIP_INSPECTION_GAME_ERROR
 } WarshipInspectionStatus;
 
-/* C99 controller, no NVS, no allocation, no TFT dependency. Only the
- * actual opt-in D10 INSPECT command can toggle D07 visibility, and only
- * RESULT DEFEAT in ATTAQUE. No access to game->captain or D06 private
- * fleet; D07 independently enforces the permission. */
+/* C99 controller, no NVS, no allocation, no TFT dependency. Only
+ * an opt-in INSPECT gesture after RESULT DEFEAT in ATTAQUE may toggle.
+ * 'observed' is the caller-owned, freshly refreshed D07 public projection
+ * (D09 keeps it STATIC to prevent a large duplicate main-task stack frame).
+ * No game->captain read: D07 independently enforces permission. */
 WarshipInspectionStatus warship_inspection_toggle(
-    WarshipLifecycle *game, const WarshipCombatUi *ui, WarshipCombatHit hit);
+    WarshipLifecycle *game, const WarshipLifecyclePublic *observed,
+    const WarshipCombatUi *ui, WarshipCombatHit hit);
 
 /* Call after ordinary D10 public frame building, before drawing. The
  * controller may obtain ONE short-lived D07-gated WarshipFleet copy
