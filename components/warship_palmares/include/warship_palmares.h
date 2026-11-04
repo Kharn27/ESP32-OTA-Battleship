@@ -78,6 +78,14 @@ WarshipPalmaresStatus warship_palmares_open(
 WarshipPalmaresStatus warship_palmares_read(
     const WarshipPalmares *ledger, WarshipPalmaresView *out);
 
+/* Read the last DURABLY acknowledged (ID, type). Caller must not
+ * inspect private internals or assume a CPU fleet is available.
+ * Failure and uncertain ledger preserve both output parameters.
+ */
+WarshipPalmaresStatus warship_palmares_last_identity(
+    const WarshipPalmares *ledger, uint64_t *id,
+    WarshipLifecycleEvent *event);
+
 /* Event identity MUST be generated outside D07, stable across retries,
  * strictly increasing on this CYD across ALL categories and restarts.
  * IDs start at 1; 0 is invalid for non-NONE events. Only the latest event

@@ -147,6 +147,18 @@ WarshipPalmaresStatus warship_palmares_read(
     return WARSHIP_PALMARES_APPLIED;
 }
 
+WarshipPalmaresStatus warship_palmares_last_identity(
+    const WarshipPalmares *ledger, uint64_t *id,
+    WarshipLifecycleEvent *event)
+{
+    if (!initialized(ledger) || id == NULL || event == NULL)
+        return WARSHIP_PALMARES_BAD_ARGUMENT;
+    if (ledger->uncertain != 0u) return WARSHIP_PALMARES_RELOAD_REQUIRED;
+    *id = ledger->last_id;
+    *event = (WarshipLifecycleEvent)ledger->last_event;
+    return WARSHIP_PALMARES_APPLIED;
+}
+
 WarshipPalmaresStatus warship_palmares_reload(WarshipPalmares *ledger)
 {
     if (!initialized(ledger)) return WARSHIP_PALMARES_BAD_ARGUMENT;

@@ -102,3 +102,8 @@ sha256sum build/cyd_warship.bin
 6. Fournir logs, photos écran/port série si pertinents, mesures RAM et piles FreeRTOS à charge réelle, constat explicite PASS/FAIL.
 
 **Statut initial de D08 :** `HOST_TESTED`/ `TARGET_BUILD_VERIFIED` seulement après preuve sur HEAD ; `ON_DEVICE_UNVERIFIED`. Une PR de socle peut être fusionnée sous décision Pilotage, mais **Issue #36 reste ouverte jusqu'à validation matérielle exigée**, comme stipulé dans son mandat.
+
+
+## Liaison D11 (Issue #63)
+
+Le raccord de l'événement D07 post-ACK et la réservation durable d'ID sont désormais implémentés dans `components/warship_event_bridge/` et `components/warship_event_id_nvs/` : voir [protocole et limites D11](D11_EVENTS_NVS_CYD.md). La clé D08 existante `warship/palmares` (44 octets) et son réducteur restent inchangés ; l'API ajoutée `warship_palmares_last_identity` fournit le marqueur dernier commit à l'orchestrateur. La réservation d'ID utilise la clé distincte `warship/event_seq`. L'absence de journal de reprise interdit toute promesse « exactly once » sous coupure. **La validation physique NVS de l'Issue #36 reste ouverte.**
