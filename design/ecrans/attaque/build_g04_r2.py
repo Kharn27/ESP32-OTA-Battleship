@@ -116,7 +116,6 @@ def make_continuous_ocean():
     return ocean
 
 sea_layer=make_continuous_ocean()
-sea_layer.save(ROOT/'g04_r2_mer_continue_180x180.png',optimize=True)
 im.paste(sea_layer,(GX,GY))
 d=ImageDraw.Draw(im)
 # The one-and-only gameplay grid, authored AFTER the ocean at exact coordinates.
@@ -126,11 +125,6 @@ for i in range(11):
     d.line((x,GY,x,GY+GRID),fill='#B9E8EE',width=1)
     d.line((GX,y,GX+GRID,y),fill='#B9E8EE',width=1)
 d.rectangle((21,53,201,233),outline='#D6FAF2',width=1)
-# Proof-only view of the authoritative 11x11 lines on continuous sea before
-# marks are added; 181x181 includes both outer boundaries.
-im.crop((GX,GY,GX+GRID+1,GY+GRID+1)).save(
-    ROOT/'g04_r2_plateau_sans_impacts_181x181.png',optimize=True)
-
 # Mechanic signs: miss = foam ring + bubbles; hit = explosive orange bloom with
 # ink-dark water contact; prepared target = four gold square brackets + cross.
 def center(k):
@@ -243,38 +237,6 @@ slabel((171,208),'Résumé et alerte acquittés','#D6F1E7',S8)
 states.save(ROOT/'g04_r2_etats_320x240.png',optimize=True)
 states.resize((1280,960),Image.Resampling.NEAREST).save(ROOT/'g04_r2_etats_x4.png',optimize=True)
 
-# True 1:1 PC acceptance comparison. Each 320x240 screenshot is pasted
-# WITHOUT resampling. The previous rejected image is an immutable input.
-old_path=ROOT/'g04_r2_avant_quadrillage_320x240.png'
-old=Image.open(old_path).convert('RGB')
-assert old.size==(320,240),'ancienne image native indisponible'
-compare=Image.new('RGB',(640,260),'#29202D')
-cd=ImageDraw.Draw(compare)
-cd.rectangle((0,0,319,19),fill='#713C3C')
-cd.rectangle((320,0,639,19),fill='#205F65')
-headfont=ImageFont.truetype(str(FONT_PATH),10)
-cd.text((9,5),'AVANT : 100 TEXTURES DISJOINTES',font=headfont,fill='#FFF5E3')
-cd.text((329,5),'APRÈS : 1 MER CONTINUE + GRILLE',font=headfont,fill='#FFF5E3')
-compare.paste(old,(0,20))
-compare.paste(im,(320,20))
-compare.save(ROOT/'g04_r2_comparaison_avant_apres_640x260.png',optimize=True)
-compare.resize((2560,1040),Image.Resampling.NEAREST).save(
-    ROOT/'g04_r2_comparaison_x4.png',optimize=True)
-# Targeted artist review: EXACT native 320x240 before/after button integration.
-old_controls=Image.open(ROOT/'g04_r2_avant_boutons_320x240.png').convert('RGB')
-assert old_controls.size==(320,240)
-buttons_cmp=Image.new('RGB',(640,260),'#29202D')
-bcd=ImageDraw.Draw(buttons_cmp)
-bcd.rectangle((0,0,319,19),fill='#713C3C')
-bcd.rectangle((320,0,639,19),fill='#205F65')
-bcd.text((8,5),'AVANT : ETIQUETTES PLATES',font=headfont,fill='#FFF0C4')
-bcd.text((328,5),'APRES : COMMANDES ENCASTREES',font=headfont,fill='#FFF0C4')
-buttons_cmp.paste(old_controls,(0,20))
-buttons_cmp.paste(im,(320,20))
-buttons_cmp.save(ROOT/'g04_r2_comparaison_boutons_640x260.png',optimize=True)
-buttons_cmp.resize((2560,1040),Image.Resampling.NEAREST).save(
- ROOT/'g04_r2_comparaison_boutons_x4.png',optimize=True)
-
 report={
  'status':'DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED',
  'concept_provenance':'source HD AI-generated painterly concept; photo-pixel cutouts, no firmware approval',
@@ -287,12 +249,12 @@ report={
  'last_reply':'B7 RATÉ','unread_severity':'COULÉ',
  'sea_render':'continuous 180x180 deterministic ocean; zero 18px tile seams',
  'grid_render':'one authoritative set of 11+11 integer-aligned 1px lines',
- 'comparative':'two 320x240 1:1 comparisons: grid water fix and integrated buttons',
+ 'po_artistic_approval':'2026-11-04 / PR #64 comment 6626211912 / PC-only',
  'button_panel':{'bbox':[208,42,320,239], 'source':'reference_controles_integres_1448x1086.png',
                  'master_kind':'raster', 'gameplay_board_unchanged': True},
  'files':{}
 }
-for name in ['reference_concept_1448x1086.png','reference_controles_integres_1448x1086.png','g04_r2_avant_boutons_320x240.png','g04_r2_comparaison_boutons_640x260.png','g04_r2_comparaison_boutons_x4.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png','g04_r2_avant_quadrillage_320x240.png','g04_r2_comparaison_avant_apres_640x260.png','g04_r2_comparaison_x4.png','g04_r2_mer_continue_180x180.png','g04_r2_plateau_sans_impacts_181x181.png']:
+for name in ['reference_concept_1448x1086.png','reference_controles_integres_1448x1086.png','build_g04_r2.py','g04_r2_attaque_320x240.png','g04_r2_attaque_x4.png','g04_r2_etats_320x240.png','g04_r2_etats_x4.png']:
  p=ROOT/name
  report['files'][name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
 (ROOT/'generation-report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

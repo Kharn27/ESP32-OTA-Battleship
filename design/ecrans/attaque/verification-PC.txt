@@ -1,20 +1,8 @@
-G04-R2 PC PASS — native 320x240 / x4 1280x960 exact NEAREST
-BEFORE/AFTER 320x240: grid changed=27577, controls changed=21952, unrelated changed=0
-PANEL ONLY vs prior continuous-sea approved layout: changed=21952, all outside panel byte-identical
-six integrated control/info regions: painted native colour variation={'FEU': 2332, 'DEFENSE': 1701, 'ABANDON': 1427, 'HISTORIQUE': 2267, 'RIPOSTE': 1621, 'ALERTE': 1410}
-HD sculpted controls are present in native PNG at 9 pixel probes; negative mutation rejected
-button before/after 640x260 and ×4 strict NEAREST: pixel exact
-clean 181x181 grid: 3861 correct RGB line pixels; NO extra grid-coloured pixels
-continuous ocean: max luma=109.4 (threshold 125), max 18px-boundary seam=4.84 (threshold 8)
-negative phantom water seam (synthetic horizontal 1px): rejected
-native 640x260 side-by-side + x4 comparison: pixel-identical source halves and exact NEAREST
-grid PNG: 121 crossings + 220 line segments checked at x=21..201/y=53..233, 100 cells of 18px
-negative grid-line corruption: rejected
-4 state vignettes: native + strict x4 NEAREST PASS
-RIPOSTE B7 : RATÉ / NON LUE COULÉ: inset raster plates, native-size manual PO legibility check required
-hit centers: C3,E3,E4,I8
-miss centers: A8,B7,D1,F9,G2,H6,J4
-selected G5; last riposte B7 RATÉ; unread COULÉ (distinct)
-negative one-channel corruption: rejected
-Original HD art + integrated-controls painted reference + editable compositor + PNG exports SHA256: MATCH
-ON_DEVICE_UNVERIFIED — artistic PO approval still pending
+G04-R2 — DOSSIER DE PREUVES CONSOLIDÉ APRÈS NETTOYAGE
+STATUT : VALIDÉ PO ARTISTIQUEMENT LE 04/11/2026 (PC 320×240) ; ON_DEVICE_UNVERIFIED
+SOURCE HISTORIQUE : génération/relecture PC GitHub Actions #41701593193 SUCCESS (avant nettoyage, visuels identiques)
+La comparaison des anciens essais et les diagnostics intermédiaires se retrouvent dans Git au commit e5d97f97a06efd0bab93b1fbebf3a973b9fb5ac1.
+CONSERVÉ : natif 320×240, zoom ×4 strict NEAREST, quatre vignettes natives et zoom, deux masters HD raster, source Python, rapport SHA256, vérificateur.
+VÉRIFICATIONS AU NIVEAU DES PNG ACTIFS : géométrie 10×10, 3861 pixels de lignes, luminosité/ruptures sur la mer visible, faux trait injecté et rejeté, 121 intersections, 220 segments, couleurs/contrastes des impacts, quatre états, 6 zones picturales et SHA256.
+NOTE : le run #41701593193 précède le nettoyage des scripts ; il ne vaut PAS un nouveau run du vérificateur révisé. CI générale C99/ESP-IDF à confirmer au HEAD final.
+MATÉRIEL CYD (TFT, stylet, mémoire, assets firmware) : NON TESTÉ.

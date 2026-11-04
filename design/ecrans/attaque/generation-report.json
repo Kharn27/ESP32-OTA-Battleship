@@ -50,7 +50,6 @@
   "unread_severity": "COULÉ",
   "sea_render": "continuous 180x180 deterministic ocean; zero 18px tile seams",
   "grid_render": "one authoritative set of 11+11 integer-aligned 1px lines",
-  "comparative": "two 320x240 1:1 comparisons: grid water fix and integrated buttons",
   "button_panel": {
     "bbox": [
       208,
@@ -71,21 +70,9 @@
       "sha256": "80ad861cef0a4408c5797c10cbe29ed0d4d12fc8ac6a2960a2336cc066cc626a",
       "bytes": 2101479
     },
-    "g04_r2_avant_boutons_320x240.png": {
-      "sha256": "d0113e3d82c7f947d7ee3d699514cd6edfd6dda2f365abc8e3db39e206968556",
-      "bytes": 72449
-    },
-    "g04_r2_comparaison_boutons_640x260.png": {
-      "sha256": "4f720ac327fe19382c3fc9e3a173eda5e705bc7855d27a444e080dea58bfedc8",
-      "bytes": 128203
-    },
-    "g04_r2_comparaison_boutons_x4.png": {
-      "sha256": "61ba54271e14bfc1f28bd820d3033b47f1ed164a3129b0ee961ca6a04f65e20d",
-      "bytes": 202869
-    },
     "build_g04_r2.py": {
-      "sha256": "4d524dd31060ee9fea29bc8f69598a5dc70068f9a4b3b7d6f4dc2607545edc10",
-      "bytes": 15859
+      "sha256": "bac6bfabcc876cfef39ac9e13dc8e715139b3a8f6ddca9413ac0ee90fc9feb37",
+      "bytes": 13544
     },
     "g04_r2_attaque_320x240.png": {
       "sha256": "0a2e446da655d561ece9d8daf8fcc5bf461f0b33ab7f104392cd8b398e1a0232",
@@ -102,26 +89,7 @@
     "g04_r2_etats_x4.png": {
       "sha256": "827049e035e9e07bdd2769f6924b41f7507a7d437f9a786c362a85a91da6b1a7",
       "bytes": 49953
-    },
-    "g04_r2_avant_quadrillage_320x240.png": {
-      "sha256": "7be1719d1876b6fe4fe82517117b3ead0433640a6f3571a1a19a35ca3de26ad8",
-      "bytes": 116048
-    },
-    "g04_r2_comparaison_avant_apres_640x260.png": {
-      "sha256": "e0c8d4fcae047bc0d5a28768fadc9cee4da75c57038c72ceae73dd18e1cc7f08",
-      "bytes": 185938
-    },
-    "g04_r2_comparaison_x4.png": {
-      "sha256": "e1e3f9300b03af774b6de90146b79dde6342b13b4f261ee340c418eaa33614b8",
-      "bytes": 284254
-    },
-    "g04_r2_mer_continue_180x180.png": {
-      "sha256": "ebb48cbf2ef74710e50b1914a80b0d677f8592d51a70f34376ee3b6de69d23b7",
-      "bytes": 10748
-    },
-    "g04_r2_plateau_sans_impacts_181x181.png": {
-      "sha256": "46f7f65362d5393e22bf14caca78258f1404242b9c038bae7359b70610475444",
-      "bytes": 11117
     }
-  }
+  },
+  "po_artistic_approval": "2026-11-04 / PR #64 comment 6626211912 / PC-only"
 }
