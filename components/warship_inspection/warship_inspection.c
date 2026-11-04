@@ -44,6 +44,11 @@ WarshipInspectionStatus warship_inspection_overlay(
     /* Only D07 flags, never a CPU fleet. The base frame is already
      * assembled by D10 (and independently rejects invalid shots).
      * Fail CLOSED on contradictions; caller clears on error. */
+    /* A frame is rebuilt from D10 first, but fail closed even when a
+     * caller accidentally reuses its former ATTACK pixel storage.
+     * DEFENSE contains the human fleet and must not be cleared here. */
+    if(ui->view==WARSHIP_COMBAT_ATTACK)
+        wipe(frame->ships,sizeof frame->ships);
     frame->reveal_available=0u;
     frame->reveal_visible=0u;
     frame->reveal_requested=0u;
@@ -92,6 +97,7 @@ WarshipInspectionStatus warship_inspection_overlay(
             const unsigned index=y*WARSHIP_FLEET_GRID+x;
             if(index>=WARSHIP_FLEET_GRID*WARSHIP_FLEET_GRID ||
                frame->ships[index]!=0u) {
+                wipe(frame->ships,sizeof frame->ships);
                 wipe(&fleet,sizeof fleet);
                 return WARSHIP_INSPECTION_GAME_ERROR;
             }
