@@ -1,77 +1,42 @@
-# G07-R2 — FIN DE PARTIE VS Capitaine · livraison partielle (Issue #53)
+# G07-R2 — FIN DE PARTIE / DÉFAITE · correction géométrique (Issue #53)
 
-> **PROPOSITION DA NON VALIDÉE PAR LE PO — PR DRAFT.**
-> `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`.
-> Une **seule scène DÉFAITE** est fournie. Ce dossier ne prouve ni VICTOIRE ni MATCH NUL.
+> **PR Draft, candidat graphique non validé PO ; DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
+> **Ce rendu correspond à DÉFAITE avec flotte adverse DÉJÀ révélée volontairement (suite G08 B/C), et NON à l'état initial secret G07.** La commande visible est « MASQUER SA FLOTTE ».
 
-## Maquette native — 320 × 240
+## PNG natif 320 × 240 (état révélé)
+![DÉFAITE — grille conforme](g07_r2_defaite_320x240.png)
 
-![G07-R2 DÉFAITE — preview 320 × 240](g07_r2_defaite_320x240.png)
+<details><summary>Zoom ×4 — 1280 × 960 strict NEAREST</summary>
 
-<details>
-<summary>Zoom obligatoire ×4 — 1280 × 960 strict NEAREST</summary>
-
-![G07-R2 DÉFAITE — zoom ×4 NEAREST](g07_r2_defaite_x4.png)
+![Zoom sans interpolation](g07_r2_defaite_x4.png)
 
 </details>
 
-[Master raster 1448 × 1086](g07_r2_source_1448x1086.png) ·
-[Générateur reproductible](build_g07_r2.py) ·
-[Empreintes SHA-256 et contrôles](g07_r2_provenance.json).
+<details><summary>Preuve de géométrie — repères superposés, non destinée à l'interface</summary>
 
-**Reconstruction :** `python3 -m pip install Pillow`, puis
-`python3 design/ecrans/fin-partie/build_g07_r2.py`. Le natif est issu de la
-source haute résolution par rééchantillonnage `LANCZOS`. Le zoom ×4 est
-la reproduction exacte des pixels du natif, `NEAREST`, testée par le script.
+![Repères grille x4](g07_r2_geometry_proof_x4.png)
 
-## Éditabilité et provenance
+</details>
 
-Le Graphiste a remis **une illustration PNG aplatie 1448 × 1086 pixels**
-(transmise dans la conversation le 04/11/2026). Le master est conservé
-sans modifications. **Les éléments internes ne sont PAS éditables par calques** :
-bois, laiton, mer, impacts, lettrage et boutons sont peints dans le même raster.
-`build_g07_r2.py` est éditable pour la chaîne de conversion, **pas pour la scène**.
-Pas de revendication d'une source SVG/ORA/PSD pleinement éditable ou d'assets
-firmware. Aucune ressource stock ou police ajoutée par l'étape d'export ;
-la provenance des éventuelles références incorporées par le Graphiste
-reste à documenter.
+[Source native aplatie](g07_r2_source_320x240.png) · [Générateur PC](build_g07_r2.py) · [SHA-256 et tests](g07_r2_provenance.json).
 
-## Contrôle des critères de l'Issue #53
+## Contrôles reproductibles
 
-| Exigence métier décidée par le PO | Preuve / réserve réelle |
-| --- | --- |
-| Une grille 10×10 | Apparente sur le raster ; **inspection VISUELLE seulement** |
-| Origine (21,53), cases 18×18, surface 180×180 | **NON CONFORME** : grille peinte plus petite que la géométrie mandatée |
-| Deux tirs de dernière manche révélés simultanément | **NON DÉMONTRÉ** par ce seul état statique |
-| Verdict initial puis compact, informatif et non tactile | **NON LIVRÉ** : le large pavé DÉFAITE peut ressembler à un bouton |
-| Trois verdicts VICTOIRE / DÉFAITE / MATCH NUL | **DÉFAITE UNIQUEMENT** ; autres variantes absentes |
-| Pas de FEU ni nouvelle sélection, impacts conservés | FEU absent du visuel ; interactions non testées |
-| ATTAQUE ↔ DÉFENSE, REJOUER et ACCUEIL | Libellés affichés ; actions/hitboxes non validées |
-| VOIR SA FLOTTE uniquement après DÉFAITE, vers G08 A/B/C | Commande affichée dans DÉFAITE ; **aucune transition G08 prouvée** |
-| Coques adverses secrètes avant choix | Pas de coque adverse révélée visuellement |
-| CYD TFT, stylet, Flash/RAM | **ON_DEVICE_UNVERIFIED** |
+Exécuter `python3 -m pip install Pillow numpy` puis `python3 design/ecrans/fin-partie/build_g07_r2.py`.
 
-### Lecture à la résolution native
+Le script **mesure dans les pixels** les traits cyan RGB (156,214,220) au lieu de déclarer a priori leur présence. Il exige :
+- 11 lignes verticales à X = **21, 39, 57, 75, 93, 111, 129, 147, 165, 183, 201**.
+- 11 lignes horizontales à Y = **53, 71, 89, 107, 125, 143, 161, 179, 197, 215, 233**.
+- Plateau **180 × 180** ; **100** cases de **18 × 18**. Les deux dernières limites sont incluses comme traits de bord.
+- Test négatif : translation horizontale de 1 pixel **rejetée**.
+- Reconstitution de l'agrandissement ×4 pixel pour pixel **NEAREST**.
 
-La composition maritime est riche (coucher de soleil, lanterne, gréement,
-bois et laiton) mais une partie du lettrage est petite à 320 × 240 et
-le cadre du verdict a un relief analogue aux touches tactiles. Avant GO PO,
-il faut distinguer plus clairement **verdict informatif** et **commande**,
-mettre le plateau au contrat géométrique, livrer les trois issues et
-la séquence annonce→compact. La jonction avec G08 exige un test spécifique.
+Ces assertions prouvent la géométrie du *PNG précis*, et non sa conformité métier exhaustive ni son rendu physique.
 
-**DÉCIDÉ PO :** règles métier ci-dessus et accès volontaire G08 après défaite.
-**PROPOSÉ DA :** composition actuelle du raster DÉFAITE.
-**NON TESTÉ CYD :** affichage physique, stylet, performances et mémoire.
+## État présenté et points encore ouverts
 
-## Statut de la G07 R1
+Le navire porte-avions, le sous-marin, le croiseur long, le navire incendié central et le navire en feu bas sont des éléments visibles de la **flotte révélée volontairement**. Leur présence n'est **pas autorisée avant choix**. Pour G07 en défaite initiale, conserver la flotte cachée et afficher `VOIR SA FLOTTE`; le parcours G08 peut ensuite conduire à la présente vue révélée, puis au masquage.
 
-Les fichiers historiques `g07_verdict_*`, `g07_variantes_*` et
-`build_g07.py` encore présents dans cette PR Draft proviennent de la
-**R1 REFUSÉE ARTISTIQUEMENT** malgré la fusion historique PR #54.
-**Ne pas les utiliser comme références visuelles actives**. Leur retrait
-est requis avant réception de R2 complète ; pas de dossier d'archives concurrent.
-Le suivi de l'ancienne version reste dans l'historique Git.
+**G07-R2 n'est pas terminée :** variantes VICTOIRE et MATCH NUL, annonce initiale, synchronisation vérifiable des deux tirs, raccord A/B/C G08, surcouches éditables plateau/impacts/verdicts/commandes. Le PNG fourni est **aplati et sans calques éditables**. Aucun export firmware, aucune vérification CYD/stylet/Flash/RAM ; pas de GO artistique du PO. Conserver la PR #74 en Draft et réserver sa fusion au Pilotage.
 
-**Aucun GO artistique PO, aucune vérification matérielle, aucune fusion.**
-Pilotage garde l'exclusivité de la réception et de la fusion.
+Les anciens `g07_verdict_*`, `g07_variantes_*` et `build_g07.py` (G07-R1) restent **rejetés artistiquement** et ne doivent pas servir de référence. Ils seront retirés du canon actif à la réception complète de R2, conformément à l'Issue.
