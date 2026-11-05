@@ -1,16 +1,16 @@
 {
   "issue": 53,
   "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "state": "DEFAITE; ATTAQUE; flotte ennemie volontairement revelee (G08 B/C)",
   "source": {
-    "file": "g07_r2_source_1448x1086.png",
+    "file": "g07_r2_source_320x240.png",
     "dimensions": [
-      1448,
-      1086
+      320,
+      240
     ],
-    "mode": "RGBA",
-    "sha256": "7fef4e00f67bb2d204afbe7b39b5ed62bd497d110b1ec54186edf6457149ae32",
-    "kind": "flattened user-supplied PNG, not editable scene layers",
-    "provenance": "Graphiste illustration forwarded in chat, 2026-11-04"
+    "kind": "user supplied flattened PNG; not layer editable",
+    "provenance": "ChatGPT uploaded raster 2026-11-05",
+    "sha256": "81bd1bcfc6e04316a9b34c90a97727f3598ec7ebf1951a0444043e17f3a5da8d"
   },
   "exports": [
     {
@@ -19,8 +19,8 @@
         320,
         240
       ],
-      "resampling": "LANCZOS",
-      "sha256": "de78ef5f1ae55cbda201b43df4177e37447a67d6098e0b239ecc1b1e3f110db0"
+      "method": "native copy; no resampling",
+      "sha256": "9abe27170c78529d0b229fae85987b8b8cec8aae284b276847183220cbd9ac2d"
     },
     {
       "file": "g07_r2_defaite_x4.png",
@@ -28,18 +28,71 @@
         1280,
         960
       ],
-      "resampling": "NEAREST",
-      "sha256": "9d3dcc03b64e9a7880b0093739c555b2e64e2cbe0e0fae2b925056809ecf1996"
+      "method": "x4 strict NEAREST",
+      "sha256": "e72c8f95d323b40f096aa7af452916dc12fa6455eebf885d9344bc4fea885915"
+    },
+    {
+      "file": "g07_r2_geometry_proof_x4.png",
+      "dimensions": [
+        1280,
+        960
+      ],
+      "method": "diagnostic only",
+      "sha256": "9ecc5bdf7ae992a13baa19c1a36275d2008d2420e2b79d20ed37746b66c34451"
     }
   ],
   "checks_pc": {
-    "native_size": "PASS",
-    "x4_size": "PASS",
-    "strict_nearest_zoom": "PASS",
-    "grid_10x10": "VISUAL_ONLY",
-    "grid_geometry_21_53_18px": "NON_CONFORMANT (image only)",
-    "simultaneous_last_shots": "NOT_PROVEN",
-    "victoire_nul_initial_compact": "NOT_DELIVERED",
+    "grid_geometry": "PASS; independent cyan pixel scan",
+    "x_lines": [
+      21,
+      39,
+      57,
+      75,
+      93,
+      111,
+      129,
+      147,
+      165,
+      183,
+      201
+    ],
+    "y_lines": [
+      53,
+      71,
+      89,
+      107,
+      125,
+      143,
+      161,
+      179,
+      197,
+      215,
+      233
+    ],
+    "origin": [
+      21,
+      53
+    ],
+    "bottom_right": [
+      201,
+      233
+    ],
+    "cells": [
+      10,
+      10
+    ],
+    "step": [
+      18,
+      18
+    ],
+    "negative_shift_x1": "PASS: translated grid rejected",
+    "nearest_exact": "PASS",
+    "five_ships": "VISUAL_ONLY",
+    "initial_defeat_secret_fleet": "NOT_DELIVERED",
+    "victory_draw_and_announcement": "NOT_DELIVERED",
+    "last_two_shots_simultaneity": "NOT_PROVEN",
+    "editable_scene_layers": "NOT_DELIVERED",
+    "tft_touch_flash_memory": "NOT_TESTED",
     "on_device": "UNVERIFIED"
   }
 }
