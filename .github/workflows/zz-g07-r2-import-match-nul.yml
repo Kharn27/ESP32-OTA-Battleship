@@ -1,0 +1,43 @@
+name: G07-R2 MATCH NUL raster import (temporary)
+on:
+  push:
+    branches:
+      - design/g07-r2-verdict
+permissions:
+  contents: write
+jobs:
+  import_match_nul:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download exact two original user PNGs
+        run: |
+          set -euo pipefail
+          D=design/ecrans/fin-partie
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 2 -o "$D/image(20261105-160127).png" "https://at.adobe.com/WNwRBcnJUxTmaOwK"
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 2 -o "$D/image(20261105-160150).png" "https://at.adobe.com/6Xm7RziYmk09LV2t"
+          echo "aaf5a765b3da31ec3727d7e9d207feb8a4cb7496c4054ef22c2b56609eea3976  $D/image(20261105-160127).png" | sha256sum -c -
+          echo "b8034a610ef31db6c349fccc55e8e292605f19c80785a819f399e8c9441928e7  $D/image(20261105-160150).png" | sha256sum -c -
+      - name: Create & verify native, x4, proofs and ORA
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow numpy
+          python design/ecrans/fin-partie/build_g07_r2_match_nul.py
+          file design/ecrans/fin-partie/g07_r2_match_nul_*.png
+          sha256sum design/ecrans/fin-partie/g07_r2_match_nul_*.png
+      - name: Commit binary assets and remove temporary CI
+        run: |
+          set -euo pipefail
+          rm -f 'design/ecrans/fin-partie/image(20261105-160127).png' 'design/ecrans/fin-partie/image(20261105-160150).png'
+          git rm .github/workflows/zz-g07-r2-import-match-nul.yml
+          git add design/ecrans/fin-partie/g07_r2_match_nul_320x240.png design/ecrans/fin-partie/g07_r2_match_nul_x4.png design/ecrans/fin-partie/g07_r2_match_nul_geometry_proof_320x240.png design/ecrans/fin-partie/g07_r2_match_nul_geometry_proof_x4.png design/ecrans/fin-partie/g07_r2_match_nul_source.ora design/ecrans/fin-partie/g07_r2_match_nul_provenance.json
+          git status --short
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "design(G07-R2): import verified MATCH NUL images and ORA (Refs #53)"
+          git push origin HEAD:design/g07-r2-verdict
