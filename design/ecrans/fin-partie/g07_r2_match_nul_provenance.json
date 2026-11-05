@@ -1,0 +1,97 @@
+{
+  "issue": 53,
+  "pr": 74,
+  "screen": "G07-R2 MATCH NUL, verdict compact VS Capitaine",
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED; PO review pending",
+  "geometry": {
+    "origin": [
+      21,
+      53
+    ],
+    "end": [
+      201,
+      233
+    ],
+    "cells": [
+      10,
+      10
+    ],
+    "cell_size": [
+      18,
+      18
+    ],
+    "x_lines": [
+      21,
+      39,
+      57,
+      75,
+      93,
+      111,
+      129,
+      147,
+      165,
+      183,
+      201
+    ],
+    "y_lines": [
+      53,
+      71,
+      89,
+      107,
+      125,
+      143,
+      161,
+      179,
+      197,
+      215,
+      233
+    ],
+    "grid_line_rgb": [
+      182,
+      227,
+      237
+    ],
+    "all_line_pixels": "PASS"
+  },
+  "checks_pc": {
+    "x4_nearest_pixel_exact": "PASS",
+    "one_pixel_shift_rejected": "PASS",
+    "control_overlay_pixels": 3925,
+    "control_overlay_only_red_and_yellow": "PASS",
+    "on_device": "NOT_TESTED",
+    "editable_separate_ui_elements": "NOT_DELIVERED"
+  },
+  "source": {
+    "input_x4_sha256": "aaf5a765b3da31ec3727d7e9d207feb8a4cb7496c4054ef22c2b56609eea3976",
+    "input_proof_sha256": "b8034a610ef31db6c349fccc55e8e292605f19c80785a819f399e8c9441928e7",
+    "provenance": "User supplied PNGs on 2026-11-05; no artistic retouching",
+    "rebuild_inputs": "Canonical x4 export and annotated native proof retained in repository"
+  },
+  "exports": [
+    {
+      "file": "g07_r2_match_nul_320x240.png",
+      "sha256": "390b7f607e38daba870e31f378170ecdf61d9f6ebfc9888fff4b9886aa068853",
+      "size_bytes": 153060
+    },
+    {
+      "file": "g07_r2_match_nul_x4.png",
+      "sha256": "eddf8b6460cafb2f49b6e35a1b7fb71422e063f56d8f2d5b05a2194015c4429a",
+      "size_bytes": 231242
+    },
+    {
+      "file": "g07_r2_match_nul_geometry_proof_320x240.png",
+      "sha256": "5c66cc2134bf004eebb35fcea3863d7dd59c7c472d24bb335e9811ed61a54151",
+      "size_bytes": 153339
+    },
+    {
+      "file": "g07_r2_match_nul_geometry_proof_x4.png",
+      "sha256": "03538adc05ba08373ba0a22252276deac5b8c587fa348122a1e74ae7d38260fc",
+      "size_bytes": 231483
+    },
+    {
+      "file": "g07_r2_match_nul_source.ora",
+      "sha256": "23164cc90e567fd96a0f5610ae01524ce6adfd0992c27a11cfdbf1cfda47204c",
+      "size_bytes": 389432
+    }
+  ]
+}
