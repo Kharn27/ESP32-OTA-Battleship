@@ -1,0 +1,52 @@
+name: TEMP upload exact PO patrol boat images to draft
+on:
+  push:
+    branches:
+      - design/patrouilleur-draft-assets
+permissions:
+  contents: write
+jobs:
+  import-user-sources:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/patrouilleur-draft-assets
+          persist-credentials: true
+      - name: Fetch seven PO source assets, verify exact hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p draft
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_A.jpeg" "https://at.adobe.com/SuUE15uv1stfHy7f"
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_B.jpeg" "https://at.adobe.com/cLWao4rcsJ1oH2HW"
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_T1A.jpeg" "https://at.adobe.com/OXKZ6SpLztTHOQT0"
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_T1B.jpeg" "https://at.adobe.com/paFwW2X1vkodi4DH"
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_T2A.jpeg" "https://at.adobe.com/vD26s1woAC7Q5aKe"
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_T2B.jpeg" "https://at.adobe.com/23XZTuA4ki8aTjX3"
+          curl --fail --location --silent --show-error --retry 2 --output "draft/patrouilleur_detruit.gif" "https://at.adobe.com/hMFCI1qmzrT6Ci6L"
+          cat > /tmp/expected_sha256 <<'SHA256'
+          631ff1b8f4245599137b6d0d3bd6919b9db3e30844d478434ee864ff885f5df5  draft/patrouilleur_A.jpeg
+          de84b5bf265cd290c24dfd84452511bf7892adccd399d9e92ba4c106f8f55450  draft/patrouilleur_B.jpeg
+          1e25359998afdedbc93ebf6baebdbeae34b327f4ab75a2f4e9d55e4c7b8a9584  draft/patrouilleur_T1A.jpeg
+          2bc761b1abcbced2fc760e8ef938571d58b3b4b14e390bad9f219846b32c8666  draft/patrouilleur_T1B.jpeg
+          f8366482082febc917a812d94efd98a75d03c100a789d5db73ceacc379c41d4d  draft/patrouilleur_T2A.jpeg
+          bcb36de1ef21c7992af3196d460ce57f68d654d4826302be0fdfa20b5515a9c3  draft/patrouilleur_T2B.jpeg
+          bdf1f617e9b9d5f8fb83cea8370c7bf231f57e536206a39321e4a94bafbf4050  draft/patrouilleur_detruit.gif
+          SHA256
+          sha256sum --check /tmp/expected_sha256
+          file draft/patrouilleur_*
+      - name: Remove superseded ocean drafts, commit exact images and remove this temporary workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm -f --ignore-unmatch -- draft/export_ocean.py draft/ocean_A_320x240.jpeg draft/ocean_A_reference_1195x896.jpeg draft/ocean_B_320x240.jpeg draft/ocean_B_reference_1195x896.jpeg
+          git rm -f --ignore-unmatch -- .github/workflows/tmp-import-patrouilleur.yml
+          git add -- draft/
+          git diff --cached --stat
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "design(draft): import exact PO patrol boat references and clear old ocean drafts"
+          git push origin HEAD:design/patrouilleur-draft-assets
