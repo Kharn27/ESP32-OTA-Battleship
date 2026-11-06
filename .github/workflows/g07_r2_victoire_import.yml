@@ -1,0 +1,72 @@
+name: Temporary G07-R2 victory importer
+on:
+  push:
+    branches:
+      - design/g07-r2-verdict
+    paths:
+      - .github/workflows/g07_r2_victoire_import.yml
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/g07-r2-verdict
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Retrieve PO-delivered revision bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 --connect-timeout 15 --max-time 120 "https://at.adobe.com/2JKufusn7T4RZ8q3" -o /tmp/g07_victoire_livraison.zip
+          file /tmp/g07_victoire_livraison.zip
+          unzip -t /tmp/g07_victoire_livraison.zip | tail -n 2
+          unzip -q /tmp/g07_victoire_livraison.zip -d /tmp/g07_import
+          test -f /tmp/g07_import/g07_victoire_delivery/g07_r2_victoire_source_hd.png
+          test -f /tmp/g07_import/g07_victoire_delivery/build_g07_r2_victoire.py
+      - name: Rebuild and independently test PC geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/g07_import/g07_victoire_delivery/* design/ecrans/fin-partie/
+          python -m pip install --disable-pip-version-check pillow numpy opencv-python-headless
+          python design/ecrans/fin-partie/build_g07_r2_victoire.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('design/ecrans/fin-partie/g07_r2_victoire_provenance.json')
+          r=json.loads(p.read_text())
+          assert r['geometry']['origin']==[21,53]
+          assert r['geometry']['end']==[201,233]
+          assert r['geometry']['cell_size']==[18,18]
+          assert r['assertions_PC']['pixel_changes_in_right_panel']==0
+          assert r['assertions_PC']['one_pixel_right_shift_negative']=='REJECTED_AS_EXPECTED'
+          print('G07-R2 VICTOIRE independent manifest PASS')
+          PY
+      - name: Update G07-R2 index and commit import on the Draft branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('design/ecrans/fin-partie/README.md')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('## Contrôles reproductibles','## Image 1/7 — VICTOIRE, verdict compact (géométrie PC CONFORME)\n\n![VICTOIRE corrigée native](g07_r2_victoire_320x240.png)\n\n<details><summary>Zoom ×4 strict NEAREST</summary>\n\n![VICTOIRE ×4](g07_r2_victoire_x4.png)\n\n</details>\n\n[Source OpenRaster partiellement éditable](g07_r2_victoire_source.ora) · [Script déterministe](build_g07_r2_victoire.py) · [Provenance et contrôle](g07_r2_victoire_provenance.json) · [README VICTOIRE et réserves](README_VICTOIRE.md).\n\n**Reconstruction réelle de la grille 10×10 à (21,53)→(201,233), 18×18 ; 22 traits mesurés, négatif de +1 px rejeté, panneau droit x ≥ 202 strictement inchangé.** Le master initial 1448×1086 reste conservé pour la reproductibilité. Source composite partiellement calquée, impacts et commandes droite encore aplatis. Pas de GO PO ni de TFT.\n\n## Contrôles reproductibles')
+          s=s.replace('**G07-R2 n\'est pas terminée :** variante VICTOIRE, annonce initiale','**G07-R2 n\'est pas terminée :** annonce initiale')
+          p.write_text(s,encoding='utf-8')
+          p=Path('design/README.md')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('autres états NON LIVRÉS · `DESIGN_PREVIEW', 'VICTOIRE et MATCH NUL également candidats PC dans le dossier · autres états EN ATTENTE · `DESIGN_PREVIEW')
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/ecrans/fin-partie/ design/README.md
+          git rm .github/workflows/g07_r2_victoire_import.yml
+          git commit -m "design(g07-r2): compose exact VICTOIRE geometry and proof, refs #53"
+          git push origin HEAD:design/g07-r2-verdict
