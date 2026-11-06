@@ -41,7 +41,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m pip install --quiet pillow
+          python3 -m pip install --quiet pillow numpy
           python3 - <<'PY'
           import json
           from pathlib import Path
