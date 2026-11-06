@@ -56,11 +56,13 @@ def marks_layers(sc):
     dh=ImageDraw.Draw(hit)
     for cell in sc["new_subtle_misses"]:
         x,y=xy(cell)
-        dm.line((x-4,y+2,x-2,y+1),fill=(112,183,199,220),width=1)
-        dm.line((x+2,y+1,x+4,y+2),fill=(112,183,199,220),width=1)
-        dm.line((x-3,y+3,x+3,y+3),fill=(87,151,176,225),width=1)
-        dm.line((x-2,y+1,x+2,y+1),fill=(178,219,226,235),width=1)
-        dm.point((x,y),fill=(226,245,244,255))
+        phase=(ord(cell[0])+int(cell[1:]))%3
+        # Broken irregular sea-foam, no repeated mini-boat shape.
+        patterns=[((-3,1),(-1,2),(2,1),(3,2)),((-3,0),(-2,2),(1,2),(3,0)),((-2,0),(-3,2),(2,2),(3,1))]
+        for dx,dy in patterns[phase]:
+            dm.point((x+dx,y+dy),fill=(108,181,198,214))
+        dm.point((x-1,y+3),fill=(55,122,152,194))
+        dm.point((x,y),fill=(172,215,224,255))
     for cell in sc["visible_fire_smoke_hits"]:
         x,y=xy(cell)
         dh.point((x,y),fill=(255,201,111,255))
@@ -71,7 +73,7 @@ def marks_layers(sc):
 def verify_history_pixels(composite,sc):
     native=composite.convert("RGB")
     for cell in sc["new_subtle_misses"]:
-        assert native.getpixel(xy(cell))==(226,245,244),("miss",cell)
+        assert native.getpixel(xy(cell))==(172,215,224),("miss",cell)
     for cell in sc["visible_fire_smoke_hits"]:
         assert native.getpixel(xy(cell))==(255,201,111),("hit",cell)
     return True
