@@ -1,0 +1,123 @@
+{
+  "issue": 53,
+  "pr": 74,
+  "screen": "G07-R2 — IMAGE 1/7, VICTOIRE compact VS Capitaine",
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED ; PO/Pilotage pending ; PR Draft",
+  "origin": {
+    "type": "PNG fourni par le PO le 2026-11-06",
+    "file": "g07_r2_victoire_source_hd.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "sha256": "61eb4fad8bd08cee7478a2233db89796f9f9c57ff34ae27783f477bf7594f81c",
+    "rights": "Fichier fourni dans la conversation, droits de re-utilisation de source non expertises"
+  },
+  "geometry": {
+    "origin": [
+      21,
+      53
+    ],
+    "end": [
+      201,
+      233
+    ],
+    "size": [
+      180,
+      180
+    ],
+    "cells": [
+      10,
+      10
+    ],
+    "cell_size": [
+      18,
+      18
+    ],
+    "line_rgb": [
+      182,
+      227,
+      237
+    ],
+    "x_lines": [
+      21,
+      39,
+      57,
+      75,
+      93,
+      111,
+      129,
+      147,
+      165,
+      183,
+      201
+    ],
+    "y_lines": [
+      53,
+      71,
+      89,
+      107,
+      125,
+      143,
+      161,
+      179,
+      197,
+      215,
+      233
+    ]
+  },
+  "assertions_PC": {
+    "native_320x240": "PASS",
+    "all_22_line_segments_exact_rgb": "PASS",
+    "one_pixel_right_shift_negative": "REJECTED_AS_EXPECTED",
+    "nearest_x4_no_interpolation": "PASS",
+    "unchanged_panel_x_ge_202": "PASS",
+    "pixel_changes_in_right_panel": 0,
+    "screen_legibility": "VISUAL_REVIEW_PC_ONLY",
+    "on_device": "NOT_TESTED",
+    "firmware_sprites": "NOT_PREPARED"
+  },
+  "layers": [
+    "Fond original — ciel, phare, commandes à droite (raster aplati)",
+    "Bandeau A–J — boiseries du visuel source",
+    "Réglette 1–10 — boiseries du visuel source",
+    "Mer et impacts — source recomposee et raccordee (raster)",
+    "Quadrillage deterministe 18px — RVB 182,227,237",
+    "Traverse basse — laiton et bois",
+    "DIAGNOSTIC — repères uniquement (MASQUÉ)"
+  ],
+  "limitations": [
+    "Maritime scene comes from one flattened user PNG",
+    "Fire/splashes/sea remain a single raster layer",
+    "Button/icons/text on right panel remain flattened",
+    "No proof of two-last-shot synchronized reveal",
+    "No physical touch/render checks"
+  ],
+  "exports": [
+    {
+      "file": "g07_r2_victoire_320x240.png",
+      "bytes": 149456,
+      "sha256": "ecfc64970276d6bbab73610466ea53db1e725a995bc6d996e83eab82f302670d"
+    },
+    {
+      "file": "g07_r2_victoire_x4.png",
+      "bytes": 227610,
+      "sha256": "ef01a4aff98b5bde872b7c47928b309c2e161a87b3cbdfffa869477a033fbe50"
+    },
+    {
+      "file": "g07_r2_victoire_geometry_proof_320x240.png",
+      "bytes": 149400,
+      "sha256": "aa6d307b5922b0bbfe44e79a219de58e6a03342ea6907488f508398a1355934d"
+    },
+    {
+      "file": "g07_r2_victoire_geometry_proof_x4.png",
+      "bytes": 227408,
+      "sha256": "775b799c9f06be23032d5d9553072d5ac3325720c2443d85142657a5242350c9"
+    },
+    {
+      "file": "g07_r2_victoire_source.ora",
+      "bytes": 392246,
+      "sha256": "beac62f0abb412678bb62b3c059e6842dd619cdea1cdd04aa1441d625615ac75"
+    }
+  ]
+}

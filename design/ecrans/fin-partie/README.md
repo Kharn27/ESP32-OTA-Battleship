@@ -53,6 +53,20 @@
 
 **Contrôle PC PASS :** 11 lignes X=21…201 et Y=53…233 (pas exact de 18), 100 cases 18×18, zoom ×4 strict NEAREST, deux fichiers d'origine vérifiés SHA-256 lors de l'import [Actions #42062625539](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/42062625539) : **SUCCESS**. Source d'auteur encore partiellement aplatie : seul le calque de repères est isolé. La conformité géométrique ne préjuge ni du GO PO ni des tests TFT/stylet.
 
+## Image 1/7 — VICTOIRE, verdict compact (géométrie PC CONFORME)
+
+![VICTOIRE corrigée native](g07_r2_victoire_320x240.png)
+
+<details><summary>Zoom ×4 strict NEAREST</summary>
+
+![VICTOIRE ×4](g07_r2_victoire_x4.png)
+
+</details>
+
+[Source OpenRaster partiellement éditable](g07_r2_victoire_source.ora) · [Script déterministe](build_g07_r2_victoire.py) · [Provenance et contrôle](g07_r2_victoire_provenance.json) · [README VICTOIRE et réserves](README_VICTOIRE.md).
+
+**Reconstruction réelle de la grille 10×10 à (21,53)→(201,233), 18×18 ; 22 traits mesurés, négatif de +1 px rejeté, panneau droit x ≥ 202 strictement inchangé.** Le master initial 1448×1086 reste conservé pour la reproductibilité. Source composite partiellement calquée, impacts et commandes droite encore aplatis. Pas de GO PO ni de TFT.
+
 ## Contrôles reproductibles
 
 Exécuter `python3 -m pip install Pillow numpy` puis `python3 design/ecrans/fin-partie/build_g07_r2.py`.
@@ -70,6 +84,6 @@ Ces assertions prouvent la géométrie du *PNG précis*, et non sa conformité m
 
 Le navire porte-avions, le sous-marin, le croiseur long, le navire incendié central et le navire en feu bas sont des éléments visibles de la **flotte révélée volontairement**. Leur présence n'est **pas autorisée avant choix**. L'état initial G07 avec flotte cachée et bouton `VOIR SA FLOTTE` est désormais livré en tête de page ; le parcours G08 peut ensuite conduire à cette vue révélée, puis au masquage.
 
-**G07-R2 n'est pas terminée :** variante VICTOIRE, annonce initiale, synchronisation vérifiable des deux tirs, raccord A/B/C G08, surcouches éditables plateau/impacts/verdicts/commandes. Le PNG DÉFAITE fourni est **aplati et sans calques éditables** ; pour MATCH NUL, une ORA contenant le raster aplati plus la surcouche de preuve masquée est livrée, sans isolation des objets UI. Aucun export firmware, aucune vérification CYD/stylet/Flash/RAM ; pas de GO artistique du PO. Conserver la PR #74 en Draft et réserver sa fusion au Pilotage.
+**G07-R2 n'est pas terminée :** annonce initiale, synchronisation vérifiable des deux tirs, raccord A/B/C G08, surcouches éditables plateau/impacts/verdicts/commandes. Le PNG DÉFAITE fourni est **aplati et sans calques éditables** ; pour MATCH NUL, une ORA contenant le raster aplati plus la surcouche de preuve masquée est livrée, sans isolation des objets UI. Aucun export firmware, aucune vérification CYD/stylet/Flash/RAM ; pas de GO artistique du PO. Conserver la PR #74 en Draft et réserver sa fusion au Pilotage.
 
 Les anciens `g07_verdict_*`, `g07_variantes_*` et `build_g07.py` (G07-R1) restent **rejetés artistiquement** et ne doivent pas servir de référence. Ils seront retirés du canon actif à la réception complète de R2, conformément à l'Issue.
