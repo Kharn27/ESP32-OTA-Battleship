@@ -28,7 +28,7 @@
         240
       ],
       "method": "native copy; no resampling",
-      "sha256": "2f6379ac1b38b4651b2283ffa5879a8da783fbf8355941bfa65f9885d944b0ec"
+      "sha256": "2d3f4f45098de91d15eb5dada9a559034778b61494adff26464547c08049d831"
     },
     {
       "file": "g07_r2_defaite_x4.png",
@@ -37,7 +37,7 @@
         960
       ],
       "method": "x4 strict NEAREST",
-      "sha256": "45c3c5d2590029890995ccad200ba6199f6af08033592c0ce47e83608f3e872d"
+      "sha256": "e708120aa28d67b11fa8cf1781fc92147a28d4fee5c385ebe3799ad1fb7816f8"
     },
     {
       "file": "g07_r2_geometry_proof_x4.png",
@@ -46,7 +46,7 @@
         960
       ],
       "method": "diagnostic only",
-      "sha256": "1c3a4936ecbadfecf61d4af1f2bb6d42f4754dfa4eb833872192144bf73d1e80"
+      "sha256": "c40cded8165a5bd9f3685b06c51eaba03b2bfe3256b7b8c4ed6e0f2663953a65"
     }
   ],
   "checks_pc": {

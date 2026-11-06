@@ -18,28 +18,28 @@
   "deliverables": [
     {
       "file": "g07_r2_defaite_masquee_320x240.png",
-      "sha256": "57223a4adc66d282037903b9fa5637011f1278500c6045c41de36793e9e5670e",
-      "size_bytes": 158268
+      "sha256": "44df68a554e43cb6b81367986b892d7cc9c5ce70b9a24f826c32e312350ea085",
+      "size_bytes": 158403
     },
     {
       "file": "g07_r2_defaite_masquee_x4.png",
-      "sha256": "ecc6c4fa50eaceed81d6c03e723625a392e812f8534f5f57f7bb330111b083ff",
-      "size_bytes": 236820
+      "sha256": "e2de48e96b0f5b1e4ee2b234a67bfcd821f5aab4e7d202777fb365b0f6b33a2f",
+      "size_bytes": 236993
     },
     {
       "file": "g07_r2_defaite_masquee_proof_320x240.png",
-      "sha256": "04fe2776d72dc8edf76c532df9415521ab95df6403d68e85c0277b4dcb1cf434",
-      "size_bytes": 158688
+      "sha256": "3efd266b6ed945cb6b95b9e24fd4707fe642c0c442f526ea56cd78e65a993fc4",
+      "size_bytes": 158821
     },
     {
       "file": "g07_r2_defaite_masquee_proof_x4.png",
-      "sha256": "a89251ff14f4daab28aaf1391b52a6cbaee12f31921c4dbada76a33c5f400d7b",
-      "size_bytes": 237468
+      "sha256": "05713d6cfae2d83673a91fd708e3c6130a3d3d86970be7a46e87686fe8b9cc70",
+      "size_bytes": 237639
     },
     {
       "file": "g07_r2_defaite_masquee_source.ora",
-      "sha256": "e9da4df477b8332554c669ec3638a0cca05e4c61c73010e10e9974da7247d27b",
-      "size_bytes": 579441
+      "sha256": "7360c086ef279ee6049f47e2471514185cba63a2bd454cca1d00648f87c5e542",
+      "size_bytes": 579620
     }
   ],
   "editable": "ORA with 6 layers (2 editable impact overlays); ornaments and text within their layers remain rasterized",
