@@ -1,0 +1,78 @@
+name: _G07-R2 VICTOIRE import temporaire
+on:
+  push:
+    branches:
+      - design/g07-r2-verdict
+    paths:
+      - .github/workflows/_g07_r2_victoire_import.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish-verified-victory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branche G07-R2
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          ref: design/g07-r2-verdict
+      - name: Importer les fichiers graphiques exacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 180 \
+            "https://at.adobe.com/PHFPOde46dPaq9Ul" -o "$RUNNER_TEMP/g07_victoire_livraison.zip"
+          echo "SHA-256 archive :"
+          sha256sum "$RUNNER_TEMP/g07_victoire_livraison.zip"
+          mkdir -p "$RUNNER_TEMP/g07-delivery"
+          unzip -q "$RUNNER_TEMP/g07_victoire_livraison.zip" -d "$RUNNER_TEMP/g07-delivery"
+          test -f "$RUNNER_TEMP/g07-delivery/design/ecrans/fin-partie/g07_r2_victoire_320x240.png"
+          cp -a "$RUNNER_TEMP/g07-delivery/design/ecrans/fin-partie/." "design/ecrans/fin-partie/"
+          echo "Vérification des empreintes binaires du livrable :"
+          cd design/ecrans/fin-partie
+          echo "64bd91c80184a11ec2bb261d2304af63071b21184a547257856208a7f3644b43  g07_r2_victoire_320x240.png" | sha256sum -c -
+          echo "65d7e46b97d933ef7ff45e705bb5a893e16a725e22b70ec9dc496cd507db94c7  g07_r2_victoire_x4.png" | sha256sum -c -
+          echo "0ac2573bc32331c94c9a9ddca76d145602ce4737980b72bf234398f407a0ff4c  g07_r2_victoire_source.ora" | sha256sum -c -
+          echo "05bf9c8d9a1fa954a40600afd8126b823a20d315ab748901decc47dee6b9959b  g07_r2_victoire_history.json" | sha256sum -c -
+          echo "068bcb52b6acc4eb3aaa724ddb696633ac2c13a1c6c00015e7923f2a1b1430ba  build_g07_r2_victoire_history.py" | sha256sum -c -
+      - name: Vérifier taille native, NEAREST, grille et scenario (PC)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image, ImageChops
+          d=Path("design/ecrans/fin-partie")
+          native=Image.open(d/"g07_r2_victoire_320x240.png").convert("RGB")
+          zoom=Image.open(d/"g07_r2_victoire_x4.png").convert("RGB")
+          assert native.size==(320,240),native.size
+          assert zoom.size==(1280,960),zoom.size
+          assert ImageChops.difference(native.resize(zoom.size,Image.Resampling.NEAREST),zoom).getbbox() is None
+          import numpy as np
+          a=np.asarray(native); col=np.all(a==[182,227,237],axis=2)
+          xs=[x for x in range(18,205) if col[53:234,x].sum()==181]
+          ys=[y for y in range(50,236) if col[y,21:202].sum()==181]
+          assert xs==list(range(21,202,18)), xs
+          assert ys==list(range(53,234,18)), ys
+          sc=json.loads((d/"g07_r2_victoire_history.json").read_text())
+          hits=sc["attack_hits"]; misses=sc["attack_misses"]
+          assert len(hits)==17 and len(set(hits))==17
+          assert len(misses)==5 and not(set(hits)&set(misses))
+          assert sorted(len(x) for x in sc["enemy_fleet_for_test_only"].values())==[2,3,3,4,5]
+          print("PASS PC: 17 touches distincts; 5 ratés; 22 lignes exactes; NEAREST pixel exact")
+          PY
+      - name: Commit de livraison graphique et suppression du workflow temporaire
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/ecrans/fin-partie
+          git rm .github/workflows/_g07_r2_victoire_import.yml
+          git diff --cached --name-only
+          git commit -m "design(G07-R2): 17 TOUCHÉ distincts pour VICTOIRE (Refs #53)"
+          git push origin HEAD:design/g07-r2-verdict
