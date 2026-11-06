@@ -1,6 +1,9 @@
 /* D09+D10 technical presentation, D11 post-ACK NVS event handoff. A
  * single task owns both SPI buses, lifecycle, DMA and NVS writes. No radio. */
 #include "d09_probe.h"
+#ifdef WARSHIP_T03_DIAGNOSTIC
+#include "t03_probe.h"
+#endif
 #include "d11_runtime.h"
 #include "warship_deploy_ui.h"
 #include "warship_combat_ui.h"
@@ -124,9 +127,15 @@ static esp_err_t draw_region(int x,int y,int w,int h)
     if(band==NULL)return ESP_ERR_INVALID_STATE;
     const int64_t begin=esp_timer_get_time();
     unsigned sent=0u;
+#ifdef WARSHIP_T03_DIAGNOSTIC
+    int64_t pixel_us=0, lcd_us=0;
+#endif
     for(int top=y; top<y+h; top+=(int)WARSHIP_LCD_BAND_ROWS) {
         const int rows=(y+h-top)<(int)WARSHIP_LCD_BAND_ROWS ?
                        (y+h-top):(int)WARSHIP_LCD_BAND_ROWS;
+#ifdef WARSHIP_T03_DIAGNOSTIC
+        const int64_t pixel_start=esp_timer_get_time();
+#endif
         for(int r=0;r<rows;++r) {
             for(int col=0;col<w;++col) {
                 const uint16_t color=(game.phase==WARSHIP_LIFECYCLE_COMBAT ||
@@ -141,7 +150,14 @@ static esp_err_t draw_region(int x,int y,int w,int h)
                 band[at+1u]=(uint8_t)color;
             }
         }
+#ifdef WARSHIP_T03_DIAGNOSTIC
+        pixel_us+=esp_timer_get_time()-pixel_start;
+        const int64_t lcd_start=esp_timer_get_time();
+#endif
         const esp_err_t err=warship_lcd_send(x,top,w,rows);
+#ifdef WARSHIP_T03_DIAGNOSTIC
+        lcd_us+=esp_timer_get_time()-lcd_start;
+#endif
         if(err!=ESP_OK) {
             ESP_LOGE(TAG,"DRAW_FAIL region=%d,%d,%d,%d band_y=%d err=%s",
                      x,y,w,h,top,esp_err_to_name(err));
@@ -151,6 +167,11 @@ static esp_err_t draw_region(int x,int y,int w,int h)
     }
     ESP_LOGI(TAG,"DRAW x=%d y=%d w=%d h=%d bands=%u us=%" PRId64,
              x,y,w,h,sent,esp_timer_get_time()-begin);
+#ifdef WARSHIP_T03_DIAGNOSTIC
+    ESP_LOGI(TAG,"T03_RASTER x=%d y=%d w=%d h=%d bands=%u"
+             " pixel_us=%" PRId64 " lcd_us=%" PRId64,
+             x,y,w,h,sent,pixel_us,lcd_us);
+#endif
     return ESP_OK;
 }
 static esp_err_t draw_combat(uint8_t include_pending)
@@ -264,6 +285,16 @@ void d09_probe_run(void)
     }
     ESP_LOGI(TAG,"LCD_PROFILE_PASS case=10 native_wide=1 mv=0 mx=0 my=1 dma=5120");
     memory_log("lcd_ready");
+#ifdef WARSHIP_T03_DIAGNOSTIC
+    ESP_LOGW(TAG,"T03_DIAGNOSTIC=ON before normal D09 screen; no second LCD init");
+    err=t03_probe_compare();
+    if(err!=ESP_OK) {
+        ESP_LOGE(TAG,"T03_DIAGNOSTIC_FAIL_NO_RETRY err=%s",esp_err_to_name(err));
+        memory_log("t03_fault");
+        return;
+    }
+    memory_log("t03_complete");
+#endif
     err=draw_for_action(WARSHIP_DEPLOY_START);
     if(err!=ESP_OK) {
         ESP_LOGE(TAG,"D09_DRAW_STOP err=%s",esp_err_to_name(err));
