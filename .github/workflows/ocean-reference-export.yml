@@ -1,0 +1,91 @@
+name: Temporary PO A/B ocean export
+
+on:
+  push:
+    branches:
+      - design/ocean-fond-modulaire
+    paths:
+      - .github/workflows/ocean-reference-export.yml
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    name: Re-export PO ocean A/B with Pillow
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: design/ocean-fond-modulaire
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Install Pillow and run exactly the PO export script
+        run: |
+          python3 -m pip install --user Pillow==12.3.0
+          python3 draft/export_ocean.py
+
+      - name: Replace rejected contents with the four authentic exports
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm -r -- design/ocean
+          mkdir -p design/ocean
+          cp draft/ocean_A_320x240.png draft/ocean_A_x4.png draft/ocean_B_320x240.png draft/ocean_B_x4.png design/ocean/
+          cat > design/ocean/README.md <<'README'
+          # Fonds d'océan — références PO A et B
+
+          **Statut :** exports de présentation, validation artistique PO en attente ; `ON_DEVICE_UNVERIFIED`. Aucun contrat de firmware ni essai matériel.
+
+          Les quatre PNG ci-dessous sont des **redimensionnements stricts** des deux JPEG du PO conservés dans `draft/` : `ocean_A_reference_1195x896.jpeg` et `ocean_B_reference_1195x896.jpeg`. Aucun élément n'a été dessiné, ajouté, effacé ou recolorisé.
+
+          ## Variante A
+
+          ![Océan A, aperçu natif 320 × 240](ocean_A_320x240.png)
+
+          [Aperçu A natif 320 × 240](ocean_A_320x240.png) · [Contrôle A ×4 NEAREST — 1280 × 960](ocean_A_x4.png)
+
+          ## Variante B
+
+          ![Océan B, aperçu natif 320 × 240](ocean_B_320x240.png)
+
+          [Aperçu B natif 320 × 240](ocean_B_320x240.png) · [Contrôle B ×4 NEAREST — 1280 × 960](ocean_B_x4.png)
+
+          ## Provenance et reproductibilité
+
+          Le script original `draft/export_ocean.py` effectue `RGB → LANCZOS 320×240 → NEAREST ×4`. Les JPEG sources et le script demeurent dans `draft/`, où le script écrit son manifeste de contrôle. Les fichiers dans ce dossier `design/ocean/` sont seulement les quatre PNG finaux et le présent README.
+
+          À l'écran CYD réel (320×240), les visuels et leur intégration restent à vérifier. Le PO choisira ou validera A/B ; Pilotage contrôle et fusionne seul la PR.
+          README
+          python3 - <<'PY'
+          from PIL import Image, ImageChops
+          from pathlib import Path
+          folder=Path("design/ocean")
+          actual={p.name for p in folder.rglob("*") if p.is_file()}
+          expected={"README.md","ocean_A_320x240.png","ocean_A_x4.png","ocean_B_320x240.png","ocean_B_x4.png"}
+          assert actual==expected,(actual,expected)
+          for name in "AB":
+              native=Image.open(folder / f"ocean_{name}_320x240.png").convert("RGB")
+              x4=Image.open(folder / f"ocean_{name}_x4.png").convert("RGB")
+              assert native.size==(320,240),native.size
+              assert x4.size==(1280,960),x4.size
+              assert ImageChops.difference(native.resize((1280,960),Image.Resampling.NEAREST),x4).getbbox() is None
+              assert (folder / f"ocean_{name}_320x240.png").read_bytes()==(Path("draft") / f"ocean_{name}_320x240.png").read_bytes()
+              assert (folder / f"ocean_{name}_x4.png").read_bytes()==(Path("draft") / f"ocean_{name}_x4.png").read_bytes()
+              print(f"PASS: variante {name}, fichiers identiques au script, zoom 4x pixel-exact")
+          PY
+          sha256sum design/ocean/*.png
+
+      - name: Commit only design/ocean replacement and remove temporary automation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm -- .github/workflows/ocean-reference-export.yml
+          git add -A -- design/ocean
+          git diff --cached --name-status
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "fix(design): re-export PO ocean references A and B only"
+          git push origin HEAD:design/ocean-fond-modulaire
