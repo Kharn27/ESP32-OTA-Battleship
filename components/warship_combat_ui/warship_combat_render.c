@@ -101,7 +101,7 @@ uint16_t warship_combat_pixel(const WarshipCombatFrame *f,
     if (text_bit(f->view==WARSHIP_COMBAT_ATTACK?"ATTAQUE":"DEFENSE",
                  22u,7u,x,y))
         return 0xffffu;
-    if (text_bit("D12",273u,7u,x,y)) return 0xffe0u;
+    if (text_bit("D13",273u,7u,x,y)) return 0xffe0u;
     for (unsigned i=0u;i<10u;++i) {
         const unsigned cx=22u+i*19u+7u;
         const unsigned cy=24u+i*19u+6u;
@@ -173,11 +173,23 @@ uint16_t warship_combat_pixel(const WarshipCombatFrame *f,
     if (f->phase==WARSHIP_LIFECYCLE_RESULT) {
         const char *label=f->verdict==WARSHIP_BATTLE_VICTORY?"VICTOIRE":
             f->verdict==WARSHIP_BATTLE_DEFEAT?"DEFAITE":"MATCH NUL";
-        if (text_bit(label,225u,187u,x,y) ||
-            text_bit("FIN PARTIE",225u,208u,x,y))
+        if (text_bit(label,225u,183u,x,y))
             return 0xffe0u;
-        /* Prevent old RIPOSTE or ALERTE from overlapping the verdict.
-         * Shot history stays visible on the left battlefield. */
+        if (f->reveal_available && f->view==WARSHIP_COMBAT_ATTACK &&
+            f->verdict==WARSHIP_BATTLE_DEFEAT &&
+            rect(x,y,225u,203u,91u,31u)) {
+            const char *cmd=!f->reveal_requested?"VOIR SA FLOTTE":
+                            f->reveal_visible?"MASQUER":"AFFICHER";
+            if (border(x,y,225u,203u,91u,31u))return 0xffffu;
+            const unsigned len=(unsigned)strlen(cmd)*6u-1u;
+            const unsigned tx=225u+(91u-len)/2u;
+            return text_bit(cmd,tx,215u,x,y)?0xffffu:0x0440u;
+        }
+        if (text_bit("FIN PARTIE",225u,212u,x,y) &&
+            !f->reveal_available)
+            return 0xffe0u;
+        /* No RIPOSTE/ALERTE over result controls. The impact grid is
+         * never redrawn from a secret fleet; overlay only supplies ships. */
         if (x>=225u && y>=175u) return 0x000cu;
     }
     if (f->busy) {

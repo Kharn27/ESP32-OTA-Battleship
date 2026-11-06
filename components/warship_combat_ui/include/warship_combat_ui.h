@@ -25,7 +25,8 @@ typedef enum {
     WARSHIP_COMBAT_CELL,
     WARSHIP_COMBAT_FIRE,
     WARSHIP_COMBAT_SWITCH,
-    WARSHIP_COMBAT_CANCEL
+    WARSHIP_COMBAT_CANCEL,
+    WARSHIP_COMBAT_INSPECT /* D13: voluntary post-DEFEAT toggle */
 } WarshipCombatCommand;
 
 typedef struct {
@@ -58,9 +59,10 @@ typedef struct {
     uint8_t terminal_event; /* D07 one-shot, diagnostic only, no D08 write */
 } WarshipCombatUi;
 
-/* Raster accepts ONLY this public render value (never lifecycle/session).
- * ships[] is populated ONLY for the human DEFENSE grid. In ATTAQUE it
- * is zero everywhere, even after a SUNK announcement.
+/* Raster accepts ONLY a prepared frame (never lifecycle/session).
+ * D10 default: ships[] is human-only for DEFENSE.
+ * D13 controller may overlay the opt-in CPU fleet in ATTAQUE after
+ * RESULT DEFEAT; all historic impact marks remain in attacks[].
  */
 typedef struct {
     uint8_t attacks[100];  /* 0 unknown; 1 MISS; 2 HIT; 3 SUNK last cell */
@@ -70,6 +72,9 @@ typedef struct {
     uint8_t has_cpu, has_human, alert, verdict, terminal;
     uint8_t rounds;
     uint8_t phase; /* public D07 phase; D12 technical navigation labels */
+    uint8_t reveal_available, reveal_visible, reveal_requested;
+    /* In ATTAQUE, ships[] may hold an opt-in D13 CPU overlay ONLY
+     * while reveal_visible=1 after a terminal DEFEAT. NEVER before. */
 } WarshipCombatFrame;
 
 void warship_combat_init(WarshipCombatUi *ui, WarshipCombatInput *in,
