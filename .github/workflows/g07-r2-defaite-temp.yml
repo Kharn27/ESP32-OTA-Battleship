@@ -1,0 +1,46 @@
+name: G07-R2 DEFAITE exports temporary
+on:
+  push:
+    branches:
+      - design/g07-r2-verdict
+    paths:
+      - .github/workflows/g07-r2-defaite-temp.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install Pillow numpy
+      - name: Validate legal history; export revealed then secret
+        run: |
+          python design/ecrans/fin-partie/g07_r2_defaite_history.py
+          python design/ecrans/fin-partie/build_g07_r2.py
+          python design/ecrans/fin-partie/build_g07_r2_defaite_masquee.py
+      - name: Commit exported previews and ORA
+        run: |
+          git config user.name "G07-R2 Graphics CI"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            design/ecrans/fin-partie/g07_r2_defaite_320x240.png \
+            design/ecrans/fin-partie/g07_r2_defaite_x4.png \
+            design/ecrans/fin-partie/g07_r2_geometry_proof_x4.png \
+            design/ecrans/fin-partie/g07_r2_provenance.json \
+            design/ecrans/fin-partie/g07_r2_defaite_masquee_320x240.png \
+            design/ecrans/fin-partie/g07_r2_defaite_masquee_x4.png \
+            design/ecrans/fin-partie/g07_r2_defaite_masquee_proof_320x240.png \
+            design/ecrans/fin-partie/g07_r2_defaite_masquee_proof_x4.png \
+            design/ecrans/fin-partie/g07_r2_defaite_masquee_source.ora \
+            design/ecrans/fin-partie/g07_r2_defaite_masquee_provenance.json
+          if ! git diff --cached --quiet; then
+            git commit -m "design(g07-r2): exporter historique DEFAITE corrigé (Refs #53) [skip ci]"
+            git push origin HEAD:design/g07-r2-verdict
+          fi
