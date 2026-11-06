@@ -1,0 +1,70 @@
+name: G07-R2 MATCH NUL — import temporaire vérifié
+on:
+  push:
+    branches:
+      - design/g07-r2-verdict
+    paths:
+      - .github/workflows/g07-r2-match-nul-import.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-match-nul:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout branche graphique
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Télécharger et contrôler livraison d'auteur
+        env:
+          ART_URL: https://at.adobe.com/eTpvT0sf8Bm8Yvqr
+          ART_SHA: e0674cc08cc012668d7fe90870363ffdce018aeb8267e32928368c08a18732a6
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --silent --show-error "$ART_URL" --output /tmp/g07-match-nul.zip
+          echo "$ART_SHA  /tmp/g07-match-nul.zip" | sha256sum --check -
+          unzip -t /tmp/g07-match-nul.zip
+          unzip -o -q /tmp/g07-match-nul.zip -d .
+      - name: Vérification externe des formats, preuves et scénario
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,struct,zipfile
+          p=Path("design/ecrans/fin-partie")
+          m=json.loads((p/"g07_r2_match_nul_provenance.json").read_text())
+          s=json.loads((p/"g07_r2_match_nul_scenario.json").read_text())
+          assert len(s["attack_hits"])==17 and len(set(s["attack_hits"]))==17
+          assert len(s["defense_hits"])==17 and len(set(s["defense_hits"]))==17
+          assert len(s["attack_misses"])==9 and len(s["defense_misses"])==9
+          assert len(s["rounds"])==26
+          assert s["last_simultaneous_pair"]["attack"]=="J9 TOUCHÉ"
+          assert s["last_simultaneous_pair"]["defense"]=="H8 TOUCHÉ"
+          assert s["rounds"][-1]["simultaneous_reveal"] is True
+          dims={
+              "g07_r2_match_nul_320x240.png":(320,240),
+              "g07_r2_match_nul_x4.png":(1280,960),
+              "g07_r2_match_nul_geometry_proof_320x240.png":(320,240),
+              "g07_r2_match_nul_geometry_proof_x4.png":(1280,960),
+          }
+          for name,expected in dims.items():
+              data=(p/name).read_bytes()
+              assert data[:8]==b'\x89PNG\r\n\x1a\n'
+              assert struct.unpack(">II",data[16:24])==expected
+              assert hashlib.sha256(data).hexdigest()==m["files"][name]["sha256"]
+          for name,info in m["files"].items():
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==info["sha256"], name
+          assert (p/"g07_r2_match_nul_correctif_source.svg").read_text().count('id="touche_')==17
+          assert (p/"g07_r2_match_nul_correctif_source.svg").read_text().count('id="rate_')==9
+          print("PASS: 4 exports dimensions+SHA, 17+17 hits, 26 paires, sources, manifest")
+          PY
+      - name: Commit ciblé sur la même branche — aucune fusion
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design/ecrans/fin-partie/
+          git commit -m "design(g07-r2): corriger MATCH NUL 17+17 impacts (Refs #53) [skip ci]" || exit 0
+          git pull --rebase origin design/g07-r2-verdict
+          git push origin HEAD:design/g07-r2-verdict
