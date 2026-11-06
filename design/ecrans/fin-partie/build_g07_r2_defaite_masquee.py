@@ -7,10 +7,11 @@ from pathlib import Path
 from PIL import Image,ImageDraw,ImageChops
 import hashlib,io,json,zipfile,numpy as np
 from xml.etree.ElementTree import Element,SubElement,tostring
+from g07_r2_defaite_history import load_and_validate,marks_layers,verify_history_pixels
 
 D=Path(__file__).resolve().parent
 src=D/"g07_r2_defaite_masquee_original_1448x1086.png"
-base=D/"g07_r2_defaite_320x240.png"
+base=D/"g07_r2_source_320x240.png"  # immutable original, not regenerated revealed export
 out=D/"g07_r2_defaite_masquee_320x240.png"
 zoom=D/"g07_r2_defaite_masquee_x4.png"
 proof=D/"g07_r2_defaite_masquee_proof_320x240.png"
@@ -37,7 +38,8 @@ def check_grid(im):
     assert X==xs and Y==ys,(X,Y)
 
 assert sha(src)=="bc8b51d0b9e579f305f4e8fabda834c3c4e19474685e2b907b7db98eedf317f0"
-assert sha(base)=="9abe27170c78529d0b229fae85987b8b8cec8aae284b276847183220cbd9ac2d"
+assert sha(base)=="81bd1bcfc6e04316a9b34c90a97727f3598ec7ebf1951a0444043e17f3a5da8d"
+scenario=load_and_validate()
 original=Image.open(src).convert("RGB")
 background=Image.open(base).convert("RGBA")
 assert original.size==(1448,1086) and background.size==(320,240)
@@ -52,9 +54,13 @@ grid=Image.new("RGBA",(320,240))
 d=ImageDraw.Draw(grid)
 for x in xs:d.line((x,53,x,233),fill=(*CYAN,255),width=1)
 for y in ys:d.line((21,y,201,y),fill=(*CYAN,255),width=1)
+miss_marks,hit_marks=marks_layers(scenario)
 panel=Image.new("RGBA",(320,240))
 panel.paste(original.resize((320,240),Image.Resampling.LANCZOS).crop((218,44,319,209)),(218,44))
-merged=Image.alpha_composite(Image.alpha_composite(Image.alpha_composite(background,sea),grid),panel)
+merged=background
+for layer in (sea,miss_marks,hit_marks,grid,panel):
+    merged=Image.alpha_composite(merged,layer)
+verify_history_pixels(merged,scenario)
 assert merged.getextrema()[3]==(255,255)
 native=merged.convert("RGB")
 native.save(out,optimize=True)
@@ -79,6 +85,8 @@ st=SubElement(root,"stack")
 layers=[
     ("Panneau VOIR SA FLOTTE",panel,"data/layer3.png"),
     ("Lignes cyan grille 18x18",grid,"data/layer2.png"),
+    ("Impacts TOUCHÉ — cendres discrètes",hit_marks,"data/layer5.png"),
+    ("Impacts RATÉ — rides marines",miss_marks,"data/layer4.png"),
     ("Mer historique tirs sans navires",sea,"data/layer1.png"),
     ("Decor G07 reutilise sans coques",background,"data/layer0.png"),
 ]
@@ -95,10 +103,14 @@ doc={
     "status":"DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED, awaiting PO visual acceptance",
     "sources":[{"file":f.name,"sha256":sha(f),"size_bytes":f.stat().st_size} for f in (src,base)],
     "deliverables":[{"file":f.name,"sha256":sha(f),"size_bytes":f.stat().st_size} for f in (out,zoom,proof,proof4,ora)],
-    "editable":"ORA with 4 layers, ornaments and text within their layers remain rasterized",
+    "editable":"ORA with 6 layers (2 editable impact overlays); ornaments and text within their layers remain rasterized",
+    "scenario_file":"g07_r2_defaite_scenario.json",
+    "scenario_sha256":sha(D/"g07_r2_defaite_scenario.json"),
+    "history":{"turns":23,"attack_hit":5,"attack_miss":18,"defense_hit":17,"defense_miss":6,"last_simultaneous_pair":scenario["last_simultaneous_pair"]},
+    "history_pixels":"PASS: 12 native ripple marks and 5 subtle hit cores measured",
     "grid_x":xs,"grid_y":ys,"origin":[21,53],"end":[201,233],"cells":[10,10],"cell_px":[18,18],
     "pixel_measured_grid":"PASS","negative_shift_1px":"PASS","nearest_4x_exact":"PASS",
-    "remaining":"No firmware asset validation; no physical CYD/stylus test; last 2 simultaneous shots not proven by static raster"
+    "remaining":"No firmware asset validation; no physical CYD/stylus test; last two simultaneous shots documented in a legal scenario, animation not proven by static raster"
 }
 manifest.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print("PASS grid / 320x240 / x4-nearest: "+sha(out))
