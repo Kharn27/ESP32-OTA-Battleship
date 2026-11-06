@@ -1,0 +1,93 @@
+{
+  "mission": "G07-R2 MATCH NUL — correction Pilotage 06/11/2026",
+  "issue": 53,
+  "pr": 74,
+  "status": "DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED; PO artistic acceptance pending",
+  "geometry": {
+    "x_lines": [
+      21,
+      39,
+      57,
+      75,
+      93,
+      111,
+      129,
+      147,
+      165,
+      183,
+      201
+    ],
+    "y_lines": [
+      53,
+      71,
+      89,
+      107,
+      125,
+      143,
+      161,
+      179,
+      197,
+      215,
+      233
+    ],
+    "color": [
+      182,
+      227,
+      237
+    ],
+    "all_22_lines_full_1px": "PASS"
+  },
+  "attack_hit_count": 17,
+  "attack_miss_count": 9,
+  "human_defense_hit_count_documented": 17,
+  "last_round": {
+    "round": 26,
+    "attack": "J9 TOUCHÉ",
+    "defense": "H8 TOUCHÉ",
+    "result": "MATCH NUL"
+  },
+  "scenario_assertions": "PASS 5+4+3+3+2, 17 hits each side, no repeats/overlap, round 26 double hit",
+  "visual_marks_generated_from_source_svg": "17 editable hit groups and 9 editable miss groups",
+  "png_marker_centers_17_hits_9_misses": "PASS",
+  "zoom_4x_strict_nearest": "PASS",
+  "negative_grid_shift_1px": "PASS (rejected)",
+  "runtime_integration": "NOT_TESTED",
+  "TFT_stylus": "NOT_TESTED",
+  "firmware_asset": "NO",
+  "artwork_editability": "SVG with separately addressable verdict, touch markers, miss markers and raster reference background; additional ORA flattening is NOT per-object editable.",
+  "rights": "Original artwork provided by user / project; all overlay icon geometry authored for this correction; no stock imagery.",
+  "files": {
+    "g07_r2_match_nul_original_320x240.png": {
+      "bytes": 153060,
+      "sha256": "390b7f607e38daba870e31f378170ecdf61d9f6ebfc9888fff4b9886aa068853"
+    },
+    "g07_r2_match_nul_correctif_source.svg": {
+      "bytes": 220060,
+      "sha256": "18c842934796a75de0eec5dca91ff8b802f8403cd06bcd259c6e64220cb14dfe"
+    },
+    "g07_r2_match_nul_320x240.png": {
+      "bytes": 142687,
+      "sha256": "db0a9ed3950a6c5c1ef7eb02126693b27f1de61a47d4ef707f261dd93e726a90"
+    },
+    "g07_r2_match_nul_x4.png": {
+      "bytes": 225790,
+      "sha256": "030e9d9119f01bf45cd5ae7cc1f6faf76d5b627eccfbbaaef95577f66b22c57c"
+    },
+    "g07_r2_match_nul_geometry_proof_320x240.png": {
+      "bytes": 141860,
+      "sha256": "76f268db0eec6a4a37125dd75784ef0e81508528198c2ac7f2ec2e9d4d81a2ce"
+    },
+    "g07_r2_match_nul_geometry_proof_x4.png": {
+      "bytes": 223713,
+      "sha256": "0917969604908548ace5cfa7749dd77c19a51884e2f62178a6f0fefd2099a4a3"
+    },
+    "g07_r2_match_nul_source.ora": {
+      "bytes": 538394,
+      "sha256": "a3e2377674477540c61db1162f33ae343ecd6187a9bb340b758b2da47661a4c6"
+    },
+    "g07_r2_match_nul_scenario.json": {
+      "bytes": 7809,
+      "sha256": "b69e17ba789e986e08783925d2ef790bbd34f1ba61886ed23b66cdf8b6c9f69b"
+    }
+  }
+}

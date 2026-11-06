@@ -1,162 +1,91 @@
-> **ATTENTION — G07 R1 OBSOLÈTE / REFUSÉE ARTISTIQUEMENT PAR LE PO LE 03/11/2026.** Les images qui suivent sont conservées **temporairement pour la traçabilité fonctionnelle** de l'ancienne [PR #54 fusionnée historiquement](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/54). **NE PAS les réutiliser comme référence de style ni comme maquette graphique validée.** Nouvelle mission : [G07-R2 / Issue #53](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/53), après G04-R2 et G05-R2. Aucune nouvelle version artistique approuvée pour le moment. `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`.
+# G07-R2 — FIN DE PARTIE / DÉFAITE ET MATCH NUL (Issue #53)
 
-# G07 — FIN DE PARTIE VS Capitaine — Issue #53
+## Nouveau : DÉFAITE initiale — flotte ennemie masquée (G07, état A)
 
-## Aperçus historiques intégrés — G07 R1 REFUSÉE (NE PAS RÉUTILISER)
+![DÉFAITE initiale 320×240](g07_r2_defaite_masquee_320x240.png)
 
-| Verdict sur ATTAQUE — 320 × 240 | Planche des variantes — 320 × 240 |
-| :---: | :---: |
-| ![G07 — écran principal de verdict compact](g07_verdict_320x240.png) | ![G07 — planche des variantes de verdict](g07_variantes_320x240.png) |
+<details><summary>Zoom ×4 NEAREST strict — 1280×960</summary>
 
-<details>
-<summary>Voir les zooms ×4 (1280 × 960, NEAREST)</summary>
-
-**Verdict principal :**
-
-![G07 — verdict, zoom ×4](g07_verdict_x4.png)
-
-**Planche des variantes :**
-
-![G07 — variantes, zoom ×4](g07_variantes_x4.png)
+![DÉFAITE initiale ×4](g07_r2_defaite_masquee_x4.png)
 
 </details>
 
-Sources : [verdict SVG](g07_verdict_320x240.svg) · [variantes SVG](g07_variantes_320x240.svg) · [générateur](build_g07.py).
+- **État initial conforme métier** : aucune coque adverse visible, verdict DÉFAITE compact, historique des tirs, touche « VOIR SA FLOTTE » ; les commandes DÉFENSE, REJOUER et ACCUEIL restent présentes.
+- **Contrôle géométrique PC PASS** : 11 lignes X=21…201, 11 lignes Y=53…233, pas exact de 18 pixels, 100 cases carrées, zoom ×4 pixel-exact, translation +1 px rejetée.
+- **Correctif historique DÉFAITE à vérifier sur le nouveau HEAD** : [23 manches et flottes légales](g07_r2_defaite_scenario.json), **5 TOUCHÉ + 18 RATÉ sur ATTAQUE**, **17 TOUCHÉ + 6 RATÉ sur DÉFENSE**, paire finale **F6 / G5** synchrone. [Source de marks séparés](g07_r2_defaite_history.py) : 12 petites rides d'écume, touches conservées ; mêmes coordonnées sur état A secret et B/C révélé. [Détail, limites de lisibilité et harmonisation proposée](README_DEFAITE_MASQUEE.md).
+- **Repère d'identité proposé pour les trois verdicts** : petit emblème CYD WARSHIP en haut à gauche comme sur cette DÉFAITE, à confirmer par PO lors des corrections VICTOIRE et MATCH NUL ; l'unification des trois images n'est pas encore acquise.
+- [Source OpenRaster 4 calques](g07_r2_defaite_masquee_source.ora) · [script reproductible](build_g07_r2_defaite_masquee.py) · [original auteur HD](g07_r2_defaite_masquee_original_1448x1086.png) · [manifeste SHA](g07_r2_defaite_masquee_provenance.json) · [preuve 320×240](g07_r2_defaite_masquee_proof_320x240.png) · [preuve ×4](g07_r2_defaite_masquee_proof_x4.png).
+- [README et limites spécifiques](README_DEFAITE_MASQUEE.md).
 
+**Statut** : DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED ; GO PO non acquis, aucun test matériel ou contrat de format firmware. Les éléments artistiques complexes sont partiellement aplatis dans les calques ORA. Cet état rejoint la variante révélée G08 B/C présentée ci-dessous.
 
-**Graphiste / DA — DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
-**Acceptation artistique PO : RETIRÉE pour le rendu R1 (03/11/2026).** Cette livraison est une maquette PC,
-sans preuve matérielle ou contrat d'assets firmware.
+---
 
-## Fichiers livrés
+> **PR Draft, candidat graphique non validé PO ; DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
+> **Ce rendu correspond à DÉFAITE avec flotte adverse DÉJÀ révélée volontairement (suite G08 B/C), et NON à l'état initial secret G07.** La commande visible est « MASQUER SA FLOTTE ».
 
-- **build_g07.py** : source originale de dessin éditable, objets SVG
-  regroupés et nommés (ambiance, navire ami, 100 cases, impacts,
-  commandes, cartouches), génération et assertions reproductibles.
-- **g07_verdict_320x240.svg** : composition ATTAQUE post-verdict
-  compact en SVG natif **réellement éditable** (rectangles,
-  polygones, lignes et textes, sans PNG encapsulé).
-- **g07_verdict_320x240.png** / **g07_verdict_x4.png** :
-  export PC 320×240 et zoom 1280×960 strictement NEAREST.
-- **g07_variantes_320x240.svg** / **.png** /
-  **g07_variantes_x4.png** : planche de petites variantes annotées
-  (mise en avant initiale, trois inscriptions de résultat compacts, commande
-  disponible seulement en DÉFAITE).
+## PNG natif 320 × 240 (état révélé)
+![DÉFAITE — grille conforme](g07_r2_defaite_320x240.png)
 
-## Intention artistique
+<details><summary>Zoom ×4 — 1280 × 960 strict NEAREST</summary>
 
-**« La mer est le plateau »** : grande grille 10×10 intégrée dans
-une mer continue, reflets de coucher du soleil par fragments, houle
-texturée, coque d'escorte militaire **amie** en perspective à
-droite, canons / passerelle / fumée et sillage ancrés au niveau
-de l'eau. Cuivre patiné pour les commandes, sans faux insignes,
-barres arbitraires ni ornement purement technique.
+![Zoom sans interpolation](g07_r2_defaite_x4.png)
 
-**Exemple montré : victoire contre Capitaine.** La dernière
-manche est résolue et **les deux tirs déjà révélés ensemble**
-avant le verdict. La grille affiche **17 TOUCHÉ** répartis
-entre cinq groupes compatibles avec les longueurs
-5 / 4 / 3 / 3 / 2 (sans tracer de coque, épave ou
-appartenance des cases), et **27 RATÉ**. Dernier coup
-offensif de l'exemple : **I7** ; dernière riposte Capitaine :
-**RATÉ**. Ni silhouette ni plan de flotte adverse secret
-ne sont affichés. Aucune cible en attente et **aucun FEU actif**.
+</details>
 
-## Contrat des états : DÉCIDÉ PO vs PROPOSÉ DA
+<details><summary>Preuve de géométrie — repères superposés, non destinée à l'interface</summary>
 
-| État ou action | DÉCIDÉ par la Bible v0.17 | PROPOSÉ par la DA pour maquette PC |
-| --- | --- | --- |
-| Dernière manche | Révélation des **deux tirs simultanée** puis évaluation du verdict | Historique immobile, pas d'animation de FEU dessinée |
-| Verdict initial | VICTOIRE, DÉFAITE ou MATCH NUL mis en avant **sur le champ de bataille** | Cartouche cuivré semi-opaque au-dessus de la grille, vignette seule |
-| Verdict persistant | Réduit ensuite, sans confirmation, timer ni écran intermédiaire imposés | **Inscription à plat** en haut à droite (RÉSULTAT / VICTOIRE, DÉFAITE ou MATCH NUL / VS CAPITAINE), sans cadre, fond surélevé, bordure ni volume ; zone x208..316, y3..38 |
-| Inspection | Consultation volontaire ATTAQUE ↔ DÉFENSE ; plus aucun tir, impacts conservés | Zone DÉFENSE dans le bandeau haut ; suppression visuelle de FEU et de toute sélection |
-| REJOUER | Retour au déploiement VS Capitaine, formation précédente du joueur par défaut, AUTO / PRÊT, nouvelle flotte adverse aléatoire secrète | Plaque cuivrée x212..316, y146..174 |
-| ACCUEIL | Sortie après résultat **sans forfait** | Plaque marine cuivrée x212..316, y180..207 |
-| VOIR SA FLOTTE | **Seulement en défaite** contre Capitaine, sur ATTAQUE, après verdict compact, volontaire | Plaque discrète x212..316, y212..236. **Réservation UX**, aucune révélation effectuée |
+![Repères grille x4](g07_r2_geometry_proof_x4.png)
 
-Le bouton **DÉFENSE** affiche dans l'exemple
-« RIPOSTE : RATÉ » comme dernière riposte ; les
-règles distinctes de résumé/alerte maximale non consultée
-restent celles du §14.10.2. Une ouverture volontaire de DÉFENSE
-acquitte l'alerte et le résumé, mais **jamais les marques**
-sur la grille. G07 ne redessine pas G05 : sur DÉFENSE après
-résultat, la grille humaine est consultable, retour ATTAQUE,
-REJOUER/ACCUEIL accessibles, et le verdict demeure connu.
+</details>
 
-Les trois résultats se déclinent dans **la même composition** ;
-la planche montre leurs **inscriptions typographiques non interactives**,
-avec la même grammaire graphique que la maquette principale. Pas de commande
-MONTRER MA FLOTTE pour VICTOIRE, pas de commande de révélation
-pour MATCH NUL. La création de l'état de révélation effective,
-son basculement AFFICHER/MASQUER, ses navires et ses assets sont
-**hors G07 (mission candidate G08)**.
+[Source native aplatie](g07_r2_source_320x240.png) · [Générateur PC](build_g07_r2.py) · [SHA-256 et tests](g07_r2_provenance.json).
 
-## Reprise ciblée après revue PO / Pilotage du 02/11/2026
+## Image 2/7 — MATCH NUL, verdict compact (géométrie CONFORME)
 
-**Motif de correction :** dans la première livraison, VICTOIRE partageait
-avec DÉFENSE un cartouche rectangulaire surélevé à liserés cuivrés.
-Ce langage commun confondait **information** et **action tactile**.
+![MATCH NUL — natif 320×240](g07_r2_match_nul_320x240.png)
 
-**Solution graphique proposée : une inscription dans le bandeau marin.**
-Le verdict est maintenant rendu directement par la typographie
-**RÉSULTAT / VICTOIRE / VS CAPITAINE**, sans contour, sans plaque,
-sans fond d'appui ni relief ; les trois issues partagent **strictement
-la même grammaire**, seules la couleur et les lettres changent.
-La planche des états reprend le même traitement, à l'échelle réduite.
-À l'inverse **DÉFENSE**, **REJOUER** et **ACCUEIL** conservent leur vraie
-plaque à bordure cuivrée, dessus éclairé et dessous ombré :
-le relief matérialise volontairement une zone d'action.
+<details><summary>Zoom ×4 pixel-exact (1280×960)</summary>
 
-**Préservé sans refonte :** mer continue, navire militaire,
-lumière, échelle et position des 100 cases, 17 touches, 27 ratés,
-FEU absent, navigation / reprise / accueil, révélation après défaite
-facultative (G08 hors mission). Aucun comportement ni règle modifiés.
-Cette distinction est testée structurellement dans le SVG, mais
-reste à **faire juger visuellement par le PO sur PNG natif 320×240**.
+![MATCH NUL — ×4 NEAREST](g07_r2_match_nul_x4.png)
 
-## Mesures, risques et provenance
+</details>
 
-- Grille x21..201, y53..233 : **100 cases de 18×18 px**.
-  Colonne A–J, lignes 1–10. Aucune seconde grille visible.
-- Tailles de texte proposées : ATTAQUE 12 px, DÉFENSE
-  10,5 px, verdict 11,7 px, libellés commandes 11–12 px,
-  sous-libellé 7,1 px, VOIR SA FLOTTE 9,1 px.
-- Dimensions **visuelles**, non des hitboxes homologuées :
-  DÉFENSE 103×34 px, REJOUER 104×28 px, ACCUEIL
-  104×27 px, VOIR SA FLOTTE 104×24 px, cases 18×18 px.
-  Les plus petits textes et zones exigent une **revue sur
-  vraie CYD/stylet** ; non évalués matériellement.
-- Rendu PC original à base de formes vectorielles créées
-  pour cette Issue ; **aucune image tierce importée**.
-  Polices hôtes DejaVu Sans si disponibles, **non distribuées**.
-  PNGs produits sous Python 3 avec CairoSVG 2.7.1 et
-  Pillow 11.3.0. Aucune contrainte RGB565, PSRAM,
-  compression, taille Flash/RAM ni latence imposée.
-- G01 = direction artistique ; G04/G05 = comportements
-  provisoires, **pas modèles de pixels**. Rien n'est
-  modifié en G01–G06, Bible ni firmware.
+[Preuve 320×240](g07_r2_match_nul_geometry_proof_320x240.png) · [Preuve ×4](g07_r2_match_nul_geometry_proof_x4.png) · [Source ORA](g07_r2_match_nul_source.ora) · [Manifest SHA/mesures](g07_r2_match_nul_provenance.json) · [Script de contrôle](build_g07_r2_match_nul.py) · [README dédié et réserves](README_MATCH_NUL.md).
 
-## Preuve reproductible PC
+**Contrôle PC PASS :** 11 lignes X=21…201 et Y=53…233 (pas exact de 18), 100 cases 18×18, zoom ×4 strict NEAREST, deux fichiers d'origine vérifiés SHA-256 lors de l'import [Actions #42062625539](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/42062625539) : **SUCCESS**. Source d'auteur encore partiellement aplatie : seul le calque de repères est isolé. La conformité géométrique ne préjuge ni du GO PO ni des tests TFT/stylet.
 
-Depuis la racine du dépôt, avec Python / CairoSVG / Pillow :
+## Image 1/7 — VICTOIRE, verdict compact (géométrie PC CONFORME)
 
-    python design/ecrans/fin-partie/build_g07.py
+![VICTOIRE corrigée native](g07_r2_victoire_320x240.png)
 
-Le script exporte les deux SVG éditables, deux PNG 320×240,
-deux PNG 1280×960 ; vérifie dimensions, zoom x4
-nearest-neighbor **pixel pour pixel** dans les deux sens,
-100 cellules uniques, 17 touches / 27 ratés disjoints,
-absence de flotte adverse dévoilée, absence de FEU après
-verdict, REJOUER / ACCUEIL / DÉFENSE, trois libellés de
-verdict et commande de défaite uniquement. Les assertions
-contrôlent désormais explicitement **1 verdict informatif
-sans rectangle ni data-action** dans la scène, **3 variantes
-informatives sans relief** et **3 commandes réelles avec
-plaques de volume et data-action**.
+<details><summary>Zoom ×4 strict NEAREST</summary>
 
-**Preuves non acquises :** affichage physique TFT 320×240,
-stylet, qualité des tailles de polices sur dalle, temps de
-rendu, mémoire et intégration firmware. Statut strict
-**DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED**.
+![VICTOIRE ×4](g07_r2_victoire_x4.png)
 
-**Statut historique :** la PR #54 a été fusionnée après une acceptation PO passée, **mais son apparence R1 a ensuite été explicitement refusée par le PO le 03/11/2026** ; la nouvelle réception esthétique concerne uniquement **G07-R2** (Issue #53). Le présent dossier est une trace fonctionnelle, non une direction artistique en vigueur.
+</details>
+
+[Source OpenRaster partiellement éditable](g07_r2_victoire_source.ora) · [Script déterministe](build_g07_r2_victoire.py) · [Provenance et contrôle](g07_r2_victoire_provenance.json) · [README VICTOIRE et réserves](README_VICTOIRE.md).
+
+**Reconstruction réelle de la grille 10×10 à (21,53)→(201,233), 18×18 ; 22 traits mesurés, négatif de +1 px rejeté, panneau droit x ≥ 202 strictement inchangé.** Le master initial 1448×1086 reste conservé pour la reproductibilité. Source composite partiellement calquée, impacts et commandes droite encore aplatis. Pas de GO PO ni de TFT.
+
+## Contrôles reproductibles
+
+Exécuter `python3 -m pip install Pillow numpy` puis `python3 design/ecrans/fin-partie/build_g07_r2.py`.
+
+Le script **mesure dans les pixels** les traits cyan RGB (156,214,220) au lieu de déclarer a priori leur présence. Il exige :
+- 11 lignes verticales à X = **21, 39, 57, 75, 93, 111, 129, 147, 165, 183, 201**.
+- 11 lignes horizontales à Y = **53, 71, 89, 107, 125, 143, 161, 179, 197, 215, 233**.
+- Plateau **180 × 180** ; **100** cases de **18 × 18**. Les deux dernières limites sont incluses comme traits de bord.
+- Test négatif : translation horizontale de 1 pixel **rejetée**.
+- Reconstitution de l'agrandissement ×4 pixel pour pixel **NEAREST**.
+
+Ces assertions prouvent la géométrie du *PNG précis*, et non sa conformité métier exhaustive ni son rendu physique.
+
+## État présenté et points encore ouverts
+
+Le navire porte-avions, le sous-marin, le croiseur long, le navire incendié central et le navire en feu bas sont des éléments visibles de la **flotte révélée volontairement**. Leur présence n'est **pas autorisée avant choix**. L'état initial G07 avec flotte cachée et bouton `VOIR SA FLOTTE` est désormais livré en tête de page ; le parcours G08 peut ensuite conduire à cette vue révélée, puis au masquage.
+
+**G07-R2 n'est pas terminée :** annonce initiale, synchronisation vérifiable des deux tirs, raccord A/B/C G08, surcouches éditables plateau/impacts/verdicts/commandes. La DÉFAITE **initiale masquée** possède désormais une ORA à 6 calques dont deux surcouches de repères d'impacts ; l'état **révélé** conserve un décor/coques d'auteur aplati, mais partage le même historique via les scripts Python. Pour MATCH NUL, les couches sont suivies dans son README spécifique. Les éléments décoratifs, textes et boutons ne sont pas entièrement isolés. Aucun export firmware, aucune vérification CYD/stylet/Flash/RAM ; pas de GO artistique du PO. Conserver la PR #74 en Draft et réserver sa fusion au Pilotage.
+
+Les anciens `g07_verdict_*`, `g07_variantes_*` et `build_g07.py` (G07-R1) restent **rejetés artistiquement** et ne doivent pas servir de référence. Ils seront retirés du canon actif à la réception complète de R2, conformément à l'Issue.

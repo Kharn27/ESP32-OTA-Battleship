@@ -1,0 +1,108 @@
+{
+  "issue": 53,
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "state": "DEFAITE; ATTAQUE; flotte ennemie volontairement revelee (G08 B/C)",
+  "scenario_file": "g07_r2_defaite_scenario.json",
+  "illustrative_attack_history": {
+    "turns": 23,
+    "hit": 5,
+    "miss": 18,
+    "last_attack": "F6",
+    "last_defense": "G5"
+  },
+  "source": {
+    "file": "g07_r2_source_320x240.png",
+    "dimensions": [
+      320,
+      240
+    ],
+    "kind": "user supplied flattened PNG; not layer editable",
+    "provenance": "ChatGPT uploaded raster 2026-11-05",
+    "sha256": "81bd1bcfc6e04316a9b34c90a97727f3598ec7ebf1951a0444043e17f3a5da8d"
+  },
+  "exports": [
+    {
+      "file": "g07_r2_defaite_320x240.png",
+      "dimensions": [
+        320,
+        240
+      ],
+      "method": "native copy; no resampling",
+      "sha256": "2d3f4f45098de91d15eb5dada9a559034778b61494adff26464547c08049d831"
+    },
+    {
+      "file": "g07_r2_defaite_x4.png",
+      "dimensions": [
+        1280,
+        960
+      ],
+      "method": "x4 strict NEAREST",
+      "sha256": "e708120aa28d67b11fa8cf1781fc92147a28d4fee5c385ebe3799ad1fb7816f8"
+    },
+    {
+      "file": "g07_r2_geometry_proof_x4.png",
+      "dimensions": [
+        1280,
+        960
+      ],
+      "method": "diagnostic only",
+      "sha256": "c40cded8165a5bd9f3685b06c51eaba03b2bfe3256b7b8c4ed6e0f2663953a65"
+    }
+  ],
+  "checks_pc": {
+    "grid_geometry": "PASS; independent cyan pixel scan",
+    "x_lines": [
+      21,
+      39,
+      57,
+      75,
+      93,
+      111,
+      129,
+      147,
+      165,
+      183,
+      201
+    ],
+    "y_lines": [
+      53,
+      71,
+      89,
+      107,
+      125,
+      143,
+      161,
+      179,
+      197,
+      215,
+      233
+    ],
+    "origin": [
+      21,
+      53
+    ],
+    "bottom_right": [
+      201,
+      233
+    ],
+    "cells": [
+      10,
+      10
+    ],
+    "step": [
+      18,
+      18
+    ],
+    "negative_shift_x1": "PASS: translated grid rejected",
+    "nearest_exact": "PASS",
+    "five_ships": "VISUAL_ONLY",
+    "initial_defeat_secret_fleet": "DELIVERED_SEPARATELY",
+    "history_pixels": "PASS: 12 supplemental misses and 5 subtle hit cores",
+    "legal_scenario": "PASS: 5+4+3+3+2, no repeated attacks, 17 human hits",
+    "victory_draw_and_announcement": "NOT_DELIVERED",
+    "last_two_shots_simultaneity": "TEST_SCENARIO_ONLY; static image cannot prove animation",
+    "editable_scene_layers": "NEW HISTORY OVERLAYS IN PYTHON; source raster remains flattened",
+    "tft_touch_flash_memory": "NOT_TESTED",
+    "on_device": "UNVERIFIED"
+  }
+}

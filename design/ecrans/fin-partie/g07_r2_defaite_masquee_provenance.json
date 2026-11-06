@@ -1,0 +1,106 @@
+{
+  "issue": 53,
+  "pr": 74,
+  "state": "DEFAITE initiale / ATTAQUE / Capitaine MASQUE",
+  "status": "DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED, awaiting PO visual acceptance",
+  "sources": [
+    {
+      "file": "g07_r2_defaite_masquee_original_1448x1086.png",
+      "sha256": "bc8b51d0b9e579f305f4e8fabda834c3c4e19474685e2b907b7db98eedf317f0",
+      "size_bytes": 3641910
+    },
+    {
+      "file": "g07_r2_source_320x240.png",
+      "sha256": "81bd1bcfc6e04316a9b34c90a97727f3598ec7ebf1951a0444043e17f3a5da8d",
+      "size_bytes": 193457
+    }
+  ],
+  "deliverables": [
+    {
+      "file": "g07_r2_defaite_masquee_320x240.png",
+      "sha256": "44df68a554e43cb6b81367986b892d7cc9c5ce70b9a24f826c32e312350ea085",
+      "size_bytes": 158403
+    },
+    {
+      "file": "g07_r2_defaite_masquee_x4.png",
+      "sha256": "e2de48e96b0f5b1e4ee2b234a67bfcd821f5aab4e7d202777fb365b0f6b33a2f",
+      "size_bytes": 236993
+    },
+    {
+      "file": "g07_r2_defaite_masquee_proof_320x240.png",
+      "sha256": "3efd266b6ed945cb6b95b9e24fd4707fe642c0c442f526ea56cd78e65a993fc4",
+      "size_bytes": 158821
+    },
+    {
+      "file": "g07_r2_defaite_masquee_proof_x4.png",
+      "sha256": "05713d6cfae2d83673a91fd708e3c6130a3d3d86970be7a46e87686fe8b9cc70",
+      "size_bytes": 237639
+    },
+    {
+      "file": "g07_r2_defaite_masquee_source.ora",
+      "sha256": "7360c086ef279ee6049f47e2471514185cba63a2bd454cca1d00648f87c5e542",
+      "size_bytes": 579620
+    }
+  ],
+  "editable": "ORA with 6 layers (2 editable impact overlays); ornaments and text within their layers remain rasterized",
+  "scenario_file": "g07_r2_defaite_scenario.json",
+  "scenario_sha256": "b232fd7ebfa02a396dc9dcaf28396a43d986f8b28cbe95f975ae85b870c40d3a",
+  "history": {
+    "turns": 23,
+    "attack_hit": 5,
+    "attack_miss": 18,
+    "defense_hit": 17,
+    "defense_miss": 6,
+    "last_simultaneous_pair": {
+      "attack": "F6",
+      "defense": "G5"
+    }
+  },
+  "history_pixels": "PASS: 12 native ripple marks and 5 subtle hit cores measured",
+  "grid_x": [
+    21,
+    39,
+    57,
+    75,
+    93,
+    111,
+    129,
+    147,
+    165,
+    183,
+    201
+  ],
+  "grid_y": [
+    53,
+    71,
+    89,
+    107,
+    125,
+    143,
+    161,
+    179,
+    197,
+    215,
+    233
+  ],
+  "origin": [
+    21,
+    53
+  ],
+  "end": [
+    201,
+    233
+  ],
+  "cells": [
+    10,
+    10
+  ],
+  "cell_px": [
+    18,
+    18
+  ],
+  "pixel_measured_grid": "PASS",
+  "negative_shift_1px": "PASS",
+  "nearest_4x_exact": "PASS",
+  "remaining": "No firmware asset validation; no physical CYD/stylus test; last two simultaneous shots documented in a legal scenario, animation not proven by static raster"
+}
