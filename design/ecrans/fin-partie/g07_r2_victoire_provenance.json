@@ -1,123 +1,160 @@
 {
-  "issue": 53,
-  "pr": 74,
-  "screen": "G07-R2 — IMAGE 1/7, VICTOIRE compact VS Capitaine",
-  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED ; PO/Pilotage pending ; PR Draft",
-  "origin": {
-    "type": "PNG fourni par le PO le 2026-11-06",
-    "file": "g07_r2_victoire_source_hd.png",
-    "size": [
-      1448,
-      1086
-    ],
-    "sha256": "61eb4fad8bd08cee7478a2233db89796f9f9c57ff34ae27783f477bf7594f81c",
-    "rights": "Fichier fourni dans la conversation, droits de re-utilisation de source non expertises"
-  },
-  "geometry": {
-    "origin": [
-      21,
-      53
-    ],
-    "end": [
-      201,
-      233
-    ],
-    "size": [
-      180,
-      180
-    ],
-    "cells": [
-      10,
-      10
-    ],
-    "cell_size": [
-      18,
-      18
-    ],
-    "line_rgb": [
-      182,
-      227,
-      237
-    ],
-    "x_lines": [
-      21,
-      39,
-      57,
-      75,
-      93,
-      111,
-      129,
-      147,
-      165,
-      183,
-      201
-    ],
-    "y_lines": [
-      53,
-      71,
-      89,
-      107,
-      125,
-      143,
-      161,
-      179,
-      197,
-      215,
-      233
-    ]
-  },
-  "assertions_PC": {
-    "native_320x240": "PASS",
-    "all_22_line_segments_exact_rgb": "PASS",
-    "one_pixel_right_shift_negative": "REJECTED_AS_EXPECTED",
-    "nearest_x4_no_interpolation": "PASS",
-    "unchanged_panel_x_ge_202": "PASS",
-    "pixel_changes_in_right_panel": 0,
-    "screen_legibility": "VISUAL_REVIEW_PC_ONLY",
-    "on_device": "NOT_TESTED",
-    "firmware_sprites": "NOT_PREPARED"
-  },
-  "layers": [
-    "Fond original — ciel, phare, commandes à droite (raster aplati)",
-    "Bandeau A–J — boiseries du visuel source",
-    "Réglette 1–10 — boiseries du visuel source",
-    "Mer et impacts — source recomposee et raccordee (raster)",
-    "Quadrillage deterministe 18px — RVB 182,227,237",
-    "Traverse basse — laiton et bois",
-    "DIAGNOSTIC — repères uniquement (MASQUÉ)"
-  ],
   "limitations": [
-    "Maritime scene comes from one flattened user PNG",
-    "Fire/splashes/sea remain a single raster layer",
-    "Button/icons/text on right panel remain flattened",
-    "No proof of two-last-shot synchronized reveal",
-    "No physical touch/render checks"
+    "Five existing painted hits remain merged with the water; twelve additional fire marks are independent editable ORA layers. No firmware sprite delivery.",
+    "Five existing painted hits remain merged with the water; twelve additional fire marks are independent editable ORA layers. No firmware sprite delivery.",
+    "Five existing painted hits remain merged with the water; twelve additional fire marks are independent editable ORA layers. No firmware sprite delivery."
   ],
+  "scenario": {
+    "scenario_id": "G07R2-VICTOIRE-17",
+    "purpose": "Design-only test data for VICTOIRE compact; ship ownership is never painted in the PNG.",
+    "enemy_fleet_for_test_only": {
+      "Porte-avions": [
+        "B1",
+        "C1",
+        "D1",
+        "E1",
+        "F1"
+      ],
+      "Croiseur": [
+        "E4",
+        "F4",
+        "G4",
+        "H4"
+      ],
+      "Contre-torpilleur": [
+        "J4",
+        "J5",
+        "J6"
+      ],
+      "Sous-marin": [
+        "B7",
+        "C7",
+        "D7"
+      ],
+      "Patrouilleur": [
+        "G9",
+        "H9"
+      ]
+    },
+    "attack_hits": [
+      "B1",
+      "C1",
+      "D1",
+      "E1",
+      "F1",
+      "E4",
+      "F4",
+      "G4",
+      "H4",
+      "J4",
+      "J5",
+      "J6",
+      "B7",
+      "C7",
+      "D7",
+      "G9",
+      "H9"
+    ],
+    "attack_misses": [
+      "C2",
+      "H3",
+      "B5",
+      "G7",
+      "J8"
+    ],
+    "original_hit_cells_unchanged": [
+      "F1",
+      "E4",
+      "J5",
+      "D7",
+      "G9"
+    ],
+    "new_hit_cells": [
+      "B1",
+      "C1",
+      "D1",
+      "E1",
+      "F4",
+      "G4",
+      "H4",
+      "J4",
+      "J6",
+      "B7",
+      "C7",
+      "H9"
+    ],
+    "last_simultaneous_turn_example": {
+      "human_attack": {
+        "coord": "H9",
+        "outcome": "TOUCHÉ",
+        "enemy_remaining_ship_cells_after": 0
+      },
+      "captain_attack": {
+        "coord": "A10",
+        "outcome": "RATÉ"
+      },
+      "result": "VICTOIRE",
+      "scope_note": "Example historical scenario only; DEFENSE state is not depicted in this single image."
+    },
+    "image_reveals_enemy_hulls": false,
+    "status": "DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED"
+  },
+  "assertions_history_PC": {
+    "grid_lines": "PASS 22 full-length 1px RGB lines",
+    "hits_17_distinct": "PASS",
+    "misses_5_unchanged": "PASS",
+    "original_hits_5_unchanged": "PASS",
+    "overlays_12_individual": "PASS",
+    "no_other_tiles_changed": "PASS",
+    "right_panel_x_ge_202_unchanged": "PASS",
+    "negative_tests": "PASS",
+    "nearest_x4_pixel_exact": "PASS"
+  },
+  "layers_history_added": [
+    "TOUCHÉ B1",
+    "TOUCHÉ C1",
+    "TOUCHÉ D1",
+    "TOUCHÉ E1",
+    "TOUCHÉ F4",
+    "TOUCHÉ G4",
+    "TOUCHÉ H4",
+    "TOUCHÉ J4",
+    "TOUCHÉ J6",
+    "TOUCHÉ B7",
+    "TOUCHÉ C7",
+    "TOUCHÉ H9"
+  ],
+  "geometry_proof_note": "Yellow squares=TOUCHÉ; cyan squares=RATÉ. Diagnostic only, not product art.",
   "exports": [
     {
       "file": "g07_r2_victoire_320x240.png",
-      "bytes": 149456,
-      "sha256": "ecfc64970276d6bbab73610466ea53db1e725a995bc6d996e83eab82f302670d"
+      "bytes": 151634,
+      "sha256": "64bd91c80184a11ec2bb261d2304af63071b21184a547257856208a7f3644b43"
     },
     {
       "file": "g07_r2_victoire_x4.png",
-      "bytes": 227610,
-      "sha256": "ef01a4aff98b5bde872b7c47928b309c2e161a87b3cbdfffa869477a033fbe50"
+      "bytes": 230364,
+      "sha256": "65d7e46b97d933ef7ff45e705bb5a893e16a725e22b70ec9dc496cd507db94c7"
     },
     {
       "file": "g07_r2_victoire_geometry_proof_320x240.png",
-      "bytes": 149400,
-      "sha256": "aa6d307b5922b0bbfe44e79a219de58e6a03342ea6907488f508398a1355934d"
+      "bytes": 150636,
+      "sha256": "f6849ca56dd1e737543e458a43d6afe9a4aa6cc7b62dfbd185a8fccfecb85222"
     },
     {
       "file": "g07_r2_victoire_geometry_proof_x4.png",
-      "bytes": 227408,
-      "sha256": "775b799c9f06be23032d5d9553072d5ac3325720c2443d85142657a5242350c9"
+      "bytes": 228845,
+      "sha256": "f987a72d91e52d89a8e10d751af4e70d156282a45cf703f6d2d5a0320a3256a3"
     },
     {
       "file": "g07_r2_victoire_source.ora",
-      "bytes": 392246,
-      "sha256": "beac62f0abb412678bb62b3c059e6842dd619cdea1cdd04aa1441d625615ac75"
+      "bytes": 393383,
+      "sha256": "0ac2573bc32331c94c9a9ddca76d145602ce4737980b72bf234398f407a0ff4c"
+    },
+    {
+      "file": "g07_r2_victoire_history.json",
+      "bytes": 1148,
+      "sha256": "05bf9c8d9a1fa954a40600afd8126b823a20d315ab748901decc47dee6b9959b"
     }
   ]
 }

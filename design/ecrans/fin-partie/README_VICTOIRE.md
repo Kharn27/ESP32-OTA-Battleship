@@ -1,56 +1,57 @@
-# G07-R2 — IMAGE 1/7 VICTOIRE compact (Issue #53 / PR #74)
+# G07-R2 — VICTOIRE compact, correction de l'historique (Issue #53 / PR #74)
 
-> **DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED**. Correction graphique ciblée reçue le 06/11/2026 ; validation artistique PO / contre-revue Pilotage en attente. L'Issue G07-R2 et la PR Draft ne sont pas achevées.
+> **CANDIDAT POUR CONTRE-REVUE PILOTAGE — `DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED`.** Image 1/7 uniquement ; pas de GO PO global ni de fusion. La composition maritime et le verdict doré sont préservés ; correction **limitée aux TOUCHÉ de la grille**.
 
-## Aperçu natif 320 × 240
+## Vue 320 × 240 (image de jeu, sans annotation)
 
-![VICTOIRE corrigée](g07_r2_victoire_320x240.png)
+![G07-R2 — VICTOIRE, 17 TOUCHÉ](g07_r2_victoire_320x240.png)
 
-<details><summary>Agrandissement ×4 strict NEAREST (1280 × 960)</summary>
+<details><summary>Zoom ×4 NEAREST — 1280 × 960</summary>
 
-![VICTOIRE zoom ×4](g07_r2_victoire_x4.png)
-
-</details>
-
-<details><summary>Diagnostic géométrique uniquement — non destiné au jeu</summary>
-
-![Géométrie annotée](g07_r2_victoire_geometry_proof_320x240.png)
-
-![Géométrie annotée ×4](g07_r2_victoire_geometry_proof_x4.png)
+![VICTOIRE ×4](g07_r2_victoire_x4.png)
 
 </details>
 
-## Géométrie démontrée sur le PNG
+<details><summary>Diagnostic séparé : touches cerclées de jaune, ratés cyan — NON destiné au jeu</summary>
 
-- Grille **10 × 10** de **18 × 18 px**, début **(21, 53)**, fin **(201, 233)**, emprise **180 × 180**.
-- Verticales : **21,39,57,75,93,111,129,147,165,183,201**.
-- Horizontales : **53,71,89,107,125,143,161,179,197,215,233**.
-- Les 22 lignes sont effectivement vérifiées **sur les 181 pixels de leur longueur** (couleur RVB **182,227,237**), sans se contenter de prédire leurs coordonnées.
-- Un déplacement artificiel de 1 px est **rejeté** ; PNG ×4 intégralement conforme à une duplication NEAREST de chaque pixel natif.
-- **Panneau droit x ≥ 202 : zéro pixel modifié** par rapport à l'image d'origine une fois réduite au format natif.
+![Preuve native](g07_r2_victoire_geometry_proof_320x240.png)
 
-La grille initiale, d'origine mal cadrée, a été retirée de la région maritime ; la mer a été recomposée avec suppression des anciens traits par *inpainting* déterministe, puis la géométrie 18 px a été tracée nativement. Le bas du plateau a été raccourci en boiserie pour permettre la 10e ligne à Y=233 ; les inscriptions A–J et 1–10 ont été repositionnées en restant dans l'identité graphique de l'image fournie.
+![Preuve ×4 NEAREST](g07_r2_victoire_geometry_proof_x4.png)
 
-## État et limites
+</details>
 
-État **FIN DE PARTIE — VS Capitaine — VICTOIRE** en verdict compact, avec boutons **DÉFENSE**, **REJOUER**, **ACCUEIL**. Une seule grille d'attaque, dix marqueurs d'historique de tir. Pas de FEU, pas de révélation spontanée de la flotte ennemie, pas de commande « VOIR SA FLOTTE » sur VICTOIRE.
+## Scénario de démonstration contrôlable
 
-**Ne prouve pas** : synchronisation des deux derniers tirs, animation initiale puis verdict compact, cohérence des placements avec un état runtime réel, hitboxes tactiles ou test TFT physique. Les autres images/états requis par l'Issue restent sous leur propre réserve.
+Les **17 TOUCHÉ distincts** correspondent aux 17 cases d'une flotte classique de test : porte-avions 5, croiseur 4, contre-torpilleur 3, sous-marin 3 et patrouilleur 2. Ces positions sont une **donnée de test** dans [`g07_r2_victoire_history.json`](g07_r2_victoire_history.json), et **pas** des coques, silhouettes ou groupes identifiés dans le PNG. Les navires adjacents sont autorisés par la Bible ; aucun des cinq naufrages n'est matérialisé par une épave dessinée.
 
-## Sources et provenance
+**TOUCHÉ visibles :** `B1 C1 D1 E1 F1 / E4 F4 G4 H4 / J4 J5 J6 / B7 C7 D7 / G9 H9` = 17 cellules uniques. Les cinq TOUCHÉ déjà peints `F1 E4 J5 D7 G9` sont conservés sur leurs pixels d'origine ; **12 nouvelles marques** sont construites sur des calques distincts. **RATÉ conservés à l'identique :** `C2 H3 B5 G7 J8`. Le scénario final place le dernier tir humain sur `H9` (TOUCHÉ terminal), la riposte de Capitaine étant RATÉ : la révélation simultanée n'est pas illustrée par ce seul état compact.
 
-- `g07_r2_victoire_source_hd.png` : original **1448 × 1086**, fourni par le PO le 06/11/2026.
-- `build_g07_r2_victoire.py` : source reproductible sous **Python 3**, **Pillow**, **NumPy**, **OpenCV** ; une invocation reconstruit les exports, la source ORA et le manifeste d'intégrité.
-- `g07_r2_victoire_source.ora` : **source éditable partielle**, avec calques raster séparés pour le bandeau A–J, la réglette 1–10, la mer/impacts, les traits de grille natifs et la traverse basse, plus fond/panneau droit. Les commandes/typos à droite, la mer et ses impacts **ne sont pas décomposés en sprites indépendants**. L'illustration de départ était aplatie.
-- `g07_r2_victoire_provenance.json` : sommes SHA-256 du master et des sorties, dimensions, contrôles PASS/NOT_TESTED, limitations.
+**Aucune révélation de flotte adverse** sur VICTOIRE ; verdict « VICTOIRE » informatif, commandes tactiles DÉFENSE / REJOUER / ACCUEIL inchangées ; aucun FEU.
 
-Légitimité de source : PNG fourni par le PO dans la conversation. Pas de recherche Stock externe. Droits d'auteur sur éléments éventuels dans l'image d'origine non audités. Aucun format de firmware imposé, aucune mesure Flash/RAM, ni présomption d'usage de microSD ou de PSRAM.
+## Contrôles PC et comparaison
 
-### Reproduire
+- Grille réellement mesurée : **11 verticales** `X=21,39,…,201` et **11 horizontales** `Y=53,71,…,233`, tous les 18 px ; **10 × 10**, cellules 18 × 18, emprise 180 × 180. Teinte des lignes d'origine `(182,227,237)` conservée.
+- Exports natifs **320 × 240** et zoom **1280 × 960** par **NEAREST exact pixel pour pixel**.
+- Les cinq cases RATÉ et les cinq cases TOUCHÉ préexistantes sont **identiques pixel pour pixel** entre la base et la correction. Aucune nouvelle modification hors des **12 cellules ajoutées** ; panneau décoratif et doré de droite **x ≥ 202 = zéro pixel modifié**.
+- Chaque ajout se trouve dans sa cellule propre, sans effacer de trait de grille. Contrôles négatifs sur doublon de tir, raté confondu avec touche et translation d'1 px. Contrôle de reconstruction OpenRaster (calques composés = PNG final) exécuté sur PC.
+- Surfaces extérieures (ciel, phare, lanternes, mer hors impacts, panneaux, boutons) strictement préservées. **Inspection visuelle 320×240 et ×4 réalisée sur PC** ; lisibilité TFT/stylet non prouvée.
+
+### Source et reproduction
+
+La source originale `g07_r2_victoire_source_hd.png` (1448 × 1086) reste celle déjà versionnée. La génération demande l'exécution **dans cet ordre** :
 
 ```bash
 python3 -m pip install pillow numpy opencv-python-headless
 python3 design/ecrans/fin-partie/build_g07_r2_victoire.py
+python3 design/ecrans/fin-partie/build_g07_r2_victoire_history.py
 ```
 
-**Réception :** `DESIGN_PREVIEW`, vérification PC du format/géométrie PASS, revue artistique PO **EN ATTENTE**, essai physique CYD **NON TESTÉ**. PR #74 toujours Draft, fusion exclusivement Pilotage.
+Le premier script restaure la composition originale et les contrôles de géométrie ; le second (piloté par `g07_r2_victoire_history.json`) ajoute les douze marques, reconstruit `g07_r2_victoire_source.ora`, actualise les deux preuves/zooms et `g07_r2_victoire_provenance.json`.
+
+`g07_r2_victoire_source.ora` : **19 calques** au total : les 7 calques hérités de la composition initiale dont un diagnostic masqué, plus **12 calques indépendants** `TOUCHÉ <case>` (éditables). **Limite honnête :** les cinq impacts d'origine demeurent dans la couche mer héritée du master ; fond, typographie et commandes du panneau droit restent peints et groupés. Ce document n'est **ni un PSD décomposé ni une planche de sprites Flash**.
+
+**Provenance** : peinture source reçue dans la conversation du PO, impacts supplémentaires dérivés de ses propres pixels de feu/smoke ; aucune image Stock ni police externe ajoutée. Les questions de droits sur l'artwork original n'ont pas fait l'objet d'un audit autonome. Hashes SHA-256 et données de scénario dans le manifeste JSON.
+
+## Réserves et prochaine porte
+
+Cette correction **ne traite pas** MATCH NUL, DÉFAITE ni les images 4–7 ; elle ne prouve pas les transitions annonce→compact, la révélation synchronisée des derniers tirs, les hitboxes tactiles ni le raccord G08. **Aucun test physique CYD, Flash/RAM, contrat de compression ou intégration firmware effectué.** Revue du Pilotage et appréciation du PO requises sur le **nouveau HEAD exact** de la PR Draft #74. Seul Pilotage peut fusionner.
