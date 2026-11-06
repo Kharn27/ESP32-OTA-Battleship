@@ -1,4 +1,23 @@
-# G07-R2 — FIN DE PARTIE / DÉFAITE · correction géométrique (Issue #53)
+# G07-R2 — FIN DE PARTIE / DÉFAITE ET MATCH NUL (Issue #53)
+
+## Nouveau : DÉFAITE initiale — flotte ennemie masquée (G07, état A)
+
+![DÉFAITE initiale 320×240](g07_r2_defaite_masquee_320x240.png)
+
+<details><summary>Zoom ×4 NEAREST strict — 1280×960</summary>
+
+![DÉFAITE initiale ×4](g07_r2_defaite_masquee_x4.png)
+
+</details>
+
+- **État initial conforme métier** : aucune coque adverse visible, verdict DÉFAITE compact, historique des tirs, touche « VOIR SA FLOTTE » ; les commandes DÉFENSE, REJOUER et ACCUEIL restent présentes.
+- **Contrôle géométrique PC PASS** : 11 lignes X=21…201, 11 lignes Y=53…233, pas exact de 18 pixels, 100 cases carrées, zoom ×4 pixel-exact, translation +1 px rejetée.
+- [Source OpenRaster 4 calques](g07_r2_defaite_masquee_source.ora) · [script reproductible](build_g07_r2_defaite_masquee.py) · [original auteur HD](g07_r2_defaite_masquee_original_1448x1086.png) · [manifeste SHA](g07_r2_defaite_masquee_provenance.json) · [preuve 320×240](g07_r2_defaite_masquee_proof_320x240.png) · [preuve ×4](g07_r2_defaite_masquee_proof_x4.png).
+- [README et limites spécifiques](README_DEFAITE_MASQUEE.md).
+
+**Statut** : DESIGN_PREVIEW / ON_DEVICE_UNVERIFIED ; GO PO non acquis, aucun test matériel ou contrat de format firmware. Les éléments artistiques complexes sont partiellement aplatis dans les calques ORA. Cet état rejoint la variante révélée G08 B/C présentée ci-dessous.
+
+---
 
 > **PR Draft, candidat graphique non validé PO ; DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED.**
 > **Ce rendu correspond à DÉFAITE avec flotte adverse DÉJÀ révélée volontairement (suite G08 B/C), et NON à l'état initial secret G07.** La commande visible est « MASQUER SA FLOTTE ».
@@ -49,7 +68,7 @@ Ces assertions prouvent la géométrie du *PNG précis*, et non sa conformité m
 
 ## État présenté et points encore ouverts
 
-Le navire porte-avions, le sous-marin, le croiseur long, le navire incendié central et le navire en feu bas sont des éléments visibles de la **flotte révélée volontairement**. Leur présence n'est **pas autorisée avant choix**. Pour G07 en défaite initiale, conserver la flotte cachée et afficher `VOIR SA FLOTTE`; le parcours G08 peut ensuite conduire à la présente vue révélée, puis au masquage.
+Le navire porte-avions, le sous-marin, le croiseur long, le navire incendié central et le navire en feu bas sont des éléments visibles de la **flotte révélée volontairement**. Leur présence n'est **pas autorisée avant choix**. L'état initial G07 avec flotte cachée et bouton `VOIR SA FLOTTE` est désormais livré en tête de page ; le parcours G08 peut ensuite conduire à cette vue révélée, puis au masquage.
 
 **G07-R2 n'est pas terminée :** variante VICTOIRE, annonce initiale, synchronisation vérifiable des deux tirs, raccord A/B/C G08, surcouches éditables plateau/impacts/verdicts/commandes. Le PNG DÉFAITE fourni est **aplati et sans calques éditables** ; pour MATCH NUL, une ORA contenant le raster aplati plus la surcouche de preuve masquée est livrée, sans isolation des objets UI. Aucun export firmware, aucune vérification CYD/stylet/Flash/RAM ; pas de GO artistique du PO. Conserver la PR #74 en Draft et réserver sa fusion au Pilotage.
 
