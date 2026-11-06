@@ -12,6 +12,8 @@
 
 - **État initial conforme métier** : aucune coque adverse visible, verdict DÉFAITE compact, historique des tirs, touche « VOIR SA FLOTTE » ; les commandes DÉFENSE, REJOUER et ACCUEIL restent présentes.
 - **Contrôle géométrique PC PASS** : 11 lignes X=21…201, 11 lignes Y=53…233, pas exact de 18 pixels, 100 cases carrées, zoom ×4 pixel-exact, translation +1 px rejetée.
+- **Correctif historique DÉFAITE à vérifier sur le nouveau HEAD** : [23 manches et flottes légales](g07_r2_defaite_scenario.json), **5 TOUCHÉ + 18 RATÉ sur ATTAQUE**, **17 TOUCHÉ + 6 RATÉ sur DÉFENSE**, paire finale **F6 / G5** synchrone. [Source de marks séparés](g07_r2_defaite_history.py) : 12 petites rides d'écume, touches conservées ; mêmes coordonnées sur état A secret et B/C révélé. [Détail, limites de lisibilité et harmonisation proposée](README_DEFAITE_MASQUEE.md).
+- **Repère d'identité proposé pour les trois verdicts** : petit emblème CYD WARSHIP en haut à gauche comme sur cette DÉFAITE, à confirmer par PO lors des corrections VICTOIRE et MATCH NUL ; l'unification des trois images n'est pas encore acquise.
 - [Source OpenRaster 4 calques](g07_r2_defaite_masquee_source.ora) · [script reproductible](build_g07_r2_defaite_masquee.py) · [original auteur HD](g07_r2_defaite_masquee_original_1448x1086.png) · [manifeste SHA](g07_r2_defaite_masquee_provenance.json) · [preuve 320×240](g07_r2_defaite_masquee_proof_320x240.png) · [preuve ×4](g07_r2_defaite_masquee_proof_x4.png).
 - [README et limites spécifiques](README_DEFAITE_MASQUEE.md).
 
