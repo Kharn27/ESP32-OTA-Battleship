@@ -10,39 +10,53 @@
       "size_bytes": 3641910
     },
     {
-      "file": "g07_r2_defaite_320x240.png",
-      "sha256": "9abe27170c78529d0b229fae85987b8b8cec8aae284b276847183220cbd9ac2d",
-      "size_bytes": 162397
+      "file": "g07_r2_source_320x240.png",
+      "sha256": "81bd1bcfc6e04316a9b34c90a97727f3598ec7ebf1951a0444043e17f3a5da8d",
+      "size_bytes": 193457
     }
   ],
   "deliverables": [
     {
       "file": "g07_r2_defaite_masquee_320x240.png",
-      "sha256": "1323cd660c09543f097a94af677e8404b69793eeb4a861c9c7281478b8b3bfe3",
-      "size_bytes": 157912
+      "sha256": "57223a4adc66d282037903b9fa5637011f1278500c6045c41de36793e9e5670e",
+      "size_bytes": 158268
     },
     {
       "file": "g07_r2_defaite_masquee_x4.png",
-      "sha256": "48412be4dbc14629bfe83b8e67bb1d9efd0683ddba0378d553666b6b5a7f1dee",
-      "size_bytes": 236412
+      "sha256": "ecc6c4fa50eaceed81d6c03e723625a392e812f8534f5f57f7bb330111b083ff",
+      "size_bytes": 236820
     },
     {
       "file": "g07_r2_defaite_masquee_proof_320x240.png",
-      "sha256": "e883dca338a416c56db819dbc52b54661e6677654fd2ff34906c5d144079792b",
-      "size_bytes": 158303
+      "sha256": "04fe2776d72dc8edf76c532df9415521ab95df6403d68e85c0277b4dcb1cf434",
+      "size_bytes": 158688
     },
     {
       "file": "g07_r2_defaite_masquee_proof_x4.png",
-      "sha256": "c85790e5b735a86362a2785e6a193c4877a99f17a5d49fb1f46d17fffca7bc30",
-      "size_bytes": 237055
+      "sha256": "a89251ff14f4daab28aaf1391b52a6cbaee12f31921c4dbada76a33c5f400d7b",
+      "size_bytes": 237468
     },
     {
       "file": "g07_r2_defaite_masquee_source.ora",
-      "sha256": "f83b6a3b5a251d364bdead4567b4f889ccf7022575981d673e16f299435e6f76",
-      "size_bytes": 577095
+      "sha256": "e9da4df477b8332554c669ec3638a0cca05e4c61c73010e10e9974da7247d27b",
+      "size_bytes": 579441
     }
   ],
-  "editable": "ORA with 4 layers, ornaments and text within their layers remain rasterized",
+  "editable": "ORA with 6 layers (2 editable impact overlays); ornaments and text within their layers remain rasterized",
+  "scenario_file": "g07_r2_defaite_scenario.json",
+  "scenario_sha256": "b232fd7ebfa02a396dc9dcaf28396a43d986f8b28cbe95f975ae85b870c40d3a",
+  "history": {
+    "turns": 23,
+    "attack_hit": 5,
+    "attack_miss": 18,
+    "defense_hit": 17,
+    "defense_miss": 6,
+    "last_simultaneous_pair": {
+      "attack": "F6",
+      "defense": "G5"
+    }
+  },
+  "history_pixels": "PASS: 12 native ripple marks and 5 subtle hit cores measured",
   "grid_x": [
     21,
     39,
@@ -88,5 +102,5 @@
   "pixel_measured_grid": "PASS",
   "negative_shift_1px": "PASS",
   "nearest_4x_exact": "PASS",
-  "remaining": "No firmware asset validation; no physical CYD/stylus test; last 2 simultaneous shots not proven by static raster"
+  "remaining": "No firmware asset validation; no physical CYD/stylus test; last two simultaneous shots documented in a legal scenario, animation not proven by static raster"
 }

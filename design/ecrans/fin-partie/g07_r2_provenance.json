@@ -2,6 +2,14 @@
   "issue": 53,
   "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
   "state": "DEFAITE; ATTAQUE; flotte ennemie volontairement revelee (G08 B/C)",
+  "scenario_file": "g07_r2_defaite_scenario.json",
+  "illustrative_attack_history": {
+    "turns": 23,
+    "hit": 5,
+    "miss": 18,
+    "last_attack": "F6",
+    "last_defense": "G5"
+  },
   "source": {
     "file": "g07_r2_source_320x240.png",
     "dimensions": [
@@ -20,7 +28,7 @@
         240
       ],
       "method": "native copy; no resampling",
-      "sha256": "9abe27170c78529d0b229fae85987b8b8cec8aae284b276847183220cbd9ac2d"
+      "sha256": "2f6379ac1b38b4651b2283ffa5879a8da783fbf8355941bfa65f9885d944b0ec"
     },
     {
       "file": "g07_r2_defaite_x4.png",
@@ -29,7 +37,7 @@
         960
       ],
       "method": "x4 strict NEAREST",
-      "sha256": "e72c8f95d323b40f096aa7af452916dc12fa6455eebf885d9344bc4fea885915"
+      "sha256": "45c3c5d2590029890995ccad200ba6199f6af08033592c0ce47e83608f3e872d"
     },
     {
       "file": "g07_r2_geometry_proof_x4.png",
@@ -38,7 +46,7 @@
         960
       ],
       "method": "diagnostic only",
-      "sha256": "9ecc5bdf7ae992a13baa19c1a36275d2008d2420e2b79d20ed37746b66c34451"
+      "sha256": "1c3a4936ecbadfecf61d4af1f2bb6d42f4754dfa4eb833872192144bf73d1e80"
     }
   ],
   "checks_pc": {
@@ -88,10 +96,12 @@
     "negative_shift_x1": "PASS: translated grid rejected",
     "nearest_exact": "PASS",
     "five_ships": "VISUAL_ONLY",
-    "initial_defeat_secret_fleet": "NOT_DELIVERED",
+    "initial_defeat_secret_fleet": "DELIVERED_SEPARATELY",
+    "history_pixels": "PASS: 12 supplemental misses and 5 subtle hit cores",
+    "legal_scenario": "PASS: 5+4+3+3+2, no repeated attacks, 17 human hits",
     "victory_draw_and_announcement": "NOT_DELIVERED",
-    "last_two_shots_simultaneity": "NOT_PROVEN",
-    "editable_scene_layers": "NOT_DELIVERED",
+    "last_two_shots_simultaneity": "TEST_SCENARIO_ONLY; static image cannot prove animation",
+    "editable_scene_layers": "NEW HISTORY OVERLAYS IN PYTHON; source raster remains flattened",
     "tft_touch_flash_memory": "NOT_TESTED",
     "on_device": "UNVERIFIED"
   }
