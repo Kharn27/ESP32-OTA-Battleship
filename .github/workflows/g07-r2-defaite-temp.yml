@@ -44,3 +44,5 @@ jobs:
             git commit -m "design(g07-r2): exporter historique DEFAITE corrigé (Refs #53) [skip ci]"
             git push origin HEAD:design/g07-r2-verdict
           fi
+
+# Rebuild 2: eau/écume irrégulière et test PC réexécutés
