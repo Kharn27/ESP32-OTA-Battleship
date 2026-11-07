@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "dimensions": "PASS",
+    "native_matches_full_source_LANCZOS": "PASS",
+    "source_sha256": "PASS",
+    "zoom_pixel_exact_NEAREST": "PASS"
+  },
+  "export": {
+    "alpha": false,
+    "full_frame_no_crop": true,
+    "library": "Pillow",
+    "library_version": "12.3.0",
+    "native_filter": "LANCZOS",
+    "native_size": [
+      320,
+      240
+    ],
+    "scale_xy": [
+      0.26778242677824265,
+      0.26785714285714285
+    ],
+    "zoom_filter": "NEAREST",
+    "zoom_size": [
+      1280,
+      960
+    ]
+  },
+  "files": {
+    "patrouilleur_intact_320x240.png": {
+      "bytes": 118827,
+      "sha256": "84b38a704d9ded44f9cc880a1af6ebf092a87a2803c8c972e24f73df9cf808fb"
+    },
+    "patrouilleur_intact_x4.png": {
+      "bytes": 188597,
+      "sha256": "346e741b9e1d22e3f2696c40b73c951f85dc1dbbb42d276f0c606082f8e78f2d"
+    }
+  },
+  "geometry_reference": {
+    "frame_origin_native": [
+      0,
+      0
+    ],
+    "frame_origin_source": [
+      0,
+      0
+    ],
+    "note": "Bbox du navire avec drapeau, hors ecume; estimation manuelle a valider sur tous les etats.",
+    "pivot_native": [
+      164,
+      118
+    ],
+    "pivot_source": [
+      612,
+      439
+    ],
+    "ship_bbox_native_approx_ltrb": [
+      106,
+      92,
+      221,
+      143
+    ],
+    "ship_bbox_source_approx_ltrb": [
+      397,
+      343,
+      827,
+      535
+    ],
+    "type": "visually_estimated_composition_anchor_not_alpha_mask"
+  },
+  "mission": "PAT-01 / Issue #79",
+  "provenance": {
+    "path": "draft/patrouilleur_A.jpeg",
+    "source_dimensions": [
+      1195,
+      896
+    ],
+    "source_is_flat_scene_with_painted_ocean": true,
+    "source_sha256": "631ff1b8f4245599137b6d0d3bd6919b9db3e30844d478434ee864ff885f5df5"
+  },
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED"
+}
