@@ -223,3 +223,32 @@ add_test(NAME d11_nvs_id_reservation COMMAND warship_event_id_nvs_tests)
 add_test(NAME d12_technical_journey COMMAND warship_journey_tests)
 
 add_test(NAME d13_post_result_inspection COMMAND warship_inspection_tests)
+
+
+# T03: build two lossless Flash representations from the *accepted G03 PNG*.
+# All generated C stays in the build tree, independently regenerated in CI.
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+set(T03_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.png")
+set(T03_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/t03_export.py")
+set(T03_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/t03_g03_data.c")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${T03_SOURCE}" "${T03_SCRIPT}")
+execute_process(
+  COMMAND "${Python3_EXECUTABLE}" "${T03_SCRIPT}"
+          --input "${T03_SOURCE}" --output "${T03_GENERATED}"
+  RESULT_VARIABLE T03_EXPORT_EXIT OUTPUT_VARIABLE T03_EXPORT_METRICS
+  ERROR_VARIABLE T03_EXPORT_ERROR)
+if(NOT T03_EXPORT_EXIT EQUAL 0)
+  message(FATAL_ERROR "T03 G03 export failed: ${T03_EXPORT_ERROR}")
+endif()
+message(STATUS "T03 G03 exact export ${T03_EXPORT_METRICS}")
+add_executable(t03_asset_tests test_t03_asset.c
+               ../components/t03_decode/t03_decode.c "${T03_GENERATED}")
+target_include_directories(t03_asset_tests PRIVATE ../components/t03_decode/include)
+target_compile_options(t03_asset_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+  target_compile_options(t03_asset_tests PRIVATE
+                         -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+  target_link_options(t03_asset_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME t03_g03_exact_raw_vs_rle COMMAND t03_asset_tests)
