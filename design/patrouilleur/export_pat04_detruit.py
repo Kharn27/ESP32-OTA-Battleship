@@ -110,7 +110,7 @@ def main() -> None:
             "pivot_PAT01_indicatif": [164, 118], "alignement_pixel_non_demontre": True,
         },
         "checks": {
-            "master_PO_SHA256": "PASS", "remplacement_JPEG": "PASS",
+            "master_PO_SHA256": "PASS", "encodage_JPEG_intermediaire": "PASS",
             "PAT01_PAT02_PAT03_SHA256": "PASS", "natif_LANCZOS": "PASS",
             "zoom_NEAREST_pixel_par_pixel": "PASS", "exports_SHA256": "PASS",
             "manifest_reproductible": "PASS",
