@@ -80,3 +80,38 @@ python design/patrouilleur/export_pat02_arriere.py --check
 Pour une régénération complète, exécuter sans `--check` puis avec `--check`. Le script vérifie les SHA des originaux/du PAT-01 et ceux des **deux PNG finaux**, la fidélité LANCZOS, les dimensions et l'égalité zoom ×4 **pixel par pixel** après relecture. [Manifeste PAT-02](preuves/pat02_export_manifest.json).
 
 **Statut : `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`**. L'intégration jeu, le rendu sur vrai écran CYD 320×240, la lisibilité après réduction en cases et les budgets Flash/RAM restent à valider avec Pilotage et le Développeur. PR Draft **Refs #80** ; fusion exclusivement Pilotage.
+
+---
+
+# PAT-03 — Patrouilleur dégâts avant T2A (Issue #81)
+
+**Graphiste / DA. Source artistique PO humain.** Le PO a sélectionné **T2A** et confirmé le **plein cadre sans translation** ([mandat Phase 2 de Pilotage](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/81#issuecomment-6708055689), 07/11/2026). La sélection T2A est une validation de la **variante**, pas une attestation d'essai matériel.
+
+## Image finale native 320 × 240
+
+![T2A — patrouilleur aux dégâts avant, image RGB 320×240](patrouilleur_avant_endommage_320x240.png)
+
+[Voir le zoom ×4 strict NEAREST — 1280×960](patrouilleur_avant_endommage_x4.png).
+
+## Original, cadrage et fidélité
+
+- **Source PO unique pour le rendu final :** [`draft/patrouilleur_T2A.jpeg`](../../draft/patrouilleur_T2A.jpeg), **1195×896 JPEG**, SHA-256 `f8366482082febc917a812d94efd98a75d03c100a789d5db73ceacc379c41d4d`.
+- **T2B est l'alternative non retenue.** Son original `draft/patrouilleur_T2B.jpeg` est préservé dans `draft/` ; les comparatifs temporaires ne figurent **pas** dans le diff final (historique Git et Issue #81 conservés).
+- Export sur **la totalité du canevas source**, sans crop, translation, changement de palette, redessin, détourage, ajout/suppression de flammes/fumée, modification de la coque, des débris ou de l'océan.
+- Même recette que PAT-01 et PAT-02 : réduction **LANCZOS** en **320×240 PNG RGB**, puis **NEAREST** en **1280×960**. Les JPEG PO sont des **scènes aplaties avec océan peint** : PNG **sans alpha**, **pas** des sprites transparents.
+- Repère de composition PAT-01 : pivot **indicatif** `(164,118)` en pixels natifs ; rectangle de coque intact approximatif `(106,92)–(221,143)`. **Pas d'ancre runtime ou de recalage géométrique certifié**. Toute variation de texture entre les originaux ne constitue pas une autorisation de déplacer les illustrations.
+
+## Méthode reproductible et vérifications
+
+Le script de travail non destructif [`export_pat03_avant.py`](export_pat03_avant.py) contrôle les SHA-256 des **deux sources PO**, les références intacte PAT-01 et arrière T1A PAT-02, la génération fidèle au LANCZOS, les dimensions et modes, le zoom NEAREST égal **pixel par pixel** après relecture, les SHA-256 des PNG finaux et la reproductibilité du manifeste :
+
+```bash
+python -m pip install Pillow==12.3.0
+python design/patrouilleur/export_pat03_avant.py --check
+```
+
+Sans `--check`, le script régénère les deux PNG et le manifeste ; utiliser `--check` ensuite pour revérifier sans écriture.
+
+[Preuves finales : manifeste PAT-03](preuves/pat03_export_manifest.json), avec provenance, tailles, mode RGB, SHA-256 et limites.
+
+**Statut : `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED`**. L'image n'a été ni affichée sur une véritable CYD, ni qualifiée comme sprite de deux cases de grille, ni intégrée au firmware. Aucune estimation validée de mémoire Flash/RAM, de décodage runtime ni de transparence ne découle de cette livraison. Revue et fusion réservées à Pilotage ; PR Draft **Refs #81**.
