@@ -1,0 +1,98 @@
+{
+  "asset_firmware_certifie": false,
+  "checks": {
+    "PAT01_PAT02_PAT03_SHA256": "PASS",
+    "exports_SHA256": "PASS",
+    "manifest_reproductible": "PASS",
+    "master_PO_SHA256": "PASS",
+    "natif_LANCZOS": "PASS",
+    "remplacement_JPEG": "PASS",
+    "zoom_NEAREST_pixel_par_pixel": "PASS"
+  },
+  "export_RGB_320x240": {
+    "alpha": false,
+    "bytes": 111411,
+    "dimensions": [
+      320,
+      240
+    ],
+    "path": "design/patrouilleur/patrouilleur_detruit_320x240.png",
+    "resampling": "LANCZOS",
+    "sha256": "8681312240ed81e4e2951b54fb4f8066dc6cbdbcc85aaa256bb848ffb6f3870f"
+  },
+  "geometrie": {
+    "alignement_pixel_non_demontre": true,
+    "alpha": false,
+    "export_plein_cadre": [
+      0,
+      0,
+      320,
+      240
+    ],
+    "mer_peinte": true,
+    "pivot_PAT01_indicatif": [
+      164,
+      118
+    ],
+    "recadrage": false,
+    "source_plein_cadre": [
+      0,
+      0,
+      1024,
+      768
+    ],
+    "translation": [
+      0,
+      0
+    ]
+  },
+  "issue": 82,
+  "references_precedentes_inchangees": {
+    "PAT-01": {
+      "path": "design/patrouilleur/patrouilleur_intact_320x240.png",
+      "sha256": "84b38a704d9ded44f9cc880a1af6ebf092a87a2803c8c972e24f73df9cf808fb"
+    },
+    "PAT-02_T1A": {
+      "path": "design/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
+      "sha256": "a136b18ab4d32e522bb5fd314b1faa87dde275e752d2b4bd99a267b4fdf93588"
+    },
+    "PAT-03_T2A": {
+      "path": "design/patrouilleur/patrouilleur_avant_endommage_320x240.png",
+      "sha256": "c079ba0e2e79ebbbcbb31e4a046d7c337dd1e1164aff1a678955d54633ceb36c"
+    }
+  },
+  "selection_PO": "nouvelle image fusion avant/arriere jointe 07/11/2026",
+  "source_JPEG_remplacee": {
+    "ancien_git_blob": "06c76f842a9d7dbbffb36044d55bdb27c61e8a69",
+    "bytes": 305871,
+    "dimensions": [
+      1024,
+      768
+    ],
+    "encodage": "Pillow 12.3.0 JPEG quality=98 subsampling=0 optimize=True",
+    "path": "draft/patrouilleur_B.jpeg",
+    "sha256": "0f6eb6a9dd4df3974a1cee5423d304930d4b1643c3612847e7599128fd374830"
+  },
+  "source_originale_PNG_preservee": {
+    "bytes": 888186,
+    "dimensions": [
+      1024,
+      768
+    ],
+    "path": "draft/patrouilleur_B_PO_fusion.png",
+    "sha256": "e004d3b1274133f118ab407e7854d2050121654cca0881b513c7acbc3bd1a808"
+  },
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED",
+  "version_Pillow": "12.3.0",
+  "zoom_RGB_1280x960": {
+    "alpha": false,
+    "bytes": 178527,
+    "dimensions": [
+      1280,
+      960
+    ],
+    "path": "design/patrouilleur/patrouilleur_detruit_x4.png",
+    "resampling": "NEAREST",
+    "sha256": "c2bfa2de4b37f8e0db255202b961efe0f9e2493a182760bb52bc168b57e7328f"
+  }
+}
