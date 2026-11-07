@@ -1,52 +1,44 @@
-name: PAT-04 import GIF PO (temporary)
+name: PAT-04 PO PNG+GIF final integrity (temporary)
 on:
   push:
     branches:
       - design/issue-82-patrouilleur-detruit-fusion-po
     paths:
       - .github/workflows/pat04-gif-import-once.yml
-  workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
-  import-gif:
+  verify-sources-and-exports:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Download original GIF supplied by PO and verify exact bytes
+      - name: Verify preserved PNG master and replacement GIF
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
-            --output /tmp/patrouilleur_detruit_PO.gif \
-            'https://at.adobe.com/tIVrJkoFmutbIwns'
-          printf '%s  %s\n' '64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096' '/tmp/patrouilleur_detruit_PO.gif' | sha256sum --check --strict
+          test ! -e draft/patrouilleur_B.jpeg
+          printf '%s  %s\n' 'e004d3b1274133f118ab407e7854d2050121654cca0881b513c7acbc3bd1a808' 'draft/patrouilleur_B_PO_fusion.png' | sha256sum --check --strict
+          printf '%s  %s\n' '64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096' 'draft/patrouilleur_detruit.gif' | sha256sum --check --strict
           python -m pip install Pillow==12.3.0
           python - <<'PY'
           from PIL import Image
-          p='/tmp/patrouilleur_detruit_PO.gif'
-          with Image.open(p) as im:
+          with Image.open('draft/patrouilleur_detruit.gif') as im:
               assert im.format=='GIF' and im.size==(478,356) and im.n_frames==9
-              durations=[]
-              for frame in range(im.n_frames):
-                  im.seek(frame)
-                  durations.append(im.info.get('duration'))
-              assert durations==[160]*9, durations
-              print('PASS GIF PO: 478x356, 9 images x 160ms, 1440ms')
+              ds=[]
+              for i in range(im.n_frames):
+                  im.seek(i)
+                  ds.append(im.info.get('duration'))
+              assert ds==[160]*9,ds
+          print('PASS GIF: 9 frames x 160ms')
           PY
-          cp /tmp/patrouilleur_detruit_PO.gif draft/patrouilleur_detruit.gif
-          printf '%s  %s\n' '64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096' 'draft/patrouilleur_detruit.gif' | sha256sum --check --strict
-      - name: Commit updated GIF as exact source for PAT-05
+      - name: PAT-04 reproducibility check with only master PNG
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add draft/patrouilleur_detruit.gif
-          git diff --cached --quiet || git commit -m 'design(PAT-05): importer nouveau GIF PO sans retouche pour qualification future'
-          git push origin HEAD:design/issue-82-patrouilleur-detruit-fusion-po
+          python design/patrouilleur/export_pat04_detruit.py --check
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+          echo 'PASS PAT-04 --check, worktree clean; PNG master and GIF source verified'
