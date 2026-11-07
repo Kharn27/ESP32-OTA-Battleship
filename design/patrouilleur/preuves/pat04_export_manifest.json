@@ -2,11 +2,11 @@
   "asset_firmware_certifie": false,
   "checks": {
     "PAT01_PAT02_PAT03_SHA256": "PASS",
+    "encodage_JPEG_intermediaire": "PASS",
     "exports_SHA256": "PASS",
     "manifest_reproductible": "PASS",
     "master_PO_SHA256": "PASS",
     "natif_LANCZOS": "PASS",
-    "remplacement_JPEG": "PASS",
     "zoom_NEAREST_pixel_par_pixel": "PASS"
   },
   "export_RGB_320x240": {
@@ -46,6 +46,17 @@
       0
     ]
   },
+  "intermediaire_JPEG_non_stocke": {
+    "ancien_git_blob": "06c76f842a9d7dbbffb36044d55bdb27c61e8a69",
+    "bytes": 305871,
+    "dans_git": false,
+    "dimensions": [
+      1024,
+      768
+    ],
+    "encodage": "Pillow 12.3.0 JPEG quality=98 subsampling=0 optimize=True",
+    "sha256": "0f6eb6a9dd4df3974a1cee5423d304930d4b1643c3612847e7599128fd374830"
+  },
   "issue": 82,
   "references_precedentes_inchangees": {
     "PAT-01": {
@@ -62,17 +73,6 @@
     }
   },
   "selection_PO": "nouvelle image fusion avant/arriere jointe 07/11/2026",
-  "source_JPEG_remplacee": {
-    "ancien_git_blob": "06c76f842a9d7dbbffb36044d55bdb27c61e8a69",
-    "bytes": 305871,
-    "dimensions": [
-      1024,
-      768
-    ],
-    "encodage": "Pillow 12.3.0 JPEG quality=98 subsampling=0 optimize=True",
-    "path": "draft/patrouilleur_B.jpeg",
-    "sha256": "0f6eb6a9dd4df3974a1cee5423d304930d4b1643c3612847e7599128fd374830"
-  },
   "source_originale_PNG_preservee": {
     "bytes": 888186,
     "dimensions": [
