@@ -52,3 +52,31 @@ Le mode `--check` **ne modifie aucun fichier** ; il vérifie SHA-256 de l'origin
 - **ON_DEVICE_UNVERIFIED :** aucun essai sur CYD, ni build firmware, ni budget Flash/RAM/mémoire revendiqué ; contrat d'asset runtime à convenir avec Développeur et Pilotage.
 - Le PO doit **accepter explicitement le PNG 320×240 et confirmer le cadrage/pivot** avant PAT-02/03/04.
 - Aucun fichier de `design/ocean/`, des autres états ou du firmware ne doit être modifié.
+
+
+---
+
+# PAT-02 — Patrouilleur dégâts arrière T1A (Issue #80)
+
+**Décision artistique PO du 07/11/2026 : T1A retenu** après comparaison T1A/T1B. Le motif est la **meilleure séparation visuelle de la coque, des flammes et des débris à petite échelle** ; le PO anticipe une meilleure netteté si le navire est affiché sur l'équivalent de deux cases de grille. **Ce dernier cas n'est pas testé** : les livrables sont des scènes complètes 320×240, et non des sprites réduits à deux cases.
+
+## Prévisualisation de l'état arrière final — 320 × 240
+
+![Patrouilleur T1A, arrière endommagé, scène originale PO réduite à 320×240](patrouilleur_arriere_endommage_320x240.png)
+
+[Zoom ×4 de contrôle — 1280×960, NEAREST strict](patrouilleur_arriere_endommage_x4.png)
+
+La source canonique est [draft/patrouilleur_T1A.jpeg](../../draft/patrouilleur_T1A.jpeg) (**1195×896**, SHA-256 \`1e25359998afdedbc93ebf6baebdbeae34b327f4ab75a2f4e9d55e4c7b8a9584\`). T1B reste uniquement en \`draft/\` et dans l'historique comparatif de l'Issue/PR, **pas** dans les exports finaux. **Aucune retouche, reconstruction de fumée/coque, translation, crop ou recolorisation** ; pleine scène avec mer peinte en **RGB sans alpha**. Pas de sprite détouré.
+
+Cadrage et facteur d'échelle **identiques à PAT-01** ; pivot nominal indicatif \`(164,118)\` et bbox de coque intacte approx. \`(106,92)–(221,143)\`. Le contrôle exploratoire de la proue sur l'original a indiqué un meilleur appariement à \`(+3,0)\` pixels source (≈ 0,8 pixel natif) ; cet indice **local** ne prouve pas un décalage global et **aucune correction n'a été appliquée**.
+
+## Reproduction / vérification
+
+\`\`\`bash
+python -m pip install Pillow==12.3.0
+python design/patrouilleur/export_pat02_arriere.py --check
+\`\`\`
+
+Pour une régénération complète, exécuter sans \`--check\` puis avec \`--check\`. Le script vérifie les SHA des originaux/du PAT-01 et ceux des **deux PNG finaux**, la fidélité LANCZOS, les dimensions et l'égalité zoom ×4 **pixel par pixel** après relecture. [Manifeste PAT-02](preuves/pat02_export_manifest.json).
+
+**Statut : \`DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED\`**. L'intégration jeu, le rendu sur vrai écran CYD 320×240, la lisibilité après réduction en cases et les budgets Flash/RAM restent à valider avec Pilotage et le Développeur. PR Draft **Refs #80** ; fusion exclusivement Pilotage.
