@@ -1,0 +1,102 @@
+{
+  "alignment_diagnostic": {
+    "best_diagnostic_offset_xy": [
+      3,
+      0
+    ],
+    "best_mean_absolute_RGB_difference": 14.4265,
+    "interpretation": "Mesure locale comparative de la phase 1 uniquement. Aucun recalage applique. Pas preuve de translation globale.",
+    "roi_source_ltrb": [
+      700,
+      410,
+      815,
+      465
+    ],
+    "unshifted_mean_absolute_RGB_difference": 24.2708
+  },
+  "checks": {
+    "PAT01_reference_unchanged": "PASS",
+    "canonical_PO_source_SHA256": "PASS",
+    "final_export_SHA256": "PASS",
+    "full_frame_dimensions": "PASS",
+    "native_pixels_match_LANCZOS": "PASS",
+    "zoom_pixels_exact_NEAREST_after_reopen": "PASS"
+  },
+  "export": {
+    "RGB_no_alpha": true,
+    "full_frame_no_crop_no_artistic_edit": true,
+    "native_dimensions": [
+      320,
+      240
+    ],
+    "native_filter": "LANCZOS",
+    "source_dimensions": [
+      1195,
+      896
+    ],
+    "sx": 0.26778242677824265,
+    "sy": 0.26785714285714285,
+    "tool": "Pillow",
+    "version": "12.3.0",
+    "zoom_dimensions": [
+      1280,
+      960
+    ],
+    "zoom_filter": "NEAREST"
+  },
+  "files": {
+    "patrouilleur_arriere_endommage_320x240.png": {
+      "bytes": 119286,
+      "dimensions": [
+        320,
+        240
+      ],
+      "mode": "RGB",
+      "path": "design/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
+      "sha256": "a136b18ab4d32e522bb5fd314b1faa87dde275e752d2b4bd99a267b4fdf93588"
+    },
+    "patrouilleur_arriere_endommage_x4.png": {
+      "bytes": 190388,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "mode": "RGB",
+      "path": "design/patrouilleur/patrouilleur_arriere_endommage_x4.png",
+      "sha256": "88f9abdc1539e9bbdd1bcd1092bf77a07c272c2aa525e699327123fffa7457ca"
+    }
+  },
+  "issue": 80,
+  "phase": "etat_arriere_final_apres_selection_PO",
+  "reference_PAT01": {
+    "native_path": "design/patrouilleur/patrouilleur_intact_320x240.png",
+    "native_pivot": [
+      164,
+      118
+    ],
+    "native_sha256": "84b38a704d9ded44f9cc880a1af6ebf092a87a2803c8c972e24f73df9cf808fb",
+    "ship_bbox_native_visual_approx": [
+      106,
+      92,
+      221,
+      143
+    ]
+  },
+  "selection_PO": {
+    "artistic_change": false,
+    "rationale": "Meilleure lisibilite pressentie a petite echelle, y compris deux cases de grille ; non testee sur CYD.",
+    "reference": "decision explicite du PO dans la conversation PAT-02 du 07/11/2026",
+    "variant": "T1A"
+  },
+  "source": {
+    "contains_painted_ocean": true,
+    "dimensions": [
+      1195,
+      896
+    ],
+    "path": "draft/patrouilleur_T1A.jpeg",
+    "sha256": "1e25359998afdedbc93ebf6baebdbeae34b327f4ab75a2f4e9d55e4c7b8a9584",
+    "transparent_sprite": false
+  },
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED"
+}
