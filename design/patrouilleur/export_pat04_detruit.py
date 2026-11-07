@@ -14,7 +14,6 @@ from PIL import Image, ImageChops
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "design/patrouilleur"
 ORIGINAL = ROOT / "draft/patrouilleur_B_PO_fusion.png"
-JPEG = ROOT / "draft/patrouilleur_B.jpeg"
 NATIVE = BASE / "patrouilleur_detruit_320x240.png"
 ZOOM = BASE / "patrouilleur_detruit_x4.png"
 MANIFEST = BASE / "preuves/pat04_export_manifest.json"
@@ -55,11 +54,10 @@ def main() -> None:
     source.save(memory, format="JPEG", quality=98, subsampling=0, optimize=True)
     expected = memory.getvalue()
     assert hashlib.sha256(expected).hexdigest() == SHA_JPEG, "JPEG non reproductible"
-    if not opt.check:
-        JPEG.write_bytes(expected)
-    assert JPEG.read_bytes() == expected, "B.jpeg ne correspond pas au PO"
-
-    with Image.open(JPEG) as file:
+    # JPEG de compatibilité reconstruit en mémoire uniquement :
+    # source PO maîtresse PNG conservée sans perte, aucun fichier B.jpeg en dépôt.
+    assert len(expected) == 305871, "Encodage JPEG intermediaire inattendu"
+    with Image.open(io.BytesIO(expected)) as file:
         assert file.format == "JPEG" and file.size == (1024, 768)
         rgb = file.convert("RGB")
     native = rgb.resize((320, 240), Image.Resampling.LANCZOS)
@@ -93,9 +91,12 @@ def main() -> None:
         "issue": 82,
         "selection_PO": "nouvelle image fusion avant/arriere jointe 07/11/2026",
         "source_originale_PNG_preservee": record(ORIGINAL, (1024, 768)),
-        "source_JPEG_remplacee": {
-            **record(JPEG, (1024, 768)),
+        "intermediaire_JPEG_non_stocke": {
+            "dimensions": [1024, 768],
+            "bytes": len(expected),
+            "sha256": SHA_JPEG,
             "encodage": "Pillow 12.3.0 JPEG quality=98 subsampling=0 optimize=True",
+            "dans_git": False,
             "ancien_git_blob": "06c76f842a9d7dbbffb36044d55bdb27c61e8a69",
         },
         "references_precedentes_inchangees": refs,
@@ -123,7 +124,7 @@ def main() -> None:
         assert MANIFEST.read_text(encoding="utf-8") == data, "Manifeste divergent"
     else:
         MANIFEST.write_text(data, encoding="utf-8")
-    print("PASS PAT-04 #82 — PNG PO conserve ; patrouilleur_B.jpeg remplace")
+    print("PASS PAT-04 #82 — PNG PO canonique ; JPEG B reconstruit en memoire, non versionne")
     print("PASS 320x240 RGB LANCZOS ; zoom 1280x960 NEAREST strict")
     print("PASS references PAT-01/02/03 SHA-256, manifest et --check")
     print("DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED")
