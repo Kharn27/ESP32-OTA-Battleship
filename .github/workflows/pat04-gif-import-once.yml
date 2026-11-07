@@ -1,0 +1,52 @@
+name: PAT-04 import GIF PO (temporary)
+on:
+  push:
+    branches:
+      - design/issue-82-patrouilleur-detruit-fusion-po
+    paths:
+      - .github/workflows/pat04-gif-import-once.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-gif:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download original GIF supplied by PO and verify exact bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --output /tmp/patrouilleur_detruit_PO.gif \
+            'https://at.adobe.com/tIVrJkoFmutbIwns'
+          printf '%s  %s\n' '64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096' '/tmp/patrouilleur_detruit_PO.gif' | sha256sum --check --strict
+          python -m pip install Pillow==12.3.0
+          python - <<'PY'
+          from PIL import Image
+          p='/tmp/patrouilleur_detruit_PO.gif'
+          with Image.open(p) as im:
+              assert im.format=='GIF' and im.size==(478,356) and im.n_frames==9
+              durations=[]
+              for frame in range(im.n_frames):
+                  im.seek(frame)
+                  durations.append(im.info.get('duration'))
+              assert durations==[160]*9, durations
+              print('PASS GIF PO: 478x356, 9 images x 160ms, 1440ms')
+          PY
+          cp /tmp/patrouilleur_detruit_PO.gif draft/patrouilleur_detruit.gif
+          printf '%s  %s\n' '64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096' 'draft/patrouilleur_detruit.gif' | sha256sum --check --strict
+      - name: Commit updated GIF as exact source for PAT-05
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add draft/patrouilleur_detruit.gif
+          git diff --cached --quiet || git commit -m 'design(PAT-05): importer nouveau GIF PO sans retouche pour qualification future'
+          git push origin HEAD:design/issue-82-patrouilleur-detruit-fusion-po
