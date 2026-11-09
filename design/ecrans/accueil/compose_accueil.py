@@ -11,7 +11,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
-from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
+from zipfile import ZipFile, ZipInfo, ZIP_STORED, ZIP_DEFLATED
 from xml.etree import ElementTree as ET
 
 import PIL
@@ -128,13 +128,22 @@ def build(repo: Path, out: Path):
         })
     ora = out / "accueil_cyd_warship_4_calques.ora"
     ora.parent.mkdir(parents=True, exist_ok=True)
+    # OpenRaster est un ZIP : des dates variables rendraient l'archive non reproductible.
+    # Chaque entree utilise des metadonnees stables, independantes de l'heure CI.
+    def add_stable(z, name: str, data: bytes, compression: int):
+        zi = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+        zi.compress_type = compression
+        zi.create_system = 3
+        zi.external_attr = 0o644 << 16
+        z.writestr(zi, data)
+
     with ZipFile(ora, "w") as z:
-        z.writestr("mimetype", "image/openraster", compress_type=ZIP_STORED)
-        z.writestr("stack.xml", ET.tostring(stack, encoding="utf-8", xml_declaration=True), compress_type=ZIP_DEFLATED)
+        add_stable(z, "mimetype", b"image/openraster", ZIP_STORED)
+        add_stable(z, "stack.xml", ET.tostring(stack, encoding="utf-8", xml_declaration=True), ZIP_DEFLATED)
         for key, layer in layers.items():
-            z.writestr(f"data/{key}.png", as_png(layer), compress_type=ZIP_DEFLATED)
-        z.writestr("mergedimage.png", as_png(merged), compress_type=ZIP_DEFLATED)
-        z.writestr("Thumbnails/thumbnail.png", as_png(native.resize((256, 192), Image.Resampling.NEAREST)), compress_type=ZIP_DEFLATED)
+            add_stable(z, f"data/{key}.png", as_png(layer), ZIP_DEFLATED)
+        add_stable(z, "mergedimage.png", as_png(merged), ZIP_DEFLATED)
+        add_stable(z, "Thumbnails/thumbnail.png", as_png(native.resize((256, 192), Image.Resampling.NEAREST)), ZIP_DEFLATED)
     with ZipFile(ora) as z:
         assert z.namelist()[0] == "mimetype"
         assert z.read("mimetype") == b"image/openraster"
