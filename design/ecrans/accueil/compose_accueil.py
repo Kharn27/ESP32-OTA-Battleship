@@ -29,9 +29,9 @@ TOUCH = {
 }
 SOURCES = {
     "fond": ("draft/Wallpaper_accueil.jpeg", (1195, 896), "e3c0603405fffbf361ca67b90f265d6fb7994a26"),
-    "logo": ("draft/accueil/Logo_titre_RGBA.png", (1075, 489), "010bb56a6c8056924d9b1af1ceeb99482e18fa3a"),
-    "jouer": ("draft/accueil/Bouton_jouer_RGBA.png", (1107, 252), "f81c510060af5aeee231bea50df420d04db7b320"),
-    "palmares": ("draft/accueil/Bouton_palmares_RGBA.png", (1163, 250), "06a53829d508ae7366338b14a187a655edd6505c"),
+    "logo": ("design/ecrans/accueil/assets/Logo_titre_RGBA.png", (1075, 489), "010bb56a6c8056924d9b1af1ceeb99482e18fa3a"),
+    "jouer": ("design/ecrans/accueil/assets/Bouton_jouer_RGBA.png", (1107, 252), "f81c510060af5aeee231bea50df420d04db7b320"),
+    "palmares": ("design/ecrans/accueil/assets/Bouton_palmares_RGBA.png", (1163, 250), "06a53829d508ae7366338b14a187a655edd6505c"),
 }
 SPRITES = {
     "logo": "logo_titre_145x66.png",
@@ -107,8 +107,8 @@ def build(repo: Path, out: Path):
 
     native = merged.convert("RGB")
     zoom = native.resize((1280, 960), Image.Resampling.NEAREST)
-    save_png(native, out / "accueil_320x240.png")
-    save_png(zoom, out / "accueil_x4_NEAREST.png")
+    save_png(native, out / "accueil_cyd_warship_320x240.png")
+    save_png(zoom, out / "accueil_cyd_warship_x4.png")
     assert zoom.tobytes() == native.resize((1280, 960), Image.Resampling.NEAREST).tobytes()
 
     # OpenRaster éditable : quatre calques placés sur la toile entière.
@@ -126,7 +126,7 @@ def build(repo: Path, out: Path):
             "name": title, "src": f"data/{key}.png", "x": "0", "y": "0",
             "opacity": "1.0", "visibility": "visible", "composite-op": "svg:src-over"
         })
-    ora = out / "edition" / "accueil_4_calques.ora"
+    ora = out / "accueil_cyd_warship_4_calques.ora"
     ora.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(ora, "w") as z:
         z.writestr("mimetype", "image/openraster", compress_type=ZIP_STORED)
@@ -158,15 +158,25 @@ def build(repo: Path, out: Path):
     assert TOUCH["JOUER"][0] + TOUCH["JOUER"][2] == TOUCH["PALMARÈS"][0]
     assert all(0 <= y and y+h <= 240 for (x,y,w,h) in TOUCH.values())
 
+    # Ne mesurer que les livrables générés, pas les sources ou les README du dossier.
+    names = [
+        "accueil_cyd_warship_320x240.png",
+        "accueil_cyd_warship_x4.png",
+        "accueil_cyd_warship_4_calques.ora",
+        "sprites/logo_titre_145x66.png",
+        "sprites/bouton_jouer_140x32.png",
+        "sprites/bouton_palmares_140x30.png",
+        "preuves/alpha_clair_sombre_640x720.png",
+        "preuves/zones_tactiles_320x240.png",
+    ]
     exported = {}
-    for file in sorted(out.rglob("*")):
-        if file.is_file() and file.name != "manifest.json":
-            raw = file.read_bytes()
-            exported[str(file.relative_to(out))] = {"bytes":len(raw), "sha256":sha256(raw)}
+    for name in sorted(names):
+        raw = (out / name).read_bytes()
+        exported[name] = {"bytes": len(raw), "sha256": sha256(raw)}
     manifest = {
         "title": "CYD WARSHIP — PR90 accueil quatre calques",
-        "source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
-        "source_status": "Assets originaux immuables",
+        "detourage_source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
+        "source_status": "JPEG PO originaux inchanges; RGBA detailles dans le meme dossier que l ecran canonique",
         "status": "DESIGN_PREVIEW — PO_REVIEW_PENDING — ON_DEVICE_UNVERIFIED",
         "tool": {"name":"Pillow", "version": PIL.__version__, "native_filter":"LANCZOS", "zoom_filter":"NEAREST"},
         "canvas": [320, 240],
@@ -187,9 +197,30 @@ def build(repo: Path, out: Path):
     print("DESIGN_PREVIEW / PO_REVIEW_PENDING / ON_DEVICE_UNVERIFIED")
 
 
+def verify_existing(repo: Path, out: Path):
+    """Regénère hors du dépôt, compare les octets et n'altère aucun fichier."""
+    from tempfile import TemporaryDirectory
+
+    with TemporaryDirectory(prefix="accueil-cyd-check-") as tmp:
+        generated = Path(tmp)
+        build(repo, generated)
+        for fresh in sorted(generated.rglob("*")):
+            if fresh.is_file():
+                rel = fresh.relative_to(generated)
+                existing = out / rel
+                assert existing.is_file(), f"Export absent : {existing}"
+                assert existing.read_bytes() == fresh.read_bytes(), f"Export different : {rel}"
+        print("PASS accueil canonique --check : ORA, PNG, manifest et sprites reproductibles")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--check", action="store_true", help="Regenerer dans un temporaire et comparer sans modifier")
     args = ap.parse_args()
-    build(args.repo.resolve(), args.out.resolve())
+    repo, out = args.repo.resolve(), args.out.resolve()
+    if args.check:
+        verify_existing(repo, out)
+    else:
+        build(repo, out)

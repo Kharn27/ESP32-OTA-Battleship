@@ -3,18 +3,19 @@
     320,
     240
   ],
+  "detourage_source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
   "exports": {
-    "accueil_320x240.png": {
+    "accueil_cyd_warship_320x240.png": {
       "bytes": 144890,
       "sha256": "ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873"
     },
-    "accueil_x4_NEAREST.png": {
-      "bytes": 224987,
-      "sha256": "60920708591f12bd0748f8e3f0d081c1ec8bdf7e76a2d13531c269cf8085424d"
-    },
-    "edition/accueil_4_calques.ora": {
+    "accueil_cyd_warship_4_calques.ora": {
       "bytes": 460124,
       "sha256": "7e458333a5f2fc3d20c48f77513c3feb66e7c794982507b99e724edae25e5c00"
+    },
+    "accueil_cyd_warship_x4.png": {
+      "bytes": 224987,
+      "sha256": "60920708591f12bd0748f8e3f0d081c1ec8bdf7e76a2d13531c269cf8085424d"
     },
     "preuves/alpha_clair_sombre_640x720.png": {
       "bytes": 44226,
@@ -63,8 +64,7 @@
     "Aucun essai sur ESP32 CYD, aucun contrat mémoire/Flash implicite",
     "Les sources JPEG et PNG originaux sont restés inchangés"
   ],
-  "source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
-  "source_status": "Assets originaux immuables",
+  "source_status": "JPEG PO originaux inchanges; RGBA detailles dans le meme dossier que l ecran canonique",
   "sources": {
     "fond": {
       "bytes": 746713,
@@ -83,7 +83,7 @@
         252
       ],
       "git_blob_sha1": "f81c510060af5aeee231bea50df420d04db7b320",
-      "path": "draft/accueil/Bouton_jouer_RGBA.png",
+      "path": "design/ecrans/accueil/assets/Bouton_jouer_RGBA.png",
       "sha256": "eb57258fc56d98904b1b97d033dbc40e932570807b6660eb50c565201196ac37"
     },
     "logo": {
@@ -93,7 +93,7 @@
         489
       ],
       "git_blob_sha1": "010bb56a6c8056924d9b1af1ceeb99482e18fa3a",
-      "path": "draft/accueil/Logo_titre_RGBA.png",
+      "path": "design/ecrans/accueil/assets/Logo_titre_RGBA.png",
       "sha256": "7cc121d08ae7f36228aff7cc36e4dd8382ed3390684143a66d1d935977df7b03"
     },
     "palmares": {
@@ -103,7 +103,7 @@
         250
       ],
       "git_blob_sha1": "06a53829d508ae7366338b14a187a655edd6505c",
-      "path": "draft/accueil/Bouton_palmares_RGBA.png",
+      "path": "design/ecrans/accueil/assets/Bouton_palmares_RGBA.png",
       "sha256": "bab67a47213e856c2f66f1af9c59759ff9ebec7ee5de1aad91758a7fda4e716d"
     }
   },
