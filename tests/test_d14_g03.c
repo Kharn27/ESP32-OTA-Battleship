@@ -57,6 +57,15 @@ static int frame_of(const WarshipFleet *fleet, WarshipDeployFrame *frame)
     return warship_deploy_make_frame(&pub,frame)==WARSHIP_DEPLOY_OK ? 0 : -1;
 }
 
+static int controlled_rng(void *context, uint32_t *out)
+{
+    if (!context || !out) return -1;
+    uint32_t *sample = (uint32_t *)context;
+    *out = *sample;
+    *sample += 37u;
+    return 0;
+}
+
 int main(void)
 {
     const WarshipDeployLayout layout=d14_g03_layout();
@@ -139,6 +148,43 @@ int main(void)
     CHECK(warship_deploy_input_step(&in,1,1,260,132,401u,
           WARSHIP_LIFECYCLE_DEPLOY,&cmd)==WARSHIP_DEPLOY_OK);
     CHECK(cmd==WARSHIP_DEPLOY_NO_ACTION);
-    puts("D14 PASS: G03 geometry, 17 cells, mask compositing, AUTO ghost-free, B01");
+    /* Integration with real D07, not only injected pictures: START,
+     * repeat AUTO, READY, RETURN, plus CPU secrecy projection invariance. */
+    WarshipLifecycle game_a, game_b;
+    WarshipLifecyclePublic pub_a={0},pub_b={0};
+    uint32_t human_seed_a=17u,cpu_seed_a=1u;
+    uint32_t human_seed_b=17u,cpu_seed_b=173u;
+    CHECK(warship_lifecycle_init(&game_a)==WARSHIP_LIFECYCLE_OK);
+    CHECK(warship_lifecycle_init(&game_b)==WARSHIP_LIFECYCLE_OK);
+    CHECK(warship_deploy_apply(&game_a,WARSHIP_DEPLOY_START,
+          controlled_rng,&human_seed_a,controlled_rng,&cpu_seed_a)==WARSHIP_DEPLOY_OK);
+    CHECK(warship_deploy_apply(&game_b,WARSHIP_DEPLOY_START,
+          controlled_rng,&human_seed_b,controlled_rng,&cpu_seed_b)==WARSHIP_DEPLOY_OK);
+    CHECK(warship_lifecycle_observe(&game_a,&pub_a)==WARSHIP_LIFECYCLE_OK);
+    CHECK(warship_lifecycle_observe(&game_b,&pub_b)==WARSHIP_LIFECYCLE_OK);
+    WarshipDeployFrame scene_a,scene_b;
+    CHECK(warship_deploy_make_frame(&pub_a,&scene_a)==WARSHIP_DEPLOY_OK);
+    CHECK(warship_deploy_make_frame(&pub_b,&scene_b)==WARSHIP_DEPLOY_OK);
+    CHECK(memcmp(&scene_a,&scene_b,sizeof scene_a)==0);
+    CHECK(d14_g03_compose(&scene_a,18,42,180,8,band,sizeof band)==0);
+    memcpy(reference,band,180u*8u*2u);
+    CHECK(d14_g03_compose(&scene_b,18,42,180,8,band,sizeof band)==0);
+    CHECK(memcmp(reference,band,180u*8u*2u)==0);
+    for (unsigned retry=0;retry<2u;++retry) {
+        CHECK(warship_deploy_apply(&game_a,WARSHIP_DEPLOY_AUTO,
+              controlled_rng,&human_seed_a,NULL,NULL)==WARSHIP_DEPLOY_OK);
+        CHECK(warship_lifecycle_observe(&game_a,&pub_a)==WARSHIP_LIFECYCLE_OK);
+        CHECK(warship_deploy_make_frame(&pub_a,&scene_a)==WARSHIP_DEPLOY_OK);
+        CHECK(d14_g03_compose(&scene_a,18,42,180,8,band,sizeof band)==0);
+    }
+    CHECK(warship_deploy_apply(&game_a,WARSHIP_DEPLOY_READY,
+          NULL,NULL,NULL,NULL)==WARSHIP_DEPLOY_OK);
+    CHECK(game_a.phase==WARSHIP_LIFECYCLE_COMBAT);
+    CHECK(warship_deploy_apply(&game_a,WARSHIP_DEPLOY_AUTO,
+          controlled_rng,&human_seed_a,NULL,NULL)==WARSHIP_DEPLOY_GAME_ERROR);
+    CHECK(warship_deploy_apply(&game_b,WARSHIP_DEPLOY_RETURN,
+          NULL,NULL,NULL,NULL)==WARSHIP_DEPLOY_OK);
+    CHECK(game_b.phase==WARSHIP_LIFECYCLE_HOME);
+    puts("D14 PASS: G03 geometry, 17 cells, ghost-free AUTO, real D07 and B01");
     return 0;
 }
