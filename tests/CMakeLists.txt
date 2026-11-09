@@ -287,3 +287,28 @@ if(WARSHIP_SANITIZERS)
     target_link_options(d14_g03_tests PRIVATE -fsanitize=address,undefined)
 endif()
 add_test(NAME d14_g03_deploy_runtime COMMAND d14_g03_tests)
+
+
+# D14 PO correction: compile ACTUAL LEDC implementation with fake GPIO/LEDC
+# instead of merely testing numerical percent mapping in a surrogate.
+# Each case runs in a fresh process to reset the controller's static state.
+add_executable(d14_backlight_tests
+               test_d14_backlight_pwm.c
+               ../components/warship_lcd/warship_lcd_light.c)
+target_include_directories(d14_backlight_tests PRIVATE
+                           ledc_fake ../components/warship_lcd)
+target_compile_definitions(d14_backlight_tests PRIVATE
+                           WARSHIP_LCD_BACKLIGHT_PERCENT=40)
+target_compile_options(d14_backlight_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_backlight_tests PRIVATE
+                           -O1 -g -fno-omit-frame-pointer
+                           -fsanitize=address,undefined)
+    target_link_options(d14_backlight_tests PRIVATE -fsanitize=address,undefined)
+endif()
+foreach(mode nominal init_timer_fail init_channel_fail stop_fail
+             set_duty_fail update_fail frequency_fail)
+    add_test(NAME d14_ledc_${mode}
+             COMMAND d14_backlight_tests ${mode})
+endforeach()
