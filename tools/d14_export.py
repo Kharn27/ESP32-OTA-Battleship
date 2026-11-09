@@ -99,7 +99,7 @@ def encode(base, svg):
             transform = (f"translate(1 {0 if v == 0 else h}) " +
                          ("rotate(-90)" if v == 1 else "scale(1)"))
             piece = (
-                f'<svg xmlns="{ROOT}" width="{w}" height="{h}" '
+                f'<svg xmlns="{ROOT}" shape-rendering="crispEdges" width="{w}" height="{h}" '
                 f'viewBox="0 0 {w} {h}">{definitions}'
                 f'<use href="#nav-{name}" transform="{transform}"/></svg>')
             rgba = render_svg(piece, (w, h))
