@@ -252,3 +252,38 @@ if(WARSHIP_SANITIZERS)
   target_link_options(t03_asset_tests PRIVATE -fsanitize=address,undefined)
 endif()
 add_test(NAME t03_g03_exact_raw_vs_rle COMMAND t03_asset_tests)
+
+
+# D14: approved G03 opaque background + transparent G02 ship sprites.
+# The same generator is run in host/IDF configurations and outputs only
+# into the build tree; no design-source files are modified.
+set(D14_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.svg")
+set(D14_PNG "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.png")
+set(D14_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/d14_export.py")
+set(D14_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/d14_g03_data.c")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${D14_SOURCE}" "${D14_PNG}" "${D14_SCRIPT}")
+execute_process(
+  COMMAND "${Python3_EXECUTABLE}" "${D14_SCRIPT}"
+          --svg "${D14_SOURCE}" --png "${D14_PNG}"
+          --output "${D14_GENERATED}"
+  RESULT_VARIABLE D14_EXPORT_EXIT OUTPUT_VARIABLE D14_METRICS
+  ERROR_VARIABLE D14_ERROR)
+if(NOT D14_EXPORT_EXIT EQUAL 0)
+  message(FATAL_ERROR "D14 asset extraction failed: ${D14_ERROR}")
+endif()
+message(STATUS "D14 G03 art/Flash ${D14_METRICS}")
+add_executable(d14_g03_tests test_d14_g03.c
+               ../components/d14_g03/d14_g03.c
+               ../components/t03_decode/t03_decode.c
+               "${D14_GENERATED}")
+target_include_directories(d14_g03_tests PRIVATE
+       ../components/d14_g03/include ../components/t03_decode/include)
+target_link_libraries(d14_g03_tests PRIVATE warship_deploy_ui)
+target_compile_options(d14_g03_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_g03_tests PRIVATE
+                          -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+    target_link_options(d14_g03_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d14_g03_deploy_runtime COMMAND d14_g03_tests)
