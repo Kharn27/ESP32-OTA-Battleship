@@ -100,12 +100,12 @@ int main(void)
     CHECK(memcmp(refreshed,expected,sizeof refreshed)==0);
     /* The old carrier occupied B2, while the new fleet has no ship on
      * row B at all. The entire former 18x18 cell must be clean water. */
-    CHECK(t03_decode_rect(&d14_g03_image,36u,60u,18u,8u,
+    CHECK(t03_decode_rect(&d14_g03_image,36u,65u,18u,8u,
                           reference,sizeof reference)==0);
-    CHECK(d14_g03_compose(&f2,36u,60u,18u,8u,band,sizeof band)==0);
+    CHECK(d14_g03_compose(&f2,36u,65u,18u,8u,band,sizeof band)==0);
     CHECK(memcmp(band,reference,18u*8u*2u)==0);
-    CHECK(memcmp(previous+(60u*320u+36u)*2u,
-                 expected+(60u*320u+36u)*2u,18u*2u)!=0);
+    CHECK(memcmp(previous+(65u*320u+36u)*2u,
+                 expected+(65u*320u+36u)*2u,18u*2u)!=0);
     /* No image data/secret Captain ever belongs to public frame. */
     WarshipDeployFrame same=f1;
     CHECK(memcmp(&same,&f1,sizeof same)==0);
