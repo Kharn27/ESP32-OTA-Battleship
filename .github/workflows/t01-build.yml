@@ -30,12 +30,20 @@ jobs:
           ${{ matrix.cc }} --version | head -1
           cmake --version | head -1
           ninja --version
+      - name: Install pinned G03 build-time rasterizer
+        run: |
+          python3 -m venv "$RUNNER_TEMP/d14-env"
+          "$RUNNER_TEMP/d14-env/bin/python" -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0'
+          echo "$RUNNER_TEMP/d14-env/bin" >> "$GITHUB_PATH"
       - name: Configure
         run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON
       - name: Verify reproducible G03 conversion
         run: |
           python3 tools/t03_export.py --input design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/t03_second.c
           cmp build-host/t03_g03_data.c build-host/t03_second.c
+          python3 tools/d14_export.py --svg design/ecrans/deploiement/g03_deploiement_320x240.svg --png design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/d14_second.c
+          cmp build-host/d14_g03_data.c build-host/d14_second.c
+          git diff --exit-code -- design/
       - name: Build
         run: cmake --build build-host --verbose
       - name: Run tests
@@ -71,6 +79,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py --version &&
             xtensa-esp32-elf-gcc --version &&
             idf.py set-target esp32 &&
@@ -89,6 +98,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py -B build-d11-bench -D WARSHIP_D11_NVS_BENCH=ON set-target esp32 &&
             idf.py -B build-d11-bench -D WARSHIP_D11_NVS_BENCH=ON build &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
@@ -113,6 +123,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py -B build-d13-reception
             -D WARSHIP_D11_NVS_BENCH=ON
             -D WARSHIP_D13_CYD_SCENARIO=ON set-target esp32 &&
@@ -144,6 +155,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py -B build-t03 -D WARSHIP_T03_DIAGNOSTIC=ON set-target esp32 &&
             idf.py -B build-t03 -D WARSHIP_T03_DIAGNOSTIC=ON build &&
             idf.py -B build-t03 size &&
