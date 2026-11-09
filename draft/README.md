@@ -45,3 +45,7 @@ e004d3b1274133f118ab407e7854d2050121654cca0881b513c7acbc3bd1a808  draft/patrouil
 ```
 
 La mer est peinte dans les sources : **aucun détourage alpha** ni budget Flash/RAM qualifié. **Statut : `DRAFT_REFERENCES — ON_DEVICE_UNVERIFIED`**.
+
+## Flotte — références PO du 09/11/2026
+
+Nouveau lot de six images de référence, documenté séparément dans [REFERENCES_FLOTTE_PO_2026-11-09.md](REFERENCES_FLOTTE_PO_2026-11-09.md). Les sources JPEG réencodées ne sont ni des sprites RGBA, ni les originaux binaires exacts.
