@@ -9,7 +9,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "driver/gpio.h"
+#include "warship_lcd_light.h"
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
 #include "esp_lcd_ili9341.h"
@@ -52,7 +52,10 @@ static esp_err_t sticky_error(esp_err_t reason)
 {
     last_error = reason;
     fault = true;
-    (void)gpio_set_level(LCD_LIGHT, 0);
+    const esp_err_t light_err = warship_lcd_light_force_off();
+    if (light_err != ESP_OK)
+        ESP_LOGE(TAG, "BACKLIGHT_FORCE_OFF_FAILED err=%s",
+                 esp_err_to_name(light_err));
     ESP_LOGE(TAG, "FAIL err=%s dma_buffer_retained=1 no_retry=1",
              esp_err_to_name(reason));
     return reason;
@@ -84,12 +87,16 @@ static esp_err_t transfer(int x, int y, int w, int h, int max_w, int max_h)
 
 static void cleanup_before_dma(void)
 {
+    /* Never rely on GPIO_SET_LEVEL when LEDC owns GPIO21. */
+    const esp_err_t light_err = warship_lcd_light_force_off();
+    if (light_err != ESP_OK)
+        ESP_LOGE(TAG, "CLEANUP_LIGHT_OFF_FAILED err=%s",
+                 esp_err_to_name(light_err));
     if (panel) { (void)esp_lcd_panel_del(panel); panel = NULL; }
     if (panel_io) { (void)esp_lcd_panel_io_del(panel_io); panel_io = NULL; }
     if (owns_bus) { (void)spi_bus_free(LCD_SPI); owns_bus = false; }
     if (completed) { vSemaphoreDelete(completed); completed = NULL; }
     if (stripe) { heap_caps_free(stripe); stripe = NULL; }
-    (void)gpio_set_level(LCD_LIGHT, 0);
 }
 
 esp_err_t warship_lcd_init(void)
@@ -97,17 +104,18 @@ esp_err_t warship_lcd_init(void)
     if (initialized || fault || panel || panel_io || owns_bus ||
         completed || stripe) return ESP_ERR_INVALID_STATE;
 
-    const gpio_config_t light = {
-        .pin_bit_mask = 1ULL << LCD_LIGHT,
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    esp_err_t err = gpio_config(&light);
-    if (err != ESP_OK) return err;
-    err = gpio_set_level(LCD_LIGHT, 0);
-    if (err != ESP_OK) return err;
+    /* Configures LEDC duty=0 and physically stops with idle_level=0
+     * before any DMA / panel initialization. Fail closed if LEDC setup
+     * is unavailable; never silently fall back to 100% GPIO HIGH. */
+    esp_err_t err = warship_lcd_light_init();
+    if (err != ESP_OK) {
+        last_error = err;
+        fault = true;
+        (void)warship_lcd_light_force_off();
+        ESP_LOGE(TAG,"BACKLIGHT_INIT_FATAL err=%s",
+                 esp_err_to_name(err));
+        return err;
+    }
 
     stripe = heap_caps_malloc(WARSHIP_LCD_DMA_BYTES,
                               MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA);
@@ -162,6 +170,7 @@ fail:
     last_error = err;
     /* No DMA has been submitted in init(). Safe to release allocations. */
     cleanup_before_dma();
+    fault = true; /* No retries after partially initialized LEDC/panel. */
     return err;
 }
 
@@ -222,7 +231,21 @@ esp_err_t warship_lcd_send(int x, int y, int width, int height)
 esp_err_t warship_lcd_backlight(bool on)
 {
     if (!prepared || fault) return ESP_ERR_INVALID_STATE;
-    const esp_err_t err = gpio_set_level(LCD_LIGHT, on ? 1 : 0);
+    const esp_err_t err = warship_lcd_light_set(on);
+    if (err != ESP_OK) return sticky_error(err);
+    last_error = ESP_OK;
+    return ESP_OK;
+}
+
+/* Explicit brightness adjustment for Pilotage experiments.
+ * 0..100 valid. Bad user input does not make LCD transport sticky;
+ * an actual LEDC hardware failure does.
+ */
+esp_err_t warship_lcd_backlight_set_percent(uint8_t percent)
+{
+    if (percent > 100u) return ESP_ERR_INVALID_ARG;
+    if (!prepared || fault) return ESP_ERR_INVALID_STATE;
+    const esp_err_t err = warship_lcd_light_set_percent(percent);
     if (err != ESP_OK) return sticky_error(err);
     last_error = ESP_OK;
     return ESP_OK;
