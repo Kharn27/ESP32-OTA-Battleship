@@ -1,0 +1,50 @@
+name: PR90 accueil deterministic ORA regeneration (temporary)
+on:
+  push:
+    branches:
+      - assets/accueil-alpha-png
+    paths:
+      - .github/workflows/pr90-accueil-canonical-temp.yml
+permissions:
+  contents: write
+jobs:
+  verify-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install Pillow==12.3.0
+      - name: Verify reproducible artifacts at two different wall-clock times
+        shell: bash
+        run: |
+          set -euo pipefail
+          a="$(mktemp -d)"
+          b="$(mktemp -d)"
+          python design/ecrans/accueil/compose_accueil.py --repo . --out "$a"
+          sleep 3
+          python design/ecrans/accueil/compose_accueil.py --repo . --out "$b"
+          diff -qr "$a" "$b"
+          echo 'PASS fixed timestamps and reproducible OpenRaster/manifest across 3 seconds'
+          test ! -e draft/accueil/Bouton_jouer_RGBA.png
+          test ! -e design/ecrans/accueil/accueil_cyd_warship.svg
+          for f in \
+            accueil_cyd_warship_320x240.png accueil_cyd_warship_x4.png \
+            sprites/logo_titre_145x66.png sprites/bouton_jouer_140x32.png \
+            sprites/bouton_palmares_140x30.png \
+            preuves/alpha_clair_sombre_640x720.png \
+            preuves/zones_tactiles_320x240.png; do
+            cmp "$a/$f" "design/ecrans/accueil/$f"
+          done
+          cp "$a/accueil_cyd_warship_4_calques.ora" design/ecrans/accueil/
+          cp "$a/manifest.json" design/ecrans/accueil/
+          python design/ecrans/accueil/compose_accueil.py --repo . --out design/ecrans/accueil --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add design/ecrans/accueil/accueil_cyd_warship_4_calques.ora design/ecrans/accueil/manifest.json
+          git diff --cached --quiet || git commit -m 'fix(accueil): OpenRaster archive deterministic and manifest updated'
+          git push origin HEAD:assets/accueil-alpha-png
+          echo 'PASS same canonical bitmaps and four editable layers'
