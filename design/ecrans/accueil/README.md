@@ -1,11 +1,11 @@
-> **PROPOSITION D'ACCUEIL MODULAIRE — PR #90, EN ATTENTE DU CHOIX ARTISTIQUE DU PO.**
-> La précédente maquette GRAPH-ACC-001 de la PR #8 était approuvée sur PC. La présente **version est proposée**, pas encore validée PO, et reste `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : aucun essai TFT, tactile, mémoire ou rendu alpha en firmware.
+> **RÉFÉRENCE ACCUEIL MODULAIRE — VALIDÉE ARTISTIQUEMENT PAR LE PO LE 09/11/2026 (PR #90).**
+> La précédente maquette GRAPH-ACC-001 de la PR #8 était approuvée sur PC. Cette nouvelle version est **acceptée artistiquement sur PC** ([décision PO](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237)) et reste `DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED` : aucun essai TFT, tactile, mémoire ou rendu alpha en firmware.
 
 # CYD WARSHIP — accueil 320 × 240 paysage
 
 ## Nouvelle composition de quatre éléments indépendants
 
-![Composition CYD WARSHIP 320 × 240 proposée](accueil_cyd_warship_320x240.png)
+![Composition CYD WARSHIP 320 × 240 validée sur PC](accueil_cyd_warship_320x240.png)
 
 - [Accueil natif 320 × 240](accueil_cyd_warship_320x240.png) — PNG RGB, 144 890 octets, SHA-256 `ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873`.
 - [Zoom ×4 strict NEAREST](accueil_cyd_warship_x4.png) — 1280 × 960 RGB, 224 987 octets.
@@ -45,6 +45,6 @@ Le contrôle reconstruit en répertoire temporaire et compare **octet par octet*
 
 ## Traçabilité et gouvernance
 
-La précédente image d'accueil monolithique et son SVG associé restent consultables dans l'historique du dépôt ([PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8)). Les noms stables `accueil_cyd_warship_320x240.png` et `accueil_cyd_warship_x4.png` représentent ici **la proposition qui remplacerait cette maquette après validation PO**. L'ancien SVG n'est pas une source valable pour cette nouvelle composition et a été retiré de la branche PR #90.
+La précédente image d'accueil monolithique et son SVG associé restent consultables dans l'historique du dépôt ([PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8)). Les noms stables `accueil_cyd_warship_320x240.png` et `accueil_cyd_warship_x4.png` représentent désormais **la référence artistique acceptée par le PO pour remplacer cette maquette après fusion**. L'ancien SVG n'est pas une source valable pour cette nouvelle composition et a été retiré de la branche PR #90.
 
-**Ne pas fusionner avant arbitrage artistique PO et CI conforme.** Une fusion de ressources graphiques PC ne valide pas l'affichage sur ESP32 CYD réelle, le rendu alpha, les hitboxes, ni les budgets Flash/RAM. L'intégration firmware demeure un travail distinct. Le GIF de destruction PAT-05 reste reporté.
+**Validation artistique PO et CI obtenues sur la PR #90 ; fusion sous responsabilité du Pilotage.** Une fusion de ressources graphiques PC ne valide pas l'affichage sur ESP32 CYD réelle, le rendu alpha, les hitboxes, ni les budgets Flash/RAM. L'intégration firmware demeure un travail distinct. Le GIF de destruction PAT-05 reste reporté.

@@ -186,14 +186,14 @@ def build(repo: Path, out: Path):
         "title": "CYD WARSHIP — PR90 accueil quatre calques",
         "detourage_source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
         "source_status": "JPEG PO originaux inchanges; RGBA detailles dans le meme dossier que l ecran canonique",
-        "status": "DESIGN_PREVIEW — PO_REVIEW_PENDING — ON_DEVICE_UNVERIFIED",
+        "status": "DESIGN_PREVIEW — PO_APPROVED — ON_DEVICE_UNVERIFIED",
         "tool": {"name":"Pillow", "version": PIL.__version__, "native_filter":"LANCZOS", "zoom_filter":"NEAREST"},
         "canvas": [320, 240],
         "layout_proposed": {key: dict(zip(("x", "y", "width", "height"), box)) for key, box in LAYOUT.items()},
         "touch_proposed": {key: dict(zip(("x", "y", "width", "height"), box)) for key, box in TOUCH.items()},
         "sources": originals, "exports": exported,
         "limitations": [
-            "Composition proposée et non validée par le PO",
+            "Composition approuvée artistiquement par le PO le 09/11/2026, maquette PC uniquement",
             "Liserés alpha : inspection artistique humaine encore nécessaire",
             "Aucun essai sur ESP32 CYD, aucun contrat mémoire/Flash implicite",
             "Les sources JPEG et PNG originaux sont restés inchangés"
@@ -203,7 +203,7 @@ def build(repo: Path, out: Path):
     print("PASS PR90 — vrais PNG 320x240, zoom x4 NEAREST, sprites RGBA, OpenRaster 4 couches")
     for name, info in exported.items():
         print(f"{name}: {info['bytes']} octets — sha256 {info['sha256']}")
-    print("DESIGN_PREVIEW / PO_REVIEW_PENDING / ON_DEVICE_UNVERIFIED")
+    print("DESIGN_PREVIEW / PO_APPROVED / ON_DEVICE_UNVERIFIED")
 
 
 def verify_existing(repo: Path, out: Path):
