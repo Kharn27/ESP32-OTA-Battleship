@@ -156,7 +156,7 @@ def main():
     for i in range(0, len(offsets), 12):
         lines.append('  ' + ','.join(str(v) + 'u' for v in offsets[i:i+12]) + ',')
     lines.append('};')
-    lines.append('const size_t d14_g03_rle_size=sizeof(d14_g03_rle);')
+    lines.append('const T03Image d14_g03_image = {d14_g03_rle, sizeof(d14_g03_rle), d14_g03_offsets, 241u, 320u, 240u, T03_ROW_RLE565BE};')
     lines.extend(sprites)
     lines.append('const D14Sprite d14_g03_sprites[5][2] = {')
     for i in range(5):
