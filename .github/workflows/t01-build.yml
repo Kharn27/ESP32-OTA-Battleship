@@ -32,6 +32,10 @@ jobs:
           ninja --version
       - name: Configure
         run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON
+      - name: Verify reproducible G03 conversion
+        run: |
+          python3 tools/t03_export.py --input design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/t03_second.c
+          cmp build-host/t03_g03_data.c build-host/t03_second.c
       - name: Build
         run: cmake --build build-host --verbose
       - name: Run tests
@@ -133,6 +137,30 @@ jobs:
             build-d13-reception/flasher_args.json
             build-d13-reception/cyd_warship.map
             sdkconfig
+          if-no-files-found: error
+      - name: Build T03 isolated Flash/G03 diagnostic (never production)
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            idf.py -B build-t03 -D WARSHIP_T03_DIAGNOSTIC=ON set-target esp32 &&
+            idf.py -B build-t03 -D WARSHIP_T03_DIAGNOSTIC=ON build &&
+            idf.py -B build-t03 size &&
+            idf.py -B build-t03 size-components &&
+            sha256sum build-t03/cyd_warship.bin &&
+            strings build-t03/cyd_warship.elf | grep -Fq 'T03_DIAGNOSTIC=ON'
+      - name: T03 diagnostic BIN (test-only; NOT for normal CYD)
+        uses: actions/upload-artifact@v4
+        with:
+          name: warship-t03-G03-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-t03/cyd_warship.bin
+            build-t03/cyd_warship.elf
+            build-t03/bootloader/bootloader.bin
+            build-t03/partition_table/partition-table.bin
+            build-t03/flasher_args.json
+            build-t03/cyd_warship.map
           if-no-files-found: error
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
