@@ -29,8 +29,10 @@ jobs:
   validate-graphic-catalog:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout exact revision
+      - name: Checkout exact revision with historical artwork refs
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Validate approved assets and screen references
         run: python3 scripts/check_graphic_pipeline.py
       - name: Verify accueil sprite exports and composed screen byte for byte
@@ -38,3 +40,5 @@ jobs:
           python3 -m venv /tmp/cyd-graphics-venv
           /tmp/cyd-graphics-venv/bin/python -m pip install --disable-pip-version-check --no-input "Pillow==12.3.0"
           /tmp/cyd-graphics-venv/bin/python maquettes/accueil/legacy/compose_accueil.py --repo . --out maquettes/accueil/legacy --check
+      - name: Verify original/CYD wallpaper exports byte for byte
+        run: /tmp/cyd-graphics-venv/bin/python scripts/export_wallpapers.py --check
