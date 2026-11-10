@@ -71,7 +71,7 @@ Reproduire depuis la racine du dépôt :
 
 ```sh
 python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
-python3 design/ecrans/deploiement/export_previews.py
+python3 maquettes/deploiement/legacy/export_previews.py
 ```
 
 Le script vérifie les 5 types/longueurs, 17 cellules uniques, l'absence de débordement/chevauchement, les deux contacts, la transformation des positions et **l'égalité textuelle des cinq définitions G02** avec leur source sur main. Il rasterise le SVG en 320×240 ; pour préserver strictement les graphismes déjà acceptés, il ne transpose **que les pixels des trois boutons** sur le PNG de référence immuable (commit `d0fbe0571415bcb94e83c560cac093d565339347`), puis génère le PNG 1280×960 par `NEAREST` ; égalité RGBA complète contre le zoom attendu et contrôle négatif RGB. **Dépendance de reproduction :** historique Git contenant ce commit (clone Git complet / `fetch-depth: 0`), CairoSVG et Pillow. Le PNG est un export PC, **sans décision** sur la palette ni sur le format embarqué. Le script vérifie que tous les pixels hors boutons sont **strictement identiques** au PNG source de référence.

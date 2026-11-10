@@ -52,8 +52,8 @@ La commande **ATTAQUE** permet le retour ; **aucun FEU** sur DÉFENSE ; **aucune
 
 ```bash
 python3 -m pip install 'Pillow==12.3.0'
-python3 design/ecrans/defense/build_g05_r2.py
-python3 design/ecrans/defense/verify_g05_r2.py
+python3 maquettes/defense/legacy/build_g05_r2.py
+python3 maquettes/defense/legacy/verify_g05_r2.py
 ```
 
 Le rendu est volontairement une **maquette PC**, pas un pack d'assets firmware. Aucun format d'encodage/compression Flash, aucun budget de RAM/Flash, aucune carte microSD/PSRAM, aucune performance sur ESP32 ni hitbox/taille de doigt n'est préjugé. Le Développeur définira le contrat d'assets et les essais sur ESP32-2432S028R. Les avis PO sur ce visuel, la touche au stylet, les petits textes, la luminosité du TFT, les états animés et la génération de sprites restent **à recueillir**. Ne pas déclarer `ON_DEVICE_VERIFIED`.
