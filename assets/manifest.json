@@ -72,6 +72,62 @@
         30
       ],
       "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "wallpaper.accueil.historique.original",
+      "path": "assets/wallpaper/accueil_historique_original_1448x1086.png",
+      "sha256": "a609d6412a1cbc4599107f7163298ad9daeb5cf2172a5eb3129424d5b75065b1",
+      "source_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/blob/50d9e1dabd71725adba50279929694123fde0fda/design/graph-acc-001/accueil_cyd_warship.svg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/105",
+      "artistic_source_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8",
+      "catalog_role": "HISTORICAL_FLATTENED_ACCUEIL",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "wallpaper.accueil.historique.cyd",
+      "path": "assets/wallpaper/accueil_historique_CYD_320x240.png",
+      "sha256": "50a0d2a1bcdb120fb1d10b45a81a16e0a0c412bbb4aa73802414c197c56d72a5",
+      "source_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/blob/50d9e1dabd71725adba50279929694123fde0fda/design/graph-acc-001/accueil_cyd_warship_320x240.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/105",
+      "artistic_source_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8",
+      "catalog_role": "HISTORICAL_FLATTENED_ACCUEIL",
+      "dimensions": [
+        320,
+        240
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "wallpaper.accueil.retenu.original",
+      "path": "assets/wallpaper/accueil_retenu_original_1195x896.jpeg",
+      "sha256": "3f686ba83e3f91e6349ebec89069d74a9595ec5d7a4c177518c0bb0f74712642",
+      "source_ref": "draft/Wallpaper_accueil.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/105",
+      "artistic_source_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237",
+      "catalog_role": "CURRENT_WALLPAPER_BACKGROUND",
+      "dimensions": [
+        1195,
+        896
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "wallpaper.accueil.retenu.cyd",
+      "path": "assets/wallpaper/accueil_retenu_CYD_320x240.png",
+      "sha256": "afb167ac27d091ccde416c5644faff4e5ac191df19753cab6a24db5a0c91a1c6",
+      "source_ref": "assets/wallpaper/accueil_retenu_original_1195x896.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/105",
+      "artistic_source_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237",
+      "catalog_role": "CURRENT_WALLPAPER_BACKGROUND",
+      "dimensions": [
+        320,
+        240
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
     }
   ]
 }
