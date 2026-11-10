@@ -8,7 +8,7 @@ endif()
 idf_component_register(
     SRCS "warship_lcd.c" "warship_lcd_light.c"
     INCLUDE_DIRS "include"
-    REQUIRES esp_lcd esp_driver_spi esp_driver_gpio esp_driver_ledc freertos heap
+    REQUIRES esp_lcd esp_driver_spi esp_driver_gpio esp_driver_ledc freertos heap d14_color_diag
 )
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
                            WARSHIP_LCD_BACKLIGHT_PERCENT=${WARSHIP_LCD_BACKLIGHT_PERCENT})
