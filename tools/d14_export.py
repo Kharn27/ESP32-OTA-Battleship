@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""D14 G03: extract canonical opaque BACKGROUND and G02 ship RGBA masks.
+"""D14 historical G03 test oracle — NOT an approved production exporter.
 
-The approved native PNG is the sole base for ALL pixels outside the five
-original ship footprints. Inside those footprints, render the SVG with its
-five <use> placements removed. Do not edit design/. Never fill-by-hand.
-CairoSVG 2.7.1 + Pillow 11.3.0 are pinned for repeatable source rendering.
+Only host regression tests may extract the previously compiled G03 opaque
+background and G02 ship RGBA masks from the immutable legacy SVG/PNG.
+The approved *screen composition* is not an individually approved asset.
+The production component must NOT invoke this program until Pilotage and PO
+approve an explicit transitional exception; otherwise it requires separate
+assets/manifest.json-approved G03/G02 components, not legacy extraction.
+No graphic pixels are changed and no legacy inputs are overwritten.
+CairoSVG 2.7.1 + Pillow 11.3.0 are pinned for repeatable oracle rendering.
 
 Output generated C in build directory only; never changes approved artwork.
 """
@@ -148,7 +152,7 @@ def main():
     raw = bytes_for_rgb565(clean)
     rle, offsets = encode_rle(raw)
     sprites, sizes = encode(clean, svg)
-    lines = ["/* D14 generated; canonical G03 PNG + G02 symbols in canonical SVG. */",
+    lines = ["/* D14 HOST-TEST oracle: legacy G03/G02 scene, not approved as production assets. */",
              '#include "d14_g03.h"', '#include <stddef.h>',
              '#include <stdint.h>']
     lines.append(fmt_u8('d14_g03_rle', rle))

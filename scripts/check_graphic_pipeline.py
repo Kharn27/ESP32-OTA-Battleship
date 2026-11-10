@@ -19,6 +19,7 @@ SCREENS = ROOT / "maquettes"
 GRAPHIC_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".svg", ".apng", ".ico"}
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 IDENTIFIER = re.compile(r"[a-z0-9]+(?:[._-][a-z0-9]+)*\Z")
+HEX40 = re.compile(r"[0-9a-f]{40}\Z")
 APPROVAL_PREFIX = "https://github.com/Kharn27/ESP32-OTA-Battleship/"
 
 
@@ -51,6 +52,16 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: stream.read(65536), b""):
             hasher.update(block)
     return hasher.hexdigest()
+
+
+def git_blob_sha(path: Path) -> str:
+    """Hash a file exactly as a Git blob; used only for frozen legacy materials."""
+    digest = hashlib.sha1()
+    digest.update(f"blob {path.stat().st_size}\0".encode("utf-8"))
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(65536), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def approval(value: object, field: str) -> None:
@@ -129,8 +140,12 @@ def check_screens(identifiers: dict[str, Path], fingerprints: set[str]) -> int:
         if doc.get("size") != [320, 240]:
             fail(f"{field}/screen.json: screen must be 320x240 landscape")
         used = doc.get("assets")
-        if not isinstance(used, list) or not used or any(not isinstance(x, str) for x in used):
-            fail(f"{field}/screen.json: assets must be non-empty list of IDs")
+        legacy = doc.get("migration_state") == "LEGACY_UNDECOMPOSED"
+        if (not isinstance(used, list)
+                or any(not isinstance(x, str) for x in used)
+                or (not used and not legacy)
+                or (legacy and used)):
+            fail(f"{field}/screen.json: assets must be IDs; frozen legacy screens use [] only")
         if len(set(used)) != len(used):
             fail(f"{field}/screen.json: duplicate asset IDs")
         missing = set(used) - set(identifiers)
@@ -144,6 +159,30 @@ def check_screens(identifiers: dict[str, Path], fingerprints: set[str]) -> int:
         preview = file_in(doc.get("preview"), directory, f"{field}.preview")
         if preview.suffix.lower() != ".png" or png_size(preview) != (320, 240):
             fail(f"{field}: preview must be a real 320x240 PNG")
+        if legacy:
+            # Transitional exception only: every historical file is locked to its
+            # original Git blob, not silently treated as an approved component.
+            legacy_dir = directory / "legacy"
+            frozen = doc.get("legacy_files")
+            if not legacy_dir.is_dir() or not isinstance(frozen, dict) or not frozen:
+                fail(f"{field}: missing frozen legacy directory/inventory")
+            real_files = {p.resolve() for p in legacy_dir.rglob("*") if p.is_file()}
+            expected_files: set[Path] = set()
+            for relative, expected_sha in frozen.items():
+                if (not isinstance(relative, str) or not relative
+                        or not isinstance(expected_sha, str)
+                        or not HEX40.fullmatch(expected_sha)):
+                    fail(f"{field}: bad legacy file entry")
+                file = file_in(f"{field}/legacy/{relative}", legacy_dir, f"{field}.legacy_files")
+                if file in expected_files or git_blob_sha(file) != expected_sha:
+                    fail(f"{field}: legacy blob mismatch/duplicate: {relative}")
+                expected_files.add(file)
+            if real_files != expected_files:
+                fail(f"{field}: untracked or missing legacy files")
+            registered_images.update(graphic_files(legacy_dir))
+        else:
+            if (directory / "legacy").exists() or doc.get("legacy_files") is not None:
+                fail(f"{field}: legacy only permitted with LEGACY_UNDECOMPOSED")
         proofs = doc.get("proofs", [])
         if not isinstance(proofs, list):
             fail(f"{field}/screen.json: proofs must be a list")
@@ -165,6 +204,8 @@ def check_screens(identifiers: dict[str, Path], fingerprints: set[str]) -> int:
 
 def main() -> int:
     try:
+        if (ROOT / "design").exists():
+            fail("legacy design/ must not reappear; use draft/, assets/ or maquettes/")
         identifiers, fingerprints = check_manifest()
         screen_count = check_screens(identifiers, fingerprints)
     except (ValueError, OSError) as exc:

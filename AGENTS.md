@@ -17,12 +17,12 @@
 | Dossier | Propriétaire du contenu | Règle |
 | --- | --- | --- |
 | `draft/` | Originaux PO, brouillons et variantes de travail | Conserver les originaux tels que remis ; ne pas les traiter comme validés ou intégrables. Ne modifier un original PO que sur mandat explicite. |
-| `assets/` | **Éléments individuels réutilisables validés artistiquement par le PO** | Images, boutons, fonds, logos, navires, effets ; chaque export visuel est déclaré dans `assets/manifest.json` avec empreinte SHA-256 et référence de décision PO. |
+| `assets/` | **Composants réutilisables destinés à l'intégration par le Développeur** (et leurs sources haute définition), validés artistiquement par le PO | Images, boutons, fonds, logos, navires, effets ; chaque export visuel est déclaré dans `assets/manifest.json` avec empreinte SHA-256 et référence de décision PO. |
 | `maquettes/` | **Compositions d'écrans** | Une maquette assemble des IDs d'assets existants et des primitives UI, sans créer de copie privée d'un composant réutilisable. Déclarer les dépendances dans `maquettes/<ecran>/screen.json`. |
 | `docs/graphisme/` ou `docs/GRAPHIC_PIPELINE.md` | Contrats, charte, flux de travail | Documentation et conventions ; aucune copie de sprites ou d'écrans comme source runtime. |
-| `design/` | **Héritage en transition**, non destination nouvelle | Ne pas y établir de nouvelle source de vérité. Toute exception pour une PR historique est examinée explicitement par Pilotage ; migration progressive sans modifier les pixels approuvés. |
+| `design/` | **Ancien emplacement retiré** | Le dossier est supprimé de l’arbre courant ; aucune nouvelle contribution n’y est autorisée. Les contenus historiques sont gelés sous `maquettes/*/legacy/` ou reclassés dans `draft/etudes/`. |
 
-Ne jamais faire passer un brouillon ou un rendu d'écran pour un composant validé. Une **validation artistique PO sur PC** n'est **pas** une validation sur la **CYD physique** ; marquer explicitement `ON_DEVICE_UNVERIFIED` si non prouvé. Un asset approuvé ne change pas silencieusement : changement de pixels = nouvelle empreinte, preuve de décision et revue.
+**Frontière stricte validée par le PO (#107) :** une image comportant tout l’écran, du texte ou des boutons déjà incrustés est une **maquette**, même si elle est au format PNG 320×240 ; elle ne doit pas être cataloguée dans `assets/`. Une version historique reste dans `maquettes/`, explicitement non active. Seuls les éléments séparables (fond nu, logo isolé, boutons isolés, navires, effets, etc.) et leurs variantes de résolution peuvent figurer dans `assets/`. Ne jamais faire passer un brouillon ou un rendu d'écran pour un composant validé. Une **validation artistique PO sur PC** n'est **pas** une validation sur la **CYD physique** ; marquer explicitement `ON_DEVICE_UNVERIFIED` si non prouvé. Un asset approuvé ne change pas silencieusement : changement de pixels = nouvelle empreinte, preuve de décision et revue.
 
 ## Protocole de travail de chaque agent
 

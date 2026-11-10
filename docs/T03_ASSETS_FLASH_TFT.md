@@ -23,7 +23,7 @@ Aucune de ces valeurs n'a été **remesurée** par T03. La trace D13 `DRAW us=` 
 
 ## 2. Une source graphique, deux formats **sans perte RGB565**
 
-Source unique et inchangée : `design/ecrans/deploiement/g03_deploiement_320x240.png` (G03 `VALIDÉ PO` comme `DESIGN_PREVIEW` uniquement), SVG associé dans `design/`. Convertisseur `tools/t03_export.py` : Python standard uniquement, refuse les dimensions autres que 320×240, les PNG non RGB8, entrelacés, alpha/transparence et malformés (CRC, filtres, longueurs). Quantification **déterministe et identique** dans les deux formats : canaux RGB8 réduits en RGB565 par décalage 5/6/5 bits; octets **high-byte first** compatibles `warship_lcd`. Toute éventuelle perte initiale RGB888→RGB565 est **commune** aux deux.
+Source unique et inchangée : `maquettes/deploiement/legacy/g03_deploiement_320x240.png` (G03 `VALIDÉ PO` comme `DESIGN_PREVIEW` uniquement), SVG associé dans `maquettes/deploiement/legacy/`. Convertisseur `tools/t03_export.py` : Python standard uniquement, refuse les dimensions autres que 320×240, les PNG non RGB8, entrelacés, alpha/transparence et malformés (CRC, filtres, longueurs). Quantification **déterministe et identique** dans les deux formats : canaux RGB8 réduits en RGB565 par décalage 5/6/5 bits; octets **high-byte first** compatibles `warship_lcd`. Toute éventuelle perte initiale RGB888→RGB565 est **commune** aux deux.
 
 | Option | Flash utile (octets, **hors alignement et linker**) | Restitution | Coût CPU et RAM |
 |---|---:|---|---|
@@ -35,8 +35,8 @@ Les **tailles RLE et empreintes ELF exactes** sont imprimées lors de la configu
 **Protocole reproductible PC :**
 
 ```sh
-python3 tools/t03_export.py --input design/ecrans/deploiement/g03_deploiement_320x240.png --output /tmp/t03-a.c
-python3 tools/t03_export.py --input design/ecrans/deploiement/g03_deploiement_320x240.png --output /tmp/t03-b.c
+python3 tools/t03_export.py --input maquettes/deploiement/legacy/g03_deploiement_320x240.png --output /tmp/t03-a.c
+python3 tools/t03_export.py --input maquettes/deploiement/legacy/g03_deploiement_320x240.png --output /tmp/t03-b.c
 cmp /tmp/t03-a.c /tmp/t03-b.c
 cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=gcc -DWARSHIP_SANITIZERS=ON
 cmake --build build-host

@@ -1,5 +1,17 @@
 # D14 — G03 runtime Flash/TFT (Issue #69)
 
+> **P0 — BLOCAGE_ASSETS_G03 (10/11/2026) :** la branche est reprise
+> avec la migration graphique de `main`. Le catalogue `assets/` ne
+> comprend pas encore les composants G03/G02 nécessaires à la production.
+> **Aucun nouveau firmware NORMAL D14 ne doit être flashé ni déclaré
+> compilé sur la base actuelle** ; le CMake production échoue
+> volontairement plutôt que d'embarquer la maquette `legacy/` sans
+> dérogation. Le profil LCD validé est préservé dans le code et les tests.
+> Voir [inventaire et passation Graphiste](D14_G03_ASSETS_BLOCKER.md).
+> Les mesures/artefacts précédents sont historiques et non recevables
+> pour le HEAD corrigé.
+
+
 > **État courant (10/11/2026) :** profil LCD PO-accepté intégré au
 > firmware normal : `MADCTL=0x28` natif paysage, gamma DoomRPG,
 > inversion ON, BGR, PWM40. Les indications « case10 » et comparaisons

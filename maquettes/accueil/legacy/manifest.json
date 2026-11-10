@@ -1,0 +1,137 @@
+{
+  "canvas": [
+    320,
+    240
+  ],
+  "catalog_exports": {
+    "sprites/bouton_jouer_140x32.png": "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png",
+    "sprites/bouton_palmares_140x30.png": "assets/boutons/bouton_palmares_CYD_140x30_RGBA.png",
+    "sprites/logo_titre_145x66.png": "assets/logo/logo_titre_CYD_145x66_RGBA.png"
+  },
+  "detourage_source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
+  "exports": {
+    "accueil_cyd_warship_320x240.png": {
+      "bytes": 144890,
+      "sha256": "ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873"
+    },
+    "accueil_cyd_warship_4_calques.ora": {
+      "bytes": 460124,
+      "sha256": "ae03b7751adc8ec0bf27ac5e143706d3ce27abe978cd72e50302964478e90f47"
+    },
+    "accueil_cyd_warship_x4.png": {
+      "bytes": 224987,
+      "sha256": "60920708591f12bd0748f8e3f0d081c1ec8bdf7e76a2d13531c269cf8085424d"
+    },
+    "preuves/alpha_clair_sombre_640x720.png": {
+      "bytes": 44226,
+      "sha256": "18ca455d24060dfbc4d8593ccdf78f3c9414ba2d16fac93a100ed5be9a351050"
+    },
+    "preuves/zones_tactiles_320x240.png": {
+      "bytes": 144506,
+      "sha256": "dec0be5c678a1364373a8db735e0aa66bbab7d0a4e970223a3dce666ee8860f9"
+    },
+    "sprites/bouton_jouer_140x32.png": {
+      "bytes": 9730,
+      "sha256": "e01df0c989bfd7f15e6fa649b245d7f3d702f1f51c33e756786c568cc199b9fc"
+    },
+    "sprites/bouton_palmares_140x30.png": {
+      "bytes": 9240,
+      "sha256": "a90b0b581253365b128367196c7e5fc1e25ec811db579b856f41e73c5a8c69ca"
+    },
+    "sprites/logo_titre_145x66.png": {
+      "bytes": 17636,
+      "sha256": "24d31c91af583fe794871c8f1e3452f93b394fddb68649c0c780ffa09a7b2df7"
+    }
+  },
+  "layout_proposed": {
+    "jouer": {
+      "height": 32,
+      "width": 140,
+      "x": 14,
+      "y": 198
+    },
+    "logo": {
+      "height": 66,
+      "width": 145,
+      "x": 88,
+      "y": 8
+    },
+    "palmares": {
+      "height": 30,
+      "width": 140,
+      "x": 166,
+      "y": 199
+    }
+  },
+  "limitations": [
+    "Composition approuvée artistiquement par le PO le 09/11/2026, maquette PC uniquement",
+    "Liserés alpha : inspection artistique humaine encore nécessaire",
+    "Aucun essai sur ESP32 CYD, aucun contrat mémoire/Flash implicite",
+    "Les sources JPEG et PNG originaux sont restés inchangés"
+  ],
+  "source_status": "JPEG PO originaux inchanges; trois sources RGBA HD et trois sprites CYD catalogues dans assets/",
+  "sources": {
+    "fond": {
+      "bytes": 746713,
+      "dimensions": [
+        1195,
+        896
+      ],
+      "git_blob_sha1": "e3c0603405fffbf361ca67b90f265d6fb7994a26",
+      "path": "draft/Wallpaper_accueil.jpeg",
+      "sha256": "3f686ba83e3f91e6349ebec89069d74a9595ec5d7a4c177518c0bb0f74712642"
+    },
+    "jouer": {
+      "bytes": 370652,
+      "dimensions": [
+        1107,
+        252
+      ],
+      "git_blob_sha1": "f81c510060af5aeee231bea50df420d04db7b320",
+      "path": "assets/boutons/bouton_jouer_original_1107x252_RGBA.png",
+      "sha256": "eb57258fc56d98904b1b97d033dbc40e932570807b6660eb50c565201196ac37"
+    },
+    "logo": {
+      "bytes": 473054,
+      "dimensions": [
+        1075,
+        489
+      ],
+      "git_blob_sha1": "010bb56a6c8056924d9b1af1ceeb99482e18fa3a",
+      "path": "assets/logo/logo_titre_original_1075x489_RGBA.png",
+      "sha256": "7cc121d08ae7f36228aff7cc36e4dd8382ed3390684143a66d1d935977df7b03"
+    },
+    "palmares": {
+      "bytes": 329233,
+      "dimensions": [
+        1163,
+        250
+      ],
+      "git_blob_sha1": "06a53829d508ae7366338b14a187a655edd6505c",
+      "path": "assets/boutons/bouton_palmares_original_1163x250_RGBA.png",
+      "sha256": "bab67a47213e856c2f66f1af9c59759ff9ebec7ee5de1aad91758a7fda4e716d"
+    }
+  },
+  "status": "DESIGN_PREVIEW — PO_APPROVED — ON_DEVICE_UNVERIFIED",
+  "title": "CYD WARSHIP — PR90 accueil quatre calques",
+  "tool": {
+    "name": "Pillow",
+    "native_filter": "LANCZOS",
+    "version": "12.3.0",
+    "zoom_filter": "NEAREST"
+  },
+  "touch_proposed": {
+    "JOUER": {
+      "height": 46,
+      "width": 152,
+      "x": 8,
+      "y": 190
+    },
+    "PALMARÈS": {
+      "height": 46,
+      "width": 152,
+      "x": 160,
+      "y": 190
+    }
+  }
+}

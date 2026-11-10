@@ -1,23 +1,16 @@
-# D14: keep generated, immutable Flash data in the SAME archive as its
-# decoder. Avoid unresolved C symbols caused by main/component archive order.
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
-set(D14_PNG "${PROJECT_DIR}/design/ecrans/deploiement/g03_deploiement_320x240.png")
-set(D14_SVG "${PROJECT_DIR}/design/ecrans/deploiement/g03_deploiement_320x240.svg")
-set(D14_GENERATOR "${PROJECT_DIR}/tools/d14_export.py")
-set(D14_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/d14_g03_data.c")
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-             "${D14_PNG}" "${D14_SVG}" "${D14_GENERATOR}")
-execute_process(
-  COMMAND "${Python3_EXECUTABLE}" "${D14_GENERATOR}"
-          --png "${D14_PNG}" --svg "${D14_SVG}"
-          --output "${D14_GENERATED}"
-  RESULT_VARIABLE D14_RESULT OUTPUT_VARIABLE D14_METRICS
-  ERROR_VARIABLE D14_ERROR)
-if(NOT D14_RESULT EQUAL 0)
-  message(FATAL_ERROR "D14 G03 asset extraction failed: ${D14_ERROR}")
-endif()
-message(STATUS "D14 G03 canonical Flash assets: ${D14_METRICS}")
-
-idf_component_register(SRCS "d14_g03.c" "${D14_GENERATED}"
-                       INCLUDE_DIRS "include"
-                       REQUIRES warship_deploy_ui t03_decode)
+# D14 #69 — PO-controlled production graphic boundary (2026-11-10).
+# The legacy G03 maquette is a visual oracle, NEVER a firmware asset.
+# The old generator extracted 1 background + 10 H/V alpha sprites from
+# that composed SVG/PNG; none is approved or declared in assets/manifest.json.
+# Until Pilotage/PO approves an individual G03 catalog and the developer
+# explicitly integrates its validated exports, fail closed at configure.
+# Avoid copying legacy screen pixels into a production "assets" folder.
+#
+# See docs/D14_G03_ASSETS_BLOCKER.md and Issue #69 comment 6773142382.
+message(FATAL_ERROR
+  "BLOCAGE_ASSETS_G03: aucun fond G03 nu ni sprites G02/G03 H/V approuves "
+  "dans assets/manifest.json. Le vieux g03_deploiement_320x240.svg/png de "
+  "maquettes/deploiement/legacy/ est un ORACLE DE TEST, pas un asset "
+  "firmware. Livrer les exports individuels avec IDs/SHA256/decision PO, "
+  "puis remplacer cette garde par une generation Flash depuis assets/ "
+  "apres revue Pilotage. Ne pas flasher un ancien BIN D14.")

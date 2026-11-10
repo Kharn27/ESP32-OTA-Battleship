@@ -1,5 +1,17 @@
 # D14 #69 — LCD de production G03 : réception CYD du NORMAL à réaliser
 
+> **P0 — BLOCAGE_ASSETS_G03 (10/11/2026) :** la branche est reprise
+> avec la migration graphique de `main`. Le catalogue `assets/` ne
+> comprend pas encore les composants G03/G02 nécessaires à la production.
+> **Aucun nouveau firmware NORMAL D14 ne doit être flashé ni déclaré
+> compilé sur la base actuelle** ; le CMake production échoue
+> volontairement plutôt que d'embarquer la maquette `legacy/` sans
+> dérogation. Le profil LCD validé est préservé dans le code et les tests.
+> Voir [inventaire et passation Graphiste](D14_G03_ASSETS_BLOCKER.md).
+> Les mesures/artefacts précédents sont historiques et non recevables
+> pour le HEAD corrigé.
+
+
 Mandat : [Issue #69 commentaire 6767686696](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/69#issuecomment-6767686696) · [PR #91 commentaire 6767696784](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/91#issuecomment-6767696784).
 
 ## Décision et autorité

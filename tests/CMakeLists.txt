@@ -228,7 +228,7 @@ add_test(NAME d13_post_result_inspection COMMAND warship_inspection_tests)
 # T03: build two lossless Flash representations from the *accepted G03 PNG*.
 # All generated C stays in the build tree, independently regenerated in CI.
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
-set(T03_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.png")
+set(T03_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../maquettes/deploiement/legacy/g03_deploiement_320x240.png")
 set(T03_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/t03_export.py")
 set(T03_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/t03_g03_data.c")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
@@ -254,11 +254,13 @@ endif()
 add_test(NAME t03_g03_exact_raw_vs_rle COMMAND t03_asset_tests)
 
 
-# D14: approved G03 opaque background + transparent G02 ship sprites.
-# The same generator is run in host/IDF configurations and outputs only
-# into the build tree; no design-source files are modified.
-set(D14_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.svg")
-set(D14_PNG "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.png")
+# D14: historical composed G03/G02 extraction is TEST ORACLE ONLY.
+# Host-only regression of the previously used technical renderer; NOT
+# a declaration that legacy maquettes are approved firmware assets.
+# Production CMake fails closed until assets/manifest.json has a
+# Graphiste/PO-approved individual G03/G02 catalog (Issue #69).
+set(D14_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../maquettes/deploiement/legacy/g03_deploiement_320x240.svg")
+set(D14_PNG "${CMAKE_CURRENT_SOURCE_DIR}/../maquettes/deploiement/legacy/g03_deploiement_320x240.png")
 set(D14_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/d14_export.py")
 set(D14_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/d14_g03_data.c")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
