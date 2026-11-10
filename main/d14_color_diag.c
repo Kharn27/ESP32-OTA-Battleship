@@ -22,8 +22,10 @@
 #define G01_SOURCE_BLOB_SHA "7bd321c6ccbfc230802e20010bfa06e71a9099a9"
 #ifdef WARSHIP_D14_DOOM_REFERENCE
 #define D14_PROFILE "DOOM_NATIVE_LANDSCAPE"
+#define D14_ORIENTATION_LOG "native_landscape=1 madctl=0x28"
 #else
 #define D14_PROFILE "A"
+#define D14_ORIENTATION_LOG "case10=1"
 #endif
 
 extern const T03Image d14_color_g01_image; /* build-time generated Flash */
@@ -129,7 +131,8 @@ void d14_color_diag_run(void)
              " BLUE=001F(00:1F) GRAY=8410(84:10)"
              " YELLOW=FFE0(FF:E0) MIDTONES=orange,red,blue,gray");
     ESP_LOGI(TAG,"D14_COLOR_PROFILE_REFERENCE"
-             " profile=%s case10=1 spi_hz=20000000 dma=5120"
+             " profile=%s " D14_ORIENTATION_LOG
+             " spi_hz=20000000 dma=5120"
              " pwm_percent=40 gamma_software=NONE",D14_PROFILE);
     esp_err_t err=warship_lcd_init();
     if(err==ESP_OK) err=warship_lcd_prepare_console(0x000cu);
