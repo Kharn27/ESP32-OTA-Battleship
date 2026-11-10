@@ -29,14 +29,21 @@ TOUCH = {
 }
 SOURCES = {
     "fond": ("draft/Wallpaper_accueil.jpeg", (1195, 896), "e3c0603405fffbf361ca67b90f265d6fb7994a26"),
-    "logo": ("maquettes/accueil/legacy/assets/Logo_titre_RGBA.png", (1075, 489), "010bb56a6c8056924d9b1af1ceeb99482e18fa3a"),
-    "jouer": ("maquettes/accueil/legacy/assets/Bouton_jouer_RGBA.png", (1107, 252), "f81c510060af5aeee231bea50df420d04db7b320"),
-    "palmares": ("maquettes/accueil/legacy/assets/Bouton_palmares_RGBA.png", (1163, 250), "06a53829d508ae7366338b14a187a655edd6505c"),
+    "logo": ("assets/logo/logo_titre_original_1075x489_RGBA.png", (1075, 489), "010bb56a6c8056924d9b1af1ceeb99482e18fa3a"),
+    "jouer": ("assets/boutons/bouton_jouer_original_1107x252_RGBA.png", (1107, 252), "f81c510060af5aeee231bea50df420d04db7b320"),
+    "palmares": ("assets/boutons/bouton_palmares_original_1163x250_RGBA.png", (1163, 250), "06a53829d508ae7366338b14a187a655edd6505c"),
 }
 SPRITES = {
     "logo": "logo_titre_145x66.png",
     "jouer": "bouton_jouer_140x32.png",
     "palmares": "bouton_palmares_140x30.png",
+}
+
+# Stable output paths for the sprites promoted to the shared catalog (#103).
+CATALOG_EXPORTS = {
+    "sprites/logo_titre_145x66.png": "assets/logo/logo_titre_CYD_145x66_RGBA.png",
+    "sprites/bouton_jouer_140x32.png": "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png",
+    "sprites/bouton_palmares_140x30.png": "assets/boutons/bouton_palmares_CYD_140x30_RGBA.png",
 }
 
 
@@ -64,6 +71,8 @@ def save_png(image: Image.Image, path: Path):
 
 
 def build(repo: Path, out: Path):
+    if out.resolve() == (repo / "maquettes/accueil/legacy").resolve():
+        raise ValueError("Legacy is frozen: generate into a separate directory or use --check")
     assert PIL.__version__ == "12.3.0", "Pillow doit être figé à 12.3.0"
     originals = {}
     images = {}
@@ -185,7 +194,8 @@ def build(repo: Path, out: Path):
     manifest = {
         "title": "CYD WARSHIP — PR90 accueil quatre calques",
         "detourage_source_commit": "5fd1ce6efd7a0c0b6f014a3b3da9fb323774570d",
-        "source_status": "JPEG PO originaux inchanges; RGBA detailles dans le meme dossier que l ecran canonique",
+        "source_status": "JPEG PO originaux inchanges; trois sources RGBA HD et trois sprites CYD catalogues dans assets/",
+        "catalog_exports": CATALOG_EXPORTS,
         "status": "DESIGN_PREVIEW — PO_APPROVED — ON_DEVICE_UNVERIFIED",
         "tool": {"name":"Pillow", "version": PIL.__version__, "native_filter":"LANCZOS", "zoom_filter":"NEAREST"},
         "canvas": [320, 240],
@@ -216,7 +226,7 @@ def verify_existing(repo: Path, out: Path):
         for fresh in sorted(generated.rglob("*")):
             if fresh.is_file():
                 rel = fresh.relative_to(generated)
-                existing = out / rel
+                existing = repo / CATALOG_EXPORTS[rel.as_posix()] if rel.as_posix() in CATALOG_EXPORTS else out / rel
                 assert existing.is_file(), f"Export absent : {existing}"
                 assert existing.read_bytes() == fresh.read_bytes(), f"Export different : {rel}"
         print("PASS accueil canonique --check : ORA, PNG, manifest et sprites reproductibles")
