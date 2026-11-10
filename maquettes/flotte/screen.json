@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "flotte",
+  "size": [
+    320,
+    240
+  ],
+  "assets": [],
+  "preview": "maquettes/flotte/legacy/g02_grille_320x240.png",
+  "status": "VALIDATED_PO_PC",
+  "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "migration_state": "LEGACY_UNDECOMPOSED",
+  "legacy_source_ref": "design/flotte/",
+  "legacy_import_commit": "87f2608236d9c93f80a0705111af0216cef35ba9",
+  "legacy_files": {
+    "README.md": "a644b38d7fcf408e77ffe84d5cb48644390e08e3",
+    "export_previews.py": "494eb794486975ac6787126ba7aa1c9137bbc840",
+    "g02_etats_320x240.png": "0ac7686e244096fe7c2d9dccc06fb55a47846498",
+    "g02_etats_320x240.svg": "e188723ccf6ac5fc48dbb6df8c4919fefdd03538",
+    "g02_etats_x4.png": "2ddf8f53032c139227ed001370f7836bc3cb1cf2",
+    "g02_etats_x4.svg": "1e5d63849e7b6fcdd457c2f9df3446c1a6ff63ca",
+    "g02_grille_320x240.png": "6032fd913e7b78635cfccb33f73fe3e7ef1c9fe1",
+    "g02_grille_320x240.svg": "5a8e8de653d40e5ab801baa7170969e9243c5d77",
+    "g02_grille_x4.png": "5a48ac5345a5d73b0b61b5d78d62e251ab71ec22",
+    "g02_grille_x4.svg": "4d50e76c3f996e979f5ab041207a66dcadfb03b7",
+    "g02_orientations_320x240.png": "15c12ce39311cfd3224d216d319f37f9579a1d12",
+    "g02_orientations_320x240.svg": "a80024ffed9a64b2af11b76b61352c365aaa14ab",
+    "g02_orientations_x4.png": "27754ad4920ec10fd941bf67d2465aa578a54ec7",
+    "g02_orientations_x4.svg": "1a28154dff14243172df4ed047977762abea8cff",
+    "g02_planche_flotte.png": "4fcc8b19dbd36e1c344e14e194d7b296fd24d167",
+    "g02_planche_flotte.svg": "3cbbe9c85ece6d6f9a3b9bc4f495c273823d7c37",
+    "validate_fleet.py": "671a588f1c788db61a6b30ace90e8d64c652ef8d"
+  }
+}

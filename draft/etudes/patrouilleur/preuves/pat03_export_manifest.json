@@ -1,0 +1,104 @@
+{
+  "checks": {
+    "PAT01_PAT02_references_SHA256": "PASS",
+    "canonical_PO_sources_SHA256": "PASS",
+    "image_source_size_and_format": "PASS",
+    "manifest_reproducible": "PASS",
+    "native_LANCZOS_RGB_320x240_exact": "PASS",
+    "output_SHA256_fixed_expected": "PASS",
+    "zoom_NEAREST_RGB_1280x960_pixel_exact_apres_relecture": "PASS"
+  },
+  "export": {
+    "alpha": false,
+    "mode": "RGB",
+    "native_dimensions": [
+      320,
+      240
+    ],
+    "native_filter": "LANCZOS",
+    "scene_originale_complete_sans_retouche_ni_translation": true,
+    "sx": 0.26778242677824265,
+    "sy": 0.26785714285714285,
+    "tool": "Pillow",
+    "version": "12.3.0",
+    "zoom_dimensions": [
+      1280,
+      960
+    ],
+    "zoom_filter": "NEAREST"
+  },
+  "files": {
+    "patrouilleur_avant_endommage_320x240.png": {
+      "bytes": 118165,
+      "dimensions": [
+        320,
+        240
+      ],
+      "mode": "RGB",
+      "path": "draft/etudes/patrouilleur/patrouilleur_avant_endommage_320x240.png",
+      "sha256": "c079ba0e2e79ebbbcbb31e4a046d7c337dd1e1164aff1a678955d54633ceb36c"
+    },
+    "patrouilleur_avant_endommage_x4.png": {
+      "bytes": 190178,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "mode": "RGB",
+      "path": "draft/etudes/patrouilleur/patrouilleur_avant_endommage_x4.png",
+      "sha256": "e9dbcb956a35d4bef6f655592ef560d14f62d7fd93c3ef52b207c09a20e8a943"
+    }
+  },
+  "geometry_reference": {
+    "bbox_coque_intacte_natif_approx": [
+      106,
+      92,
+      221,
+      143
+    ],
+    "pivot_natif_indicatif": [
+      164,
+      118
+    ],
+    "preuve_alignement_pixel_global": false,
+    "translation_appliquee": [
+      0,
+      0
+    ]
+  },
+  "issue": 81,
+  "phase": "etat_avant_final_apres_choix_PO",
+  "references": {
+    "PAT01": {
+      "path": "draft/etudes/patrouilleur/patrouilleur_intact_320x240.png",
+      "sha256": "84b38a704d9ded44f9cc880a1af6ebf092a87a2803c8c972e24f73df9cf808fb"
+    },
+    "PAT02_T1A": {
+      "path": "draft/etudes/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
+      "sha256": "a136b18ab4d32e522bb5fd314b1faa87dde275e752d2b4bd99a267b4fdf93588"
+    }
+  },
+  "runtime_asset": false,
+  "selection_PO": {
+    "cadrage": "plein cadre original, sans translation",
+    "reference": "Issue #81 commentaire Pilotage #6708055689 (07/11/2026)",
+    "variant": "T2A"
+  },
+  "source": {
+    "alpha": false,
+    "dimensions": [
+      1195,
+      896
+    ],
+    "format": "JPEG",
+    "ocean_peint": true,
+    "path": "draft/patrouilleur_T2A.jpeg",
+    "sha256": "f8366482082febc917a812d94efd98a75d03c100a789d5db73ceacc379c41d4d"
+  },
+  "source_alternative_conservee_seulement_dans_draft": {
+    "exported": false,
+    "path": "draft/patrouilleur_T2B.jpeg",
+    "sha256": "bcb36de1ef21c7992af3196d460ce57f68d654d4826302be0fdfa20b5515a9c3"
+  },
+  "status": "DESIGN_PREVIEW — ON_DEVICE_UNVERIFIED"
+}

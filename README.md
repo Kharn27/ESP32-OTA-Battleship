@@ -12,9 +12,9 @@ Bataille navale électronique pour ESP32 CYD classique (ESP32-2432S028R, écran 
 
 ➡️ [BIBLE_PRODUIT.md](BIBLE_PRODUIT.md) — vision, contraintes, règles décidées, variantes de jeu, parcours, décisions et questions ouvertes.
 
-🎨 [Gouvernance permanente des agents](AGENTS.md) · [Pipeline graphique draft/assets/maquettes](docs/GRAPHIC_PIPELINE.md) — règles communes et contrôles. `design/` reste une référence historique pendant sa migration.
+🎨 [Gouvernance permanente des agents](AGENTS.md) · [Pipeline graphique draft/assets/maquettes](docs/GRAPHIC_PIPELINE.md) — règles communes et contrôles. `design/` a été remplacé par un classement contrôlé (Issue #101) ; les anciens contenus restent lisibles sous `maquettes/*/legacy/` et `draft/etudes/`.
 
-🎨 [Références graphiques courantes et statuts](design/README.md) — **index normatif par écran**, incluant les sources, les validations PO et les maquettes non approuvées.
+🎨 [Références graphiques courantes et statuts](maquettes/INDEX.md) — **index normatif par écran**, incluant les sources, les validations PO et les maquettes non approuvées.
 
 🗂️ [MAQUETTES.md](MAQUETTES.md) — **index de la maquette d'accueil retenue et des recherches graphiques historiques** : sept anciens SVG UX et dix fichiers A–F retirés de `main` sur décision PO, sans réécriture Git. Archives : [maquettes UX](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/maquettes), [A/B/C](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-themes), [D/E/F](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/a768e6cabbdfba1b793f3c77c0d75f0dae001c54/assets/explorations/2026-10-29-attaque-layouts) et [PR #1](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/1). Les deux scènes narratives retirées de `main` restent consultables via la [PR #2](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/2) et leur [dossier historique figé](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/872496d73a150dd5a016c219973e5865576b7e04/assets/explorations/2026-10-29-bataille-en-cours). **Aucune référence visuelle de production approuvée.**
 
