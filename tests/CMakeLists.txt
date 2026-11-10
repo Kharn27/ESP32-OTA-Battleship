@@ -312,3 +312,19 @@ foreach(mode nominal init_timer_fail init_channel_fail stop_fail
     add_test(NAME d14_ledc_${mode}
              COMMAND d14_backlight_tests ${mode})
 endforeach()
+
+
+# D14 targeted color diagnosis, purely C99 and independent of ESP-IDF:
+# exact wire-order swatches, 5 isolated profiles and known calibrated gamma.
+add_executable(d14_color_diag_tests
+               test_d14_color_diag.c
+               ../components/d14_color_diag/d14_color_diag.c)
+target_include_directories(d14_color_diag_tests PRIVATE
+                           ../components/d14_color_diag/include)
+target_compile_options(d14_color_diag_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_color_diag_tests PRIVATE
+                           -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+    target_link_options(d14_color_diag_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d14_color_profiles_and_rgb565_be COMMAND d14_color_diag_tests)
