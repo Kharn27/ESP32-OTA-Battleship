@@ -59,3 +59,7 @@ Les différences `CF/ED/E8/C0/C1/C5/C7/B1` et l'ordre complet ne figuraient PAS 
 5. Restaurer **le binaire normal du même HEAD**, toujours sans effacement NVS. Transmettre au Pilotage logs, photos, identification de la CYD et hashes exacts. Seul Pilotage décide d'une adaptation minimale du normal et fusionne la PR.
 
 **Aucun flash ni verdict écran/tactile revendiqué par le développeur.**
+
+## Référence PC des demi-teintes (générée des mêmes octets C99)
+
+Le programme C hôte `d14_doom_ref_tests --dump-midtones <fichier>` sérialise les **30 bandes de 5120 octets**, soit **153600 octets** du même `d14_doom_midtone_band()` que les deux firmwares TEST-ONLY. Le script `tools/d14_doom_reference_preview.py` relit exclusivement ce RAW, convertit par décalage des composants 5/6/5 en RGB888 sans LUT, puis crée `d14_midtones_pc_reference.png` et `d14_midtones_pc_reference.json` (SHA raw + échantillons). L'archive de chaque job hôte GCC/Clang contient le RAW et la preview ; elle sert à confronter la couleur de la CYD à la même image numérique. Les différences de prise de vue ne valent pas mesure optique instrumentée.

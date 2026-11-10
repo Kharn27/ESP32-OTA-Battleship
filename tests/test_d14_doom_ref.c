@@ -84,11 +84,35 @@ static void test_rgb565be(void)
     assert(d14_doom_midtone_band(0,8,data,D14_DOOM_BAND_BYTES-1u)==-1);
     assert(d14_doom_midtone_band(239,1,data,640u)==0);
 }
-int main(void)
+/* Serializes EXACTLY the tested C-generated 30 DMA stripes for Pillow
+ * conversion to a PC reference. No second independent RGB generator.
+ */
+static int dump_midtones(const char *path)
+{
+    FILE *out=fopen(path,"wb");
+    if(out==NULL) return 2;
+    uint8_t band[D14_DOOM_BAND_BYTES];
+    for(unsigned y=0u;y<D14_DOOM_H;y+=D14_DOOM_BAND_ROWS) {
+        if(d14_doom_midtone_band((uint16_t)y,D14_DOOM_BAND_ROWS,
+                                 band,sizeof band)!=0 ||
+           fwrite(band,1u,sizeof band,out)!=sizeof band) {
+            (void)fclose(out);
+            return 3;
+        }
+    }
+    if(fclose(out)!=0) return 4;
+    puts("D14_DOOM_REF midtones raw RGB565BE 153600 bytes exported");
+    return 0;
+}
+
+int main(int argc,char **argv)
 {
     test_init_sequence();
     test_runtime();
     test_rgb565be();
+    if(argc==3 && strcmp(argv[1],"--dump-midtones")==0)
+        return dump_midtones(argv[2]);
+    if(argc!=1) return 5;
     puts("D14_DOOM_REF sequence + RGB565BE: PASS");
     return 0;
 }

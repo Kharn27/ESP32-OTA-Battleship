@@ -54,6 +54,24 @@ jobs:
         run: cmake --build build-host --verbose
       - name: Run tests
         run: ctest --test-dir build-host --output-on-failure -V
+      - name: Export PC midtones reference from tested C99 RGB565BE output
+        run: |
+          build-host/d14_doom_ref_tests --dump-midtones build-host/d14_midtones_from_c.rgb565be
+          python3 tools/d14_doom_reference_preview.py \\
+            --raw build-host/d14_midtones_from_c.rgb565be \\
+            --png build-host/d14_midtones_pc_reference.png \\
+            --report build-host/d14_midtones_pc_reference.json
+          test "$(stat -c%s build-host/d14_midtones_from_c.rgb565be)" = 153600
+          sha256sum build-host/d14_midtones_from_c.rgb565be
+      - name: Archive exact PC midtones reference for A vs DOOM_REFERENCE
+        uses: actions/upload-artifact@v4
+        with:
+          name: warship-d14-PC-MIDTONES-${{ matrix.cc }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-host/d14_midtones_from_c.rgb565be
+            build-host/d14_midtones_pc_reference.png
+            build-host/d14_midtones_pc_reference.json
+          if-no-files-found: error
 
   esp32:
     name: ESP-IDF v5.5.6 Xtensa esp32
