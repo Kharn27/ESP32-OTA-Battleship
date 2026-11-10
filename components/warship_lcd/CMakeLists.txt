@@ -12,4 +12,8 @@ idf_component_register(
 )
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
                            WARSHIP_LCD_BACKLIGHT_PERCENT=${WARSHIP_LCD_BACKLIGHT_PERCENT})
+if(WARSHIP_D14_COLOR_DIAGNOSTIC)
+    target_compile_definitions(${COMPONENT_LIB} PRIVATE
+                               WARSHIP_D14_COLOR_DIAGNOSTIC=1)
+endif()
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Wextra -Werror)
