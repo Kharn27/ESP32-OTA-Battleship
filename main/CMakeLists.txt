@@ -26,9 +26,27 @@ if(WARSHIP_D14_COLOR_DIAGNOSTIC)
      WARSHIP_D13_CYD_SCENARIO)
     message(FATAL_ERROR "D14 color probe must be isolated from other diagnostics")
   endif()
+  # Exact source is PO-approved G01 PNG PR#90, imported unchanged
+  # from main into this D14 branch. Byte hash guarded by the generator.
+  # Generate ONLY in test-only build dir, never in design/ or normal BIN.
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  set(G01_SOURCE "${PROJECT_DIR}/design/ecrans/accueil/accueil_cyd_warship_320x240.png")
+  set(G01_GENERATOR "${PROJECT_DIR}/tools/d14_color_g01_export.py")
+  set(G01_C "${CMAKE_CURRENT_BINARY_DIR}/d14_color_g01_data.c")
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+               "${G01_SOURCE}" "${G01_GENERATOR}")
+  execute_process(
+    COMMAND "${Python3_EXECUTABLE}" "${G01_GENERATOR}"
+            --input "${G01_SOURCE}" --output "${G01_C}"
+    RESULT_VARIABLE G01_STATUS OUTPUT_VARIABLE G01_METRICS
+    ERROR_VARIABLE G01_ERROR)
+  if(NOT G01_STATUS EQUAL 0)
+    message(FATAL_ERROR "G01 PR90 COLOR test extraction failed: ${G01_ERROR}")
+  endif()
+  message(STATUS "D14 COLOR PR90 G01 Flash: ${G01_METRICS}")
   # Explicitly omit the D09 game loop and D11 NVS adapter from the
   # test-only object list. No app-side NVS entry point is compiled.
-  set(WARSHIP_MAIN_SRCS "app_main.c" "d14_color_diag.c")
+  set(WARSHIP_MAIN_SRCS "app_main.c" "d14_color_diag.c" "${G01_C}")
 else()
   set(WARSHIP_MAIN_SRCS "app_main.c" "d09_probe.c" "d11_runtime.c" ${T03_SRCS})
 endif()
