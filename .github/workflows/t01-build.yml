@@ -195,7 +195,27 @@ jobs:
             sha256sum build-d14-color/cyd_warship.bin &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             strings build-d14-color/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
-            strings build-d14-color/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG'
+            strings build-d14-color/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG' &&
+            python tools/d14_color_pillow_audit.py
+            --input design/ecrans/accueil/accueil_cyd_warship_320x240.png
+            --generated-c "$(find build-d14-color -name d14_color_g01_data.c -type f -print -quit)"
+            --elf build-d14-color/cyd_warship.elf
+            --bin build-d14-color/cyd_warship.bin
+            --out-dir build-d14-color/d14-pillow-audit
+      - name: Archive independent Pillow vs actual APP BIN audit and reconstructed image
+        uses: actions/upload-artifact@v4
+        with:
+          name: warship-d14-PILLOW-FLASH-AUDIT-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-d14-color/d14-pillow-audit/report.json
+            build-d14-color/d14-pillow-audit/README.txt
+            build-d14-color/d14-pillow-audit/g01_original_vs_esp32_flash.png
+            build-d14-color/d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
+            build-d14-color/d14-pillow-audit/g01_quantization_delta_actual.png
+            build-d14-color/d14-pillow-audit/g01_quantization_delta_x8_DEBUG_ONLY.png
+            build-d14-color/d14-pillow-audit/g01_extracted_from_esp32_flash.rgb565be
+            build-d14-color/d14-pillow-audit/pillow_expected.rgb565be
+          if-no-files-found: error
       - name: D14 G01 PR90 color A diagnostic BIN (TEST ONLY; no gameplay/NVS)
         uses: actions/upload-artifact@v4
         with:
