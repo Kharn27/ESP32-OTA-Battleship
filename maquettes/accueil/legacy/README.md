@@ -37,7 +37,7 @@ Les zones sont adjacentes à `x=160`, sans intervalle neutre : **point à corrig
 Depuis la racine du dépôt, avec `Pillow==12.3.0` :
 
 ```bash
-python design/ecrans/accueil/compose_accueil.py \
+python maquettes/accueil/legacy/compose_accueil.py \
   --repo . --out design/ecrans/accueil --check
 ```
 

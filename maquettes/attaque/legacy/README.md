@@ -39,8 +39,8 @@ Quatre vignettes de comportement, sans créer d'autres écrans de référence :
 
 ```sh
 python3 -m pip install 'Pillow==12.3.0'
-python3 design/ecrans/attaque/build_g04_r2.py
-python3 design/ecrans/attaque/verify_g04_r2.py
+python3 maquettes/attaque/legacy/build_g04_r2.py
+python3 maquettes/attaque/legacy/verify_g04_r2.py
 ```
 
 ### Nettoyage contrôlé / historique

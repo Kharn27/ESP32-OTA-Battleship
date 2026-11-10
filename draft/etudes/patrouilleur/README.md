@@ -40,8 +40,8 @@ Depuis la racine du dépôt (Python 3 + `Pillow==12.3.0`) :
 
 ```bash
 python -m pip install Pillow==12.3.0
-python design/patrouilleur/export_patrouilleur.py
-python design/patrouilleur/export_patrouilleur.py --check
+python draft/etudes/patrouilleur/export_patrouilleur.py
+python draft/etudes/patrouilleur/export_patrouilleur.py --check
 ```
 
 Le mode `--check` **ne modifie aucun fichier** ; il vérifie SHA-256 de l'original, dimensions, correspondance des pixels issus du redimensionnement, zoom ×4 pixel-exact et empreintes/taille des exports. La [preuve JSON](preuves/export_manifest.json) enregistre les SHA-256, octets, provenance, repères et filtres.
@@ -51,7 +51,7 @@ Le mode `--check` **ne modifie aucun fichier** ; il vérifie SHA-256 de l'origin
 - **DESIGN_PREVIEW seulement :** comparaison et contrôles PC, pas de validation de lisibilité sur écran physique.
 - **ON_DEVICE_UNVERIFIED :** aucun essai sur CYD, ni build firmware, ni budget Flash/RAM/mémoire revendiqué ; contrat d'asset runtime à convenir avec Développeur et Pilotage.
 - Le PO doit **accepter explicitement le PNG 320×240 et confirmer le cadrage/pivot** avant PAT-02/03/04.
-- Aucun fichier de `design/ocean/`, des autres états ou du firmware ne doit être modifié.
+- Aucun fichier de `draft/etudes/ocean/`, des autres états ou du firmware ne doit être modifié.
 
 
 ---
@@ -74,7 +74,7 @@ Cadrage et facteur d'échelle **identiques à PAT-01** ; pivot nominal indicatif
 
 ```bash
 python -m pip install Pillow==12.3.0
-python design/patrouilleur/export_pat02_arriere.py --check
+python draft/etudes/patrouilleur/export_pat02_arriere.py --check
 ```
 
 Pour une régénération complète, exécuter sans `--check` puis avec `--check`. Le script vérifie les SHA des originaux/du PAT-01 et ceux des **deux PNG finaux**, la fidélité LANCZOS, les dimensions et l'égalité zoom ×4 **pixel par pixel** après relecture. [Manifeste PAT-02](preuves/pat02_export_manifest.json).
@@ -107,7 +107,7 @@ Le script de travail non destructif [`export_pat03_avant.py`](export_pat03_avant
 
 ```bash
 python -m pip install Pillow==12.3.0
-python design/patrouilleur/export_pat03_avant.py --check
+python draft/etudes/patrouilleur/export_pat03_avant.py --check
 ```
 
 Sans `--check`, le script régénère les deux PNG et le manifeste ; utiliser `--check` ensuite pour revérifier sans écriture.

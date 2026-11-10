@@ -16,7 +16,7 @@
       320,
       240
     ],
-    "path": "design/patrouilleur/patrouilleur_detruit_320x240.png",
+    "path": "draft/etudes/patrouilleur/patrouilleur_detruit_320x240.png",
     "resampling": "LANCZOS",
     "sha256": "8681312240ed81e4e2951b54fb4f8066dc6cbdbcc85aaa256bb848ffb6f3870f"
   },
@@ -60,15 +60,15 @@
   "issue": 82,
   "references_precedentes_inchangees": {
     "PAT-01": {
-      "path": "design/patrouilleur/patrouilleur_intact_320x240.png",
+      "path": "draft/etudes/patrouilleur/patrouilleur_intact_320x240.png",
       "sha256": "84b38a704d9ded44f9cc880a1af6ebf092a87a2803c8c972e24f73df9cf808fb"
     },
     "PAT-02_T1A": {
-      "path": "design/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
+      "path": "draft/etudes/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
       "sha256": "a136b18ab4d32e522bb5fd314b1faa87dde275e752d2b4bd99a267b4fdf93588"
     },
     "PAT-03_T2A": {
-      "path": "design/patrouilleur/patrouilleur_avant_endommage_320x240.png",
+      "path": "draft/etudes/patrouilleur/patrouilleur_avant_endommage_320x240.png",
       "sha256": "c079ba0e2e79ebbbcbb31e4a046d7c337dd1e1164aff1a678955d54633ceb36c"
     }
   },
@@ -91,7 +91,7 @@
       1280,
       960
     ],
-    "path": "design/patrouilleur/patrouilleur_detruit_x4.png",
+    "path": "draft/etudes/patrouilleur/patrouilleur_detruit_x4.png",
     "resampling": "NEAREST",
     "sha256": "c2bfa2de4b37f8e0db255202b961efe0f9e2493a182760bb52bc168b57e7328f"
   }

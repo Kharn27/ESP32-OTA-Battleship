@@ -52,7 +52,7 @@
         240
       ],
       "mode": "RGB",
-      "path": "design/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
+      "path": "draft/etudes/patrouilleur/patrouilleur_arriere_endommage_320x240.png",
       "sha256": "a136b18ab4d32e522bb5fd314b1faa87dde275e752d2b4bd99a267b4fdf93588"
     },
     "patrouilleur_arriere_endommage_x4.png": {
@@ -62,14 +62,14 @@
         960
       ],
       "mode": "RGB",
-      "path": "design/patrouilleur/patrouilleur_arriere_endommage_x4.png",
+      "path": "draft/etudes/patrouilleur/patrouilleur_arriere_endommage_x4.png",
       "sha256": "88f9abdc1539e9bbdd1bcd1092bf77a07c272c2aa525e699327123fffa7457ca"
     }
   },
   "issue": 80,
   "phase": "etat_arriere_final_apres_selection_PO",
   "reference_PAT01": {
-    "native_path": "design/patrouilleur/patrouilleur_intact_320x240.png",
+    "native_path": "draft/etudes/patrouilleur/patrouilleur_intact_320x240.png",
     "native_pivot": [
       164,
       118

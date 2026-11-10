@@ -29,9 +29,9 @@ TOUCH = {
 }
 SOURCES = {
     "fond": ("draft/Wallpaper_accueil.jpeg", (1195, 896), "e3c0603405fffbf361ca67b90f265d6fb7994a26"),
-    "logo": ("design/ecrans/accueil/assets/Logo_titre_RGBA.png", (1075, 489), "010bb56a6c8056924d9b1af1ceeb99482e18fa3a"),
-    "jouer": ("design/ecrans/accueil/assets/Bouton_jouer_RGBA.png", (1107, 252), "f81c510060af5aeee231bea50df420d04db7b320"),
-    "palmares": ("design/ecrans/accueil/assets/Bouton_palmares_RGBA.png", (1163, 250), "06a53829d508ae7366338b14a187a655edd6505c"),
+    "logo": ("maquettes/accueil/legacy/assets/Logo_titre_RGBA.png", (1075, 489), "010bb56a6c8056924d9b1af1ceeb99482e18fa3a"),
+    "jouer": ("maquettes/accueil/legacy/assets/Bouton_jouer_RGBA.png", (1107, 252), "f81c510060af5aeee231bea50df420d04db7b320"),
+    "palmares": ("maquettes/accueil/legacy/assets/Bouton_palmares_RGBA.png", (1163, 250), "06a53829d508ae7366338b14a187a655edd6505c"),
 }
 SPRITES = {
     "logo": "logo_titre_145x66.png",
