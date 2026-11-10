@@ -1,0 +1,30 @@
+name: Seed FLOT-01 previews (temporary Issue 109)
+on:
+  push:
+    branches:
+      - 'assets/issue-109-sous-marin'
+permissions:
+  contents: write
+jobs:
+  generate:
+    if: contains(github.event.head_commit.message, '[submarine-seed]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'assets/issue-109-sous-marin'
+          fetch-depth: 0
+      - name: Generate 4x previews and register asset catalog
+        run: |
+          python3 -m venv /tmp/submarine-venv
+          /tmp/submarine-venv/bin/python -m pip install --disable-pip-version-check 'Pillow==12.3.0'
+          /tmp/submarine-venv/bin/python scripts/check_sous_marin_assets.py --write
+      - name: Commit binary zooms on topic branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/flotte/sous-marin assets/manifest.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'assets(flot-01): generate byte-verifiable x4 previews and manifest'
+          git push origin HEAD:assets/issue-109-sous-marin
