@@ -34,7 +34,7 @@ jobs:
         run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON
       - name: Verify reproducible G03 conversion
         run: |
-          python3 tools/t03_export.py --input design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/t03_second.c
+          python3 tools/t03_export.py --input maquettes/deploiement/legacy/g03_deploiement_320x240.png --output build-host/t03_second.c
           cmp build-host/t03_g03_data.c build-host/t03_second.c
       - name: Build
         run: cmake --build build-host --verbose

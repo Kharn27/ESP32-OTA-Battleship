@@ -228,7 +228,7 @@ add_test(NAME d13_post_result_inspection COMMAND warship_inspection_tests)
 # T03: build two lossless Flash representations from the *accepted G03 PNG*.
 # All generated C stays in the build tree, independently regenerated in CI.
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
-set(T03_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/deploiement/g03_deploiement_320x240.png")
+set(T03_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../maquettes/deploiement/legacy/g03_deploiement_320x240.png")
 set(T03_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/t03_export.py")
 set(T03_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/t03_g03_data.c")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
