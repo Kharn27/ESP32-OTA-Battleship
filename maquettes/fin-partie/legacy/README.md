@@ -71,7 +71,7 @@
 
 ## Contrôles reproductibles
 
-Exécuter `python3 -m pip install Pillow numpy` puis `python3 design/ecrans/fin-partie/build_g07_r2.py`.
+Exécuter `python3 -m pip install Pillow numpy` puis `python3 maquettes/fin-partie/legacy/build_g07_r2.py`.
 
 Le script **mesure dans les pixels** les traits cyan RGB (156,214,220) au lieu de déclarer a priori leur présence. Il exige :
 - 11 lignes verticales à X = **21, 39, 57, 75, 93, 111, 129, 147, 165, 183, 201**.

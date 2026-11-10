@@ -38,8 +38,8 @@ Depuis la racine du dépôt :
 
 ```sh
 python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==11.3.0'
-python3 design/flotte/validate_fleet.py
-python3 design/flotte/export_previews.py
+python3 maquettes/flotte/legacy/validate_fleet.py
+python3 maquettes/flotte/legacy/export_previews.py
 ```
 
 `export_previews.py` contrôle **la taille réelle 320×240**, **1280×960**, **l'égalité exacte du raster agrandi à l'image native redimensionnée en NEAREST**, et un échantillon correspondant pour chaque pixel natif. Les sept PNG sont **versionnés dans cette PR**.

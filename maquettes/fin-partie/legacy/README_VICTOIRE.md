@@ -42,8 +42,8 @@ La source originale `g07_r2_victoire_source_hd.png` (1448 × 1086) reste celle d
 
 ```bash
 python3 -m pip install pillow numpy opencv-python-headless
-python3 design/ecrans/fin-partie/build_g07_r2_victoire.py
-python3 design/ecrans/fin-partie/build_g07_r2_victoire_history.py
+python3 maquettes/fin-partie/legacy/build_g07_r2_victoire.py
+python3 maquettes/fin-partie/legacy/build_g07_r2_victoire_history.py
 ```
 
 Le premier script restaure la composition originale et les contrôles de géométrie ; le second (piloté par `g07_r2_victoire_history.json`) ajoute les douze marques, reconstruit `g07_r2_victoire_source.ora`, actualise les deux preuves/zooms et `g07_r2_victoire_provenance.json`.

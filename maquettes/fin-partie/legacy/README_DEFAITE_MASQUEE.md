@@ -31,9 +31,9 @@ Les positions CPU légales 5/4/3/3/2 sont consignées uniquement pour vérifier 
 - [Master HD](g07_r2_defaite_masquee_original_1448x1086.png), [manifest d'exports et SHA](g07_r2_defaite_masquee_provenance.json), [preuve géométrique native](g07_r2_defaite_masquee_proof_320x240.png), [preuve ×4](g07_r2_defaite_masquee_proof_x4.png).
 
 Pour reconstruire sous Python après installation de Pillow et numpy, lancer dans cet ordre :
-1. `python design/ecrans/fin-partie/g07_r2_defaite_history.py`
-2. `python design/ecrans/fin-partie/build_g07_r2.py`
-3. `python design/ecrans/fin-partie/build_g07_r2_defaite_masquee.py`
+1. `python maquettes/fin-partie/legacy/g07_r2_defaite_history.py`
+2. `python maquettes/fin-partie/legacy/build_g07_r2.py`
+3. `python maquettes/fin-partie/legacy/build_g07_r2_defaite_masquee.py`
 
 ## Harmonisation graphique — proposition DA, non validée
 
