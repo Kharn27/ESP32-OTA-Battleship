@@ -4,7 +4,7 @@ option(WARSHIP_T03_DIAGNOSTIC "T03 G03 flash formats vs LCD startup diagnostic" 
 set(T03_SRCS)
 if(WARSHIP_T03_DIAGNOSTIC)
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
-  set(T03_PNG "${PROJECT_DIR}/design/ecrans/deploiement/g03_deploiement_320x240.png")
+  set(T03_PNG "${PROJECT_DIR}/maquettes/deploiement/legacy/g03_deploiement_320x240.png")
   set(T03_EXPORT "${PROJECT_DIR}/tools/t03_export.py")
   set(T03_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/t03_g03_data.c")
   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${T03_PNG}" "${T03_EXPORT}")
