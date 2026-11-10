@@ -1,6 +1,6 @@
 # Pipeline graphique — CYD WARSHIP (I-009)
 
-**Statut : contrat organisationnel validé en principe par le PO le 10/11/2026, en cours d'implémentation (Issue #99).** La présente PR est une **fondation** ; aucune migration des contenus de `design/` n'est implicite.
+**Statut : contrat organisationnel PO (Issue #99, PR #100 fusionnée), migration contrôlée (Issue #101, PR #102).** Les anciens écrans restent explicitement `LEGACY_UNDECOMPOSED` tant qu'ils ne sont pas recomposés avec des assets individuellement approuvés. Aucun GO artistique nouveau n'est déduit du déplacement.
 
 ## Les trois espaces
 
@@ -63,7 +63,7 @@ Le statut peut devenir `VALIDATED_PO_PC` **avec** `po_validation_ref`. Les image
 - **Étape A — réalisée (PR #100) :** gouvernance et contrôles communs.
 - **Étape B — réalisée (Issue #101) :** inventaire, déplacement des fichiers historiques sans retouche des graphiques, conservation des statuts et gel des répertoires `legacy/` par empreinte Git. Aucun asset individuel approuvé implicitement.
 - **Étape C — à venir, sous validation PO individuelle :** décomposer les écrans hérités en véritables éléments partagés approuvés, remplir `assets/manifest.json` (SHA-256) et reconstruire les maquettes avec leurs IDs ; lever `LEGACY_UNDECOMPOSED` écran par écran. Les scènes aplaties ne deviennent pas des sprites.
-- **Étape D — fermeture de l'héritage :** supprimer `design/` seulement quand plus aucun lien ou script actif ne l'utilise, puis rendre le blocage des ajouts hérités effectif en CI.
+- **Étape D — réalisée dans la PR #102 :** `design/` retiré de l'arbre courant, liens des sources et outils actualisés, réintroduction interdite en CI. Les anciens chemins de révisions Git immuables restent consultables par leur SHA.
 
 Pendant la transition, les PR graphiques historiques déjà ouvertes nécessitent une coordination Pilotage ; elles ne sont **pas automatiquement approuvées** ni automatiquement invalidées. La réorganisation n'accorde aucun nouveau GO PO et ne remplace pas les tests physiques.
 
