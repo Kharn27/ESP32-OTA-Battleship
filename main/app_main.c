@@ -10,7 +10,7 @@
 #include "warship_palmares.h"
 #include "warship_palmares_nvs.h"
 
-#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
+#if defined(WARSHIP_D14_COLOR_DIAGNOSTIC) || defined(WARSHIP_D14_DOOM_REFERENCE)
 void d14_color_diag_run(void);
 #else
 static const char *const TAG = "CYD_WARSHIP";
@@ -18,7 +18,7 @@ static const char *const TAG = "CYD_WARSHIP";
 
 void app_main(void)
 {
-#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
+#if defined(WARSHIP_D14_COLOR_DIAGNOSTIC) || defined(WARSHIP_D14_DOOM_REFERENCE)
     /* DELIBERATELY no d11_runtime_init, NVS, D07, CPU or touch; only LCD.
      * This opt-in TEST ONLY image cannot start a real game.
      */

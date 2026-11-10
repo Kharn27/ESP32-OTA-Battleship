@@ -50,5 +50,11 @@ esp_err_t warship_lcd_backlight_set_percent(uint8_t percent);
  */
 esp_err_t warship_lcd_diag_apply_profile(unsigned index);
 #endif
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+/* TEST ONLY, after prepare_console and with no DMA in flight.
+ * Executes DoomRPG runtime gamma/inversion, keeps case10, turns BGR on.
+ */
+esp_err_t warship_lcd_doom_reference_finish(void);
+#endif
 bool warship_lcd_info(WarshipLcdInfo *out);
 #endif

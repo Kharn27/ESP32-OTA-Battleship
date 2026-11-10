@@ -387,3 +387,20 @@ message(STATUS "${D14_PILLOW_STDOUT}")
 add_test(NAME d14_g01_pr90_independent_pillow_oracle
          COMMAND d14_g01_pr90_tests
                  "${D14_PILLOW_AUDIT_DIR}/pillow_expected.rgb565be")
+
+# D14 DoomRPG reference: exact analog/power/gamma/inversion command order
+# plus a direct RGB565BE half-tone oracle, isolated from ESP-IDF/hardware.
+add_executable(d14_doom_ref_tests
+               test_d14_doom_ref.c
+               ../components/d14_doom_ref/d14_doom_ref.c)
+target_include_directories(d14_doom_ref_tests PRIVATE
+                           ../components/d14_doom_ref/include)
+target_compile_options(d14_doom_ref_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_doom_ref_tests PRIVATE
+                           -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+    target_link_options(d14_doom_ref_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d14_doom_reference_registers_and_rgb565be
+         COMMAND d14_doom_ref_tests)

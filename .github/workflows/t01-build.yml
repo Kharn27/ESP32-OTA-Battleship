@@ -95,6 +95,7 @@ jobs:
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin &&
             ! strings build/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE' &&
             ! strings build/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG' &&
             test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
@@ -196,6 +197,34 @@ jobs:
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             strings build-d14-color/cyd_warship.elf | grep -F 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' >/dev/null &&
             strings build-d14-color/cyd_warship.elf | grep -F 'source=G01_PR90_PNG' >/dev/null
+      - name: Build D14 DoomRPG LCD reference (isolated TEST ONLY)
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
+            idf.py -B build-d14-doom -D WARSHIP_D14_DOOM_REFERENCE=ON set-target esp32 &&
+            idf.py -B build-d14-doom -D WARSHIP_D14_DOOM_REFERENCE=ON build &&
+            idf.py -B build-d14-doom size &&
+            idf.py -B build-d14-doom size-components &&
+            sha256sum build-d14-doom/cyd_warship.bin &&
+            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
+            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=INIT' &&
+            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=DONE' &&
+            strings build-d14-doom/cyd_warship.elf | grep -Fq 'G01_PR90_PNG'
+      - name: D14 DoomRPG reference diagnostic BIN (TEST ONLY, never normal)
+        uses: actions/upload-artifact@v4
+        with:
+          name: warship-d14-DOOM-REFERENCE-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-d14-doom/cyd_warship.bin
+            build-d14-doom/cyd_warship.elf
+            build-d14-doom/bootloader/bootloader.bin
+            build-d14-doom/partition_table/partition-table.bin
+            build-d14-doom/flasher_args.json
+            build-d14-doom/cyd_warship.map
+          if-no-files-found: error
       - name: Independent APP BIN audit with Pillow 11.3 on host (not inside IDF action)
         run: |
           set -euo pipefail

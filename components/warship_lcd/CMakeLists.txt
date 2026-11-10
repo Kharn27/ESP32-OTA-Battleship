@@ -5,15 +5,23 @@ set(WARSHIP_LCD_BACKLIGHT_PERCENT 40 CACHE STRING
 if(NOT WARSHIP_LCD_BACKLIGHT_PERCENT MATCHES "^(0|[1-9][0-9]?|100)$")
     message(FATAL_ERROR "WARSHIP_LCD_BACKLIGHT_PERCENT must be 0..100")
 endif()
+set(D14_DOOM_REQUIRES)
+if(WARSHIP_D14_DOOM_REFERENCE)
+    list(APPEND D14_DOOM_REQUIRES d14_doom_ref)
+endif()
 idf_component_register(
     SRCS "warship_lcd.c" "warship_lcd_light.c"
     INCLUDE_DIRS "include"
-    REQUIRES esp_lcd esp_driver_spi esp_driver_gpio esp_driver_ledc freertos heap d14_color_diag
+    REQUIRES esp_lcd esp_driver_spi esp_driver_gpio esp_driver_ledc freertos heap d14_color_diag ${D14_DOOM_REQUIRES}
 )
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
                            WARSHIP_LCD_BACKLIGHT_PERCENT=${WARSHIP_LCD_BACKLIGHT_PERCENT})
 if(WARSHIP_D14_COLOR_DIAGNOSTIC)
     target_compile_definitions(${COMPONENT_LIB} PRIVATE
                                WARSHIP_D14_COLOR_DIAGNOSTIC=1)
+endif()
+if(WARSHIP_D14_DOOM_REFERENCE)
+    target_compile_definitions(${COMPONENT_LIB} PRIVATE
+                               WARSHIP_D14_DOOM_REFERENCE=1)
 endif()
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Wextra -Werror)

@@ -13,6 +13,10 @@
 #ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
 #include "d14_color_diag.h"
 #endif
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+#include "d14_doom_ref.h"
+#include "freertos/task.h"
+#endif
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
 #include "esp_lcd_ili9341.h"
@@ -88,6 +92,32 @@ static esp_err_t transfer(int x, int y, int w, int h, int max_w, int max_h)
     return ESP_OK;
 }
 
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+/* Synchronous parameter writes. No color DMA is permitted until all
+ * vendor commands and their delays have completed. Vendor errors are
+ * terminal and force the backlight OFF, exactly as transport errors.
+ */
+static esp_err_t d14_doom_send(const char *stage,
+                              const D14DoomCmd *commands, size_t count)
+{
+    if (commands == NULL || count == 0u || !panel_io || fault)
+        return ESP_ERR_INVALID_STATE;
+    for (size_t i=0u; i<count; ++i) {
+        const D14DoomCmd *c=&commands[i];
+        if(c->len>sizeof c->data) return sticky_error(ESP_ERR_INVALID_ARG);
+        const esp_err_t err=esp_lcd_panel_io_tx_param(
+            panel_io,c->cmd,c->len==0u?NULL:c->data,c->len);
+        ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=%s step=%u cmd=0x%02x"
+                 " length=%u delay_ms=%u err=%s",
+                 stage,(unsigned)i,(unsigned)c->cmd,(unsigned)c->len,
+                 (unsigned)c->delay_ms,esp_err_to_name(err));
+        if(err!=ESP_OK) return sticky_error(err);
+        if(c->delay_ms!=0u) vTaskDelay(pdMS_TO_TICKS(c->delay_ms));
+    }
+    return ESP_OK;
+}
+#endif
+
 static void cleanup_before_dma(void)
 {
     /* Never rely on GPIO_SET_LEVEL when LEDC owns GPIO21. */
@@ -159,10 +189,26 @@ esp_err_t warship_lcd_init(void)
     if (err != ESP_OK) goto fail;
     err = esp_lcd_panel_reset(panel);
     if (err != ESP_OK) goto fail;
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+    /* The native ESP-IDF panel object remains the DMA/CASET/RASET owner.
+     * Bypass ONLY its default init list in this isolated probe. After
+     * SWRESET it already waited 20ms; TFT_eSPI V2.5.43 waits 150ms.
+     */
+    vTaskDelay(pdMS_TO_TICKS(130u));
+    size_t n_init=0u;
+    const D14DoomCmd *init=d14_doom_init(&n_init);
+    ESP_LOGW(TAG,"D14_DOOM_PROFILE phase=INIT"
+             " ref=TFT_eSPI_V2.5.43 source=ILI9341_2_DRIVER"
+             " reset_wait_ms=150 profile=TEST_ONLY");
+    err=d14_doom_send("INIT",init,n_init);
+    if(err!=ESP_OK) goto fail;
+    /* DISPON was issued by the vendor list; do not call it twice. */
+#else
     err = esp_lcd_panel_init(panel);
     if (err != ESP_OK) goto fail;
     err = esp_lcd_panel_disp_on_off(panel, true);
     if (err != ESP_OK) goto fail;
+#endif
 
     initialized = true;
     ESP_LOGI(TAG, "INIT_PASS LCD=ILI9341 SPI2=13,14,15,2 BL=21 clock_hz=%u dma_bytes=%u",
@@ -253,6 +299,34 @@ esp_err_t warship_lcd_backlight_set_percent(uint8_t percent)
     last_error = ESP_OK;
     return ESP_OK;
 }
+
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+esp_err_t warship_lcd_doom_reference_finish(void)
+{
+    if(!initialized || !prepared || fault || !panel_io || !panel ||
+       !stripe || !completed || transfers != 30u)
+        return ESP_ERR_INVALID_STATE;
+    /* 30 case10 clear-band DMA transfers must have fully completed.
+     * After this call no mirror()/swap_xy() may rewrite cached MADCTL.
+     */
+    size_t n=0u;
+    const D14DoomCmd *cmds=d14_doom_runtime(&n);
+    esp_err_t err=d14_doom_send("RUNTIME",cmds,n);
+    if(err!=ESP_OK) return err;
+    const uint8_t madctl=d14_doom_case10_madctl();
+    err=esp_lcd_panel_io_tx_param(panel_io,0x36u,&madctl,1u);
+    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=FINAL cmd=0x36"
+             " madctl=0x%02x case10=1 bgr=1 mv=0 mx=0 my=1"
+             " rgb565be_swap=NONE err=%s",(unsigned)madctl,
+             esp_err_to_name(err));
+    if(err!=ESP_OK) return sticky_error(err);
+    ESP_LOGW(TAG,"D14_DOOM_PROFILE phase=DONE"
+             " analogue=TFT_eSPI_V2.5.43 gamma=DoomRPG_RE"
+             " inversion=ON bgr=ON case10=1"
+             " product_firmware=UNCHANGED");
+    return ESP_OK;
+}
+#endif
 
 #ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
 /* TEST ONLY: main D14 diagnostic is the only caller.
