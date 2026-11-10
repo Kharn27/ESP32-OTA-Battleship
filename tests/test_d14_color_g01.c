@@ -1,5 +1,5 @@
 /* D14 COLOR HOST: every one of 76,800 G01 PR90 PNG RGB565 pixels
- * must survive RLE encoding and T03 decoding bit-for-bit.
+ * must survive Flash raw encoding and T03 rectangle decoding bit-for-bit.
  * Golden bytes are the pinned PNG quantized directly by the Python
  * build-time exporter (no G03 artwork, CSS or alpha).
  */
@@ -27,10 +27,11 @@ int main(int argc,char **argv)
     CHECK(fread(golden,1,RGB_BYTES,fp)==RGB_BYTES);
     CHECK(fgetc(fp)==EOF); /* no hidden padding/cropped rows */
     CHECK(fclose(fp)==0);
-    CHECK(d14_color_g01_image.format==T03_ROW_RLE565BE);
+    CHECK(d14_color_g01_image.format==T03_RAW565BE);
     CHECK(d14_color_g01_image.width==320u);
     CHECK(d14_color_g01_image.height==240u);
-    CHECK(d14_color_g01_image.row_offset_count==241u);
+    CHECK(d14_color_g01_image.row_offsets==NULL);
+    CHECK(d14_color_g01_image.row_offset_count==0u);
     CHECK(d14_color_g01_image.bytes!=NULL);
 
     for (unsigned y=0u;y<240u;y+=8u) {
@@ -39,7 +40,7 @@ int main(int argc,char **argv)
               0u,(uint16_t)y,320u,8u,band,sizeof band)==0);
         CHECK(memcmp(band,golden+(size_t)y*320u*2u,sizeof band)==0);
     }
-    /* Subrectangle crossing non-trivial coordinates and row-index RLE. */
+    /* Subrectangle crossing non-trivial coordinates and Flash rectangle layout. */
     CHECK(t03_decode_rect(&d14_color_g01_image,
           31u,53u,19u,8u,band,sizeof band)==0);
     for(unsigned y=0u;y<8u;++y)
