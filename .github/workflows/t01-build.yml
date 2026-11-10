@@ -43,6 +43,12 @@ jobs:
           cmp build-host/t03_g03_data.c build-host/t03_second.c
           python3 tools/d14_export.py --svg design/ecrans/deploiement/g03_deploiement_320x240.svg --png design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/d14_second.c
           cmp build-host/d14_g03_data.c build-host/d14_second.c
+          # This is PR90's APPROVED binary PNG from main, not old D14 PR8.
+          printf '%s  %s\\n' ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873 design/ecrans/accueil/accueil_cyd_warship_320x240.png | sha256sum -c -
+          test "$(git rev-parse HEAD:design/ecrans/accueil/accueil_cyd_warship_320x240.png)" = "7bd321c6ccbfc230802e20010bfa06e71a9099a9"
+          python3 tools/d14_color_g01_export.py --input design/ecrans/accueil/accueil_cyd_warship_320x240.png --output build-host/d14_g01_second.c --raw-reference build-host/d14_g01_second.rgb565be
+          cmp build-host/d14_color_g01_data.c build-host/d14_g01_second.c
+          cmp build-host/d14_color_g01_ref.rgb565be build-host/d14_g01_second.rgb565be
           git diff --exit-code -- design/
       - name: Build
         run: cmake --build build-host --verbose
@@ -89,6 +95,7 @@ jobs:
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin &&
             ! strings build/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG' &&
             test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'commit_resolved_pair' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
@@ -175,7 +182,7 @@ jobs:
             build-t03/flasher_args.json
             build-t03/cyd_warship.map
           if-no-files-found: error
-      - name: Build D14 color A/B/C/D/E diagnostic TEST ONLY (no NVS/gameplay)
+      - name: Build D14 G01 PR90 profile A diagnostic TEST ONLY (no NVS/gameplay)
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.5.6
@@ -187,11 +194,12 @@ jobs:
             idf.py -B build-d14-color size &&
             sha256sum build-d14-color/cyd_warship.bin &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
-            strings build-d14-color/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY'
-      - name: D14 color A/B/C/D/E diagnostic BIN (TEST ONLY; no gameplay/NVS)
+            strings build-d14-color/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
+            strings build-d14-color/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG'
+      - name: D14 G01 PR90 color A diagnostic BIN (TEST ONLY; no gameplay/NVS)
         uses: actions/upload-artifact@v4
         with:
-          name: warship-d14-COLOR-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          name: warship-d14-G01-PR90-COLOR-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             build-d14-color/cyd_warship.bin
             build-d14-color/cyd_warship.elf
