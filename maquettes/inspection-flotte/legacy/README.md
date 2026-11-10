@@ -93,7 +93,7 @@ Exécuter depuis le dossier de la maquette (Linux, Python 3 et Pillow ; font `De
 
 ```sh
 python3 -m pip install Pillow
-python3 design/ecrans/inspection-flotte/build_g08_reference.py
+python3 maquettes/inspection-flotte/legacy/build_g08_reference.py
 ```
 
 **Contrôles positifs réels :** plateau x21,y53, 10×10 cellules espacées de **18 pixels** (contrôle des positions de traits), cinq navires alignés en 5/4/3/3/2 et 17 cases uniques, 12 touches et 20 ratés disjoints, 5 segments intacts ; ORA à 5 calques et calques d'impacts lus et **identiques byte-à-byte** A/B/C, coques absentes A/C ; dimensions PNG lus depuis fichier ; **RGBA des pixels du PNG ×4 relu exactement égaux au NEAREST attendu** pour chaque état et la planche.

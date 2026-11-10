@@ -99,7 +99,7 @@ Depuis la racine du dépôt :
 
 ```bash
 python3 -m pip install 'CairoSVG==2.7.1' 'Pillow==12.3.0'
-python3 design/ecrans/palmares/export_previews.py
+python3 maquettes/palmares/legacy/export_previews.py
 ```
 
 Le validateur lit le **SVG réellement rendu** : cinq groupes de données/valeurs uniques, libellés et lien ACCUEIL, absence de catégories fictives ou supplémentaires, somme d'exemple 12=7+3+2, plaque globale séparée, état zéro `5×00`, dimensions natives, PNG **1280×960 RGBA égal octet pour octet au zoom NEAREST**, avec contrôle négatif RGB. Il contrôle aussi la taille de la vignette 252×108. Il ne remplace **pas** une revue artistique/ergonomique sur écran CYD.
