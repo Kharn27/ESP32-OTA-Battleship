@@ -24,8 +24,22 @@ typedef struct {
  */
 const D14DoomCmd *d14_doom_init(size_t *count);
 const D14DoomCmd *d14_doom_runtime(size_t *count);
-/* Runtime screen geometry stays the PO-validated case10 (MY, BGR). */
-uint8_t d14_doom_case10_madctl(void);
+/* TEST ONLY, TFT_eSPI rotation 1: MV=1, BGR=1, MX=MY=0. */
+uint8_t d14_doom_native_landscape_madctl(void);
+
+/* Inclusive CASET (0x2A) and RASET (0x2B) windows.
+ * Independent host oracle for the esp_lcd draw_bitmap x+w-1/y+h-1 contract.
+ */
+typedef struct {
+    uint8_t caset[4];
+    uint8_t raset[4];
+} D14DoomWindow;
+int d14_doom_native_window(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+                           D14DoomWindow *out);
+
+/* Extra TEST-ONLY first/last pixel & 4x2 boundary screen; no changed PNG. */
+int d14_doom_geometry_band(uint16_t y, uint16_t rows,
+                           uint8_t *dest, size_t capacity);
 
 /* Deterministic full-width half-tone synthetic diagnostic; wire RGB565BE. */
 uint16_t d14_doom_midtone_pixel(uint16_t x, uint16_t y);

@@ -82,6 +82,26 @@ static esp_err_t transfer(int x, int y, int w, int h, int max_w, int max_h)
         (size_t)w * (size_t)h > WARSHIP_LCD_DMA_BYTES / 2u)
         return ESP_ERR_INVALID_ARG;
 
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+    D14DoomWindow window;
+    if (d14_doom_native_window((uint16_t)x, (uint16_t)y,
+                               (uint16_t)w, (uint16_t)h, &window) != 0)
+        return ESP_ERR_INVALID_ARG;
+    /* Independent check of the first and last full-width DMA stripes.
+     * Actual CASET/RASET/RAMWR remain owned by esp_lcd_panel_draw_bitmap.
+     */
+    if (x == 0 && w == 320 && h == 8 &&
+        (y == 0 || y == (int)WARSHIP_LCD_HEIGHT - 8))
+        ESP_LOGI(TAG,"D14_DOOM_WINDOW geom=320x240 x=%d y=%d"
+                 " CASET_2A=%02x:%02x:%02x:%02x"
+                 " RASET_2B=%02x:%02x:%02x:%02x"
+                 " RAMWR=0x2c bytes=%u",
+                 x,y,(unsigned)window.caset[0],(unsigned)window.caset[1],
+                 (unsigned)window.caset[2],(unsigned)window.caset[3],
+                 (unsigned)window.raset[0],(unsigned)window.raset[1],
+                 (unsigned)window.raset[2],(unsigned)window.raset[3],
+                 (unsigned)(w*h*2));
+#endif
     (void)xSemaphoreTake(completed, 0);
     esp_err_t err = esp_lcd_panel_draw_bitmap(panel, x, y, x + w, y + h, stripe);
     if (err != ESP_OK) return sticky_error(err);
@@ -233,6 +253,35 @@ esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565)
         return ESP_OK;
     }
 
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+    /* Set MV=1 / BGR=1 BEFORE any CASET/RASET/RAMWR.
+     * The former clear of 320 pixels at MV=0 exceeded portrait GRAM.
+     * No swap_xy()/mirror() in this path: cached MADCTL misses BGR.
+     */
+    const uint8_t madctl=d14_doom_native_landscape_madctl();
+    esp_err_t err=esp_lcd_panel_io_tx_param(panel_io,0x36u,
+                                            &madctl,sizeof madctl);
+    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=ROTATE_BEFORE_CLEAR cmd=0x36"
+             " madctl=0x%02x mv=1 mx=0 my=0 bgr=1"
+             " gram=320x240 err=%s",
+             (unsigned)madctl,esp_err_to_name(err));
+    if(err!=ESP_OK) return sticky_error(err);
+    for(unsigned row=0u;row<WARSHIP_LCD_HEIGHT;row+=WARSHIP_LCD_BAND_ROWS) {
+        for(unsigned i=0u;i<WARSHIP_LCD_WIDTH*WARSHIP_LCD_BAND_ROWS;++i) {
+            stripe[2u*i]=(uint8_t)(clear_rgb565>>8);
+            stripe[2u*i+1u]=(uint8_t)clear_rgb565;
+        }
+        err=transfer(0,(int)row,(int)WARSHIP_LCD_WIDTH,
+                     (int)WARSHIP_LCD_BAND_ROWS,
+                     (int)WARSHIP_LCD_WIDTH,(int)WARSHIP_LCD_HEIGHT);
+        if(err!=ESP_OK) return err;
+    }
+    prepared=true;
+    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=CLEAR_DONE madctl=0x28"
+             " window=0..319x0..239 bands=30 dma_bytes=5120"
+             " no_mirror_swap=1");
+    return ESP_OK;
+#else
     /* PO-proven console sequence: MV=0 + MX=MY=0, then a 320x240
      * wide clear via CASET/RASET/RAMWR. This is nonstandard for a nominal
      * 240-column controller, but the SAME sequence is used on the PO's CYD.
@@ -265,6 +314,7 @@ esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565)
     prepared = true;
     ESP_LOGI(TAG, "PROFILE_APPLIED case=10 mv=0 mx=0 my=1 window=320x240 clear_bands=30");
     return ESP_OK;
+#endif
 }
 
 uint8_t *warship_lcd_band(void)
@@ -308,23 +358,20 @@ esp_err_t warship_lcd_doom_reference_finish(void)
     if(!initialized || !prepared || fault || !panel_io || !panel ||
        !stripe || !completed || transfers != 30u)
         return ESP_ERR_INVALID_STATE;
-    /* 30 case10 clear-band DMA transfers must have fully completed.
-     * After this call no mirror()/swap_xy() may rewrite cached MADCTL.
+    /* 30 clear-band DMA transfers fully completed AFTER 0x28.
+     * The physical register is the authority; no cached mirror/swap calls.
      */
     size_t n=0u;
     const D14DoomCmd *cmds=d14_doom_runtime(&n);
     esp_err_t err=d14_doom_send("RUNTIME",cmds,n);
     if(err!=ESP_OK) return err;
-    const uint8_t madctl=d14_doom_case10_madctl();
-    err=esp_lcd_panel_io_tx_param(panel_io,0x36u,&madctl,1u);
-    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=FINAL cmd=0x36"
-             " madctl=0x%02x case10=1 bgr=1 mv=0 mx=0 my=1"
-             " rgb565be_swap=NONE err=%s",(unsigned)madctl,
-             esp_err_to_name(err));
-    if(err!=ESP_OK) return sticky_error(err);
+    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=FINAL"
+             " madctl=0x28 applied_before_clear=1"
+             " native_landscape=1 mv=1 bgr=1"
+             " rgb565be_swap=NONE no_new_rotation_write=1");
     ESP_LOGW(TAG,"D14_DOOM_PROFILE phase=DONE"
              " analogue=TFT_eSPI_V2.5.43 gamma=DoomRPG_RE"
-             " inversion=ON bgr=ON case10=1"
+             " inversion=ON bgr=ON native_landscape=1"
              " product_firmware=UNCHANGED");
     return ESP_OK;
 }

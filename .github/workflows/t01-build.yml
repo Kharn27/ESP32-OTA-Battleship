@@ -230,6 +230,9 @@ jobs:
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=INIT' &&
             strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=DONE' &&
+            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=ROTATE_BEFORE_CLEAR' &&
+            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_WINDOW geom=320x240' &&
+            strings build-d14-doom/cyd_warship.elf | grep -Fq 'NATIVE_EDGES_4x2' &&
             strings build-d14-doom/cyd_warship.elf | grep -Fq 'G01_PR90_PNG'
       - name: D14 DoomRPG reference diagnostic BIN (TEST ONLY, never normal)
         uses: actions/upload-artifact@v4

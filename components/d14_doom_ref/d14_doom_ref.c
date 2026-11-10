@@ -64,13 +64,65 @@ const D14DoomCmd *d14_doom_runtime(size_t *count)
     return runtime_cmds;
 }
 
-uint8_t d14_doom_case10_madctl(void)
+uint8_t d14_doom_native_landscape_madctl(void)
 {
-    /* Preserve 320x240 PO case10 orientation: MY=1, MV=MX=0.
-     * BGR=1 is the only change from baseline MADCTL 0x80.
-     * NOT identical to DoomRPG setRotation(1) (0x28).
-     */
-    return 0x88u;
+    /* TFT_eSPI V2.5.43 rotation 1: MAD_MV | COLOR_ORDER(BGR). */
+    return 0x28u;
+}
+
+int d14_doom_native_window(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+                           D14DoomWindow *out)
+{
+    if (out == NULL || w == 0u || h == 0u ||
+        x >= D14_DOOM_W || y >= D14_DOOM_H ||
+        w > D14_DOOM_W - (unsigned)x ||
+        h > D14_DOOM_H - (unsigned)y)
+        return -1;
+    const uint16_t end_x = (uint16_t)(x + w - 1u);
+    const uint16_t end_y = (uint16_t)(y + h - 1u);
+    out->caset[0]=(uint8_t)(x>>8);
+    out->caset[1]=(uint8_t)x;
+    out->caset[2]=(uint8_t)(end_x>>8);
+    out->caset[3]=(uint8_t)end_x;
+    out->raset[0]=(uint8_t)(y>>8);
+    out->raset[1]=(uint8_t)y;
+    out->raset[2]=(uint8_t)(end_y>>8);
+    out->raset[3]=(uint8_t)end_y;
+    return 0;
+}
+
+static uint16_t geometry_pixel(uint16_t x, uint16_t y)
+{
+    /* TL red, TR green, BL blue, BR white. Distinct physical corners. */
+    if (x < 6u && y < 6u) return 0xF800u;
+    if (x >= D14_DOOM_W - 6u && y < 6u) return 0x07E0u;
+    if (x < 6u && y >= D14_DOOM_H - 6u) return 0x001Fu;
+    if (x >= D14_DOOM_W - 6u && y >= D14_DOOM_H - 6u) return 0xFFFFu;
+    if (x == 0u || x == D14_DOOM_W - 1u ||
+        y == 0u || y == D14_DOOM_H - 1u) return 0xFFFFu;
+    if (x == 79u || x == 80u || x == 159u || x == 160u ||
+        x == 239u || x == 240u || y == 119u || y == 120u)
+        return 0x07FFu; /* cyan rectangle boundaries */
+    return (((unsigned)x/80u + (unsigned)y/120u) & 1u) ?
+           0x4208u : 0x0000u;
+}
+
+int d14_doom_geometry_band(uint16_t y, uint16_t rows,
+                           uint8_t *dest, size_t capacity)
+{
+    if (dest == NULL || rows == 0u || rows > D14_DOOM_BAND_ROWS ||
+        y >= D14_DOOM_H || (unsigned)y+rows > D14_DOOM_H ||
+        capacity < (size_t)D14_DOOM_W*rows*2u)
+        return -1;
+    for (unsigned row=0u; row<rows; ++row)
+        for (unsigned x=0u; x<D14_DOOM_W; ++x) {
+            const uint16_t pixel=geometry_pixel((uint16_t)x,
+                                                (uint16_t)(y+row));
+            const size_t pos=((size_t)row*D14_DOOM_W+x)*2u;
+            dest[pos]=(uint8_t)(pixel>>8);
+            dest[pos+1u]=(uint8_t)pixel;
+        }
+    return 0;
 }
 
 static uint16_t rgb565(unsigned r, unsigned g, unsigned b)

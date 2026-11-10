@@ -24,10 +24,9 @@ typedef struct {
 } WarshipLcdInfo;
 
 esp_err_t warship_lcd_init(void);
-/* Configure ONLY the physically referenced console boot profile 10.
- * In this CYD-specific profile, a 320x240 window is addressed with
- * MADCTL.MV=0. Do not substitute a generic landscape rotation.
- * Calling the function again is a no-op (do not reapply MADCTL).
+/* Normal/A remains the physically referenced case10 (MADCTL.MV=0).
+ * TEST-ONLY D14 Doom instead uses native landscape MV=1 / 0x28 BEFORE
+ * clearing 320x240. Calling again is a no-op in either variant.
  */
 esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565);
 /* A single borrowed, DMA-capable band. Fill only after previous send returned
@@ -51,8 +50,8 @@ esp_err_t warship_lcd_backlight_set_percent(uint8_t percent);
 esp_err_t warship_lcd_diag_apply_profile(unsigned index);
 #endif
 #ifdef WARSHIP_D14_DOOM_REFERENCE
-/* TEST ONLY, after prepare_console and with no DMA in flight.
- * Executes DoomRPG runtime gamma/inversion, keeps case10, turns BGR on.
+/* TEST ONLY, after native-landscape clear and idle DMA.
+ * Executes DoomRPG runtime gamma/inversion without overwriting 0x28.
  */
 esp_err_t warship_lcd_doom_reference_finish(void);
 #endif

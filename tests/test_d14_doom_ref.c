@@ -55,8 +55,71 @@ static void test_runtime(void)
     assert(v[2].len==15u && memcmp(v[2].data,gamma,15)==0);
     assert(v[3].len==15u && memcmp(v[3].data,gamma,15)==0);
     assert(v[4].len==0u && v[5].len==0u);
-    assert(d14_doom_case10_madctl()==0x88u);
+    assert(d14_doom_native_landscape_madctl()==0x28u);
 }
+static void test_native_landscape_windows(void)
+{
+    D14DoomWindow w;
+    assert(d14_doom_native_window(0,0,320,8,&w)==0);
+    assert(memcmp(w.caset,(const uint8_t[]){0,0,1,0x3F},4)==0);
+    assert(memcmp(w.raset,(const uint8_t[]){0,0,0,7},4)==0);
+    assert(d14_doom_native_window(0,232,320,8,&w)==0);
+    assert(memcmp(w.caset,(const uint8_t[]){0,0,1,0x3F},4)==0);
+    assert(memcmp(w.raset,(const uint8_t[]){0,232,0,239},4)==0);
+    assert(d14_doom_native_window(319,239,1,1,&w)==0);
+    assert(memcmp(w.caset,(const uint8_t[]){1,0x3F,1,0x3F},4)==0);
+    assert(memcmp(w.raset,(const uint8_t[]){0,239,0,239},4)==0);
+    assert(d14_doom_native_window(79,119,2,2,&w)==0);
+    assert(memcmp(w.caset,(const uint8_t[]){0,79,0,80},4)==0);
+    assert(memcmp(w.raset,(const uint8_t[]){0,119,0,120},4)==0);
+    assert(d14_doom_native_window(0,0,1,1,NULL)==-1);
+    assert(d14_doom_native_window(0,0,0,8,&w)==-1);
+    assert(d14_doom_native_window(0,0,320,0,&w)==-1);
+    assert(d14_doom_native_window(1,0,320,8,&w)==-1);
+    assert(d14_doom_native_window(0,1,320,240,&w)==-1);
+    assert(d14_doom_native_window(320,0,1,1,&w)==-1);
+    assert(d14_doom_native_window(0,240,1,1,&w)==-1);
+    assert(d14_doom_native_window(UINT16_MAX,0,1,1,&w)==-1);
+    assert(d14_doom_native_window(0,UINT16_MAX,1,1,&w)==-1);
+}
+
+static void test_geometry_screen(void)
+{
+    uint8_t band[D14_DOOM_BAND_BYTES+2u];
+    memset(band,0xA5,sizeof band);
+    assert(d14_doom_geometry_band(0,8,band,sizeof band)==0);
+    assert(band[D14_DOOM_BAND_BYTES]==0xA5 &&
+           band[D14_DOOM_BAND_BYTES+1]==0xA5);
+    assert(band[0]==0xF8u && band[1]==0x00u); /* TL */
+    assert(band[638]==0x07u && band[639]==0xE0u); /* TR */
+    for(unsigned row=0u;row<D14_DOOM_H;row+=D14_DOOM_BAND_ROWS) {
+        assert(d14_doom_geometry_band((uint16_t)row,8,band,sizeof band)==0);
+        for(unsigned r=0u;r<8u;++r) {
+            const unsigned y=row+r;
+            const size_t last=(r*320u+319u)*2u;
+            const uint16_t left=y<6u?0xF800u:y>=234u?0x001Fu:0xFFFFu;
+            const uint16_t right=y<6u?0x07E0u:0xFFFFu;
+            assert(band[r*640u]==(uint8_t)(left>>8));
+            assert(band[r*640u+1u]==(uint8_t)left);
+            assert(band[last]==(uint8_t)(right>>8));
+            assert(band[last+1u]==(uint8_t)right);
+        }
+    }
+    assert(d14_doom_geometry_band(119,1,band,sizeof band)==0);
+    assert(band[79u*2u]==0x07u && band[79u*2u+1u]==0xFFu);
+    assert(band[80u*2u]==0x07u && band[80u*2u+1u]==0xFFu);
+    assert(band[160u*2u]==0x07u && band[160u*2u+1u]==0xFFu);
+    assert(d14_doom_geometry_band(120,1,band,sizeof band)==0);
+    assert(band[80u*2u]==0x07u && band[80u*2u+1u]==0xFFu);
+    assert(d14_doom_geometry_band(0,0,band,sizeof band)==-1);
+    assert(d14_doom_geometry_band(0,9,band,sizeof band)==-1);
+    assert(d14_doom_geometry_band(239,8,band,sizeof band)==-1);
+    assert(d14_doom_geometry_band(240,1,band,sizeof band)==-1);
+    assert(d14_doom_geometry_band(0,8,NULL,sizeof band)==-1);
+    assert(d14_doom_geometry_band(0,8,band,D14_DOOM_BAND_BYTES-1u)==-1);
+    assert(d14_doom_geometry_band(239,1,band,640u)==0);
+}
+
 static void test_rgb565be(void)
 {
     uint8_t data[D14_DOOM_BAND_BYTES+2u];
@@ -109,10 +172,12 @@ int main(int argc,char **argv)
 {
     test_init_sequence();
     test_runtime();
+    test_native_landscape_windows();
+    test_geometry_screen();
     test_rgb565be();
     if(argc==3 && strcmp(argv[1],"--dump-midtones")==0)
         return dump_midtones(argv[2]);
     if(argc!=1) return 5;
-    puts("D14_DOOM_REF sequence + RGB565BE: PASS");
+    puts("D14_DOOM_NATIVE_LANDSCAPE sequence + windows + edges + RGB565BE: PASS");
     return 0;
 }

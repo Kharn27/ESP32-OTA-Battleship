@@ -21,7 +21,7 @@
 #define G01_SHA256 "ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873"
 #define G01_SOURCE_BLOB_SHA "7bd321c6ccbfc230802e20010bfa06e71a9099a9"
 #ifdef WARSHIP_D14_DOOM_REFERENCE
-#define D14_PROFILE "DOOM_REFERENCE"
+#define D14_PROFILE "DOOM_NATIVE_LANDSCAPE"
 #else
 #define D14_PROFILE "A"
 #endif
@@ -89,6 +89,29 @@ static esp_err_t diagnostic_draw(unsigned source)
     return ESP_OK;
 }
 
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+/* One extra short page tests the actual 320x240 native-landscape edges
+ * and 4x2 tile seams. The next three source screens stay byte-identical.
+ */
+static esp_err_t diagnostic_geometry(void)
+{
+    uint8_t *band=warship_lcd_band();
+    if(!band) return ESP_ERR_INVALID_STATE;
+    for(unsigned top=0u;top<D14_COLOR_H;top+=D14_COLOR_BAND_ROWS) {
+        if(d14_doom_geometry_band((uint16_t)top,D14_COLOR_BAND_ROWS,
+                                  band,WARSHIP_LCD_DMA_BYTES)!=0)
+            return ESP_ERR_INVALID_ARG;
+        const esp_err_t err=warship_lcd_send(0,(int)top,320,8);
+        if(err!=ESP_OK) return err;
+    }
+    ESP_LOGI(TAG,"D14_DOOM_GEOMETRY source=NATIVE_EDGES_4x2"
+             " width=320 height=240 bands=30"
+             " corner_TL=RED TR=GREEN BL=BLUE BR=WHITE"
+             " borders=first_last_pixel_each_row");
+    return ESP_OK;
+}
+#endif
+
 void d14_color_diag_run(void)
 {
     ESP_LOGW(TAG,"D14_COLOR_DIAGNOSTIC=ON TEST_ONLY"
@@ -122,11 +145,22 @@ void d14_color_diag_run(void)
 #endif
     if(err!=ESP_OK) goto failed;
     diagnostic_metrics("lcd_ready");
-
-    err=diagnostic_draw(0u);
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+    err=diagnostic_geometry();
     if(err!=ESP_OK) goto failed;
     err=warship_lcd_backlight(true);
     if(err!=ESP_OK) goto failed;
+    diagnostic_metrics("NATIVE_EDGES_4x2");
+    ESP_LOGW(TAG,"D14_COLOR_STEP profile=%s source=NATIVE_EDGES_4x2"
+             " hold_ms=1500 next=DIRECT_RGB565",D14_PROFILE);
+    vTaskDelay(pdMS_TO_TICKS(1500));
+#endif
+    err=diagnostic_draw(0u);
+    if(err!=ESP_OK) goto failed;
+#ifndef WARSHIP_D14_DOOM_REFERENCE
+    err=warship_lcd_backlight(true);
+    if(err!=ESP_OK) goto failed;
+#endif
     diagnostic_metrics("DIRECT_RGB565");
     ESP_LOGW(TAG,"D14_COLOR_STEP profile=%s source=DIRECT_RGB565"
              " hold_ms=%u next=MIDTONES_RGB565",D14_PROFILE,

@@ -1,5 +1,23 @@
 # D14 #69 — Sonde DoomRPG de référence LCD (TEST-ONLY)
 
+## Correctif du 10/11/2026 — DOOM_NATIVE_LANDSCAPE (mandat Pilotage)
+
+**Ce correctif remplace l'orientation TEST-ONLY `0x88` du HEAD `82eb35944f8aeded632bb0dfebe99e3e97609a89`.**
+Ordres : [Issue #69 / retour photographique](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/69#issuecomment-6766672826) et [PR #91 / instruction développeur](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/91#issuecomment-6766679296).
+**Les sections historiques sous ce préambule décrivent l'ancienne sonde à MADCTL `0x88` et son ancien protocole A+Doom ; elles ne sont plus le protocole courant.**
+
+- Constat PO sur une CYD : A : primaires correctes, demi-teintes incertaines, G01 délavé. Ancienne Doom : couleurs perçues plus saturées, mais géométrie visiblement détruite avec répétitions verticales et bande latérale. Les `ESP_OK` SPI et 120 DMA ne prouvent pas l'adressage du GRAM. Aucun SHA256 des BIN physiques locaux communiqué.
+- **Unique changement de pilotage panneau :** sous `WARSHIP_D14_DOOM_REFERENCE=ON`, écrire `MADCTL=0x28` (`MY=0, MX=0, MV=1, BGR=1`) **après l'INIT TFT_eSPI et avant le premier transfert clear**. Le pilote `esp_lcd` garde la maîtrise de `CASET (0x2A)`, `RASET (0x2B)`, `RAMWR (0x2C)` ; pas de `swap_xy()/mirror()` qui réécrirait le MADCTL à partir d'un cache RGB. Pas de réécriture de `0x28` en FIN : les six commandes runtime n'altèrent pas l'orientation.
+- **Fenêtres :** clear de 30 bandes 320×8 ; première `CASET=00:00:01:3F`, `RASET=00:00:00:07`, dernière `CASET=00:00:01:3F`, `RASET=00:E8:00:EF`, `RAMWR=0x2C`, 5120 octets RGB565BE chacune. Test C99 séparé validant les bornes inclusives `x+w-1/y+h-1`, les bords et les refus ; les logs ne sont pas une capture filaire.
+- **Sonde visuelle supplémentaire** `NATIVE_EDGES_4x2` de 1,5 seconde : quatre coins asymétriques rouge/vert/bleu/blanc, première et dernière colonne de chaque ligne, séparateurs des 4 colonnes × 2 lignes. Ensuite **mêmes données RGB565BE** que la précédente sonde pour `DIRECT_RGB565` (3,5 s), `MIDTONES_RGB565` (3,5 s), puis le même G01 PR90 immobile. Profil A déjà testé **inchangé**.
+- **Invariants préservés :** tous les registres analogiques, gamma et inversion Doom, BGR, PNG G01, conversion RGB565BE sans byte-swap, SPI2 20 MHz, DMA 5120 B, GPIO21 PWM40 5 kHz ; aucun framebuffer plein écran, Arduino, NVS, toucher, gameplay, ESP-NOW, D15 ou modification du firmware normal.
+- **Traces attendues :** `D14_DOOM_PROFILE phase=ROTATE_BEFORE_CLEAR` avec `madctl=0x28`, `D14_DOOM_WINDOW` avec `CASET_2A`, `RASET_2B`, `RAMWR=0x2c`, `phase=CLEAR_DONE`, `phase=FINAL/DONE`, `D14_DOOM_GEOMETRY`, `D14_COLOR_DRAW`, `D14_COLOR_MEM`, `WARSHIP_BL`. Vérifier GCC/Clang ASan+UBSan, ESP-IDF 5.5.6 Xtensa, CI **3/3 sur HEAD exact**, binaire et SHA256 de l'artefact avant tout flash.
+
+**Protocole physique futur (un seul flash Doom corrigé, après revue Pilotage seulement).** Avec une CYD, flasher uniquement `build-d14-doom` du nouveau HEAD vérifié (bootloader/partition/app associés), **sans `erase-flash`** pour préserver NVS. Consigner HEAD/App version et hash APP BIN réellement utilisé, capturer UART 115200, photo du motif de géométrie, des mi-teintes et de G01, donner **deux avis distincts géométrie/couleur**, et comparer au A déjà testé sans reflash A. Relever heap8, largest8, pile, `lcd_fault`, timeouts, PWM. Aucun verdict `ON_DEVICE_VERIFIED` avant preuve. **D14 `CORRECTIONS_REQUISES`, PR #91 Draft non fusionnée.**
+
+---
+
+## Référence historique — précédente sonde DOOM_REFERENCE à `0x88`
 **Mandat :** Issue #69 commentaire #6765376676 et PR #91 commentaire #6765383053 (10/11/2026).
 **Statut :** investigation matérielle, A et DOOM_REFERENCE sur deux BIN indépendants. Pas de correction produit validée. PR Draft, non fusionnée.
 
