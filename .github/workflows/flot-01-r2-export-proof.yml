@@ -1,0 +1,46 @@
+name: FLOT-01 R2 export proof (exact frozen HEAD)
+
+on:
+  push:
+    branches:
+      - ci/flot-01-r2-export-proof-b3d94fb
+    paths:
+      - .github/workflows/flot-01-r2-export-proof.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify-export:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout complete approved PR HEAD
+        uses: actions/checkout@v4
+        with:
+          ref: b3d94fb1dc9a180f480045cc2f02ba619c3415f4
+          persist-credentials: false
+      - name: Assert exact source SHA and clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "b3d94fb1dc9a180f480045cc2f02ba619c3415f4"
+          git rev-parse HEAD
+          test -z "$(git status --porcelain)"
+          test -f design/ecrans/attaque/g04_r2_attaque_320x240.png
+          sha256sum design/ecrans/attaque/g04_r2_attaque_320x240.png
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install declared PC export dependencies
+        shell: bash
+        run: |
+          python -m pip install 'Pillow==12.3.0' 'CairoSVG==2.8.2'
+          python -c 'import PIL,cairosvg; print("Pillow",PIL.__version__,"CairoSVG",cairosvg.__version__)'
+      - name: Run complete non-destructive FLOT-01 R2 export check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 design/flotte/navires/sous-marin/export_and_check.py --check
+          test -z "$(git status --porcelain)"
+          echo "FLOT-01-R2 EXPORT CHECK PASS; HEAD b3d94fb1dc9a180f480045cc2f02ba619c3415f4; checkout unchanged"
