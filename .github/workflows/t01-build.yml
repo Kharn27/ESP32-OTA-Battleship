@@ -207,6 +207,7 @@ jobs:
         with:
           name: warship-d14-PILLOW-FLASH-AUDIT-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
+            design/ecrans/accueil/accueil_cyd_warship_320x240.png
             build-d14-color/d14-pillow-audit/report.json
             build-d14-color/d14-pillow-audit/README.txt
             build-d14-color/d14-pillow-audit/g01_original_vs_esp32_flash.png
