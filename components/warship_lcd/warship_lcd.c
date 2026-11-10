@@ -10,6 +10,9 @@
 #include <string.h>
 
 #include "warship_lcd_light.h"
+#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
+#include "d14_color_diag.h"
+#endif
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
 #include "esp_lcd_ili9341.h"
@@ -250,6 +253,82 @@ esp_err_t warship_lcd_backlight_set_percent(uint8_t percent)
     last_error = ESP_OK;
     return ESP_OK;
 }
+
+#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
+/* TEST ONLY: main D14 diagnostic is the only caller.
+ * Driver's case10 keeps MV=0, MX=0, MY=1. Explicit MADCTL
+ * values 0x80 RGB / 0x88 BGR preserve that orientation.
+ * Do NOT call mirror()/swap_xy() after the direct register write;
+ * that would overwrite BGR using the cached driver state.
+ */
+static esp_err_t d14_vendor_param(char id, uint8_t cmd,
+                                  const uint8_t *data,size_t length)
+{
+    const esp_err_t err=esp_lcd_panel_io_tx_param(panel_io,cmd,
+                                                  data,length);
+    ESP_LOGI(TAG,"D14_COLOR_CMD case=%c cmd=0x%02x bytes=%u err=%s",
+             id,(unsigned)cmd,(unsigned)length,esp_err_to_name(err));
+    if(err!=ESP_OK) return sticky_error(err);
+    return ESP_OK;
+}
+
+esp_err_t warship_lcd_diag_apply_profile(unsigned index)
+{
+    static unsigned expected_index=0u;
+    D14ColorProfile p;
+    if(!initialized || !prepared || fault || !panel_io ||
+       !panel || !stripe || !completed)
+        return ESP_ERR_INVALID_STATE;
+    if(index!=expected_index ||
+       d14_color_profile(index,&p)!=0)
+        return ESP_ERR_INVALID_ARG;
+
+    /* The first three modes never write any gamma parameters:
+     * A=RGB/OFF, B=RGB/ON, C=BGR/OFF (compared against A).
+     * D restores RGB, applies the exact DoomRPG gamma bytes, then
+     * enables inversion; E changes ONLY BGR relative to D.
+     */
+    ESP_LOGW(TAG,"D14_COLOR_PROFILE_BEGIN case=%c index=%u"
+             " inverted=%u bgr=%u doom_gamma=%u"
+             " madctl_case10=1 pwm_percent_experimental=40"
+             " spi_hz=20000000 dma=5120",
+             p.id,index,p.inverted,p.bgr,p.gamma);
+    esp_err_t err;
+    if(index==2u || index==3u || index==4u) {
+        const uint8_t madctl=p.bgr ? 0x88u : 0x80u;
+        ESP_LOGI(TAG,"D14_COLOR_MADCTL case=%c value=0x%02x"
+                 " MY=1 MX=0 MV=0 BGR=%u",
+                 p.id,(unsigned)madctl,(unsigned)p.bgr);
+        err=d14_vendor_param(p.id,0x36u,&madctl,1u);
+        if(err!=ESP_OK) return err;
+    }
+    if(index==3u) {
+        const uint8_t zero=0x00u, one=0x01u;
+        ESP_LOGI(TAG,"D14_COLOR_GAMMA_BYTES source=DoomRPG-RE"
+                 " table=00:15:17:07:11:06:2B:56:3C:05:10:0F:3F:3F:0F");
+        err=d14_vendor_param(p.id,0xf2u,&zero,1u);
+        if(err!=ESP_OK) return err;
+        err=d14_vendor_param(p.id,0x26u,&one,1u);
+        if(err!=ESP_OK) return err;
+        err=d14_vendor_param(p.id,0xe0u,d14_color_doom_gamma,15u);
+        if(err!=ESP_OK) return err;
+        err=d14_vendor_param(p.id,0xe1u,d14_color_doom_gamma,15u);
+        if(err!=ESP_OK) return err;
+    }
+    err=esp_lcd_panel_invert_color(panel,p.inverted!=0u);
+    ESP_LOGI(TAG,"D14_COLOR_INVERSION case=%c"
+             " invert=%u command_expected=0x%02x err=%s",
+             p.id,(unsigned)p.inverted,
+             p.inverted ? 0x21u:0x20u,esp_err_to_name(err));
+    if(err!=ESP_OK) return sticky_error(err);
+    ESP_LOGW(TAG,"D14_COLOR_PROFILE_APPLIED case=%c"
+             " rgb565be_payload_unchanged=1"
+             " inverted=%u bgr=%u gamma=%u",p.id,
+             (unsigned)p.inverted,(unsigned)p.bgr,(unsigned)p.gamma);
+    ++expected_index;
+    return ESP_OK;
+}
+#endif
 
 bool warship_lcd_info(WarshipLcdInfo *out)
 {
