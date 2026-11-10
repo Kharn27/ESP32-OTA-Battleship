@@ -34,6 +34,7 @@
 ## Checklist de livraison
 - [ ] Diff limité à la mission
 - [ ] Fichiers et sources/export graphiques cohérents si concernés
+- [ ] Si visuels concernés : respect de `AGENTS.md`, `assets/manifest.json`, `maquettes/<ecran>/screen.json`, preuve du GO PO (distincte de la CI et du test CYD)
 - [ ] Tests et résultats **réels** fournis, échecs non masqués
 - [ ] Aucune dépendance au dépôt d'idées `Le-Grenier-Geek` modifiée
 - [ ] HEAD exact actualisé après le dernier push
