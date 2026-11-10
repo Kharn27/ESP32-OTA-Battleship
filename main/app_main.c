@@ -10,21 +10,10 @@
 #include "warship_palmares.h"
 #include "warship_palmares_nvs.h"
 
-#if defined(WARSHIP_D14_COLOR_DIAGNOSTIC) || defined(WARSHIP_D14_DOOM_REFERENCE)
-void d14_color_diag_run(void);
-#else
 static const char *const TAG = "CYD_WARSHIP";
-#endif
 
 void app_main(void)
 {
-#if defined(WARSHIP_D14_COLOR_DIAGNOSTIC) || defined(WARSHIP_D14_DOOM_REFERENCE)
-    /* DELIBERATELY no d11_runtime_init, NVS, D07, CPU or touch; only LCD.
-     * This opt-in TEST ONLY image cannot start a real game.
-     */
-    d14_color_diag_run();
-    return;
-#else
     char banner[WARSHIP_CORE_BANNER_CAPACITY];
     if (warship_core_banner(banner, sizeof banner) != WARSHIP_CORE_OK) {
         ESP_LOGE(TAG, "Boot banner error");
@@ -61,5 +50,4 @@ void app_main(void)
     /* D11 reads storage at app entry; no write/format on a normal boot. */
     d11_runtime_init();
     d09_probe_run();
-#endif
 }

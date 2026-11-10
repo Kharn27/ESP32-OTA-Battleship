@@ -1,3 +1,10 @@
+> **ARCHIVE / NON EXÉCUTABLE (10/11/2026).** Les sondes D14 COLOR A–E et
+> DOOM_REFERENCE sont supprimées du build/CI de production. Les commandes,
+> anciennes tailles et BIN mentionnés plus bas sont historiques, **à ne pas
+> flasher pour la réception D14 actuelle**. Le profil LCD approuvé est désormais
+> intégré inconditionnellement au firmware normal ; procédure actuelle :
+> [D14_LCD_PRODUCTION.md](D14_LCD_PRODUCTION.md).
+
 # D14 — Diagnostic colorimétrique G01 PR90 sur une CYD — TEST ONLY
 
 **Contrat actualisé (10/11/2026) :** [Issue #69 ordre technique](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/69#issuecomment-6763479511) et [PR #91 complément](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/91#issuecomment-6763485631). La PR reste **Draft, non fusionnée** et D14 reste `CORRECTIONS_REQUISES` jusqu'à décision PO/Pilotage.

@@ -1,5 +1,12 @@
 # D14 — G03 runtime Flash/TFT (Issue #69)
 
+> **État courant (10/11/2026) :** profil LCD PO-accepté intégré au
+> firmware normal : `MADCTL=0x28` natif paysage, gamma DoomRPG,
+> inversion ON, BGR, PWM40. Les indications « case10 » et comparaisons
+> anciennes qui suivent sont historiques.
+> Voir [D14_LCD_PRODUCTION.md](D14_LCD_PRODUCTION.md).
+
+
 
 ## Correctif de réception 09/11/2026 — rétroéclairage LEDC, ordre Pilotage
 

@@ -43,35 +43,14 @@ jobs:
           cmp build-host/t03_g03_data.c build-host/t03_second.c
           python3 tools/d14_export.py --svg design/ecrans/deploiement/g03_deploiement_320x240.svg --png design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/d14_second.c
           cmp build-host/d14_g03_data.c build-host/d14_second.c
-          # This is PR90's APPROVED binary PNG from main, not old D14 PR8.
+          # Approved G01 PR90 from the reconciled main, unchanged.
           echo 'ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873  design/ecrans/accueil/accueil_cyd_warship_320x240.png' | sha256sum -c -
           test "$(git rev-parse HEAD:design/ecrans/accueil/accueil_cyd_warship_320x240.png)" = "7bd321c6ccbfc230802e20010bfa06e71a9099a9"
-          python3 tools/d14_color_g01_export.py --input design/ecrans/accueil/accueil_cyd_warship_320x240.png --output build-host/d14_g01_second.c --raw-reference build-host/d14_g01_second.rgb565be
-          cmp build-host/d14_color_g01_data.c build-host/d14_g01_second.c
-          cmp build-host/d14_color_g01_ref.rgb565be build-host/d14_g01_second.rgb565be
           git diff --exit-code -- design/
       - name: Build
         run: cmake --build build-host --verbose
       - name: Run tests
         run: ctest --test-dir build-host --output-on-failure -V
-      - name: Export PC midtones reference from tested C99 RGB565BE output
-        run: |
-          build-host/d14_doom_ref_tests --dump-midtones build-host/d14_midtones_from_c.rgb565be
-          python3 tools/d14_doom_reference_preview.py \
-            --raw build-host/d14_midtones_from_c.rgb565be \
-            --png build-host/d14_midtones_pc_reference.png \
-            --report build-host/d14_midtones_pc_reference.json
-          test "$(stat -c%s build-host/d14_midtones_from_c.rgb565be)" = 153600
-          sha256sum build-host/d14_midtones_from_c.rgb565be
-      - name: Archive exact PC midtones reference for A vs DOOM_REFERENCE
-        uses: actions/upload-artifact@v4
-        with:
-          name: warship-d14-PC-MIDTONES-${{ matrix.cc }}-${{ github.event.pull_request.head.sha || github.sha }}
-          path: |
-            build-host/d14_midtones_from_c.rgb565be
-            build-host/d14_midtones_pc_reference.png
-            build-host/d14_midtones_pc_reference.json
-          if-no-files-found: error
 
   esp32:
     name: ESP-IDF v5.5.6 Xtensa esp32
@@ -97,6 +76,11 @@ jobs:
           grep -Fq 'd09_probe_run();' main/app_main.c
           grep -Fq '"d09_probe.c"' main/CMakeLists.txt
           ! grep -Fq '"t02_probe.c"' main/CMakeLists.txt
+          ! grep -R -E 'WARSHIP_D14_(COLOR_DIAGNOSTIC|DOOM_REFERENCE)' CMakeLists.txt main components tests
+          test -f components/warship_panel_profile/warship_panel_profile.c
+          test ! -d components/d14_color_diag
+          test ! -d components/d14_doom_ref
+          test ! -e main/d14_color_diag.c
       - name: Build and static memory report
         uses: espressif/esp-idf-ci-action@v1
         with:
@@ -112,6 +96,10 @@ jobs:
             idf.py size-components &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_PROFILE phase=INIT' &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_PROFILE phase=ROTATE_BEFORE_CLEAR' &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_PROFILE phase=READY' &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_WINDOW x=' &&
             ! strings build/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
             ! strings build/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE' &&
             ! strings build/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG' &&
@@ -200,96 +188,6 @@ jobs:
             build-t03/partition_table/partition-table.bin
             build-t03/flasher_args.json
             build-t03/cyd_warship.map
-          if-no-files-found: error
-      - name: Build D14 G01 PR90 profile A diagnostic TEST ONLY (no NVS/gameplay)
-        uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: v5.5.6
-          target: esp32
-          command: >-
-            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
-            idf.py -B build-d14-color -D WARSHIP_D14_COLOR_DIAGNOSTIC=ON set-target esp32 &&
-            idf.py -B build-d14-color -D WARSHIP_D14_COLOR_DIAGNOSTIC=ON build &&
-            idf.py -B build-d14-color size &&
-            sha256sum build-d14-color/cyd_warship.bin &&
-            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
-            strings build-d14-color/cyd_warship.elf | grep -F 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' >/dev/null &&
-            strings build-d14-color/cyd_warship.elf | grep -F 'source=G01_PR90_PNG' >/dev/null
-      - name: Build D14 DoomRPG LCD reference (isolated TEST ONLY)
-        uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: v5.5.6
-          target: esp32
-          command: >-
-            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
-            idf.py -B build-d14-doom -D WARSHIP_D14_DOOM_REFERENCE=ON set-target esp32 &&
-            idf.py -B build-d14-doom -D WARSHIP_D14_DOOM_REFERENCE=ON build &&
-            idf.py -B build-d14-doom size &&
-            idf.py -B build-d14-doom size-components &&
-            sha256sum build-d14-doom/cyd_warship.bin &&
-            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
-            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=INIT' &&
-            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=DONE' &&
-            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE phase=ROTATE_BEFORE_CLEAR' &&
-            strings build-d14-doom/cyd_warship.elf | grep -Fq 'D14_DOOM_WINDOW geom=320x240' &&
-            strings build-d14-doom/cyd_warship.elf | grep -Fq 'NATIVE_EDGES_4x2' &&
-            strings build-d14-doom/cyd_warship.elf | grep -Fq 'G01_PR90_PNG'
-      - name: D14 DoomRPG reference diagnostic BIN (TEST ONLY, never normal)
-        uses: actions/upload-artifact@v4
-        with:
-          name: warship-d14-DOOM-REFERENCE-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
-          path: |
-            build-d14-doom/cyd_warship.bin
-            build-d14-doom/cyd_warship.elf
-            build-d14-doom/bootloader/bootloader.bin
-            build-d14-doom/partition_table/partition-table.bin
-            build-d14-doom/flasher_args.json
-            build-d14-doom/cyd_warship.map
-          if-no-files-found: error
-      - name: Independent APP BIN audit with Pillow 11.3 on host (not inside IDF action)
-        run: |
-          set -euo pipefail
-          # IDF Docker owns build-d14-color (root); host writes proof in repo root.
-          python3 -m venv "$RUNNER_TEMP/d14-audit-pillow"
-          "$RUNNER_TEMP/d14-audit-pillow/bin/python" -m pip install --disable-pip-version-check 'Pillow==11.3.0'
-          test -s build-d14-color/cyd_warship.elf
-          test -s build-d14-color/cyd_warship.bin
-          G01_C="$(find build-d14-color -name d14_color_g01_data.c -type f -print -quit)"
-          test -n "$G01_C" && test -s "$G01_C"
-          "$RUNNER_TEMP/d14-audit-pillow/bin/python" tools/d14_color_pillow_audit.py \
-            --input design/ecrans/accueil/accueil_cyd_warship_320x240.png \
-            --generated-c "$G01_C" \
-            --elf build-d14-color/cyd_warship.elf \
-            --bin build-d14-color/cyd_warship.bin \
-            --out-dir d14-pillow-audit
-          python3 -m json.tool d14-pillow-audit/report.json >/dev/null
-          test -s d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
-      - name: Archive independent Pillow vs actual APP BIN audit and reconstructed image
-        uses: actions/upload-artifact@v4
-        with:
-          name: warship-d14-PILLOW-FLASH-AUDIT-${{ github.event.pull_request.head.sha || github.sha }}
-          path: |
-            design/ecrans/accueil/accueil_cyd_warship_320x240.png
-            d14-pillow-audit/report.json
-            d14-pillow-audit/README.txt
-            d14-pillow-audit/g01_original_vs_esp32_flash.png
-            d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
-            d14-pillow-audit/g01_quantization_delta_actual.png
-            d14-pillow-audit/g01_quantization_delta_x8_DEBUG_ONLY.png
-            d14-pillow-audit/g01_extracted_from_esp32_flash.rgb565be
-            d14-pillow-audit/pillow_expected.rgb565be
-          if-no-files-found: error
-      - name: D14 G01 PR90 color A diagnostic BIN (TEST ONLY; no gameplay/NVS)
-        uses: actions/upload-artifact@v4
-        with:
-          name: warship-d14-G01-PR90-COLOR-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
-          path: |
-            build-d14-color/cyd_warship.bin
-            build-d14-color/cyd_warship.elf
-            build-d14-color/bootloader/bootloader.bin
-            build-d14-color/partition_table/partition-table.bin
-            build-d14-color/flasher_args.json
-            build-d14-color/cyd_warship.map
           if-no-files-found: error
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4

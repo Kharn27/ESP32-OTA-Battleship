@@ -1,3 +1,10 @@
+> **ARCHIVE / NON EXÉCUTABLE (10/11/2026).** Les sondes D14 COLOR A–E et
+> DOOM_REFERENCE sont supprimées du build/CI de production. Les commandes,
+> anciennes tailles et BIN mentionnés plus bas sont historiques, **à ne pas
+> flasher pour la réception D14 actuelle**. Le profil LCD approuvé est désormais
+> intégré inconditionnellement au firmware normal ; procédure actuelle :
+> [D14_LCD_PRODUCTION.md](D14_LCD_PRODUCTION.md).
+
 # D14 — Audit indépendant Pillow / PNG / RGB565 / BIN ESP32 — Issue #69
 
 **Contrat Pilotage :** [ordre #6764371996](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/69#issuecomment-6764371996) et [PR #91 #6764379881](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/91#issuecomment-6764379881), 10 novembre 2026. Travail **sans nouveau flash**, branche existante D14, PR Draft non fusionnée. Aucune décision sur couleurs, gamma, inversion ou sources artistiques.

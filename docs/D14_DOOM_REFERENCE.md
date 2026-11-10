@@ -1,3 +1,10 @@
+> **ARCHIVE / NON EXÉCUTABLE (10/11/2026).** Les sondes D14 COLOR A–E et
+> DOOM_REFERENCE sont supprimées du build/CI de production. Les commandes,
+> anciennes tailles et BIN mentionnés plus bas sont historiques, **à ne pas
+> flasher pour la réception D14 actuelle**. Le profil LCD approuvé est désormais
+> intégré inconditionnellement au firmware normal ; procédure actuelle :
+> [D14_LCD_PRODUCTION.md](D14_LCD_PRODUCTION.md).
+
 # D14 #69 — Sonde DoomRPG de référence LCD (TEST-ONLY)
 
 ## Correctif du 10/11/2026 — DOOM_NATIVE_LANDSCAPE (mandat Pilotage)
