@@ -199,6 +199,7 @@ jobs:
       - name: Independent APP BIN audit with Pillow 11.3 on host (not inside IDF action)
         run: |
           set -euo pipefail
+          # IDF Docker owns build-d14-color (root); host writes proof in repo root.
           python3 -m venv "$RUNNER_TEMP/d14-audit-pillow"
           "$RUNNER_TEMP/d14-audit-pillow/bin/python" -m pip install --disable-pip-version-check 'Pillow==11.3.0'
           test -s build-d14-color/cyd_warship.elf
@@ -210,23 +211,23 @@ jobs:
             --generated-c "$G01_C" \
             --elf build-d14-color/cyd_warship.elf \
             --bin build-d14-color/cyd_warship.bin \
-            --out-dir build-d14-color/d14-pillow-audit
-          python3 -m json.tool build-d14-color/d14-pillow-audit/report.json >/dev/null
-          test -s build-d14-color/d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
+            --out-dir d14-pillow-audit
+          python3 -m json.tool d14-pillow-audit/report.json >/dev/null
+          test -s d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
       - name: Archive independent Pillow vs actual APP BIN audit and reconstructed image
         uses: actions/upload-artifact@v4
         with:
           name: warship-d14-PILLOW-FLASH-AUDIT-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             design/ecrans/accueil/accueil_cyd_warship_320x240.png
-            build-d14-color/d14-pillow-audit/report.json
-            build-d14-color/d14-pillow-audit/README.txt
-            build-d14-color/d14-pillow-audit/g01_original_vs_esp32_flash.png
-            build-d14-color/d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
-            build-d14-color/d14-pillow-audit/g01_quantization_delta_actual.png
-            build-d14-color/d14-pillow-audit/g01_quantization_delta_x8_DEBUG_ONLY.png
-            build-d14-color/d14-pillow-audit/g01_extracted_from_esp32_flash.rgb565be
-            build-d14-color/d14-pillow-audit/pillow_expected.rgb565be
+            d14-pillow-audit/report.json
+            d14-pillow-audit/README.txt
+            d14-pillow-audit/g01_original_vs_esp32_flash.png
+            d14-pillow-audit/g01_reconstructed_from_esp32_flash.png
+            d14-pillow-audit/g01_quantization_delta_actual.png
+            d14-pillow-audit/g01_quantization_delta_x8_DEBUG_ONLY.png
+            d14-pillow-audit/g01_extracted_from_esp32_flash.rgb565be
+            d14-pillow-audit/pillow_expected.rgb565be
           if-no-files-found: error
       - name: D14 G01 PR90 color A diagnostic BIN (TEST ONLY; no gameplay/NVS)
         uses: actions/upload-artifact@v4
