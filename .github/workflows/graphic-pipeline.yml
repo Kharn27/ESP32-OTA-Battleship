@@ -5,7 +5,6 @@ on:
     paths:
       - 'AGENTS.md'
       - 'design/**'
-      - 'design/**'
       - 'assets/**'
       - 'maquettes/**'
       - 'docs/GRAPHIC_PIPELINE.md'
@@ -15,6 +14,7 @@ on:
     branches: [main]
     paths:
       - 'AGENTS.md'
+      - 'design/**'
       - 'assets/**'
       - 'maquettes/**'
       - 'docs/GRAPHIC_PIPELINE.md'
