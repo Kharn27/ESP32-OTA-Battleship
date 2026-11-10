@@ -100,6 +100,84 @@
         240
       ],
       "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "flotte.sous-marin.intact.h",
+      "path": "assets/flotte/sous-marin/sous_marin_intact_h.png",
+      "sha256": "e6c6639e37edbc040fba4a3f04a70f588fab8d4cba66c290c1f2beaf362f1425",
+      "source_ref": "assets/flotte/sous-marin/sources/sous_marin_intact_h.svg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/97#issuecomment-6766809070",
+      "dimensions": [
+        54,
+        18
+      ],
+      "usage": "RUNTIME_SPRITE_NOT_INTEGRATED",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "flotte.sous-marin.intact.h.x4",
+      "path": "assets/flotte/sous-marin/sous_marin_intact_h_x4.png",
+      "sha256": "d2cc1b86be32957e1ce7d0e1f4a415c5390f24b5b2d037e8260a05bfa87a13a5",
+      "source_ref": "assets/flotte/sous-marin/sous_marin_intact_h.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/97#issuecomment-6766809070",
+      "dimensions": [
+        216,
+        72
+      ],
+      "usage": "INSPECTION_ONLY_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "flotte.sous-marin.source.h",
+      "path": "assets/flotte/sous-marin/sources/sous_marin_intact_h.svg",
+      "sha256": "aa04f3376048121c0f5b8b15ae4a45e2d3f66a56af34c0743dd84311157630f3",
+      "source_ref": "draft/sous_marin_PO_A.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/97#issuecomment-6766809070",
+      "dimensions": [
+        54,
+        18
+      ],
+      "usage": "EDITABLE_SOURCE_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "flotte.sous-marin.intact.v",
+      "path": "assets/flotte/sous-marin/sous_marin_intact_v.png",
+      "sha256": "0a4203cbfb9ea152fe9610732ca2fdd71e0d734d2aab2272fc4ffed3941629cb",
+      "source_ref": "assets/flotte/sous-marin/sources/sous_marin_intact_v.svg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/97#issuecomment-6766809070",
+      "dimensions": [
+        18,
+        54
+      ],
+      "usage": "RUNTIME_SPRITE_NOT_INTEGRATED",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "flotte.sous-marin.intact.v.x4",
+      "path": "assets/flotte/sous-marin/sous_marin_intact_v_x4.png",
+      "sha256": "eee7ebed4c0a0577006ea522334afbe72adcec4a93e4cbe78a265786edd62a67",
+      "source_ref": "assets/flotte/sous-marin/sous_marin_intact_v.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/97#issuecomment-6766809070",
+      "dimensions": [
+        72,
+        216
+      ],
+      "usage": "INSPECTION_ONLY_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "flotte.sous-marin.source.v",
+      "path": "assets/flotte/sous-marin/sources/sous_marin_intact_v.svg",
+      "sha256": "ebc6b9989ea435a09657d66f962a78b37d9695ab070bec7640688774d9c2016f",
+      "source_ref": "draft/sous_marin_PO_A.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/97#issuecomment-6766809070",
+      "dimensions": [
+        18,
+        54
+      ],
+      "usage": "EDITABLE_SOURCE_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
     }
   ]
 }
