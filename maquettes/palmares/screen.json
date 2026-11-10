@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "palmares",
+  "size": [
+    320,
+    240
+  ],
+  "assets": [],
+  "preview": "maquettes/palmares/legacy/g06_palmares_320x240.png",
+  "status": "VALIDATED_PO_PC",
+  "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/51",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "migration_state": "LEGACY_UNDECOMPOSED",
+  "legacy_source_ref": "design/ecrans/palmares/",
+  "legacy_import_commit": "87f2608236d9c93f80a0705111af0216cef35ba9",
+  "legacy_files": {
+    "README.md": "a50e12b7c4c650deee56c8028c1de7f39699893c",
+    "export_previews.py": "bdeb98ae3a46d6f3f5134beff8167a788b4086c5",
+    "g06_palmares_320x240.png": "7ea3acb726939ea5e658c43fc61e95f64233cd42",
+    "g06_palmares_320x240.svg": "3513a9248ff077a6c0d65a67073d2940f68c541a",
+    "g06_palmares_x4.png": "575770f7f59a7cc304853ca6c4b469efcfd2ef14",
+    "g06_zero_partie.png": "efb8ce1876e4bd40410063a9cfcd378aadffa610",
+    "g06_zero_partie.svg": "c193242faa8e3867a5dfad932f8723f48c492bf0"
+  }
+}

@@ -1,6 +1,6 @@
 # DRAFT — Références PO du patrouilleur (I-009)
 
-Ce dossier conserve les **sources graphiques remises par le PO**, distinctes des exports 320 × 240 validés dans [`design/patrouilleur/`](../design/patrouilleur/). Les fonds océaniques de [`design/ocean/`](../design/ocean/) restent inchangés.
+Ce dossier conserve les **sources graphiques remises par le PO**, distinctes des exports 320 × 240 validés dans [`draft/etudes/patrouilleur/`](etudes/patrouilleur/). Les fonds océaniques de [`draft/etudes/ocean/`](etudes/ocean/) restent inchangés.
 
 ## États statiques et décisions PO
 

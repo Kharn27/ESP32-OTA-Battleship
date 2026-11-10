@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "deploiement",
+  "size": [
+    320,
+    240
+  ],
+  "assets": [],
+  "preview": "maquettes/deploiement/legacy/g03_deploiement_320x240.png",
+  "status": "VALIDATED_PO_PC",
+  "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/41",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "migration_state": "LEGACY_UNDECOMPOSED",
+  "legacy_source_ref": "design/ecrans/deploiement/",
+  "legacy_import_commit": "87f2608236d9c93f80a0705111af0216cef35ba9",
+  "legacy_files": {
+    "README.md": "9452459d711b262caab1a0d30d27babb9bdff991",
+    "export_previews.py": "5c194db697b7685a4f2b020559983c74ee94a28a",
+    "g03_deploiement_320x240.png": "83d82b9b2baccbbd553e48f82cd452bd2d739f55",
+    "g03_deploiement_320x240.svg": "114f1295997eb2a4a65c006ca0c40a00aa8c41d7",
+    "g03_deploiement_x4.png": "7a44d740487311c794727fddb29539afa155844b"
+  }
+}

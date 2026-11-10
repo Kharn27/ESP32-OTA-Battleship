@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "defense",
+  "size": [
+    320,
+    240
+  ],
+  "assets": [],
+  "preview": "maquettes/defense/legacy/g05_r2_defense_320x240.png",
+  "status": "VALIDATED_PO_PC",
+  "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/72",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "migration_state": "LEGACY_UNDECOMPOSED",
+  "legacy_source_ref": "design/ecrans/defense/",
+  "legacy_import_commit": "87f2608236d9c93f80a0705111af0216cef35ba9",
+  "legacy_files": {
+    "README.md": "772fd80171816b373dd42c7c1b7826f9ef702b76",
+    "build_g05_r2.py": "def40f5876099dfb2883c9f9f3fb6b5ecc9480f2",
+    "g05_r2_defense_320x240.png": "454d3cabe5245577fc3afc6764d46fae05485c9b",
+    "g05_r2_defense_layers.ora": "d508dc2d62849b8382cc0d37c268985b17047318",
+    "g05_r2_defense_x4.png": "815daf2b77f1397b905a74380391db7e887739c1",
+    "g05_r2_etats_320x240.png": "1fbaa8e96a2e6741053ab62ffd4a3fe74333d484",
+    "g05_r2_etats_x4.png": "a9d0710e08a1d5b2a72ef4fe68139f8f8f66ea92",
+    "generation-report.json": "2ec973a8c12efbc1b1a707180257574cc285869c",
+    "layout.json": "56462042165832e5f07d2d187c3fdc53b83556c8",
+    "reference_defense_1448x1086_lossless.webp": "5bebefbab865f75b4c887505bd18ed3e5fb26f88",
+    "verification-PC.txt": "43e328f0a29256661a0c7de7921ff7bfbe193474",
+    "verify_g05_r2.py": "9bfa73b3e3825af3eed158dffcbb0d862bac543c"
+  }
+}

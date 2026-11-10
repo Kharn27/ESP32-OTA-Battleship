@@ -6,7 +6,7 @@
 
 1. **`draft/`** : originaux et brouillons remis par le PO, non modifiés par défaut. Une proposition peut être comparée dans une Issue ou une PR, mais elle n'est pas un asset approuvé.
 2. **`assets/`** : une bibliothèque de **composants individuels réutilisables**, acceptés artistiquement par le PO et indexés par un ID stable dans `assets/manifest.json`. Sous-familles recommandées : `fonds/`, `boutons/`, `logos/`, `navires/`, `effets/`. Les sources éditables et scripts peuvent être associés à leur composant, sans copier ses exports dans les écrans.
-3. **`maquettes/`** : une bibliothèque d'**écrans assemblés** et documentés, un dossier par écran (accueil, déploiement, attaque, défense, fin-partie, palmarès...). Chaque écran porte un `screen.json` qui cite les **IDs** du manifeste, un aperçu natif 320 × 240 et les sources/recettes de composition. Un aperçu aplati est une **preuve de design**, jamais un asset runtime implicite.
+3. **`maquettes/`** : une bibliothèque d'**écrans assemblés** et documentés, un dossier par écran (accueil, déploiement, attaque, défense, fin-partie, palmarès...). Chaque écran porte un `screen.json` qui cite les **IDs** du manifeste, un aperçu natif 320 × 240 et les sources/recettes de composition. **Exception temporaire :** un écran migré peut déclarer `migration_state: LEGACY_UNDECOMPOSED`, `assets: []`, et un inventaire immuable `legacy_files` (SHA-1 Git). Ces fichiers historiques ne sont alors pas encore une composition conforme au nouveau pipeline. Un aperçu aplati est une **preuve de design**, jamais un asset runtime implicite.
 
 Une maquette peut créer du texte, des grilles, des rectangles et des repères de mise en page (primitives UI), mais **pas cacher de nouveaux sprites** dans son fichier source ou son dossier. Toute nouvelle image réutilisable passe par `draft/` ou le processus d'acceptation de `assets/`. Pour les dépendances exactes, `assets/manifest.json` est la référence et les maquettes ne copient pas les composants.
 
@@ -60,9 +60,9 @@ Le statut peut devenir `VALIDATED_PO_PC` **avec** `po_validation_ref`. Les image
 
 ## Application et migration contrôlée
 
-- **Étape A — ce contrat :** nouveaux dossiers, manifeste, fichiers de règles et contrôle GitHub Actions ; les fichiers sous `design/` ne sont pas déplacés.
-- **Étape B — inventaire contradictoire :** relever les références déjà approuvées (par ex. accueil PR #90), les candidats, les scripts et toutes les dépendances. Ne pas promouvoir un rendu candidat par simple déplacement.
-- **Étape C — migration :** déplacer, sans changement de pixels, uniquement les assets approuvés ; recréer les maquettes en référençant ces assets, mettre à jour chemins/scripts/index et valider les empreintes. Gérer explicitement les scènes aplaties, non réutilisables comme sprites.
+- **Étape A — réalisée (PR #100) :** gouvernance et contrôles communs.
+- **Étape B — réalisée (Issue #101) :** inventaire, déplacement des fichiers historiques sans retouche des graphiques, conservation des statuts et gel des répertoires `legacy/` par empreinte Git. Aucun asset individuel approuvé implicitement.
+- **Étape C — à venir, sous validation PO individuelle :** décomposer les écrans hérités en véritables éléments partagés approuvés, remplir `assets/manifest.json` (SHA-256) et reconstruire les maquettes avec leurs IDs ; lever `LEGACY_UNDECOMPOSED` écran par écran. Les scènes aplaties ne deviennent pas des sprites.
 - **Étape D — fermeture de l'héritage :** supprimer `design/` seulement quand plus aucun lien ou script actif ne l'utilise, puis rendre le blocage des ajouts hérités effectif en CI.
 
 Pendant la transition, les PR graphiques historiques déjà ouvertes nécessitent une coordination Pilotage ; elles ne sont **pas automatiquement approuvées** ni automatiquement invalidées. La réorganisation n'accorde aucun nouveau GO PO et ne remplace pas les tests physiques.
@@ -82,3 +82,10 @@ Le workflow GitHub Actions exécute cette vérification à chaque PR touchant la
 > Pour CYD WARSHIP, lis au début de chaque mission le fichier `AGENTS.md` de la branche principale du dépôt `Kharn27/ESP32-OTA-Battleship`, puis les règles du pipeline qu'il référence. Applique ces règles et les décisions PO sans attendre qu'elles soient recopiées dans les prompts. N'utilise aucun brouillon comme asset approuvé ; travaille en Issue/PR et ne fusionne pas (fusion réservée au Pilotage). Si tu ne peux pas consulter le dépôt, signale-le explicitement.
 
 Cette configuration doit être faite **dans les instructions persistantes de chaque projet ChatGPT**, car les agents de projets différents ne partagent pas automatiquement leurs instructions ni leur contexte.
+
+## Migration transitoire — conventions minimales
+
+- Les aperçus restent dans `maquettes/<écran>/legacy/`, **inchangés graphiquement** ; `screen.json` porte le GO de l'écran, pas celui de chaque sprite.
+- Tout fichier dans `legacy/` est vérifié par l'empreinte **Git blob SHA-1**, non par une décision PO. Aucun nouveau contenu n’y est créé : lancer une nouvelle Issue/PR pour convertir une composition en assets approuvés.
+- Les fonds océaniques, scènes du patrouilleur et prototype de sprite sous-marin non approuvés sont sous `draft/etudes/`. Les originaux PO de `draft/` sont inchangés.
+- **Règle finale pour tout nouvel écran :** pas d'exception legacy ; `assets/manifest.json` doit référencer chaque composant approuvé et la maquette doit être refaite exclusivement à partir de ces composants.

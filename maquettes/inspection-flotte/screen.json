@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "inspection-flotte",
+  "size": [
+    320,
+    240
+  ],
+  "assets": [],
+  "preview": "maquettes/inspection-flotte/legacy/g08_etat_a_320x240.png",
+  "status": "VALIDATED_PO_PC",
+  "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/56",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "migration_state": "LEGACY_UNDECOMPOSED",
+  "legacy_source_ref": "design/ecrans/inspection-flotte/",
+  "legacy_import_commit": "87f2608236d9c93f80a0705111af0216cef35ba9",
+  "legacy_files": {
+    "README.md": "d055ceb82ce7e907be9f9f6bf76c9e8c255657d5",
+    "build_g08_reference.py": "cc2f19f818d3f6a1c39c4caca457578c1ee26413",
+    "g08_etat_a_320x240.png": "b2025e94a67d00a6a64982b5006e5886a3d9fba7",
+    "g08_etat_a_layers.ora": "37ad558e86a15d72484f743997d879920f2841c5",
+    "g08_etat_a_x4.png": "56e3aab0ce09c304803b9f3d780195b41c5ec430",
+    "g08_etat_b_320x240.png": "a01749dbbdc4567f53de8af060fff63752cca284",
+    "g08_etat_b_layers.ora": "63801d379b5b481617f7ae8d424e1533997989df",
+    "g08_etat_b_x4.png": "4b470317019eb57b7e3e4f8f6eb4104036534285",
+    "g08_etat_c_320x240.png": "278eac24d8474ea233f09ea469afe5c4360b3d0d",
+    "g08_etat_c_layers.ora": "632201a0a2b6e64f6b5a483ab895c3f1f7992375",
+    "g08_etat_c_x4.png": "6390f430c9997776e4e75eaefacb24e04ce49143",
+    "g08_inspection_320x240.png": "a01749dbbdc4567f53de8af060fff63752cca284",
+    "g08_inspection_x4.png": "4b470317019eb57b7e3e4f8f6eb4104036534285",
+    "g08_variantes_320x240.png": "7e330c66ced67cd637fa74f9d3c313f2627456f5",
+    "g08_variantes_x4.png": "59c748ef3e3217206d37ee764db3d761314180b2",
+    "generation-report.txt": "0354dceb8a3565246b10ca636c8a678bbbbf1f4d",
+    "reference_design_PO.png": "1540c925d19ee9d99c53cb03a1dc9e9e06be8f25",
+    "scenario_G08.json": "9d5b1a483184d7bf2a4ee67bdd61d40b771f283f"
+  }
+}

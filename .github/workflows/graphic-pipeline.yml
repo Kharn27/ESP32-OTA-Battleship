@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'AGENTS.md'
+      - 'design/**'
+      - 'design/**'
       - 'assets/**'
       - 'maquettes/**'
       - 'docs/GRAPHIC_PIPELINE.md'
