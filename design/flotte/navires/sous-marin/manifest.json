@@ -1,0 +1,92 @@
+{
+  "mission": "FLOT-01 / #92",
+  "statut": "DESIGN_PREVIEW - ON_DEVICE_UNVERIFIED / ATTENTE_STOP_PO",
+  "source": "sous_marin_intact_h.svg",
+  "references": [
+    "design/flotte/g02_grille_320x240.svg",
+    "draft/sous_marin_PO_A.jpeg"
+  ],
+  "dimensions": {
+    "H": [
+      54,
+      18
+    ],
+    "V": [
+      18,
+      54
+    ],
+    "grille": [
+      320,
+      240
+    ],
+    "zoom": [
+      1280,
+      960
+    ]
+  },
+  "placement_G02": {
+    "cellules": "C6-E6",
+    "origine_grille": [
+      19,
+      39
+    ],
+    "pas": 18,
+    "ancre_H": [
+      55,
+      129
+    ],
+    "demonstration_V_hors_G02": "C6-C8, uniquement banc essai, pas changement regle"
+  },
+  "orientation": {
+    "H": "proue vers la droite",
+    "V": "rotation anti-horaire 90 deg de H; proue vers le haut"
+  },
+  "format": "PNG RGBA (alpha 0/255), aucun pixel d ocean integre",
+  "raw_rgba_estimate_bytes": 3888,
+  "files": {
+    "preuve_alpha_clair_sombre_320x240.png": {
+      "sha256": "d2b024f6866c640e6ec8a9529f3bb6cf9b41a928bc2a4f28a35ee58de07725b1",
+      "octets": 10628
+    },
+    "preuve_alpha_clair_sombre_x4_nearest.png": {
+      "sha256": "d80083e568f5e81245a6b922e539c22bf28976700efdfe11ef4603a66b7b04f2",
+      "octets": 21241
+    },
+    "preuve_comparaison_g02_320x240.png": {
+      "sha256": "5cce31184a26bcd2b6b06dc81a7c190ebd2b84b6b2034e12cc87c49987e28502",
+      "octets": 10617
+    },
+    "preuve_comparaison_g02_x4_nearest.png": {
+      "sha256": "eeb9f728eee355c476df9ab7011ae2ba61b2614e750da982f8999cc733c3328f",
+      "octets": 20119
+    },
+    "preuve_grille_320x240.png": {
+      "sha256": "97f6ab4442bd48260760058e65d5774e13c8e0f378a344f7a058b7b24cdae0e4",
+      "octets": 13017
+    },
+    "preuve_grille_v_320x240.png": {
+      "sha256": "4037d29d4e6b0e9748797451594f7b50d57284c51330086f960fdfd66f614a7b",
+      "octets": 12772
+    },
+    "preuve_grille_v_x4_nearest.png": {
+      "sha256": "56c74b23f11d42d22e52d932baec1b5cf2a2812c2be840e2d24d2436db62de10",
+      "octets": 23709
+    },
+    "preuve_grille_x4_nearest.png": {
+      "sha256": "b99c0327e27b61c457e55ea2355f4b36859b82ba8d61f515a96ebf547125e90b",
+      "octets": 23687
+    },
+    "sous_marin_intact_h.png": {
+      "sha256": "b15640f594afe21d6994404b07dbfd2ffc3edf3bc7d351a65daf1427d1e8273e",
+      "octets": 610
+    },
+    "sous_marin_intact_v.png": {
+      "sha256": "c143eee15bab4064ed66b1350970bab15a22e49dc2c8c9a7c041277911fca18f",
+      "octets": 649
+    },
+    "sous_marin_intact_v.svg": {
+      "sha256": "7419c8d7050121034b7358d4f215bc9d6490990d3b6003dea35cffa9ce47ab83",
+      "octets": 2617
+    }
+  }
+}
