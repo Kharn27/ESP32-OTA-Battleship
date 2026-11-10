@@ -44,7 +44,7 @@ jobs:
           python3 tools/d14_export.py --svg design/ecrans/deploiement/g03_deploiement_320x240.svg --png design/ecrans/deploiement/g03_deploiement_320x240.png --output build-host/d14_second.c
           cmp build-host/d14_g03_data.c build-host/d14_second.c
           # This is PR90's APPROVED binary PNG from main, not old D14 PR8.
-          printf '%s  %s\\n' ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873 design/ecrans/accueil/accueil_cyd_warship_320x240.png | sha256sum -c -
+          echo 'ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873  design/ecrans/accueil/accueil_cyd_warship_320x240.png' | sha256sum -c -
           test "$(git rev-parse HEAD:design/ecrans/accueil/accueil_cyd_warship_320x240.png)" = "7bd321c6ccbfc230802e20010bfa06e71a9099a9"
           python3 tools/d14_color_g01_export.py --input design/ecrans/accueil/accueil_cyd_warship_320x240.png --output build-host/d14_g01_second.c --raw-reference build-host/d14_g01_second.rgb565be
           cmp build-host/d14_color_g01_data.c build-host/d14_g01_second.c
