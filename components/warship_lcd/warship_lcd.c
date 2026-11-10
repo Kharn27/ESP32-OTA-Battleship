@@ -1,8 +1,10 @@
 /*
- * T02 CYD LCD transport (independent WARSHIP implementation).
- * Based on the hardware behavior documented for the PO's already-tested
- * Locomotive BASIC CYD console; no original GPLv3 source or header is copied.
- * See docs/T02_CYD_PROBE.md for a source/protocol comparison.
+ * CYD WARSHIP production LCD transport, native C/ESP-IDF.
+ * Driver ownership and DMA/LEDC protections descend from T02.
+ * The active ILI9341 analog/gamma/orientation contract is the D14
+ * PO-accepted DoomRPG reference (warship_panel_profile.h), NOT
+ * the historical Locomotive BASIC case10/MV=0 profile.
+ * See docs/D14_LCD_PRODUCTION.md. No Arduino runtime required.
  */
 #include "warship_lcd.h"
 

@@ -1,7 +1,7 @@
-# D14 PO backlight reception: experiment-only percent, not a PO choice.
-# Change with: idf.py -B build-d14 -D WARSHIP_LCD_BACKLIGHT_PERCENT=40 build
+# D14 validated visual LCD profile: default LEDC PWM40 (GPIO21, 5 kHz).
+# Pilotage may specify another 0..100 percent only for a separate experiment.
 set(WARSHIP_LCD_BACKLIGHT_PERCENT 40 CACHE STRING
-    "CYD backlight LEDC trial duty percent (0..100), pending PO acceptance")
+    "CYD backlight LEDC configured duty percent (0..100, default 40)")
 if(NOT WARSHIP_LCD_BACKLIGHT_PERCENT MATCHES "^(0|[1-9][0-9]?|100)$")
     message(FATAL_ERROR "WARSHIP_LCD_BACKLIGHT_PERCENT must be 0..100")
 endif()
