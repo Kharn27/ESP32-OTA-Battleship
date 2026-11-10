@@ -44,5 +44,11 @@ esp_err_t warship_lcd_send(int x, int y, int width, int height);
  */
 esp_err_t warship_lcd_backlight(bool on);
 esp_err_t warship_lcd_backlight_set_percent(uint8_t percent);
+#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
+/* A..E strictly in sequence, after prepare_console case10, no DMA pending.
+ * TEST ONLY. Any panel cmd error makes LCD sticky and forces LEDC OFF.
+ */
+esp_err_t warship_lcd_diag_apply_profile(unsigned index);
+#endif
 bool warship_lcd_info(WarshipLcdInfo *out);
 #endif
