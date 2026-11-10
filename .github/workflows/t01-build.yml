@@ -57,9 +57,9 @@ jobs:
       - name: Export PC midtones reference from tested C99 RGB565BE output
         run: |
           build-host/d14_doom_ref_tests --dump-midtones build-host/d14_midtones_from_c.rgb565be
-          python3 tools/d14_doom_reference_preview.py \\
-            --raw build-host/d14_midtones_from_c.rgb565be \\
-            --png build-host/d14_midtones_pc_reference.png \\
+          python3 tools/d14_doom_reference_preview.py \
+            --raw build-host/d14_midtones_from_c.rgb565be \
+            --png build-host/d14_midtones_pc_reference.png \
             --report build-host/d14_midtones_pc_reference.json
           test "$(stat -c%s build-host/d14_midtones_from_c.rgb565be)" = 153600
           sha256sum build-host/d14_midtones_from_c.rgb565be
