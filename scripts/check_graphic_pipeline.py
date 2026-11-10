@@ -57,7 +57,7 @@ def sha256(path: Path) -> str:
 def git_blob_sha(path: Path) -> str:
     """Hash a file exactly as a Git blob; used only for frozen legacy materials."""
     digest = hashlib.sha1()
-    digest.update(f"blob {path.stat().st_size}\\0".encode("utf-8").replace(b"\\0", b"\\x00"))
+    digest.update(f"blob {path.stat().st_size}\0".encode("utf-8"))
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(65536), b""):
             digest.update(block)
