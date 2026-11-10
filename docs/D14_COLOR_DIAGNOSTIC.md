@@ -1,76 +1,76 @@
-# D14 — Diagnostic comparatif LCD RGB565 / inversion / gamma — TEST ONLY
+# D14 — Diagnostic colorimétrique G01 PR90 sur une CYD — TEST ONLY
 
-**Contrat :** [Issue #69, ordre du 10/11/2026](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/69#issuecomment-6762545815) et [complément PR #91](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/91#issuecomment-6762552187). Autorisation sur **branche D14 existante** ; PR Draft et fusion réservée au Pilotage. Ne remplace jamais la configuration produit D14 sans décision PO.
+**Contrat actualisé (10/11/2026) :** [Issue #69 ordre technique](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/69#issuecomment-6763479511) et [PR #91 complément](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/91#issuecomment-6763485631). La PR reste **Draft, non fusionnée** et D14 reste `CORRECTIONS_REQUISES` jusqu'à décision PO/Pilotage.
 
-## Pourquoi cette expérience ?
+## 1. Faits matériels antérieurs, sans interpolation
 
-Sur une **même ESP32-2432S028R**, le PO observe les couleurs normales avec les firmwares **DoomRPG-RE** et **ESP32-Locomotive-Basic**, mais une image G03 D14 encore délavée avec un rétroéclairage PWM expérimenté à 40 %. Le seul niveau lumineux ne résout donc pas le défaut chromatique. Ce constat est **PO rapporté**, pas une mesure de saturation. Les deux firmwares témoins servent d'**oracles de comportement matériel** ; il n'est pas démontré que la cause soit l'inversion, BGR, gamma ou la source d'images.
+Le PO a réellement exécuté la sonde précédente `App version=4251e31` sur l'ESP32-2432S028R classique et rapporte : **« A a les couleurs correctes mais délavées ; les autres [B, C, D, E] sont bullshit »**. Il **n'a pas séparé** son jugement entre aplats et page G03 : aucune conclusion individuelle inventée par type de page. Les commandes gamma/MADCTL et inversion sont revenues `ESP_OK` et la sonde a terminé 10 pages, avec heap8 295608, largest8 172032, marge pile main 2280, `lcd_fault=0`, `timeouts=0` et PWM40 `409/1023` à 5 kHz. Il s'agit de **la première sonde**, et **non du présent binaire**. Le PO rapporte également les couleurs normales sur la même CYD dans Locomotive BASIC et DoomRPG ; cette comparaison ne prouve pas la cause du délavage G01/D14.
 
-Sources comparées, consultées directement avant implémentation :
+Décision Pilotage : **arrêter les hypothèses B/C/D/E** dans l'essai PO. Revenir au seul profil **A = RGB, inversion OFF, gamma ILI9341 d'initialisation inchangée**, mais afficher comme référence artistique la **véritable image accueil PO approuvée**, plus une page d'aplats purement numériques. Pas de modification du profil LCD normal, pas de D15.
 
-- [DoomRPG-RE `ESP32/src/platform_video.cpp`](https://github.com/Kharn27/DoomRPG-RE/blob/main/ESP32/src/platform_video.cpp) : RGB565 framebuffer sans modification, `applyCydInvertedGammaProfile()` commande **F2=00, 26=01, E0 et E1 avec la même table 15 octets**, puis `invertDisplay(true)`. [`platformio.ini`](https://github.com/Kharn27/DoomRPG-RE/blob/main/ESP32/platformio.ini) configure **`ILI9341_2_DRIVER`**, `TFT_INVERSION_ON`, `TFT_RGB_ORDER=TFT_BGR`. C'est un **profil calibré sur ce firmware**, pas une preuve de compatibilité de sa pile complète avec `esp_lcd`.
-- [ESP32-Locomotive-Basic `firmware/components/cyd_ili9341/cyd_ili9341.c`](https://github.com/Kharn27/ESP32-Locomotive-Basic/blob/main/firmware/components/cyd_ili9341/cyd_ili9341.c) : **esp_lcd ILI9341** SPI2 20 MHz, `rgb_ele_order=RGB` par défaut (`LCD_BGR=0`), `LCD_RGB_DATA_ENDIAN_BIG`, DMA 5120. Les cas d'orientation indexés **9/10** sont distincts : pour l'index 9, `swap_xy=0, mirror_x=1, mirror_y=0` ; pour l'index 10, `swap_xy=0, mirror_x=0, mirror_y=1`. Les logs de Locomotive exécuté sur la CYD seraient nécessaires pour identifier le cas **effectivement** utilisé lors de sa bonne restitution : ne pas déduire un cas de son seul code.
-- [Battleship `warship_lcd.c`](https://github.com/Kharn27/ESP32-OTA-Battleship/blob/31097c892d87e1b3370e236f18d6bf7150178051/components/warship_lcd/warship_lcd.c) : esp_lcd RGB/BIG, 20 MHz, `prepare_console` **case10** `MV=0 MX=0 MY=1`, SPI2 DMA 5120. Aucune inversion/gamma/BGR personnalisée appliquée dans le produit avant le test. **Ne pas changer ce profil automatiquement sur le firmware normal**.
+## 2. Source G01 PO : provenance vérifiable
 
-## Schéma A/B/C/D/E — une hypothèse comparée à la fois
+| Propriété | Valeur |
+|---|---|
+| Dépôt source | `Kharn27/ESP32-OTA-Battleship`, `main` |
+| Commit main de lecture | `8fc0a2b4947d9f74023a4d1dc44bd54d680a9847` |
+| Approbation | PR graphique **#90**, pas l'ancienne PR #8 de la branche D14 |
+| Chemin | `design/ecrans/accueil/accueil_cyd_warship_320x240.png` |
+| Blob Git source | `7bd321c6ccbfc230802e20010bfa06e71a9099a9` |
+| Taille | **144890 octets** |
+| SHA-256 source PNG | `ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873` |
+| Géométrie | **320×240 RGB8 non entrelacé** |
 
-Un **unique BIN TEST-ONLY** produit **dix pages successives** en ~35 s (durée 3500 ms * 2 pages * 5 profils). L'ordre est **déterministe et non bouclé** : la dernière page reste visible jusqu'à l'arrêt. À chaque étape, le firmware affiche les mêmes constantes RGB565 (DIRECT), puis les **mêmes** fond G03 ROW-RLE et cinq sprites G02 (G03_RLE_ALPHA), avec positions humaines constantes et **aucune** donnée secrète Capitaine. Les profils ne sont pas nommés à l'écran : associer l'image au log UART `D14_COLOR_STEP case=...` et `D14_COLOR_DRAW page=...`.
+Le fichier homonyme historique de la branche D14 (blob `21e67bba4120838c5eeef8a687fcb120f874ab36`) **était obsolète**. Cette mission importe par **référence au blob Git original** le PNG PR90 sans aucune retouche ni rééchantillonnage. Les autres ressources `design/` (SVG, ORA, G03/G02, etc.) ne sont pas modifiées. **Aucun vieux SVG accueil n'est utilisé**. Le changement du seul blob PNG sur la branche D14 n'est pas une nouvelle proposition artistique : les octets correspondent exactement à `main`.
 
-| Profil | Inversion panneau | MADCTL BGR | Gamma vendor | Comparaison causale |
-|---|---|---|---|---|
-| **A** | OFF via `esp_lcd_panel_invert_color(false)` | OFF, RGB initial | inchangée (après init esp_lcd) | référence actuelle |
-| **B** | ON via `esp_lcd_panel_invert_color(true)` | OFF, RGB | inchangée | **B contre A** : inversion seule |
-| **C** | OFF | ON, MADCTL=0x88 | inchangée | **C contre A** : BGR seul ; inversion remise OFF |
-| **D** | ON | OFF, MADCTL=0x80 | **DoomRPG exacte** | **D contre B** : apport du gamma *sous la même inversion* |
-| **E** | ON | ON, MADCTL=0x88 | DoomRPG inchangée | **E contre D** : ajout du BGR avec inversion+gamma |
+Le script `tools/d14_color_g01_export.py` lit **ce PNG précis** avec le parseur Python standard `t03_export.read_png`, exige **taille + SHA-256** attendus, interprète uniquement RGB8, vérifie CRC/scanlines, puis réduit chaque pixel RGB888 en **RGB565BE** :
 
-**Aucun rétablissement artificiel d'une gamma « par défaut » n'est revendiqué.** Le profil D écrit la gamma **une seule fois**, après A/B/C, puis E conserve la même gamma. Le profil B teste inversion sans gamma Doom. À C la référence d'orientation est encore le **case10 (MY=1, MX=MV=0)** ; seuls les bits BGR changent avec un écrit explicite **0x36 / 0x88**. À D retour à **0x36 / 0x80**. Ces écritures directes sont exclusivement en TEST-ONLY, sans appel ultérieur à `swap_xy` ou `mirror` susceptible d'écraser le MADCTL du diagnostic. Les résultats réels sont à vérifier sur la dalle : les commandes ne lisent pas l'état effectif des registres.
+```text
+RGB565 = ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3)
+DMA[2*i] = RGB565 >> 8
+DMA[2*i+1] = RGB565 & 0xFF
+```
 
-**Référence DoomRPG (15 octets exacts, du source ci-dessus) :**
+**Pas** de correction de gamma/contraste/saturation, alpha, filtre, compression perceptuelle ou mise à l'échelle. C'est une **quantification** 8→5/6/5 bits par canal, pas une identité RGB888. Le RGB565 brut est **153600 octets**, SHA-256 `8a376f7ca4cf83ed31b146905b25c80455b71fdef194eee8c40ac00e2d5248dc`. Essai de compression ROW-RLE : **172909 octets avec l'index** (plus gros et plus lent). Pour cette image détaillée, le générateur choisit le **RGB565BE RAW en Flash** ; aucun RLE, PNG ou SVG n'est décodé par l'ESP32. `t03_decode_rect(T03_RAW565BE)` copie directement les lignes en bande DMA bornée.
 
-`00 15 17 07 11 06 2B 56 3C 05 10 0F 3F 3F 0F`
+Le fichier C contenant le tableau `static const uint8_t` est généré **uniquement dans le répertoire de compilation** du binaire `WARSHIP_D14_COLOR_DIAGNOSTIC=ON`, **jamais dans `design/` ou dans le firmware normal**.
 
-Pour D, le module envoie (avec `esp_lcd_panel_io_tx_param`) **0xF2 : 00** ; **0x26 : 01** ; **0xE0 : 15 octets ci-dessus** ; **0xE1 : les mêmes 15 octets** ; puis appelle `esp_lcd_panel_invert_color(true)`. Les appels et retours `ESP_OK`/échecs sont tous journalisés. Les autres étapes n'écrivent aucun vendor gamma.
+## 3. Deux pages de référence, **A uniquement**
 
-Le protocole source RGB565-BE de `tools/t03_export.py` et `tools/d14_export.py` est `(((R>>3)<<11)|((G>>2)<<5)|(B>>3)` ; `t03_decode_rect()` et `d14_g03_compose()` écrivent `high-byte` puis `low-byte` dans le buffer DMA. `esp_lcd_panel_draw_bitmap` transmet ce buffer avec `LCD_RGB_DATA_ENDIAN_BIG`. La composition RGB565 n'échange pas les canaux ; les seules interpolations concernent l'alpha8 du sprite (régime original inchangé).
+Binaire de réception isolé `WARSHIP_D14_COLOR_DIAGNOSTIC=ON`, **OFF par défaut** dans `CMakeLists.txt`. `app_main` du test ne compile pas les modules main `d09_probe.c` ni `d11_runtime.c` ; il ne lance **ni NVS, ni jeu, ni tactile, ni palmarès**. Les cinq profils historiques restent décrits dans le code de sonde, mais seul `warship_lcd_diag_apply_profile(0)` est appelé : **aucune commande BGR/vendor gamma, inversion OFF uniquement**.
 
-**Motif RGB565 direct :** écran natif 320×240, grille artificielle de 4 colonnes de 80 px × 2 rangées de 120 px :
+| Ordre | Durée | Source affichée | Contrôle demandé |
+|---|---|---|---|
+| **1. A / DIRECT_RGB565** | ~3,5 secondes | 8 bandes colorées constantes | Le noir, blanc, rouge, vert, bleu, gris et dégradé ont-ils de la profondeur/contraste ? |
+| **2. A / G01_PR90_PNG** | Reste visible jusqu'au redémarrage | PNG accueil PR90 entier, converti bit-à-bit en RGB565BE | Le véritable écran d'accueil PO a-t-il des couleurs fidèles ou paraît-il délavé ? |
 
-| Zone (x,y) | Couleur RGB565 | Octets DMA |
-|---|---|---|
-| 0..79, 0..119 | Noir `0x0000` | `00 00` |
-| 80..159, 0..119 | Blanc `0xFFFF` | `FF FF` |
-| 160..239, 0..119 | Rouge `0xF800` | `F8 00` |
-| 240..319, 0..119 | Vert `0x07E0` | `07 E0` |
-| 0..79, 120..239 | Bleu `0x001F` | `00 1F` |
-| 80..159, 120..239 | Gris moyen `0x8410` | `84 10` |
-| 160..239, 120..239 | Dégradé de gris linéaire 5/6/5 `0x0000` vers `0xFFFF` | `00 00` → `FF FF` |
-| 240..319, 120..239 | Jaune `0xFFE0` | `FF E0` |
+**Aplats directs :** 4 colonnes de 80 px et 2 lignes de 120 px, donnant (de gauche à droite) :
+- Haut : noir `0000/00:00`, blanc `FFFF/FF:FF`, rouge `F800/F8:00`, vert `07E0/07:E0`.
+- Bas : bleu `001F/00:1F`, gris moyen `8410/84:10`, rampe noir→blanc, jaune `FFE0/FF:E0`.
 
-**Sans pipeline RLE sur la page directe**. À la page suivante le **même asset G03 approuvé** est affiché par `d14_g03_compose` + navires issus d'une fixture D07 publique immuable ; aucune retouche PNG/SVG ou permutation de palette. Un écran de test n'est pas une mesure colorimétrique instrumentée.
+Contrat physique constant : ILI9341 `esp_lcd`, **RGB/BIG endian**, case10 `MV=0 MX=0 MY=1`, SPI2 **20 MHz**, GPIO21 LEDC **40% / 5 kHz** (valeur expérimentale inchangée), 320×240, **30 bandes de 320×8×2 = 5120 octets**, tampon DMA existant, transferts synchrones. Aucun framebuffer plein écran RAM, aucune PSRAM, microSD, nouvelle tâche ou radio.
 
-## Sécurité, build et preuves
+**Logs 115200 :** `D14_COLOR_DIAGNOSTIC=ON TEST_ONLY`, `D14_COLOR_SOURCE source=G01_PR90_PNG` (blob SHA, SHA256), `D14_COLOR_PROFILE_APPLIED case=A`, `WARSHIP_BL PWM_STATE` (`freq_hz_actual=5000`, `duty_configured=409/1023` attendus), `D14_COLOR_DRAW profile=A source=DIRECT_RGB565|G01_PR90_PNG`, `D14_COLOR_MEM` (heap8/largest8/stack_margin_bytes, LCD bands/timeouts/fault), puis `D14_COLOR_DONE`. Ces valeurs attendues sont **des critères de relevé**, pas des mesures déjà faites du nouveau firmware.
 
-- Uniquement lorsque `-D WARSHIP_D14_COLOR_DIAGNOSTIC=ON` est passé à CMake (option **OFF par défaut** au niveau du projet). Entrée `app_main` de diagnostic **avant tout `d11_runtime_init`** : pas de NVS, de palmarès, de jeu, de tactile, de radio ni de mutation de mémoire Flash. Ne pas combiner avec les options D11/D13/T03. Avec l'option OFF, la routine de diagnostic n'est pas compilée dans le binaire normal.
-- Toujours le vrai `warship_lcd_init` / `warship_lcd_prepare_console(0x000c)`, SPI2 **20 MHz**, **même tampon DMA 5120 B emprunté** ; bandes 320×8×2, chacune envoyée après reconstruction, attente du DMA. Sur erreur panel, le pilote met sa faute sticky et éteint LEDC ; la routine quitte le test sans retries et tente OFF. PWM expérimental **40%** conservé sur tous les cas A–E.
-- Journaux : `D14_COLOR_DIAGNOSTIC=ON TEST_ONLY` ; `WARSHIP_BL PWM_INIT/PWM_STATE` ; `D14_COLOR_PROFILE_BEGIN` et `D14_COLOR_CMD` pour les commandes vendor, `D14_COLOR_INVERSION`, `D14_COLOR_DRAW case=... page=DIRECT_RGB565|G03_RLE_ALPHA`, `D14_COLOR_MEM` avec heap8/largest8, marge pile main et 0 LCD fault/timeout.
-- `HOST_TESTED` : `tests/test_d14_color_diag.c` valide les cinq profils A/B/C/D/E et 15 octets de gamma, toutes les couleurs en mémoire et au niveau octet, les erreurs de bornes et le 5120B DMA. Les anciennes suites vérifient le décodage RLE et la composition G03. `TARGET_BUILD_VERIFIED` et `CI_PASSED` **uniquement au HEAD exact**, sans présumer du visuel.
+## 4. Tests et build (sur HEAD exact à fournir)
 
-**Build local optionnel** (ESP-IDF v5.5.6, Python hôte avec `CairoSVG==2.7.1` et `Pillow==11.3.0` pour la génération G03) :
+`tests/test_d14_color_g01.c` décode **les 30 bandes** du G01 et compare tous les **76800 pixels** RGB565 à une référence brute générée **à partir du PNG PR90 approuvé** ; vérifie un sous-rectangle non aligné, bornes, capacité et refus d'arguments invalides. Le SHA du PNG est imposé par le script. CI : seconde génération identique byte-to-byte (`cmp` du C et du RGB565 golden), `sha256sum -c`, `git rev-parse HEAD:<png>` attendu, et `git diff --exit-code -- design/`. Cette dernière commande vérifie l'absence de retouche par la génération, **pas** l'absence de l'import Git PR90.
 
 ```sh
+# ESP-IDF v5.5.6 ; Python de build avec CairoSVG/Pillow pour les assets
+# D14 G03 toujours présents dans les autres composants (pas pour G01).
 idf.py -B build-d14-color -D WARSHIP_D14_COLOR_DIAGNOSTIC=ON set-target esp32
 idf.py -B build-d14-color -D WARSHIP_D14_COLOR_DIAGNOSTIC=ON build
 sha256sum build-d14-color/cyd_warship.bin
 ```
 
-Dans la CI, seul l'artefact **`warship-d14-COLOR-TEST-ONLY-<HEAD>`** contient ce firmware. Le firmware **normal** est construit séparément et doit toujours continuer à lancer D07/D09 sans profils couleur.
+Le **firmware NORMAL** est construit et archivé séparément. Son boot reste D09/D10, son image déploiement reste G03 ; **aucun écran accueil D15/JOUER/PALMARÈS fonctionnel n'est développé ici**. Les preuves requises : GCC+Clang ASan/UBSan, ESP-IDF v5.5.6 Xtensa normal + diagnostic, CI 3/3 et SHA BIN distincts.
 
-## Protocole PO très court — une seule CYD, réversible
+## 5. Réception PO ultra-courte sur **UNE** CYD
 
-1. Après la contre-revue Pilotage et **CI 3/3 sur le HEAD final**, récupérer l'artefact **D14 COLOR TEST ONLY** et son SHA-256 ; flasher **bootloader + partitions + app du même artefact** via `flasher_args.json`, **sans `erase-flash`** pour préserver les scores. Débrancher/rebrancher ou redémarrer pour recommencer le cycle de 35s.
-2. Brancher UART **115200**. Noter pour **A, B, C, D, E** au moins le jugement des **aplats directs** et, si possible, du **G03** : `normaux / délavés / inversion gênante / rouge-bleu permutés`. Le log indique le profil/page actif ; durée ~3,5s par image. Le PO peut dire **« A mauvais, B ... D bon »** sans photographier. Collecter `D14_COLOR_CMD`, `D14_COLOR_INVERSION`, `D14_COLOR_DRAW`, `WARSHIP_BL`, `D14_COLOR_MEM`, tout `FAIL`.
-3. Si A et B sont délavés mais D redonne un bon contraste, Pilotage peut isoler l'apport gamma de D. Si C améliore A ou E améliore D, arbitrer la composante BGR. Si les aplats directs sont bons dans un cas mais **G03 est délavé dans le même cas**, investiguer ensuite palette/alpha/PNG et rendu visuel avec Graphiste ; ne pas déduire une erreur de panneau. Si **tous les aplats** sont délavés, étudier d'autres registres/profils avec preuve matérielle, sans essai aveugle.
-4. **Revenir au binaire normal** de la CI après le diagnostic (même règle bootloader/partitions/app ; sans erase). Le diagnostic n'a pas ouvert NVS. **Aucune partie/FEU, ni 20 tirs**, pas de photo systématique. Le verdict d'acceptation G03 et le choix d'un profil de production restent **exclusivement au PO/Pilotage**.
+1. Après **CI verte du HEAD final**, télécharger **l'artefact explicitement nommé `warship-d14-G01-PR90-COLOR-TEST-ONLY-<HEAD>`**, vérifier le SHA-256 de son `build-d14-color/cyd_warship.bin`. Flasher bootloader, partition-table, application du **même** artefact avec `flasher_args.json`. **Ne pas lancer `erase-flash`**, pour préserver les scores existants. Le firmware TEST-ONLY ne démarre pas NVS.
+2. Ouvrir UART **115200**, redémarrer et regarder **A aplats (~3,5 s) puis accueil G01 statique**. Les pages **B–E ne sont plus proposées** ; ne pas toucher l'écran. Comparer si possible la perception au vrai écran approuvé et aux couleurs connues de Locomotive BASIC.
+3. Remettre un verdict en **deux parties distinctes** : `APLATS A : fidèles / ternes (+ détails)` et `ACCUEIL G01 : fidèle / délavé (+ détails)`. Joindre les lignes `D14_COLOR_SOURCE/PROFILE/DRAW/MEM`, `WARSHIP_BL`, et les éventuelles erreurs/timeout. La photo est facultative. **Pas de partie, AUTO, FEU ni campagne lourde.**
+4. Restaurer l'artefact **normal** du même HEAD après l'essai, sans `erase-flash` (trois fichiers cohérents). Aucun choix de gamma/ordre de canaux ne sera imposé sans nouveau verdict PO/Pilotage.
 
-**État actuel :** tant que le firmware diagnostic n'a pas été flashé par le PO, les profils A/B/C/D/E sont **NON TESTÉS matériellement**. Les essais avec DoomRPG et Locomotive constituent de bonnes références indépendantes, mais ne qualifient pas automatiquement le résultat du diagnostic Battleship.
+**État de la nouvelle sonde G01 : `ON_DEVICE_UNVERIFIED` jusqu'à son flash sur la vraie CYD.** Si les aplats sont ternes, approfondir le profil matériel/pilote et la référence Locomotive BASIC. S'ils sont corrects mais G01 terne, comparer directement la source PNG et sa quantification, sans modifier les œuvres sans arbitrage. **Seul le PO décide de la fidélité et seul le Pilotage autorise toute correction de production et fusion de la PR #91.**
