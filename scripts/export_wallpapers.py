@@ -17,6 +17,12 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / "assets/wallpaper"
+HISTORICAL_DEST = ROOT / "maquettes/accueil-historique/legacy"
+HISTORICAL_SCREEN = HISTORICAL_DEST.parent / "screen.json"
+
+
+def output_path(name: str) -> Path:
+    return (HISTORICAL_DEST if name.startswith("accueil_historique_") else DEST) / name
 MANIFEST = ROOT / "assets/manifest.json"
 OLD_COMMIT = "50d9e1dabd71725adba50279929694123fde0fda"
 OLD_DIR = "design/graph-acc-001/"
@@ -100,6 +106,9 @@ def construct() -> tuple[dict[str, bytes], list[dict]]:
     for identifier, name, dims, source, role, art in meta:
         if dimensions(files[name]) != tuple(dims):
             raise RuntimeError("Wrong output dimensions: " + name)
+        if role == "HISTORICAL_FLATTENED_ACCUEIL":
+            # The old complete UI is an archived screen, NEVER a firmware asset.
+            continue
         catalog.append({
             "id": identifier, "path": "assets/wallpaper/" + name,
             "sha256": sha256(files[name]), "source_ref": source,
@@ -112,22 +121,30 @@ def construct() -> tuple[dict[str, bytes], list[dict]]:
 
 def verify(files: dict[str, bytes], entries: list[dict]) -> None:
     for name, data in files.items():
-        if not (DEST / name).is_file() or (DEST / name).read_bytes() != data:
-            raise RuntimeError("Export missing or changed: " + name)
+        path = output_path(name)
+        if not path.is_file() or path.read_bytes() != data:
+            raise RuntimeError("Export missing or changed: " + str(path))
     m = json.loads(MANIFEST.read_text(encoding="utf-8"))
     by_id = {e["id"]: e for e in m["assets"]}
     for entry in entries:
         if by_id.get(entry["id"]) != entry:
             raise RuntimeError("Manifest mismatch: " + entry["id"])
-    print("WALLPAPER_EXPORT_OK: four images byte-reproducible")
+    screen = json.loads(HISTORICAL_SCREEN.read_text(encoding="utf-8"))
+    for name, data in files.items():
+        if name.startswith("accueil_historique_"):
+            canonical_blob = hashlib.sha1(f"blob {len(data)}\0".encode("ascii") + data).hexdigest()
+            if screen.get("legacy_files", {}).get(name) != canonical_blob:
+                raise RuntimeError("Historical screen inventory mismatch: " + name)
+    print("ACCUEIL_EXPORT_OK: two runtime wallpaper images and two archived screen images byte-reproducible")
     for e in entries:
         print(e["path"], e["dimensions"], e["sha256"])
 
 
 def write(files: dict[str, bytes], entries: list[dict]) -> None:
     DEST.mkdir(parents=True, exist_ok=True)
+    HISTORICAL_DEST.mkdir(parents=True, exist_ok=True)
     for name, data in files.items():
-        path = DEST / name
+        path = output_path(name)
         if path.exists() and path.read_bytes() != data:
             raise RuntimeError("Refusing to overwrite approved pixels: " + name)
         path.write_bytes(data)

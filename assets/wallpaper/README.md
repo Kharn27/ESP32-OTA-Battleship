@@ -1,33 +1,17 @@
-# Wallpapers d'accueil — CYD WARSHIP
+# Wallpaper d’accueil retenu — CYD WARSHIP
 
-Deux visuels d'accueil historiques, chacun en **grand format lisible** et en **320 × 240 natif CYD**.
+Ce répertoire conserve **uniquement le fond de scène exploitable séparément par le développeur** pour l’accueil actuel : aucune inscription, aucun bouton ni logo n’est peint dans cette image.
 
-## Fond actuellement retenu (sans interface incrustée)
+## Original — 1195 × 896 px
 
-**Original PO — 1195 × 896 (JPEG)**
+![Fond d’accueil original — JPEG](accueil_retenu_original_1195x896.jpeg)
 
-![Fond d'accueil retenu, original](accueil_retenu_original_1195x896.jpeg)
+## Version CYD — 320 × 240 px
 
-**Export CYD — 320 × 240 (LANCZOS)**
+![Fond d’accueil CYD](accueil_retenu_CYD_320x240.png)
 
-![Fond d'accueil retenu, CYD](accueil_retenu_CYD_320x240.png)
+Le JPEG original est repris octet par octet de [`draft/Wallpaper_accueil.jpeg`](../../draft/Wallpaper_accueil.jpeg), et la version native CYD en est une réduction LANCZOS reproductible. Les éléments interactifs sont des sprites individuels dans [`assets/logo/`](../logo/) et [`assets/boutons/`](../boutons/).
 
-Ce fond nu est celui de l'[accueil modulaire validé en PR #90](../../maquettes/accueil/legacy/README.md). Le [logo](../logo/) et les [boutons](../boutons/) sont des éléments séparés.
+**L’ancienne composition complète**, avec titre et boutons incrustés, n’est **pas** un wallpaper : elle se trouve exclusivement dans [`maquettes/accueil-historique/`](../../maquettes/accueil-historique/legacy/README.md), conformément à la [décision PO #107](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/107).
 
-## Première version — composition historique de l'accueil
-
-**Illustration originale extraite sans perte de la source SVG — 1448 × 1086**
-
-![Accueil historique, original](accueil_historique_original_1448x1086.png)
-
-**Export CYD historique — 320 × 240**
-
-![Accueil historique, CYD](accueil_historique_CYD_320x240.png)
-
-**Attention :** cette [première maquette, PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) est une **composition aplatie avec titre et boutons intégrés**. Elle est archivée à titre comparatif ; ce n'est **pas un wallpaper nu réutilisable derrière des boutons supplémentaires**, et ce n'est pas l'accueil courant.
-
-## Traçabilité
-
-Le JPEG d'origine du PO reste intact dans draft/Wallpaper_accueil.jpeg. Le PNG CYD ancien et le raster HD historique viennent du commit immuable de la PR #8. Le nouveau PNG 320×240 est issu d'un redimensionnement unique LANCZOS du JPEG choisi. Voir le [manifeste des empreintes](../manifest.json), le [script reproductible](../../scripts/export_wallpapers.py), la [PR #90](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237) et le [mandat PO #105](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/105).
-
-**ON_DEVICE_UNVERIFIED** — ni rendu sur CYD réelle, ni budgets Flash/RAM ou intégration firmware ne sont validés par ce rangement.
+Voir le [manifeste SHA-256](../manifest.json), le [script de vérification](../../scripts/export_wallpapers.py) et le [GO PC de l’accueil actuel](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237). **Rendu et intégration sur CYD physique non vérifiés** ; les deux exports restent `ON_DEVICE_UNVERIFIED`.
