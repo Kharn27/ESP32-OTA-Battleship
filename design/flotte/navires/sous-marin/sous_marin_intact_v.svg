@@ -8,35 +8,60 @@
     <path d="M7 7L5 5H4V8L2 9V11L4 12V14H5L8 12Z" fill="#657C7C"/>
     <path d="M4 8H10V11H4Z" fill="#314E60"/>
     <path d="M4 7H7V8H4Z" fill="#B7BDB0"/>
-    <!-- Coque en plan : silhouette intégralement dans le gabarit 54x18 -->
-    <path d="M5 8L9 6L16 5H39L46 6L50 8L53 9V11L50 13L46 14L39 15H16L9 14L5 12Z" fill="#0A1C32"/>
-    <path d="M7 8L10 7L17 6H40L47 7L51 9V11L47 13L40 14H17L10 13L7 11Z" fill="#495B5F"/>
+    <!-- Coque en plan : silhouette intacte dans le gabarit 54x18; valeurs metalliques renforcees -->
+    <path d="M5 8L9 6L16 5H39L46 6L50 8L53 9V11L50 13L46 14L39 15H16L9 14L5 12Z" fill="#334850"/>
+    <path d="M7 8L10 7L17 6H40L47 7L51 9V11L47 13L40 14H17L10 13L7 11Z" fill="#667679"/>
     <!-- Flanc sombre qui assoit le navire sur l'eau -->
-    <path d="M8 11L12 12L20 13H41L47 12L50 11L47 13L40 14H17L10 13Z" fill="#263945"/>
-    <path d="M11 8L17 7H41L47 8L49 9H43L39 8H18L12 9Z" fill="#8B9E9F"/>
+    <path d="M8 11L12 12L20 13H41L47 12L50 11L47 13L40 14H17L10 13Z" fill="#384B53"/>
+    <path d="M11 8L17 7H41L47 8L49 9H43L39 8H18L12 9Z" fill="#AFB8AE"/>
     <!-- Plaques de pont et reliefs métalliques -->
-    <path d="M13 9H22V11H13ZM35 9H43V11H35Z" fill="#647F86"/>
-    <path d="M14 8H21V9H14ZM36 8H43V9H36Z" fill="#B4BDB3"/>
-    <path d="M13 12H21V13H13ZM36 12H43V13H36Z" fill="#40545A"/>
+    <path d="M13 9H22V11H13ZM35 9H43V11H35Z" fill="#879794"/>
+    <path d="M14 8H21V9H14ZM36 8H43V9H36Z" fill="#C8CDC0"/>
+    <path d="M13 12H21V13H13ZM36 12H43V13H36Z" fill="#617276"/>
     <path d="M18 7V8M20 11V13M35 7V8M40 11V13" fill="none" stroke="#0A1C32" stroke-width="1"/>
     <path d="M16 10H19M38 10H41" fill="none" stroke="#D7D2B8" stroke-width="1"/>
     <!-- Kiosque : encrage franc et plateau éclairé (G02 + PO). -->
     <path d="M22 7L24 4H32L35 7V12L32 13H24L21 11V8Z" fill="#0A1C32"/>
-    <path d="M23 7L25 5H31L33 7V11L31 12H25L23 10Z" fill="#647A79"/>
-    <path d="M25 5H31V7H25Z" fill="#ABB8AD"/>
-    <path d="M24 8H32V10H24Z" fill="#485E63"/>
+    <path d="M23 7L25 5H31L33 7V11L31 12H25L23 10Z" fill="#84938D"/>
+    <path d="M25 5H31V7H25Z" fill="#CDD4C6"/>
+    <path d="M24 8H32V10H24Z" fill="#65767A"/>
     <path d="M26 9H30V10H26Z" fill="#142F3E"/>
-    <path d="M24 11H32V12H24Z" fill="#263945"/>
+    <path d="M24 11H32V12H24Z" fill="#42565B"/>
     <!-- Mâts du sous-marin, 1 pixel par axe, trois hauteurs distinctes -->
-    <path d="M26 2V5M29 1V5M32 3V5" fill="none" stroke="#0A1C32" stroke-width="2"/>
-    <path d="M26 2V4M29 1V4M32 3V4" fill="none" stroke="#C1C8BC" stroke-width="1"/>
+    <path d="M26 2V5M29 1V5M32 3V5" fill="none" stroke="#243943" stroke-width="2"/>
+    <path d="M26 2V4M29 1V4M32 3V4" fill="none" stroke="#D0D6C8" stroke-width="1"/>
     <path d="M29 1H31V2H30Z" fill="#E8D6A5"/>
     <path d="M32 3H33V4H32Z" fill="#F0B975"/>
     <!-- Ombre des joints et légère patine, accents limités -->
     <path d="M17 7V8M43 8V9M12 11V12M45 11V12" fill="none" stroke="#1D3A48" stroke-width="1"/>
     <path d="M19 14H23M36 14H39" stroke="#A87558" stroke-width="1" fill="none"/>
-    <path d="M47 9H50V10H47Z" fill="#BBC8BC"/>
+    <path d="M47 9H50V10H47Z" fill="#D0D0C0"/>
     <path d="M49 11H51" stroke="#647F86" stroke-width="1"/>
+
+    <!-- PO A: anneau du pont et panneaux metalliques patines (pas une nouvelle silhouette) -->
+    <g id="po-a-metal-patine">
+      <!-- rail ovoide autour du pont, clair au nord, sombre au sud -->
+      <path d="M11 8H20M35 8H45M10 10V11M46 10V11" stroke="#E1DCCB" stroke-width="1" fill="none"/>
+      <path d="M12 12H21M35 12H44M11 9V11M45 9V11" stroke="#233C46" stroke-width="1" fill="none"/>
+      <!-- rainures de tole et plaques : relief discernable a 1x -->
+      <path d="M16 8V11M19 8V11M38 8V11M42 8V11" stroke="#526268" stroke-width="1" fill="none"/>
+      <path d="M14 9H16M17 10H19M37 9H39M40 10H42" stroke="#C4C8BD" stroke-width="1" fill="none"/>
+      <path d="M13 11H15M19 11H21M36 11H38M42 11H44" stroke="#A6B1AA" stroke-width="1" fill="none"/>
+      <!-- Eclats de patine gris chaud, rustines localisees, pas de motifs uniformes -->
+      <path d="M17 12H19M39 12H41" stroke="#907562" stroke-width="1" fill="none"/>
+      <path d="M13 9H14M21 8H22M43 9H44" stroke="#B5A998" stroke-width="1" fill="none"/>
+      <!-- Joint de coque / 3 rivets le long du flanc -->
+      <path d="M14 13H15M22 13H23M35 13H36M44 12H45" stroke="#84948D" stroke-width="1" fill="none"/>
+      <!-- Kiosque : top metallique cintre, flank ombre, hublot sombre -->
+      <path d="M25 6H30M24 7H25M31 7H32" stroke="#E0DECE" stroke-width="1" fill="none"/>
+      <path d="M24 8V10M31 8V10" stroke="#324D55" stroke-width="1" fill="none"/>
+      <path d="M26 8H30V9H26Z" fill="#304B55"/>
+      <path d="M27 8H29" stroke="#B5CAC3" stroke-width="1" fill="none"/>
+      <path d="M25 10H31" stroke="#A6B1A6" stroke-width="1" fill="none"/>
+      <!-- Finitions de proue / pont arrondi, fougue sans halo -->
+      <path d="M47 8H49M49 10H50M8 9H10" stroke="#C7CDC0" stroke-width="1" fill="none"/>
+      <path d="M49 12H50" stroke="#465F68" stroke-width="1" fill="none"/>
+    </g>
   </g>
 </g>
 </svg>

@@ -1,10 +1,12 @@
 {
   "mission": "FLOT-01 / #92",
-  "statut": "DESIGN_PREVIEW - ON_DEVICE_UNVERIFIED / ATTENTE_STOP_PO",
+  "statut": "CORRECTIONS_REQUISES - INTACT_HV_NON_VALIDE_PO / ON_DEVICE_UNVERIFIED",
   "source": "sous_marin_intact_h.svg",
   "references": [
     "design/flotte/g02_grille_320x240.svg",
-    "draft/sous_marin_PO_A.jpeg"
+    "draft/sous_marin_PO_A.jpeg",
+    "design/ecrans/attaque/g04_r2_attaque_320x240.png",
+    "design/ecrans/defense/layout.json"
   ],
   "dimensions": {
     "H": [
@@ -37,6 +39,20 @@
     ],
     "demonstration_V_hors_G02": "C6-C8, uniquement banc essai, pas changement regle"
   },
+  "placement_G04_G05": {
+    "cellules": "C6-E6",
+    "origine_grille": [
+      21,
+      53
+    ],
+    "pas": 18,
+    "ancre_H": [
+      57,
+      143
+    ],
+    "preuve": "incrustation d asset dans le raster G04 approuve, hors comportement de jeu",
+    "source_G04_SHA256": "0a2e446da655d561ece9d8daf8fcc5bf461f0b33ab7f104392cd8b398e1a0232"
+  },
   "orientation": {
     "H": "proue vers la droite",
     "V": "rotation anti-horaire 90 deg de H; proue vers le haut"
@@ -45,48 +61,64 @@
   "raw_rgba_estimate_bytes": 3888,
   "files": {
     "preuve_alpha_clair_sombre_320x240.png": {
-      "sha256": "d2b024f6866c640e6ec8a9529f3bb6cf9b41a928bc2a4f28a35ee58de07725b1",
-      "octets": 10628
+      "sha256": "d7ed1288544e238fe03798672b08de811d5712fa428754800a479461a69ffd03",
+      "octets": 11176
     },
     "preuve_alpha_clair_sombre_x4_nearest.png": {
-      "sha256": "d80083e568f5e81245a6b922e539c22bf28976700efdfe11ef4603a66b7b04f2",
-      "octets": 21241
+      "sha256": "fe3586cc9bdce8cf696f9140ef32a3bcc277b47954c3abece7c2fe21e4e67925",
+      "octets": 22020
+    },
+    "preuve_avant_apres_320x240.png": {
+      "sha256": "bb70f103d13bbc8aff4f160e4c6c00d34ad80c18b49e2f2edb0f68b49f6cd886",
+      "octets": 9089
+    },
+    "preuve_avant_apres_x4_nearest.png": {
+      "sha256": "cc94c297a1395ff05e69bb80a91c85cb7d7e1be0f61f60720ad20200968b790a",
+      "octets": 18589
+    },
+    "preuve_combat_g04_320x240.png": {
+      "sha256": "174bed72d0e029033a4bb73f1d88ad0adebe05750f50373490a88880cc5d4bf9",
+      "octets": 139431
+    },
+    "preuve_combat_g04_x4_nearest.png": {
+      "sha256": "f57c7d51dd4082e66d1c600b39a6b4959c31fedf20fde1c80736d90074d4e977",
+      "octets": 920203
     },
     "preuve_comparaison_g02_320x240.png": {
-      "sha256": "5cce31184a26bcd2b6b06dc81a7c190ebd2b84b6b2034e12cc87c49987e28502",
-      "octets": 10617
+      "sha256": "e75bc510126f11b85b458248fc1f9b1ef567651b3763a8a40146eb136dd9c213",
+      "octets": 10840
     },
     "preuve_comparaison_g02_x4_nearest.png": {
-      "sha256": "eeb9f728eee355c476df9ab7011ae2ba61b2614e750da982f8999cc733c3328f",
-      "octets": 20119
+      "sha256": "e4e510481c9df1f8484318b17592b12d9043426c9417c4347ed4afc41fe1e205",
+      "octets": 20372
     },
     "preuve_grille_320x240.png": {
-      "sha256": "97f6ab4442bd48260760058e65d5774e13c8e0f378a344f7a058b7b24cdae0e4",
-      "octets": 13017
+      "sha256": "70a0f1b5b031f1b37fbad32577013c7c1d8eb0a971e74e843b61b753e47b0a75",
+      "octets": 13847
     },
     "preuve_grille_v_320x240.png": {
-      "sha256": "4037d29d4e6b0e9748797451594f7b50d57284c51330086f960fdfd66f614a7b",
-      "octets": 12772
+      "sha256": "cee76e0867879ae91ca40a55aabb582d2d6076a02573e2e7526dde524bf67205",
+      "octets": 13429
     },
     "preuve_grille_v_x4_nearest.png": {
-      "sha256": "56c74b23f11d42d22e52d932baec1b5cf2a2812c2be840e2d24d2436db62de10",
-      "octets": 23709
+      "sha256": "750e250dd9ef14430dfe012c4e9b16dbeb4caae1aaa49f8d590ca8413219c941",
+      "octets": 24729
     },
     "preuve_grille_x4_nearest.png": {
-      "sha256": "b99c0327e27b61c457e55ea2355f4b36859b82ba8d61f515a96ebf547125e90b",
-      "octets": 23687
+      "sha256": "0726bba88437ff7d9eaeb4cdce9e42bb07840f6854a8a5af1b6ed2056cd37b6f",
+      "octets": 24713
     },
     "sous_marin_intact_h.png": {
-      "sha256": "b15640f594afe21d6994404b07dbfd2ffc3edf3bc7d351a65daf1427d1e8273e",
-      "octets": 610
+      "sha256": "e6c6639e37edbc040fba4a3f04a70f588fab8d4cba66c290c1f2beaf362f1425",
+      "octets": 831
     },
     "sous_marin_intact_v.png": {
-      "sha256": "c143eee15bab4064ed66b1350970bab15a22e49dc2c8c9a7c041277911fca18f",
-      "octets": 649
+      "sha256": "0a4203cbfb9ea152fe9610732ca2fdd71e0d734d2aab2272fc4ffed3941629cb",
+      "octets": 890
     },
     "sous_marin_intact_v.svg": {
-      "sha256": "7419c8d7050121034b7358d4f215bc9d6490990d3b6003dea35cffa9ce47ab83",
-      "octets": 2617
+      "sha256": "ebc6b9989ea435a09657d66f962a78b37d9695ab070bec7640688774d9c2016f",
+      "octets": 4505
     }
   }
 }
