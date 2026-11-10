@@ -1,4 +1,77 @@
 {
   "schema_version": 1,
-  "assets": []
+  "assets": [
+    {
+      "id": "logo.titre.original",
+      "path": "assets/logo/logo_titre_original_1075x489_RGBA.png",
+      "sha256": "7cc121d08ae7f36228aff7cc36e4dd8382ed3390684143a66d1d935977df7b03",
+      "source_ref": "draft/Logo_titre.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103",
+      "dimensions": [
+        1075,
+        489
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "logo.titre.cyd",
+      "path": "assets/logo/logo_titre_CYD_145x66_RGBA.png",
+      "sha256": "24d31c91af583fe794871c8f1e3452f93b394fddb68649c0c780ffa09a7b2df7",
+      "source_ref": "assets/logo/logo_titre_original_1075x489_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103",
+      "dimensions": [
+        145,
+        66
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.jouer.original",
+      "path": "assets/boutons/bouton_jouer_original_1107x252_RGBA.png",
+      "sha256": "eb57258fc56d98904b1b97d033dbc40e932570807b6660eb50c565201196ac37",
+      "source_ref": "draft/Bouton_jouer.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103",
+      "dimensions": [
+        1107,
+        252
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.jouer.cyd",
+      "path": "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png",
+      "sha256": "e01df0c989bfd7f15e6fa649b245d7f3d702f1f51c33e756786c568cc199b9fc",
+      "source_ref": "assets/boutons/bouton_jouer_original_1107x252_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103",
+      "dimensions": [
+        140,
+        32
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.palmares.original",
+      "path": "assets/boutons/bouton_palmares_original_1163x250_RGBA.png",
+      "sha256": "bab67a47213e856c2f66f1af9c59759ff9ebec7ee5de1aad91758a7fda4e716d",
+      "source_ref": "draft/Bouton_palmares.jpeg",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103",
+      "dimensions": [
+        1163,
+        250
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.palmares.cyd",
+      "path": "assets/boutons/bouton_palmares_CYD_140x30_RGBA.png",
+      "sha256": "a90b0b581253365b128367196c7e5fc1e25ec811db579b856f41e73c5a8c69ca",
+      "source_ref": "assets/boutons/bouton_palmares_original_1163x250_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103",
+      "dimensions": [
+        140,
+        30
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    }
+  ]
 }

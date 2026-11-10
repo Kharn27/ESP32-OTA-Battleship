@@ -1,9 +1,10 @@
 # Bibliothèque d'assets approuvés
 
-Ce répertoire accueille **uniquement les composants graphiques individuels approuvés artistiquement par le PO**, réutilisables dans plusieurs écrans : `fonds/`, `boutons/`, `logos/`, `navires/`, `effets/` (familles indicatives, à créer à l'arrivée d'un asset réel).
+Ce dossier rassemble les composants réutilisables acceptés artistiquement par le PO, avec un ID et un SHA-256 dans [`manifest.json`](manifest.json).
 
-Chaque fichier visuel doit apparaître dans [`manifest.json`](manifest.json) avec un ID stable, un SHA-256 exact, la source, un lien de décision PO et son statut de validation matérielle. Le GO artistique sur PC n'implique pas qu'un sprite RGB565/alpha soit intégrable ni validé sur CYD.
+- [**Logo**](logo/README.md) : sprite original RGBA 1075×489 et sprite CYD 145×66.
+- [**Boutons JOUER / PALMARÈS**](boutons/README.md) : quatre PNG RGBA, tailles originales et CYD.
 
-**Aucun asset n'est encore reclassé par cette PR** : l'index est volontairement vide. Le contenu legacy de `design/` doit faire l'objet d'un inventaire distinct avant promotion, même lorsqu'une maquette a reçu un GO PO.
+Les six exports sont issus de l'[accueil approuvé sur PC — PR #90](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237) et classés dans le catalogue sur [mandat PO — Issue #103](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103), **sans changement des images**. Les JPEG sources restent sous [`draft/`](../draft/) et la maquette conserve son écran composé sans copie privée des sprites.
 
-Voir [contrat](../docs/GRAPHIC_PIPELINE.md) et [instructions agents](../AGENTS.md).
+Tous les éléments sont **`ON_DEVICE_UNVERIFIED`** : leur acceptation artistique PC ne valide ni décodage embarqué ni budget Flash/RAM. Voir [le pipeline](../docs/GRAPHIC_PIPELINE.md) et [`AGENTS.md`](../AGENTS.md).
