@@ -30,12 +30,37 @@ jobs:
           ${{ matrix.cc }} --version | head -1
           cmake --version | head -1
           ninja --version
+      - name: Install pinned G03 build-time rasterizer
+        run: |
+          python3 -m venv "$RUNNER_TEMP/d14-env"
+          "$RUNNER_TEMP/d14-env/bin/python" -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0'
+          echo "$RUNNER_TEMP/d14-env/bin" >> "$GITHUB_PATH"
       - name: Configure
         run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON
-      - name: Verify reproducible G03 conversion
+      - name: Verify graphic pipeline and removed design tree
+        run: |
+          python3 scripts/check_graphic_pipeline.py
+          test ! -d design
+          test -z "$(git ls-files design)"
+          python3 - <<'PY'
+          import json
+          manifest=json.load(open("assets/manifest.json",encoding="utf8"))
+          ids=[asset["id"] for asset in manifest["assets"]]
+          print("GRAPHIC_CATALOG count=%d IDs=%s" % (len(ids), ",".join(ids)))
+          # Zero G03/G02 IDs on this HEAD: report factual P0 blocker,
+          # do not silently promote legacy maquettes to production.
+          assert len(ids)==8, "Inventory changed: re-evaluate D14 G03 blocker before build"
+          PY
+      - name: Verify reproducible G03 LEGACY HOST TEST ORACLE ONLY
         run: |
           python3 tools/t03_export.py --input maquettes/deploiement/legacy/g03_deploiement_320x240.png --output build-host/t03_second.c
           cmp build-host/t03_g03_data.c build-host/t03_second.c
+          python3 tools/d14_export.py --svg maquettes/deploiement/legacy/g03_deploiement_320x240.svg --png maquettes/deploiement/legacy/g03_deploiement_320x240.png --output build-host/d14_second.c
+          cmp build-host/d14_g03_data.c build-host/d14_second.c
+          # Approved G01 PR90 from the reconciled main, unchanged.
+          echo 'ca73f029e80c95c09b3c7defe1437bba3156280b2f2169465ee3f30014343873  maquettes/accueil/legacy/accueil_cyd_warship_320x240.png' | sha256sum -c -
+          test "$(git rev-parse HEAD:maquettes/accueil/legacy/accueil_cyd_warship_320x240.png)" = "7bd321c6ccbfc230802e20010bfa06e71a9099a9"
+          git diff --exit-code -- maquettes/ assets/ draft/
       - name: Build
         run: cmake --build build-host --verbose
       - name: Run tests
@@ -52,6 +77,14 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
           git rev-parse HEAD
+      - name: Assert production G03 catalog boundary is explicit
+        run: |
+          test ! -d design
+          grep -Fq "BLOCAGE_ASSETS_G03" components/d14_g03/CMakeLists.txt
+          ! grep -Fq "d14_export.py" components/d14_g03/CMakeLists.txt
+          python3 scripts/check_graphic_pipeline.py
+          # Production build below will intentionally fail closed until the
+          # Graphiste/PO-approved individual G03 assets are catalogued.
       - name: Verify unconditional D09 boot and retired mode selector
         run: |
           test ! -e main/Kconfig.projbuild
@@ -65,12 +98,18 @@ jobs:
           grep -Fq 'd09_probe_run();' main/app_main.c
           grep -Fq '"d09_probe.c"' main/CMakeLists.txt
           ! grep -Fq '"t02_probe.c"' main/CMakeLists.txt
+          ! grep -R -E 'WARSHIP_D14_(COLOR_DIAGNOSTIC|DOOM_REFERENCE)' CMakeLists.txt main components tests
+          test -f components/warship_panel_profile/warship_panel_profile.c
+          test ! -d components/d14_color_diag
+          test ! -d components/d14_doom_ref
+          test ! -e main/d14_color_diag.c
       - name: Build and static memory report
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py --version &&
             xtensa-esp32-elf-gcc --version &&
             idf.py set-target esp32 &&
@@ -79,6 +118,13 @@ jobs:
             idf.py size-components &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_PROFILE phase=INIT' &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_PROFILE phase=ROTATE_BEFORE_CLEAR' &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_PROFILE phase=READY' &&
+            strings build/cyd_warship.elf | grep -Fq 'PANEL_WINDOW x=' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'D14_DOOM_PROFILE' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'source=G01_PR90_PNG' &&
             test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'commit_resolved_pair' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
@@ -89,6 +135,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py -B build-d11-bench -D WARSHIP_D11_NVS_BENCH=ON set-target esp32 &&
             idf.py -B build-d11-bench -D WARSHIP_D11_NVS_BENCH=ON build &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
@@ -113,6 +160,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py -B build-d13-reception
             -D WARSHIP_D11_NVS_BENCH=ON
             -D WARSHIP_D13_CYD_SCENARIO=ON set-target esp32 &&
@@ -144,6 +192,7 @@ jobs:
           esp_idf_version: v5.5.6
           target: esp32
           command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
             idf.py -B build-t03 -D WARSHIP_T03_DIAGNOSTIC=ON set-target esp32 &&
             idf.py -B build-t03 -D WARSHIP_T03_DIAGNOSTIC=ON build &&
             idf.py -B build-t03 size &&

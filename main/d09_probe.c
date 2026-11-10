@@ -6,6 +6,7 @@
 #endif
 #include "d11_runtime.h"
 #include "warship_deploy_ui.h"
+#include "d14_g03.h"
 #include "warship_combat_ui.h"
 #include "warship_journey.h"
 #include "warship_inspection.h"
@@ -174,6 +175,55 @@ static esp_err_t draw_region(int x,int y,int w,int h)
 #endif
     return ESP_OK;
 }
+/* D14: draw canonical PO G03 from ship-free RLE + PUBLIC ship silhouettes.
+ * Every region/band is completely reconstructed before synchronous SPI2 DMA.
+ */
+static esp_err_t draw_g03_region(WarshipDeployRect rect, const char *reason)
+{
+    if (rect.x >= 320u || rect.y >= 240u ||
+        !rect.w || !rect.h ||
+        (unsigned)rect.x+rect.w > 320u ||
+        (unsigned)rect.y+rect.h > 240u ||
+        (size_t)rect.w * WARSHIP_LCD_BAND_ROWS * 2u > WARSHIP_LCD_DMA_BYTES)
+        return ESP_ERR_INVALID_ARG;
+    uint8_t *const band=warship_lcd_band();
+    if (!band) return ESP_ERR_INVALID_STATE;
+    const int64_t start=esp_timer_get_time();
+    int64_t compose_us=0,lcd_us=0;
+    unsigned bands=0u;
+    for (unsigned top=rect.y;top<(unsigned)rect.y+rect.h;
+         top+=WARSHIP_LCD_BAND_ROWS) {
+        const unsigned remaining=(unsigned)rect.y+rect.h-top;
+        const unsigned rows=remaining<WARSHIP_LCD_BAND_ROWS ?
+                            remaining:WARSHIP_LCD_BAND_ROWS;
+        const int64_t before=esp_timer_get_time();
+        if (d14_g03_compose(&frame,rect.x,(uint16_t)top,
+                            rect.w,(uint16_t)rows,
+                            band,WARSHIP_LCD_DMA_BYTES)!=0) {
+            ESP_LOGE(TAG,"D14_COMPOSE_INVALID no_dma=1 y=%u",
+                     top);
+            return ESP_FAIL;
+        }
+        compose_us+=esp_timer_get_time()-before;
+        const int64_t lcd_start=esp_timer_get_time();
+        const esp_err_t err=warship_lcd_send(rect.x,(int)top,rect.w,(int)rows);
+        lcd_us+=esp_timer_get_time()-lcd_start;
+        if(err!=ESP_OK) {
+            ESP_LOGE(TAG,"D14_LCD_STOP reason=%s band_y=%u err=%s",
+                     reason,top,esp_err_to_name(err));
+            return err;
+        }
+        ++bands;
+    }
+    ESP_LOGI(TAG,"D14_DRAW reason=%s x=%u y=%u w=%u h=%u bands=%u"
+             " compose_us=%" PRId64 " lcd_us=%" PRId64 " total_us=%" PRId64
+             " dma_bytes=%u",
+             reason,(unsigned)rect.x,(unsigned)rect.y,
+             (unsigned)rect.w,(unsigned)rect.h,bands,
+             compose_us,lcd_us,esp_timer_get_time()-start,
+             (unsigned)WARSHIP_LCD_DMA_BYTES);
+    return ESP_OK;
+}
 static esp_err_t draw_combat(uint8_t include_pending)
 {
     if (warship_lifecycle_observe(&game,&public_view)!=WARSHIP_LIFECYCLE_OK ||
@@ -237,15 +287,18 @@ static esp_err_t draw_for_action(WarshipDeployAction action)
              (unsigned)public_view.phase,(unsigned)frame.mode,
              (unsigned)public_view.has_human_fleet,
              (unsigned)public_view.has_battle);
-    if(action==WARSHIP_DEPLOY_AUTO)
-        return draw_region(0,0,220,240);
-    if(action==WARSHIP_DEPLOY_READY)
-        return draw_region(220,0,100,240);
+    if(game.phase==WARSHIP_LIFECYCLE_DEPLOY) {
+        if(action==WARSHIP_DEPLOY_AUTO)
+            return draw_g03_region(d14_g03_auto_dirty(),"AUTO_grid_clean");
+        const WarshipDeployRect entire={0u,0u,320u,240u};
+        return draw_g03_region(entire,"DEPLOY_full");
+    }
+    /* D15 is not active: genuine technical HOME with START. */
     return draw_region(0,0,320,240);
 }
 void d09_probe_run(void)
 {
-    ESP_LOGW(TAG,"BOOT probe=D09 technical only; PO calibration issue=21 swap=1 screen_x_raw_y=215..3799 screen_y_raw_x=302..3865 size=320x240; NOT G03");
+    ESP_LOGW(TAG,"BOOT D14 G03 DEPLOY / technical D09 HOME + D10 COMBAT; PO calibration issue=21 swap=1 screen_x_raw_y=215..3799 screen_y_raw_x=302..3865 size=320x240");
     ESP_LOGI(TAG,"STACK_CONFIG main_task_bytes=%u sizeof_solo=%u sizeof_battle=%u; MAIN task watermark is MIN FREE BYTES, not current free stack",
              (unsigned)CONFIG_ESP_MAIN_TASK_STACK_SIZE,
              (unsigned)sizeof(WarshipSoloSession),
@@ -259,7 +312,7 @@ void d09_probe_run(void)
              (unsigned)sizeof(WarshipFleet),
              (unsigned)sizeof combat_frame);
     memory_log("startup_after_nvs_read");
-    WarshipDeployLayout layout=warship_deploy_default_layout();
+    WarshipDeployLayout layout=d14_g03_layout();
     if(warship_deploy_input_init(&input,&layout)!=WARSHIP_DEPLOY_OK ||
        warship_lifecycle_init(&game)!=WARSHIP_LIFECYCLE_OK) {
         ESP_LOGE(TAG,"D09_CONTROL_INIT_FAIL");
@@ -283,7 +336,7 @@ void d09_probe_run(void)
         ESP_LOGE(TAG,"LCD_PROFILE_FAIL err=%s",esp_err_to_name(err));
         return;
     }
-    ESP_LOGI(TAG,"LCD_PROFILE_PASS case=10 native_wide=1 mv=0 mx=0 my=1 dma=5120");
+    ESP_LOGI(TAG,"LCD_PROFILE_PASS native_landscape=1 madctl=0x28 mv=1 bgr=1 width=320 height=240 dma=5120");
     memory_log("lcd_ready");
 #ifdef WARSHIP_T03_DIAGNOSTIC
     ESP_LOGW(TAG,"T03_DIAGNOSTIC=ON before normal D09 screen; no second LCD init");

@@ -252,3 +252,83 @@ if(WARSHIP_SANITIZERS)
   target_link_options(t03_asset_tests PRIVATE -fsanitize=address,undefined)
 endif()
 add_test(NAME t03_g03_exact_raw_vs_rle COMMAND t03_asset_tests)
+
+
+# D14: historical composed G03/G02 extraction is TEST ORACLE ONLY.
+# Host-only regression of the previously used technical renderer; NOT
+# a declaration that legacy maquettes are approved firmware assets.
+# Production CMake fails closed until assets/manifest.json has a
+# Graphiste/PO-approved individual G03/G02 catalog (Issue #69).
+set(D14_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../maquettes/deploiement/legacy/g03_deploiement_320x240.svg")
+set(D14_PNG "${CMAKE_CURRENT_SOURCE_DIR}/../maquettes/deploiement/legacy/g03_deploiement_320x240.png")
+set(D14_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/d14_export.py")
+set(D14_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/d14_g03_data.c")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${D14_SOURCE}" "${D14_PNG}" "${D14_SCRIPT}")
+execute_process(
+  COMMAND "${Python3_EXECUTABLE}" "${D14_SCRIPT}"
+          --svg "${D14_SOURCE}" --png "${D14_PNG}"
+          --output "${D14_GENERATED}"
+  RESULT_VARIABLE D14_EXPORT_EXIT OUTPUT_VARIABLE D14_METRICS
+  ERROR_VARIABLE D14_ERROR)
+if(NOT D14_EXPORT_EXIT EQUAL 0)
+  message(FATAL_ERROR "D14 asset extraction failed: ${D14_ERROR}")
+endif()
+message(STATUS "D14 G03 art/Flash ${D14_METRICS}")
+add_executable(d14_g03_tests test_d14_g03.c
+               ../components/d14_g03/d14_g03.c
+               ../components/t03_decode/t03_decode.c
+               "${D14_GENERATED}")
+target_include_directories(d14_g03_tests PRIVATE
+       ../components/d14_g03/include ../components/t03_decode/include)
+target_link_libraries(d14_g03_tests PRIVATE warship_deploy_ui)
+target_compile_options(d14_g03_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_g03_tests PRIVATE
+                          -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+    target_link_options(d14_g03_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d14_g03_deploy_runtime COMMAND d14_g03_tests)
+
+
+# D14 PO correction: compile ACTUAL LEDC implementation with fake GPIO/LEDC
+# instead of merely testing numerical percent mapping in a surrogate.
+# Each case runs in a fresh process to reset the controller's static state.
+add_executable(d14_backlight_tests
+               test_d14_backlight_pwm.c
+               ../components/warship_lcd/warship_lcd_light.c)
+target_include_directories(d14_backlight_tests PRIVATE
+                           ledc_fake ../components/warship_lcd)
+target_compile_definitions(d14_backlight_tests PRIVATE
+                           WARSHIP_LCD_BACKLIGHT_PERCENT=40)
+target_compile_options(d14_backlight_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_backlight_tests PRIVATE
+                           -O1 -g -fno-omit-frame-pointer
+                           -fsanitize=address,undefined)
+    target_link_options(d14_backlight_tests PRIVATE -fsanitize=address,undefined)
+endif()
+foreach(mode nominal init_timer_fail init_channel_fail stop_fail
+             set_duty_fail update_fail frequency_fail)
+    add_test(NAME d14_ledc_${mode}
+             COMMAND d14_backlight_tests ${mode})
+endforeach()
+
+
+# Exact C99 production panel code linked into the Xtensa normal image:
+# init and calibrated gamma/inversion order, MV=1 and 320x240 windows.
+add_executable(warship_panel_profile_tests
+               test_warship_panel_profile.c
+               ../components/warship_panel_profile/warship_panel_profile.c)
+target_include_directories(warship_panel_profile_tests PRIVATE
+                           ../components/warship_panel_profile/include)
+target_compile_options(warship_panel_profile_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(warship_panel_profile_tests PRIVATE
+                           -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+    target_link_options(warship_panel_profile_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME production_ili9341_init_orientation_and_windows
+         COMMAND warship_panel_profile_tests)

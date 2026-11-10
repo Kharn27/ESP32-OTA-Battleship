@@ -1,5 +1,14 @@
 # T02 — sonde matérielle ESP32-2432S028R (LOT 1)
 
+> **ARCHIVE TECHNIQUE T02.** La référence historique de la console
+> Locomotive BASIC (`case10`, `MV=0`) exposée plus bas n'est **plus
+> le profil actif** de CYD WARSHIP. Suite au GO PO du 10/11/2026,
+> D14 #69 intègre désormais le profil ILI9341 `MADCTL=0x28` (`MV=1`)
+> et gamma DoomRPG dans le firmware normal. Voir
+> [D14_LCD_PRODUCTION.md](D14_LCD_PRODUCTION.md). Les preuves T02 ci-dessous
+> restent historiques et ne prescrivent pas un flash/réglage actuel.
+
+
 > **CORRECTIONS_REQUISES (Pilotage, PR #22)** — [consigne #6536448760](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/22#issuecomment-6536448760). Le PO rapporte un **VISUAL_FAIL** (écran incomplet et pixels d'ancien firmware). **Pas de log de boot/HEAD associé à cette observation** : provenance PO, pas preuve sur un SHA exact. L'ancien log `App version d76a9b8` était le firmware **T01**, et ne constitue pas un essai T02. Toutes les anciennes compilations prouvent seulement la compilation, **pas** la fonctionnalité LCD. Essais supplémentaires PO **suspendus** jusqu'au correctif/revue Pilotage.
 
 **Mandat** : [Issue #21](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/21), passation Pilotage [#6532928571](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/21#issuecomment-6532928571), Bible v0.17 §2, §14.1, §14.9, TEST_POLICY. **Base** `main` T01 : `d76a9b8305dd305cc6f5c3fbd62571b975e86189`. Branche : `spike/issue-21-cyd-tft-touch-probe`.

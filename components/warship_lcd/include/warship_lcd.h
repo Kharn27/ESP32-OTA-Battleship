@@ -24,10 +24,8 @@ typedef struct {
 } WarshipLcdInfo;
 
 esp_err_t warship_lcd_init(void);
-/* Configure ONLY the physically referenced console boot profile 10.
- * In this CYD-specific profile, a 320x240 window is addressed with
- * MADCTL.MV=0. Do not substitute a generic landscape rotation.
- * Calling the function again is a no-op (do not reapply MADCTL).
+/* Native 320x240 landscape, MADCTL=0x28 before first GRAM window.
+ * Doom gamma/inversion after clear; idempotent once prepared.
  */
 esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565);
 /* A single borrowed, DMA-capable band. Fill only after previous send returned
@@ -35,6 +33,14 @@ esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565);
  */
 uint8_t *warship_lcd_band(void);
 esp_err_t warship_lcd_send(int x, int y, int width, int height);
+/* Backlight GPIO21 active-high assumption pending device verification.
+ * Default EXPERIMENTAL PWM is 5 kHz / 40% (configure via
+ * -D WARSHIP_LCD_BACKLIGHT_PERCENT=N, 0..100). On/off controls LEDC
+ * output enable/stop with idle level 0, not GPIO output when owned by LEDC.
+ * Change percent at runtime only from the LCD-owning task; 0 stops PWM.
+ * Brightness adjustment does not alter Flash sprites, SPI or MADCTL.
+ */
 esp_err_t warship_lcd_backlight(bool on);
+esp_err_t warship_lcd_backlight_set_percent(uint8_t percent);
 bool warship_lcd_info(WarshipLcdInfo *out);
 #endif
