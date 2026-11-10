@@ -12,7 +12,7 @@ PR indépendante à fusionner uniquement par Pilotage.
 
 ## Provenance et fidélité
 
-- **Unique source de ce travail :** [`draft/patrouilleur_A.jpeg`](../../draft/patrouilleur_A.jpeg), original PO du 06/11/2026, **1195 × 896**.
+- **Unique source de ce travail :** [`draft/patrouilleur_A.jpeg`](../../../draft/patrouilleur_A.jpeg), original PO du 06/11/2026, **1195 × 896**.
 - SHA-256 original attendu : `631ff1b8f4245599137b6d0d3bd6919b9db3e30844d478434ee864ff885f5df5`.
 - **Aucun redessin, remplacement de mer, recolorisation, ajout ni extraction du navire.**
 - Cadrage **plein cadre** (aucun crop) et conversion RGB ; réduction à 320 × 240 avec **LANCZOS** pour limiter les aliasings lors du sous-échantillonnage de la source JPEG ; contrôle ×4 par **NEAREST**, sans interpolation.
@@ -66,7 +66,7 @@ Le mode `--check` **ne modifie aucun fichier** ; il vérifie SHA-256 de l'origin
 
 [Zoom ×4 de contrôle — 1280×960, NEAREST strict](patrouilleur_arriere_endommage_x4.png)
 
-La source canonique est [draft/patrouilleur_T1A.jpeg](../../draft/patrouilleur_T1A.jpeg) (**1195×896**, SHA-256 `1e25359998afdedbc93ebf6baebdbeae34b327f4ab75a2f4e9d55e4c7b8a9584`). T1B reste uniquement en `draft/` et dans l'historique comparatif de l'Issue/PR, **pas** dans les exports finaux. **Aucune retouche, reconstruction de fumée/coque, translation, crop ou recolorisation** ; pleine scène avec mer peinte en **RGB sans alpha**. Pas de sprite détouré.
+La source canonique est [draft/patrouilleur_T1A.jpeg](../../../draft/patrouilleur_T1A.jpeg) (**1195×896**, SHA-256 `1e25359998afdedbc93ebf6baebdbeae34b327f4ab75a2f4e9d55e4c7b8a9584`). T1B reste uniquement en `draft/` et dans l'historique comparatif de l'Issue/PR, **pas** dans les exports finaux. **Aucune retouche, reconstruction de fumée/coque, translation, crop ou recolorisation** ; pleine scène avec mer peinte en **RGB sans alpha**. Pas de sprite détouré.
 
 Cadrage et facteur d'échelle **identiques à PAT-01** ; pivot nominal indicatif `(164,118)` et bbox de coque intacte approx. `(106,92)–(221,143)`. Le contrôle exploratoire de la proue sur l'original a indiqué un meilleur appariement à `(+3,0)` pixels source (≈ 0,8 pixel natif) ; cet indice **local** ne prouve pas un décalage global et **aucune correction n'a été appliquée**.
 
@@ -95,7 +95,7 @@ Pour une régénération complète, exécuter sans `--check` puis avec `--check`
 
 ## Original, cadrage et fidélité
 
-- **Source PO unique pour le rendu final :** [`draft/patrouilleur_T2A.jpeg`](../../draft/patrouilleur_T2A.jpeg), **1195×896 JPEG**, SHA-256 `f8366482082febc917a812d94efd98a75d03c100a789d5db73ceacc379c41d4d`.
+- **Source PO unique pour le rendu final :** [`draft/patrouilleur_T2A.jpeg`](../../../draft/patrouilleur_T2A.jpeg), **1195×896 JPEG**, SHA-256 `f8366482082febc917a812d94efd98a75d03c100a789d5db73ceacc379c41d4d`.
 - **T2B est l'alternative non retenue.** Son original `draft/patrouilleur_T2B.jpeg` est préservé dans `draft/` ; les comparatifs temporaires ne figurent **pas** dans le diff final (historique Git et Issue #81 conservés).
 - Export sur **la totalité du canevas source**, sans crop, translation, changement de palette, redessin, détourage, ajout/suppression de flammes/fumée, modification de la coque, des débris ou de l'océan.
 - Même recette que PAT-01 et PAT-02 : réduction **LANCZOS** en **320×240 PNG RGB**, puis **NEAREST** en **1280×960**. Les JPEG PO sont des **scènes aplaties avec océan peint** : PNG **sans alpha**, **pas** des sprites transparents.

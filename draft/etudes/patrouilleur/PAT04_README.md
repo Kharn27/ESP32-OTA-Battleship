@@ -12,7 +12,7 @@
 ## Changement explicite de source
 
 - Le PO a **remplacé l'ancienne direction artistique B** par son image fusionnant les états arrière **T1A** et avant **T2A** acceptés. Elle présente une destruction sur les deux extrémités, deux colonnes de fumée et des débris dans l'eau.
-- **Master PO conservé sans perte ni retouche :** [`draft/patrouilleur_B_PO_fusion.png`](../../draft/patrouilleur_B_PO_fusion.png), image RGB **1024×768**, SHA-256 `e004d3b1274133f118ab407e7854d2050121654cca0881b513c7acbc3bd1a808`.
+- **Master PO conservé sans perte ni retouche :** [`draft/patrouilleur_B_PO_fusion.png`](../../../draft/patrouilleur_B_PO_fusion.png), image RGB **1024×768**, SHA-256 `e004d3b1274133f118ab407e7854d2050121654cca0881b513c7acbc3bd1a808`.
 - **Ancien fichier retiré à la demande du PO :** `draft/patrouilleur_B.jpeg` n’est plus versionné. Le script PAT-04 **reconstruit seulement en mémoire** son JPEG de compatibilité avec Pillow 12.3.0 (`quality=98`, `subsampling=0`, `optimize=True` ; SHA-256 `0f6eb6a9dd4df3974a1cee5423d304930d4b1643c3612847e7599128fd374830`). Ce JPEG est **avec perte**, mais la source canonique PNG est conservée sans perte.
 - Ancien B : blob Git `06c76f842a9d7dbbffb36044d55bdb27c61e8a69`, conservé **dans l'historique Git** ; ne participe pas à l'export.
 - **Image finale :** `patrouilleur_detruit_320x240.png`, **RGB sans alpha**, pleine scène **1024×768 → 320×240 en LANCZOS**, calculée via le **JPEG intermédiaire en mémoire** régénéré depuis le PNG maître ; zoom `patrouilleur_detruit_x4.png` en **NEAREST**, vérifié pixel par pixel. Le résultat est identique aux exports de la revue initiale.
@@ -40,4 +40,4 @@ Le `--check` est **non destructif** : il confirme le SHA du PNG PO, le JPEG **en
 
 ## Source d'animation mise à jour, hors livraison statique
 
-Le GIF maître fourni par le PO est désormais conservé dans [`draft/patrouilleur_detruit.gif`](../../draft/patrouilleur_detruit.gif), **478×356, 9 frames de 160 ms (1,44 s)**, SHA-256 `64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096`. Ce fichier est **uniquement une référence pour PAT-05 #83**, sans animation intégrée, validation graphique frame par frame ni qualification ESP32.
+Le GIF maître fourni par le PO est désormais conservé dans [`draft/patrouilleur_detruit.gif`](../../../draft/patrouilleur_detruit.gif), **478×356, 9 frames de 160 ms (1,44 s)**, SHA-256 `64391042c66bb89cce8f04622a213d85fd028ea6bdbefbf59cd60ed611c4f096`. Ce fichier est **uniquement une référence pour PAT-05 #83**, sans animation intégrée, validation graphique frame par frame ni qualification ESP32.

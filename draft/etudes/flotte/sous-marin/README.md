@@ -25,9 +25,9 @@ Aucun état **TOUCHÉ** ni **COULÉ** n'a été dessiné ou homologué. Ce pilot
 
 ## Sources artistiques
 
-- [G02 approuvé, `maquettes/flotte/legacy/g02_grille_320x240.svg`](../../g02_grille_320x240.svg) : **fuseau, kiosque, rapport 3 cases**, palette et emprise du Sous-marin approuvés pour concept PC. La silhouette G02 est reproduite uniquement dans le panneau comparatif, sans altérer le fichier source.
+- [G02 approuvé, `maquettes/flotte/legacy/g02_grille_320x240.svg`](../../../../maquettes/flotte/legacy/g02_grille_320x240.svg) : **fuseau, kiosque, rapport 3 cases**, palette et emprise du Sous-marin approuvés pour concept PC. La silhouette G02 est reproduite uniquement dans le panneau comparatif, sans altérer le fichier source.
 - **PO `draft/sous_marin_PO_A.jpeg`** : référence d'identité visuelle pour l'état intact, coque d'acier gris patiné, détail supérieur et plusieurs mâts centraux. Le JPEG du dépôt est une **copie réencodée**, non un sprite transparent et non une preuve pixel à pixel de l'original PO.
-- [G01 `CONTRAT_GRAPHIQUE.md`](../../../fondations/CONTRAT_GRAPHIQUE.md) : encrage froid, nuances marines, accents chauds limités ; le navire doit être autonome et ne contient **ni mer peinte, ni gerbe, ni damier**.
+- [G01 `CONTRAT_GRAPHIQUE.md`](../../../../docs/graphisme/CONTRAT_GRAPHIQUE.md) : encrage froid, nuances marines, accents chauds limités ; le navire doit être autonome et ne contient **ni mer peinte, ni gerbe, ni damier**.
 - Dessin vectoriel/pixel original de production basé sur ces références de projet ; aucun contenu provenant d'une banque d'images, aucune police redistribuée.
 
 Les détails du PO (lignes de coque, mâts, kiosque central) sont **interprétés** à 54×18 ; une simple réduction de la scène HD aurait effacé la plupart des indices et incrusté la mer. La correction PO de novembre conserve **strictement les 486 pixels de masque opaque** et la silhouette originale et modifie localement la métallisation gris acier, l’encrage des flancs, les joints/plaques du pont, la patine chaude localisée, et le relief de kiosque. Aucun effet halo, ni mer incrustée. Le contrôle 1× reste l’autorité artistique ; le zoom ×4 ne sert qu’à vérifier les pixels.
