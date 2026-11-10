@@ -12,7 +12,7 @@ from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT / "draft/patrouilleur_A.jpeg"
-TARGET = ROOT / "design/patrouilleur"
+TARGET = ROOT / "draft/etudes/patrouilleur"
 NATIVE = TARGET / "patrouilleur_intact_320x240.png"
 ZOOM = TARGET / "patrouilleur_intact_x4.png"
 MANIFEST = TARGET / "preuves/export_manifest.json"

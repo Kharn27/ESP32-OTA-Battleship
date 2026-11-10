@@ -22,7 +22,7 @@ HERE = Path(__file__).resolve().parent
 SRC = HERE / 'sous_marin_intact_h.svg'
 ORIGIN=(19,39); CELL=18; H_BBOX=(55,129,109,147)
 G04_ORIGIN=(21,53); G04_CELL=18; G04_H_ANCHOR=(57,143)
-G04_SOURCE=HERE.parents[2] / 'ecrans' / 'attaque' / 'g04_r2_attaque_320x240.png'
+G04_SOURCE=HERE.parents[3] / 'maquettes' / 'attaque' / 'legacy' / 'g04_r2_attaque_320x240.png'
 
 
 def rgba(svg: bytes, wh:tuple[int,int]) -> Image.Image:

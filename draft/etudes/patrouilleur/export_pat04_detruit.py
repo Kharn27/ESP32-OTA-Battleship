@@ -12,7 +12,7 @@ import PIL
 from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[3]
-BASE = ROOT / "design/patrouilleur"
+BASE = ROOT / "draft/etudes/patrouilleur"
 ORIGINAL = ROOT / "draft/patrouilleur_B_PO_fusion.png"
 NATIVE = BASE / "patrouilleur_detruit_320x240.png"
 ZOOM = BASE / "patrouilleur_detruit_x4.png"

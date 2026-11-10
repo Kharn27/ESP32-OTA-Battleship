@@ -9,7 +9,7 @@ from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 SVG = HERE / "g03_deploiement_320x240.svg"
-G02 = HERE.parents[1] / "flotte" / "g02_grille_320x240.svg"
+G02 = HERE.parents[1] / "flotte" / "legacy" / "g02_grille_320x240.svg"
 NATIVE = HERE / "g03_deploiement_320x240.png"
 ZOOM = HERE / "g03_deploiement_x4.png"
 svg = SVG.read_text(encoding="utf-8")

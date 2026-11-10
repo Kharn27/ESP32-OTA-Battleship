@@ -11,7 +11,7 @@ import PIL
 from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[3]
-BASE = ROOT / "design/patrouilleur"
+BASE = ROOT / "draft/etudes/patrouilleur"
 SOURCE = ROOT / "draft/patrouilleur_T2A.jpeg"
 OTHER_SOURCE = ROOT / "draft/patrouilleur_T2B.jpeg"
 INTACT = BASE / "patrouilleur_intact_320x240.png"
