@@ -252,3 +252,79 @@ if(WARSHIP_SANITIZERS)
   target_link_options(t03_asset_tests PRIVATE -fsanitize=address,undefined)
 endif()
 add_test(NAME t03_g03_exact_raw_vs_rle COMMAND t03_asset_tests)
+
+# D15-A #112: same C99 renderer, same generated const layers as Xtensa test-only.
+# The legacy G01 maquette is never an input to generated C; only assets/ are.
+set(D15A_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/d15a_generate_g01.py")
+set(D15A_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/d15a_g01_data.c")
+set(D15A_INPUTS
+    "${CMAKE_CURRENT_SOURCE_DIR}/../assets/manifest.json"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../assets/wallpaper/accueil_retenu_CYD_320x240.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../assets/logo/logo_titre_CYD_145x66_RGBA.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../assets/boutons/bouton_jouer_CYD_140x32_RGBA.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../assets/boutons/bouton_palmares_CYD_140x30_RGBA.png")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${D15A_SCRIPT}" ${D15A_INPUTS})
+execute_process(
+  COMMAND "${Python3_EXECUTABLE}" "${D15A_SCRIPT}"
+          --repo "${CMAKE_CURRENT_SOURCE_DIR}/.."
+          --output "${D15A_GENERATED}"
+  RESULT_VARIABLE D15A_EXIT OUTPUT_VARIABLE D15A_INFO
+  ERROR_VARIABLE D15A_ERROR)
+if(NOT D15A_EXIT EQUAL 0)
+  message(FATAL_ERROR "D15-A G01 approved asset extraction failed: ${D15A_ERROR}")
+endif()
+message(STATUS "D15-A Flash test layers: ${D15A_INFO}")
+add_executable(d15a_g01_tests
+               test_d15a_g01.c
+               ../components/d15a_g01/g01_compose.c
+               "${D15A_GENERATED}")
+target_include_directories(d15a_g01_tests PRIVATE
+                           ../components/d15a_g01/include)
+target_compile_options(d15a_g01_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+  target_compile_options(d15a_g01_tests PRIVATE
+                         -O1 -g -fno-omit-frame-pointer
+                         -fsanitize=address,undefined)
+  target_link_options(d15a_g01_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d15a_g01_four_layers_bounds_alpha_bands COMMAND d15a_g01_tests)
+
+# The LCD profile on the D15-A preview is EXACT D14 C99 production data.
+add_executable(d15a_panel_profile_tests
+               test_warship_panel_profile.c
+               ../components/warship_panel_profile/warship_panel_profile.c)
+target_include_directories(d15a_panel_profile_tests PRIVATE
+                           ../components/warship_panel_profile/include)
+target_compile_options(d15a_panel_profile_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+  target_compile_options(d15a_panel_profile_tests PRIVATE
+                         -O1 -g -fno-omit-frame-pointer
+                         -fsanitize=address,undefined)
+  target_link_options(d15a_panel_profile_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d15a_d14_lcd_profile_23_init_6_runtime_madctl
+         COMMAND d15a_panel_profile_tests)
+
+# Compile the identical LEDC GPIO21 C module with controlled ESP-IDF fakes.
+add_executable(d15a_backlight_tests
+               test_d15a_backlight_pwm.c
+               ../components/warship_lcd/warship_lcd_light.c)
+target_include_directories(d15a_backlight_tests PRIVATE
+                           ledc_fake ../components/warship_lcd)
+target_compile_definitions(d15a_backlight_tests PRIVATE
+                           WARSHIP_LCD_BACKLIGHT_PERCENT=40)
+target_compile_options(d15a_backlight_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+  target_compile_options(d15a_backlight_tests PRIVATE
+                         -O1 -g -fno-omit-frame-pointer
+                         -fsanitize=address,undefined)
+  target_link_options(d15a_backlight_tests PRIVATE -fsanitize=address,undefined)
+endif()
+foreach(mode nominal init_timer_fail init_channel_fail stop_fail
+             set_duty_fail update_fail frequency_fail)
+  add_test(NAME d15a_ledc_${mode} COMMAND d15a_backlight_tests ${mode})
+endforeach()

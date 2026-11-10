@@ -30,16 +30,46 @@ jobs:
           ${{ matrix.cc }} --version | head -1
           cmake --version | head -1
           ninja --version
+      - name: Install pinned G01 visual converter
+        run: |
+          python3 -m venv "$RUNNER_TEMP/d15a-py"
+          "$RUNNER_TEMP/d15a-py/bin/python" -m pip install --disable-pip-version-check "Pillow==12.3.0"
+          echo "$RUNNER_TEMP/d15a-py/bin" >> "$GITHUB_PATH"
       - name: Configure
-        run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON
+        run: cmake -S tests -B build-host -G Ninja -DCMAKE_C_COMPILER=${{ matrix.cc }} -DWARSHIP_SANITIZERS=ON -DPython3_EXECUTABLE="$RUNNER_TEMP/d15a-py/bin/python"
       - name: Verify reproducible G03 conversion
         run: |
           python3 tools/t03_export.py --input maquettes/deploiement/legacy/g03_deploiement_320x240.png --output build-host/t03_second.c
           cmp build-host/t03_g03_data.c build-host/t03_second.c
+      - name: Verify G01 native assets, reproducibility and 320x240 pixel differences
+        run: |
+          python3 scripts/check_graphic_pipeline.py
+          python3 tools/d15a_generate_g01.py --repo . --output build-host/d15a_second.c --report build-host/d15a_g01_metrics.json --preview build-host/d15a_g01_firmware.png --reference maquettes/accueil/legacy/accueil_cyd_warship_320x240.png
+          cmp build-host/d15a_g01_data.c build-host/d15a_second.c
+          python3 - <<'PY'
+          import json
+          data=json.load(open("build-host/d15a_g01_metrics.json"))
+          assert len(data["flash_layers"]) == 4
+          assert data["flash_pixel_bytes"] == 208350
+          assert data["source"].startswith("assets/manifest.json")
+          for key in ("maquette_vs_assembled_rgb888","maquette_vs_firmware_rgb565",
+                      "rgb888_source_vs_firmware_rgb565"):
+              assert 0 <= data[key]["different_pixels"] <= 76800
+          print("G01_RGBA_COMPARISON_PASS", json.dumps(data, sort_keys=True))
+          PY
+          test ! -d design
       - name: Build
         run: cmake --build build-host --verbose
       - name: Run tests
         run: ctest --test-dir build-host --output-on-failure -V
+      - name: G01 PC proof (not CYD validation)
+        uses: actions/upload-artifact@v4
+        with:
+          name: d15a-G01-PC-${{ matrix.cc }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-host/d15a_g01_metrics.json
+            build-host/d15a_g01_firmware.png
+          if-no-files-found: error
 
   esp32:
     name: ESP-IDF v5.5.6 Xtensa esp32
@@ -64,6 +94,8 @@ jobs:
           ! grep -R -q 'CONFIG_WARSHIP_BOOT_' main components
           grep -Fq 'd09_probe_run();' main/app_main.c
           grep -Fq '"d09_probe.c"' main/CMakeLists.txt
+          grep -Fq "WARSHIP_D15A_G01_TEST_ONLY" CMakeLists.txt
+          grep -Fq '"d15a_g01_preview.c"' main/CMakeLists.txt
           ! grep -Fq '"t02_probe.c"' main/CMakeLists.txt
       - name: Build and static memory report
         uses: espressif/esp-idf-ci-action@v1
@@ -79,6 +111,8 @@ jobs:
             idf.py size-components &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin &&
+            ! strings build/cyd_warship.elf | grep -Fq 'D15A_G01_TEST_ONLY=ON' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'G01_ASSET_LAYERS' &&
             test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'commit_resolved_pair' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
@@ -161,6 +195,34 @@ jobs:
             build-t03/partition_table/partition-table.bin
             build-t03/flasher_args.json
             build-t03/cyd_warship.map
+          if-no-files-found: error
+      - name: Build D15-A isolated four-asset G01 preview TEST ONLY
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            python -m pip install --disable-pip-version-check 'Pillow==12.3.0' &&
+            idf.py -B build-d15a-g01 -D WARSHIP_D15A_G01_TEST_ONLY=ON set-target esp32 &&
+            idf.py -B build-d15a-g01 -D WARSHIP_D15A_G01_TEST_ONLY=ON build &&
+            idf.py -B build-d15a-g01 size &&
+            idf.py -B build-d15a-g01 size-components &&
+            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
+            strings build-d15a-g01/cyd_warship.elf | grep -Fq 'D15A_G01_TEST_ONLY=ON' &&
+            ! strings build-d15a-g01/cyd_warship.elf | grep -Fq 'BLOCAGE_ASSETS_G03' &&
+            sha256sum build-d15a-g01/cyd_warship.bin
+      - name: D15-A G01 visual preview BIN (TEST ONLY; NO NVS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: d15a-G01-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-d15a-g01/cyd_warship.bin
+            build-d15a-g01/cyd_warship.elf
+            build-d15a-g01/bootloader/bootloader.bin
+            build-d15a-g01/partition_table/partition-table.bin
+            build-d15a-g01/flasher_args.json
+            build-d15a-g01/cyd_warship.map
+            sdkconfig
           if-no-files-found: error
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4

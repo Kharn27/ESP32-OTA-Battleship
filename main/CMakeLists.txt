@@ -1,3 +1,15 @@
+# D15-A #112: test-only standalone app, NO D09 boot, D11 NVS or G03.
+# This branch is based on current main, independent from blocked D14 PR #91.
+if(WARSHIP_D15A_G01_TEST_ONLY)
+  if(WARSHIP_D11_NVS_BENCH OR WARSHIP_D13_CYD_SCENARIO OR WARSHIP_T03_DIAGNOSTIC)
+    message(FATAL_ERROR "D15-A test-only cannot combine with D11/D13/T03 diagnostics")
+  endif()
+  idf_component_register(
+    SRCS "d15a_g01_preview.c"
+    PRIV_REQUIRES warship_lcd d15a_g01 heap freertos log)
+  return()
+endif()
+
 # T03 opt-in startup benchmark ONLY: no alternate boot, NVS, SPI init.
 # Default OFF. Source PNG is never edited; generated C stays in build/.
 option(WARSHIP_T03_DIAGNOSTIC "T03 G03 flash formats vs LCD startup diagnostic" OFF)
