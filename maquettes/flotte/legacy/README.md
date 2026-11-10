@@ -54,4 +54,4 @@ Identité G01 acceptée par le PO : **« La mer est le plateau »**, mer turquoi
 
 **Provenance :** dessin original G02, sans image tierce ni police embarquée livrée ; fonte sans-serif hôte comme substitution de preview. **Aucun changement métier, firmware, accueil ou G01.**
 
-Références : [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [revue Pilotage](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32#pullrequestreview-5724899315), [contrat G01](../fondations/CONTRAT_GRAPHIQUE.md) et [politique de preuve](../../docs/TEST_POLICY.md).
+Références : [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [revue Pilotage](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32#pullrequestreview-5724899315), [contrat G01](../../../docs/graphisme/CONTRAT_GRAPHIQUE.md) et [politique de preuve](../../../docs/TEST_POLICY.md).

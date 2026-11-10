@@ -106,4 +106,4 @@ Le validateur lit le **SVG réellement rendu** : cinq groupes de données/valeur
 
 **Non testés :** TFT/stylet réel (T02-B/D09), rendu police embarquée, lisibilité aux angles, consommation Flash/RAM, vitesse de rendu, comportement NVS ou redémarrage. Aucun budget mémoire, compression, schéma d'API ou format de pixel runtime imposé. La fusion et l'acceptation artistique attendent **avis explicite du PO**, puis décision Pilotage.
 
-Références : [Issue G06 #47](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/47), [Bible v0.17](../../../BIBLE_PRODUIT.md) §14.1/14.8/15.2, [G01](../../fondations/CONTRAT_GRAPHIQUE.md), [accueil retenu](../accueil/README.md), [D08 #36](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/36), [politique de test](../../../docs/TEST_POLICY.md).
+Références : [Issue G06 #47](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/47), [Bible v0.17](../../../BIBLE_PRODUIT.md) §14.1/14.8/15.2, [G01](../../../docs/graphisme/CONTRAT_GRAPHIQUE.md), [accueil retenu](../../accueil/legacy/README.md), [D08 #36](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/36), [politique de test](../../../docs/TEST_POLICY.md).
