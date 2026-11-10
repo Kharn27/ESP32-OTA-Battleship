@@ -88,6 +88,7 @@ jobs:
             idf.py size-components &&
             grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
             sha256sum build/cyd_warship.bin &&
+            ! strings build/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY' &&
             test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'commit_resolved_pair' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
@@ -173,6 +174,31 @@ jobs:
             build-t03/partition_table/partition-table.bin
             build-t03/flasher_args.json
             build-t03/cyd_warship.map
+          if-no-files-found: error
+      - name: Build D14 color A/B/C/D/E diagnostic TEST ONLY (no NVS/gameplay)
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            python -m pip install --disable-pip-version-check 'CairoSVG==2.7.1' 'Pillow==11.3.0' &&
+            idf.py -B build-d14-color -D WARSHIP_D14_COLOR_DIAGNOSTIC=ON set-target esp32 &&
+            idf.py -B build-d14-color -D WARSHIP_D14_COLOR_DIAGNOSTIC=ON build &&
+            idf.py -B build-d14-color size &&
+            sha256sum build-d14-color/cyd_warship.bin &&
+            grep -Fx 'CONFIG_ESP_MAIN_TASK_STACK_SIZE=4096' sdkconfig &&
+            strings build-d14-color/cyd_warship.elf | grep -Fq 'D14_COLOR_DIAGNOSTIC=ON TEST_ONLY'
+      - name: D14 color A/B/C/D/E diagnostic BIN (TEST ONLY; no gameplay/NVS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: warship-d14-COLOR-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-d14-color/cyd_warship.bin
+            build-d14-color/cyd_warship.elf
+            build-d14-color/bootloader/bootloader.bin
+            build-d14-color/partition_table/partition-table.bin
+            build-d14-color/flasher_args.json
+            build-d14-color/cyd_warship.map
           if-no-files-found: error
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
