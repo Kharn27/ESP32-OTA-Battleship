@@ -10,17 +10,9 @@ endif()
 idf_component_register(
     SRCS "warship_lcd.c" "warship_lcd_light.c"
     INCLUDE_DIRS "include"
-    REQUIRES esp_lcd esp_driver_spi esp_driver_gpio esp_driver_ledc freertos heap d14_color_diag
-    PRIV_REQUIRES d14_doom_ref
+    REQUIRES esp_lcd esp_driver_spi esp_driver_gpio esp_driver_ledc freertos heap
+    PRIV_REQUIRES warship_panel_profile
 )
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
                            WARSHIP_LCD_BACKLIGHT_PERCENT=${WARSHIP_LCD_BACKLIGHT_PERCENT})
-if(WARSHIP_D14_COLOR_DIAGNOSTIC)
-    target_compile_definitions(${COMPONENT_LIB} PRIVATE
-                               WARSHIP_D14_COLOR_DIAGNOSTIC=1)
-endif()
-if(WARSHIP_D14_DOOM_REFERENCE)
-    target_compile_definitions(${COMPONENT_LIB} PRIVATE
-                               WARSHIP_D14_DOOM_REFERENCE=1)
-endif()
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Wextra -Werror)

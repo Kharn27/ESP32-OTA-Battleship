@@ -24,9 +24,8 @@ typedef struct {
 } WarshipLcdInfo;
 
 esp_err_t warship_lcd_init(void);
-/* Normal/A remains the physically referenced case10 (MADCTL.MV=0).
- * TEST-ONLY D14 Doom instead uses native landscape MV=1 / 0x28 BEFORE
- * clearing 320x240. Calling again is a no-op in either variant.
+/* Native 320x240 landscape, MADCTL=0x28 before first GRAM window.
+ * Doom gamma/inversion after clear; idempotent once prepared.
  */
 esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565);
 /* A single borrowed, DMA-capable band. Fill only after previous send returned
@@ -43,17 +42,5 @@ esp_err_t warship_lcd_send(int x, int y, int width, int height);
  */
 esp_err_t warship_lcd_backlight(bool on);
 esp_err_t warship_lcd_backlight_set_percent(uint8_t percent);
-#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
-/* A..E strictly in sequence, after prepare_console case10, no DMA pending.
- * TEST ONLY. Any panel cmd error makes LCD sticky and forces LEDC OFF.
- */
-esp_err_t warship_lcd_diag_apply_profile(unsigned index);
-#endif
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-/* TEST ONLY, after native-landscape clear and idle DMA.
- * Executes DoomRPG runtime gamma/inversion without overwriting 0x28.
- */
-esp_err_t warship_lcd_doom_reference_finish(void);
-#endif
 bool warship_lcd_info(WarshipLcdInfo *out);
 #endif

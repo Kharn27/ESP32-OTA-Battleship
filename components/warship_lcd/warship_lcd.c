@@ -10,12 +10,7 @@
 #include <string.h>
 
 #include "warship_lcd_light.h"
-#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
-#include "d14_color_diag.h"
-#endif
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-#include "d14_doom_ref.h"
-#endif
+#include "warship_panel_profile.h"
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
 #include "esp_lcd_ili9341.h"
@@ -25,9 +20,7 @@
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-#include "freertos/task.h" /* MUST follow FreeRTOS.h in ESP-IDF 5.5.6 */
-#endif
+#include "freertos/task.h"
 
 #define LCD_SPI SPI2_HOST
 #define LCD_MOSI GPIO_NUM_13
@@ -70,10 +63,7 @@ static esp_err_t sticky_error(esp_err_t reason)
     return reason;
 }
 
-/* Serialized transfer to an explicit LCD window. The special native-wide
- * 320x240 + MADCTL.MV=0 layout is intentional for this specific CYD.
- * Width/height are always bounded, regardless of panel address semantics.
- */
+/* Serialized native 320x240 landscape transfer (MADCTL.MV=1). */
 static esp_err_t transfer(int x, int y, int w, int h, int max_w, int max_h)
 {
     if (!panel || !completed || !stripe || fault) return ESP_ERR_INVALID_STATE;
@@ -82,26 +72,20 @@ static esp_err_t transfer(int x, int y, int w, int h, int max_w, int max_h)
         (size_t)w * (size_t)h > WARSHIP_LCD_DMA_BYTES / 2u)
         return ESP_ERR_INVALID_ARG;
 
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-    D14DoomWindow window;
-    if (d14_doom_native_window((uint16_t)x, (uint16_t)y,
-                               (uint16_t)w, (uint16_t)h, &window) != 0)
+    WarshipPanelWindow window;
+    if(warship_panel_window((uint16_t)x,(uint16_t)y,
+                            (uint16_t)w,(uint16_t)h,&window)!=0)
         return ESP_ERR_INVALID_ARG;
-    /* Independent check of the first and last full-width DMA stripes.
-     * Actual CASET/RASET/RAMWR remain owned by esp_lcd_panel_draw_bitmap.
-     */
-    if (x == 0 && w == 320 && h == 8 &&
-        (y == 0 || y == (int)WARSHIP_LCD_HEIGHT - 8))
-        ESP_LOGI(TAG,"D14_DOOM_WINDOW geom=320x240 x=%d y=%d"
+    if(x==0 && w==320 && h==8 &&
+       (y==0 || y==(int)WARSHIP_LCD_HEIGHT-8))
+        ESP_LOGI(TAG,"PANEL_WINDOW x=%d y=%d"
                  " CASET_2A=%02x:%02x:%02x:%02x"
-                 " RASET_2B=%02x:%02x:%02x:%02x"
-                 " RAMWR=0x2c bytes=%u",
+                 " RASET_2B=%02x:%02x:%02x:%02x RAMWR=0x2c bytes=%u",
                  x,y,(unsigned)window.caset[0],(unsigned)window.caset[1],
                  (unsigned)window.caset[2],(unsigned)window.caset[3],
                  (unsigned)window.raset[0],(unsigned)window.raset[1],
                  (unsigned)window.raset[2],(unsigned)window.raset[3],
                  (unsigned)(w*h*2));
-#endif
     (void)xSemaphoreTake(completed, 0);
     esp_err_t err = esp_lcd_panel_draw_bitmap(panel, x, y, x + w, y + h, stripe);
     if (err != ESP_OK) return sticky_error(err);
@@ -114,22 +98,21 @@ static esp_err_t transfer(int x, int y, int w, int h, int max_w, int max_h)
     return ESP_OK;
 }
 
-#ifdef WARSHIP_D14_DOOM_REFERENCE
 /* Synchronous parameter writes. No color DMA is permitted until all
  * vendor commands and their delays have completed. Vendor errors are
  * terminal and force the backlight OFF, exactly as transport errors.
  */
-static esp_err_t d14_doom_send(const char *stage,
-                              const D14DoomCmd *commands, size_t count)
+static esp_err_t panel_send_commands(const char *stage,
+                              const WarshipPanelCmd *commands, size_t count)
 {
     if (commands == NULL || count == 0u || !panel_io || fault)
         return ESP_ERR_INVALID_STATE;
     for (size_t i=0u; i<count; ++i) {
-        const D14DoomCmd *c=&commands[i];
+        const WarshipPanelCmd *c=&commands[i];
         if(c->len>sizeof c->data) return sticky_error(ESP_ERR_INVALID_ARG);
         const esp_err_t err=esp_lcd_panel_io_tx_param(
             panel_io,c->cmd,c->len==0u?NULL:c->data,c->len);
-        ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=%s step=%u cmd=0x%02x"
+        ESP_LOGI(TAG,"PANEL_PROFILE phase=%s step=%u cmd=0x%02x"
                  " length=%u delay_ms=%u err=%s",
                  stage,(unsigned)i,(unsigned)c->cmd,(unsigned)c->len,
                  (unsigned)c->delay_ms,esp_err_to_name(err));
@@ -138,7 +121,6 @@ static esp_err_t d14_doom_send(const char *stage,
     }
     return ESP_OK;
 }
-#endif
 
 static void cleanup_before_dma(void)
 {
@@ -211,26 +193,17 @@ esp_err_t warship_lcd_init(void)
     if (err != ESP_OK) goto fail;
     err = esp_lcd_panel_reset(panel);
     if (err != ESP_OK) goto fail;
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-    /* The native ESP-IDF panel object remains the DMA/CASET/RASET owner.
-     * Bypass ONLY its default init list in this isolated probe. After
-     * SWRESET it already waited 20ms; TFT_eSPI V2.5.43 waits 150ms.
+    /* ESP-IDF reset waits 20ms; add 130ms and send tested vendor init.
+     * Do not call esp_lcd_panel_init(): it overwrites analog/gamma.
      */
     vTaskDelay(pdMS_TO_TICKS(130u));
     size_t n_init=0u;
-    const D14DoomCmd *init=d14_doom_init(&n_init);
-    ESP_LOGW(TAG,"D14_DOOM_PROFILE phase=INIT"
+    const WarshipPanelCmd *init=warship_panel_init_commands(&n_init);
+    ESP_LOGW(TAG,"PANEL_PROFILE phase=INIT"
              " ref=TFT_eSPI_V2.5.43 source=ILI9341_2_DRIVER"
-             " reset_wait_ms=150 profile=TEST_ONLY");
-    err=d14_doom_send("INIT",init,n_init);
+             " reset_wait_ms=150 profile=PRODUCTION");
+    err=panel_send_commands("INIT",init,n_init);
     if(err!=ESP_OK) goto fail;
-    /* DISPON was issued by the vendor list; do not call it twice. */
-#else
-    err = esp_lcd_panel_init(panel);
-    if (err != ESP_OK) goto fail;
-    err = esp_lcd_panel_disp_on_off(panel, true);
-    if (err != ESP_OK) goto fail;
-#endif
 
     initialized = true;
     ESP_LOGI(TAG, "INIT_PASS LCD=ILI9341 SPI2=13,14,15,2 BL=21 clock_hz=%u dma_bytes=%u",
@@ -247,25 +220,23 @@ fail:
 
 esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565)
 {
-    if (!initialized || fault) return ESP_ERR_INVALID_STATE;
-    if (prepared) {
-        ESP_LOGI(TAG, "PROFILE_REUSED case=10 madctl_unchanged=1 no_clear=1");
+    if(!initialized || fault || !panel_io || !panel || !stripe || !completed)
+        return ESP_ERR_INVALID_STATE;
+    if(prepared) {
+        ESP_LOGI(TAG,"PANEL_PROFILE_REUSED madctl=0x28 no_clear=1");
         return ESP_OK;
     }
-
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-    /* Set MV=1 / BGR=1 BEFORE any CASET/RASET/RAMWR.
-     * The former clear of 320 pixels at MV=0 exceeded portrait GRAM.
-     * No swap_xy()/mirror() in this path: cached MADCTL misses BGR.
+    /* Native landscape, BGR. Set MV=1 before any CASET/RASET/RAMWR;
+     * esp_lcd mirror/swap cache must not overwrite the actual register.
      */
-    const uint8_t madctl=d14_doom_native_landscape_madctl();
+    const uint8_t madctl=warship_panel_landscape_madctl();
     esp_err_t err=esp_lcd_panel_io_tx_param(panel_io,0x36u,
                                             &madctl,sizeof madctl);
-    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=ROTATE_BEFORE_CLEAR cmd=0x36"
-             " madctl=0x%02x mv=1 mx=0 my=0 bgr=1"
-             " gram=320x240 err=%s",
+    ESP_LOGI(TAG,"PANEL_PROFILE phase=ROTATE_BEFORE_CLEAR"
+             " cmd=0x36 madctl=0x%02x mv=1 mx=0 my=0 bgr=1 err=%s",
              (unsigned)madctl,esp_err_to_name(err));
     if(err!=ESP_OK) return sticky_error(err);
+
     for(unsigned row=0u;row<WARSHIP_LCD_HEIGHT;row+=WARSHIP_LCD_BAND_ROWS) {
         for(unsigned i=0u;i<WARSHIP_LCD_WIDTH*WARSHIP_LCD_BAND_ROWS;++i) {
             stripe[2u*i]=(uint8_t)(clear_rgb565>>8);
@@ -276,45 +247,20 @@ esp_err_t warship_lcd_prepare_console(uint16_t clear_rgb565)
                      (int)WARSHIP_LCD_WIDTH,(int)WARSHIP_LCD_HEIGHT);
         if(err!=ESP_OK) return err;
     }
+    ESP_LOGI(TAG,"PANEL_PROFILE phase=CLEAR_DONE madctl=0x28"
+             " width=320 height=240 bands=30 dma=5120");
+    /* Match tested sequence: gamma/inversion AFTER clear, BL still OFF. */
+    size_t count=0u;
+    const WarshipPanelCmd *commands=warship_panel_runtime_commands(&count);
+    err=panel_send_commands("RUNTIME",commands,count);
+    if(err!=ESP_OK) return err;
     prepared=true;
-    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=CLEAR_DONE madctl=0x28"
-             " window=0..319x0..239 bands=30 dma_bytes=5120"
-             " no_mirror_swap=1");
+    last_error=ESP_OK;
+    ESP_LOGW(TAG,"PANEL_PROFILE phase=READY"
+             " madctl=0x28 gamma=DoomRPG_RE inversion=ON bgr=ON"
+             " rgb565be_swap=NONE spi_hz=20000000 no_cached_rotation=1"
+             " production=1");
     return ESP_OK;
-#else
-    /* PO-proven console sequence: MV=0 + MX=MY=0, then a 320x240
-     * wide clear via CASET/RASET/RAMWR. This is nonstandard for a nominal
-     * 240-column controller, but the SAME sequence is used on the PO's CYD.
-     * Do not silently change to a generic MV=1 path.
-     */
-    esp_err_t err = esp_lcd_panel_swap_xy(panel, false);
-    if (err != ESP_OK) return sticky_error(err);
-    err = esp_lcd_panel_mirror(panel, false, false);
-    if (err != ESP_OK) return sticky_error(err);
-
-    ESP_LOGI(TAG, "PROFILE_BEGIN case=10 native_wide=1 mv=0 clear_window=320x240");
-    for (unsigned row = 0u; row < WARSHIP_LCD_HEIGHT; row += WARSHIP_LCD_BAND_ROWS) {
-        for (unsigned i = 0u; i < WARSHIP_LCD_WIDTH * WARSHIP_LCD_BAND_ROWS; ++i) {
-            stripe[2u * i] = (uint8_t)(clear_rgb565 >> 8);
-            stripe[2u * i + 1u] = (uint8_t)clear_rgb565;
-        }
-        err = transfer(0, (int)row, (int)WARSHIP_LCD_WIDTH,
-                       (int)WARSHIP_LCD_BAND_ROWS,
-                       (int)WARSHIP_LCD_WIDTH, (int)WARSHIP_LCD_HEIGHT);
-        if (err != ESP_OK) return err;
-    }
-
-    /* Preserve the reference's second MADCTL sequence, even though
-     * MV is already clear. Console case 10 => MV=0, MX=0, MY=1.
-     */
-    err = esp_lcd_panel_swap_xy(panel, false);
-    if (err != ESP_OK) return sticky_error(err);
-    err = esp_lcd_panel_mirror(panel, false, true);
-    if (err != ESP_OK) return sticky_error(err);
-    prepared = true;
-    ESP_LOGI(TAG, "PROFILE_APPLIED case=10 mv=0 mx=0 my=1 window=320x240 clear_bands=30");
-    return ESP_OK;
-#endif
 }
 
 uint8_t *warship_lcd_band(void)
@@ -351,107 +297,6 @@ esp_err_t warship_lcd_backlight_set_percent(uint8_t percent)
     last_error = ESP_OK;
     return ESP_OK;
 }
-
-#ifdef WARSHIP_D14_DOOM_REFERENCE
-esp_err_t warship_lcd_doom_reference_finish(void)
-{
-    if(!initialized || !prepared || fault || !panel_io || !panel ||
-       !stripe || !completed || transfers != 30u)
-        return ESP_ERR_INVALID_STATE;
-    /* 30 clear-band DMA transfers fully completed AFTER 0x28.
-     * The physical register is the authority; no cached mirror/swap calls.
-     */
-    size_t n=0u;
-    const D14DoomCmd *cmds=d14_doom_runtime(&n);
-    esp_err_t err=d14_doom_send("RUNTIME",cmds,n);
-    if(err!=ESP_OK) return err;
-    ESP_LOGI(TAG,"D14_DOOM_PROFILE phase=FINAL"
-             " madctl=0x28 applied_before_clear=1"
-             " native_landscape=1 mv=1 bgr=1"
-             " rgb565be_swap=NONE no_new_rotation_write=1");
-    ESP_LOGW(TAG,"D14_DOOM_PROFILE phase=DONE"
-             " analogue=TFT_eSPI_V2.5.43 gamma=DoomRPG_RE"
-             " inversion=ON bgr=ON native_landscape=1"
-             " product_firmware=UNCHANGED");
-    return ESP_OK;
-}
-#endif
-
-#ifdef WARSHIP_D14_COLOR_DIAGNOSTIC
-/* TEST ONLY: main D14 diagnostic is the only caller.
- * Driver's case10 keeps MV=0, MX=0, MY=1. Explicit MADCTL
- * values 0x80 RGB / 0x88 BGR preserve that orientation.
- * Do NOT call mirror()/swap_xy() after the direct register write;
- * that would overwrite BGR using the cached driver state.
- */
-static esp_err_t d14_vendor_param(char id, uint8_t cmd,
-                                  const uint8_t *data,size_t length)
-{
-    const esp_err_t err=esp_lcd_panel_io_tx_param(panel_io,cmd,
-                                                  data,length);
-    ESP_LOGI(TAG,"D14_COLOR_CMD case=%c cmd=0x%02x bytes=%u err=%s",
-             id,(unsigned)cmd,(unsigned)length,esp_err_to_name(err));
-    if(err!=ESP_OK) return sticky_error(err);
-    return ESP_OK;
-}
-
-esp_err_t warship_lcd_diag_apply_profile(unsigned index)
-{
-    static unsigned expected_index=0u;
-    D14ColorProfile p;
-    if(!initialized || !prepared || fault || !panel_io ||
-       !panel || !stripe || !completed)
-        return ESP_ERR_INVALID_STATE;
-    if(index!=expected_index ||
-       d14_color_profile(index,&p)!=0)
-        return ESP_ERR_INVALID_ARG;
-
-    /* The first three modes never write any gamma parameters:
-     * A=RGB/OFF, B=RGB/ON, C=BGR/OFF (compared against A).
-     * D restores RGB, applies the exact DoomRPG gamma bytes, then
-     * enables inversion; E changes ONLY BGR relative to D.
-     */
-    ESP_LOGW(TAG,"D14_COLOR_PROFILE_BEGIN case=%c index=%u"
-             " inverted=%u bgr=%u doom_gamma=%u"
-             " madctl_case10=1 pwm_percent_experimental=40"
-             " spi_hz=20000000 dma=5120",
-             p.id,index,p.inverted,p.bgr,p.gamma);
-    esp_err_t err;
-    if(index==2u || index==3u || index==4u) {
-        const uint8_t madctl=p.bgr ? 0x88u : 0x80u;
-        ESP_LOGI(TAG,"D14_COLOR_MADCTL case=%c value=0x%02x"
-                 " MY=1 MX=0 MV=0 BGR=%u",
-                 p.id,(unsigned)madctl,(unsigned)p.bgr);
-        err=d14_vendor_param(p.id,0x36u,&madctl,1u);
-        if(err!=ESP_OK) return err;
-    }
-    if(index==3u) {
-        const uint8_t zero=0x00u, one=0x01u;
-        ESP_LOGI(TAG,"D14_COLOR_GAMMA_BYTES source=DoomRPG-RE"
-                 " table=00:15:17:07:11:06:2B:56:3C:05:10:0F:3F:3F:0F");
-        err=d14_vendor_param(p.id,0xf2u,&zero,1u);
-        if(err!=ESP_OK) return err;
-        err=d14_vendor_param(p.id,0x26u,&one,1u);
-        if(err!=ESP_OK) return err;
-        err=d14_vendor_param(p.id,0xe0u,d14_color_doom_gamma,15u);
-        if(err!=ESP_OK) return err;
-        err=d14_vendor_param(p.id,0xe1u,d14_color_doom_gamma,15u);
-        if(err!=ESP_OK) return err;
-    }
-    err=esp_lcd_panel_invert_color(panel,p.inverted!=0u);
-    ESP_LOGI(TAG,"D14_COLOR_INVERSION case=%c"
-             " invert=%u command_expected=0x%02x err=%s",
-             p.id,(unsigned)p.inverted,
-             p.inverted ? 0x21u:0x20u,esp_err_to_name(err));
-    if(err!=ESP_OK) return sticky_error(err);
-    ESP_LOGW(TAG,"D14_COLOR_PROFILE_APPLIED case=%c"
-             " rgb565be_payload_unchanged=1"
-             " inverted=%u bgr=%u gamma=%u",p.id,
-             (unsigned)p.inverted,(unsigned)p.bgr,(unsigned)p.gamma);
-    ++expected_index;
-    return ESP_OK;
-}
-#endif
 
 bool warship_lcd_info(WarshipLcdInfo *out)
 {

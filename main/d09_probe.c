@@ -336,7 +336,7 @@ void d09_probe_run(void)
         ESP_LOGE(TAG,"LCD_PROFILE_FAIL err=%s",esp_err_to_name(err));
         return;
     }
-    ESP_LOGI(TAG,"LCD_PROFILE_PASS case=10 native_wide=1 mv=0 mx=0 my=1 dma=5120");
+    ESP_LOGI(TAG,"LCD_PROFILE_PASS native_landscape=1 madctl=0x28 mv=1 bgr=1 width=320 height=240 dma=5120");
     memory_log("lcd_ready");
 #ifdef WARSHIP_T03_DIAGNOSTIC
     ESP_LOGW(TAG,"T03_DIAGNOSTIC=ON before normal D09 screen; no second LCD init");
