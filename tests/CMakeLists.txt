@@ -328,3 +328,38 @@ if(WARSHIP_SANITIZERS)
     target_link_options(d14_color_diag_tests PRIVATE -fsanitize=address,undefined)
 endif()
 add_test(NAME d14_color_profiles_and_rgb565_be COMMAND d14_color_diag_tests)
+
+
+# D14 corrective color probe: the source is exactly the PO-approved G01
+# PNG from PR#90 on main, SHA-256 pinned in generator, not old G01 PR#8.
+# Golden is RGB565BE quantized directly from THAT PNG, no G03/SVG involved.
+set(D14_G01_PNG "${CMAKE_CURRENT_SOURCE_DIR}/../design/ecrans/accueil/accueil_cyd_warship_320x240.png")
+set(D14_G01_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../tools/d14_color_g01_export.py")
+set(D14_G01_C "${CMAKE_CURRENT_BINARY_DIR}/d14_color_g01_data.c")
+set(D14_G01_RAW "${CMAKE_CURRENT_BINARY_DIR}/d14_color_g01_ref.rgb565be")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${D14_G01_PNG}" "${D14_G01_SCRIPT}")
+execute_process(
+    COMMAND "${Python3_EXECUTABLE}" "${D14_G01_SCRIPT}"
+            --input "${D14_G01_PNG}" --output "${D14_G01_C}"
+            --raw-reference "${D14_G01_RAW}"
+    RESULT_VARIABLE D14_G01_STATUS OUTPUT_VARIABLE D14_G01_METRICS
+    ERROR_VARIABLE D14_G01_ERROR)
+if(NOT D14_G01_STATUS EQUAL 0)
+    message(FATAL_ERROR "D14 G01 PR90 PNG hash/encode error: ${D14_G01_ERROR}")
+endif()
+message(STATUS "D14 G01 PR90 test source: ${D14_G01_METRICS}")
+add_executable(d14_g01_pr90_tests test_d14_color_g01.c
+               ../components/t03_decode/t03_decode.c "${D14_G01_C}")
+target_include_directories(d14_g01_pr90_tests PRIVATE
+                           ../components/t03_decode/include)
+target_compile_options(d14_g01_pr90_tests PRIVATE
+                       -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+    target_compile_options(d14_g01_pr90_tests PRIVATE
+                           -O1 -g -fno-omit-frame-pointer
+                           -fsanitize=address,undefined)
+    target_link_options(d14_g01_pr90_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME d14_g01_pr90_every_pixel_exact
+         COMMAND d14_g01_pr90_tests "${D14_G01_RAW}")
