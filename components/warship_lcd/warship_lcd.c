@@ -15,7 +15,6 @@
 #endif
 #ifdef WARSHIP_D14_DOOM_REFERENCE
 #include "d14_doom_ref.h"
-#include "freertos/task.h"
 #endif
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
@@ -26,6 +25,9 @@
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
+#ifdef WARSHIP_D14_DOOM_REFERENCE
+#include "freertos/task.h" /* MUST follow FreeRTOS.h in ESP-IDF 5.5.6 */
+#endif
 
 #define LCD_SPI SPI2_HOST
 #define LCD_MOSI GPIO_NUM_13
