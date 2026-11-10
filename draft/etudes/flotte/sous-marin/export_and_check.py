@@ -249,7 +249,7 @@ def build():
     hashes={name:{'sha256':hashlib.sha256(data).hexdigest(),'octets':len(data)} for name,data in sorted(files.items())}
     manifest={'mission':'FLOT-01 / #92','statut':'CORRECTIONS_REQUISES - INTACT_HV_NON_VALIDE_PO / ON_DEVICE_UNVERIFIED',
               'source':'sous_marin_intact_h.svg',
-              'references':['design/flotte/g02_grille_320x240.svg','draft/sous_marin_PO_A.jpeg','design/ecrans/attaque/g04_r2_attaque_320x240.png','design/ecrans/defense/layout.json'],
+              'references':['maquettes/flotte/legacy/g02_grille_320x240.svg','draft/sous_marin_PO_A.jpeg','maquettes/attaque/legacy/g04_r2_attaque_320x240.png','maquettes/defense/legacy/layout.json'],
               'dimensions':{'H':[54,18],'V':[18,54],'grille':[320,240],'zoom':[1280,960]},
               'placement_G02':{'cellules':'C6-E6','origine_grille':[19,39],'pas':18,'ancre_H':[55,129], 'demonstration_V_hors_G02':'C6-C8, uniquement banc essai, pas changement regle'},
               'placement_G04_G05':{'cellules':'C6-E6','origine_grille':[21,53],'pas':18,'ancre_H':[57,143],'preuve':'incrustation d asset dans le raster G04 approuve, hors comportement de jeu','source_G04_SHA256':hashlib.sha256(G04_SOURCE.read_bytes()).hexdigest()},

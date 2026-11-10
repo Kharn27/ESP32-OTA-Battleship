@@ -11,7 +11,7 @@ from pathlib import Path
 import PIL
 from PIL import Image, ImageChops
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT / "design/patrouilleur"
 ORIGINAL = ROOT / "draft/patrouilleur_B_PO_fusion.png"
 NATIVE = BASE / "patrouilleur_detruit_320x240.png"

@@ -10,7 +10,7 @@ from pathlib import Path
 import PIL
 from PIL import Image, ImageChops
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT / "design/patrouilleur"
 SOURCE = ROOT / "draft/patrouilleur_T1A.jpeg"
 INTACT = BASE / "patrouilleur_intact_320x240.png"

@@ -18,6 +18,6 @@ Les quatre PNG ci-dessous sont des **redimensionnements stricts** des deux JPEG 
 
 ## Provenance et reproductibilité
 
-Le script original `draft/export_ocean.py` effectue `RGB → LANCZOS 320×240 → NEAREST ×4`. Les JPEG sources et le script demeurent dans `draft/`, où le script écrit son manifeste de contrôle. Les fichiers dans ce dossier `design/ocean/` sont seulement les quatre PNG finaux et le présent README.
+Le script original `draft/export_ocean.py` effectue `RGB → LANCZOS 320×240 → NEAREST ×4`. Les JPEG sources et le script demeurent dans `draft/`, où le script écrit son manifeste de contrôle. Les fichiers dans ce dossier `draft/etudes/ocean/` sont seulement les quatre PNG finaux et le présent README.
 
 À l'écran CYD réel (320×240), les visuels et leur intégration restent à vérifier. Le PO choisira ou validera A/B ; Pilotage contrôle et fusionne seul la PR.

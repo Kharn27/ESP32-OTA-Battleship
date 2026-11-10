@@ -25,7 +25,7 @@ Aucun état **TOUCHÉ** ni **COULÉ** n'a été dessiné ou homologué. Ce pilot
 
 ## Sources artistiques
 
-- [G02 approuvé, `design/flotte/g02_grille_320x240.svg`](../../g02_grille_320x240.svg) : **fuseau, kiosque, rapport 3 cases**, palette et emprise du Sous-marin approuvés pour concept PC. La silhouette G02 est reproduite uniquement dans le panneau comparatif, sans altérer le fichier source.
+- [G02 approuvé, `maquettes/flotte/legacy/g02_grille_320x240.svg`](../../g02_grille_320x240.svg) : **fuseau, kiosque, rapport 3 cases**, palette et emprise du Sous-marin approuvés pour concept PC. La silhouette G02 est reproduite uniquement dans le panneau comparatif, sans altérer le fichier source.
 - **PO `draft/sous_marin_PO_A.jpeg`** : référence d'identité visuelle pour l'état intact, coque d'acier gris patiné, détail supérieur et plusieurs mâts centraux. Le JPEG du dépôt est une **copie réencodée**, non un sprite transparent et non une preuve pixel à pixel de l'original PO.
 - [G01 `CONTRAT_GRAPHIQUE.md`](../../../fondations/CONTRAT_GRAPHIQUE.md) : encrage froid, nuances marines, accents chauds limités ; le navire doit être autonome et ne contient **ni mer peinte, ni gerbe, ni damier**.
 - Dessin vectoriel/pixel original de production basé sur ces références de projet ; aucun contenu provenant d'une banque d'images, aucune police redistribuée.
@@ -35,7 +35,7 @@ Les détails du PO (lignes de coque, mâts, kiosque central) sont **interprété
 ## Géométrie et alpha
 
 - G02 historique : grille **10×10**, origine **(19,39)**, pas **18 px**, longueur **3**.
-- G04-R2 / G05-R2 maquettes artistiquement approuvées : grille **10×10**, origine **(21,53)**, pas **18 px**, ancre H C6–E6 = **(57,143)**. Preuve composée sur le PNG original `design/ecrans/attaque/g04_r2_attaque_320x240.png` sans le modifier ; elle n’institue PAS un affichage du navire ennemi en ATTAQUE. **Le renderer provisoire D10 est encore (22,24), cases de 19px : la preuve artistique G04 ne vaut pas preuve firmware.**
+- G04-R2 / G05-R2 maquettes artistiquement approuvées : grille **10×10**, origine **(21,53)**, pas **18 px**, ancre H C6–E6 = **(57,143)**. Preuve composée sur le PNG original `maquettes/attaque/legacy/g04_r2_attaque_320x240.png` sans le modifier ; elle n’institue PAS un affichage du navire ennemi en ATTAQUE. **Le renderer provisoire D10 est encore (22,24), cases de 19px : la preuve artistique G04 ne vaut pas preuve firmware.**
 - Horizontal canonique C6–E6 : ancre absolue **(55,129)**, rectangle de l'asset **[55,109) × [129,147)**. Vertical d'essai : **(55,129)**, emprise **18×54**, C6–C8 **pour inspection uniquement**, sans changer la pose G02 approuvée.
 - Export PNG de type RGBA réel (`mode=RGBA`) et alpha 0 ou 255 ; tous les pixels hors coque sont transparents, aucun fond maritime n'est présent dans le sprite. La présence de transparence doit être constatée dans les pixels, pas déduite de `.png`.
 - La rotation V est réalisée par transposition discrète NEAREST du **raster H** ; le SVG V reste une **source éditable dérivée** avec transformation -90°. Une rasterisation directe de V selon un moteur SVG peut différer sur quelques pixels de contour à cause du placement de traits ; l'export PNG canonique est celui du script. Cette nuance est documentée, et aucun pixel n'est interpolé dans le PNG orienté.
@@ -43,7 +43,7 @@ Les détails du PO (lignes de coque, mâts, kiosque central) sont **interprété
 
 ## Reproduire les exports et les preuves
 
-Dans le dossier `design/flotte/navires/sous-marin/` :
+Dans le dossier `draft/etudes/flotte/sous-marin/` :
 
 ```sh
 python3 -m pip install 'Pillow==12.3.0' 'CairoSVG==2.8.2'

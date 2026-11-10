@@ -30,8 +30,8 @@ Le ratio 4:3, l'orientation du bateau et son placement au centre restent proches
 
 ```sh
 python -m pip install Pillow==12.3.0
-python design/patrouilleur/export_pat04_detruit.py
-python design/patrouilleur/export_pat04_detruit.py --check
+python draft/etudes/patrouilleur/export_pat04_detruit.py
+python draft/etudes/patrouilleur/export_pat04_detruit.py --check
 ```
 
 Le `--check` est **non destructif** : il confirme le SHA du PNG PO, le JPEG **en mémoire** dérivé de façon reproductible, les trois états précédents, les dimensions, les pixels du natif et du zoom NEAREST, les SHA des PNG et le manifeste reproductible. Aucun fichier JPEG B n’est requis dans le dépôt.
