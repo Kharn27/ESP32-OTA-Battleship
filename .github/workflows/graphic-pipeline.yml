@@ -9,6 +9,7 @@ on:
       - 'maquettes/**'
       - 'docs/GRAPHIC_PIPELINE.md'
       - 'scripts/check_graphic_pipeline.py'
+      - 'scripts/check_sous_marin_assets.py'
       - '.github/workflows/graphic-pipeline.yml'
   push:
     branches: [main]
@@ -19,6 +20,7 @@ on:
       - 'maquettes/**'
       - 'docs/GRAPHIC_PIPELINE.md'
       - 'scripts/check_graphic_pipeline.py'
+      - 'scripts/check_sous_marin_assets.py'
       - '.github/workflows/graphic-pipeline.yml'
   workflow_dispatch:
 
@@ -42,3 +44,5 @@ jobs:
           /tmp/cyd-graphics-venv/bin/python maquettes/accueil/legacy/compose_accueil.py --repo . --out maquettes/accueil/legacy --check
       - name: Verify original/CYD wallpaper exports byte for byte
         run: /tmp/cyd-graphics-venv/bin/python scripts/export_wallpapers.py --check
+      - name: Validate FLOT-01 native sprites and 4x pixel-perfect previews
+        run: /tmp/cyd-graphics-venv/bin/python scripts/check_sous_marin_assets.py --check
