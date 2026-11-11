@@ -224,6 +224,35 @@ jobs:
             build-d15a-g01/cyd_warship.map
             sdkconfig
           if-no-files-found: error
+      - name: Build GUI-01 isolated tactile button TEST ONLY
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            python -m pip install --disable-pip-version-check 'Pillow==12.3.0' &&
+            idf.py -B build-gui01 -D WARSHIP_GUI01_TEST_ONLY=ON set-target esp32 &&
+            idf.py -B build-gui01 -D WARSHIP_GUI01_TEST_ONLY=ON build &&
+            idf.py -B build-gui01 size &&
+            idf.py -B build-gui01 size-components &&
+            strings build-gui01/cyd_warship.elf | grep -Fq 'WARSHIP_GUI01_TEST_ONLY=ON' &&
+            strings build-gui01/cyd_warship.elf | grep -Fq 'GUI01_ACTIVATE' &&
+            ! strings build-gui01/cyd_warship.elf | grep -Fq 'D15A_G01_TEST_ONLY=ON' &&
+            ! strings build-gui01/cyd_warship.elf | grep -Fq 'warship_d11lab' &&
+            sha256sum build-gui01/cyd_warship.bin
+      - name: GUI-01 tactile button BIN (TEST ONLY, NO GAME/NVS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: gui01-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-gui01/cyd_warship.bin
+            build-gui01/cyd_warship.elf
+            build-gui01/bootloader/bootloader.bin
+            build-gui01/partition_table/partition-table.bin
+            build-gui01/flasher_args.json
+            build-gui01/cyd_warship.map
+            sdkconfig
+          if-no-files-found: error
       - name: Firmware artifact (no device validation)
         uses: actions/upload-artifact@v4
         with:

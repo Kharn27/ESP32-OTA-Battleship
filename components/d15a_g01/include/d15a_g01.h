@@ -33,4 +33,12 @@ uint16_t d15a_blend565(uint16_t bg, uint16_t ink, uint8_t alpha);
  */
 int d15a_compose_band(uint16_t y, uint16_t rows,
                        uint8_t *dest, size_t capacity);
+/* GUI01 single-region composer: w*h*2 <= 5120, fully in 320x240.
+ * pressed_layer=D15A_IMAGE_COUNT means NORMAL (bit-identical to D15-A).
+ * Otherwise dim only selected button sprite in RGB565 before alpha blend.
+ * Caller clips region and owns completed LCD DMA before reuse. */
+uint16_t d15a_dim565(uint16_t color, uint8_t brightness);
+int d15a_compose_region(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+                        unsigned pressed_layer, uint8_t brightness,
+                        uint8_t *dest, size_t capacity);
 #endif

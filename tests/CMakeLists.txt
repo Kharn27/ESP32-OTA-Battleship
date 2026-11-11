@@ -291,6 +291,28 @@ if(WARSHIP_SANITIZERS)
 endif()
 add_test(NAME d15a_g01_four_layers_bounds_alpha_bands COMMAND d15a_g01_tests)
 
+# GUI-01 pure C99: same Flash data from four approved assets as D15-A.
+add_executable(gui01_gesture_tests test_gui_button.c
+               ../components/gui_button/gui_button.c)
+target_include_directories(gui01_gesture_tests PRIVATE
+                           ../components/gui_button/include)
+target_compile_options(gui01_gesture_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+add_executable(gui01_pixel_tests test_gui01_pixels.c
+               ../components/d15a_g01/g01_compose.c
+               ../components/d15a_g01/g01_region.c "${D15A_GENERATED}")
+target_include_directories(gui01_pixel_tests PRIVATE
+                           ../components/d15a_g01/include)
+target_compile_options(gui01_pixel_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+  foreach(t gui01_gesture_tests gui01_pixel_tests)
+    target_compile_options(${t} PRIVATE -O1 -g -fno-omit-frame-pointer
+                           -fsanitize=address,undefined)
+    target_link_options(${t} PRIVATE -fsanitize=address,undefined)
+  endforeach()
+endif()
+add_test(NAME gui01_buttons_gestures_boundaries_cancel COMMAND gui01_gesture_tests)
+add_test(NAME gui01_exact_RGB565_alpha_restore_clip COMMAND gui01_pixel_tests)
+
 # The LCD profile on the D15-A preview is EXACT D14 C99 production data.
 add_executable(d15a_panel_profile_tests
                test_warship_panel_profile.c

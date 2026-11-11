@@ -1,3 +1,15 @@
+# GUI-01 #115: isolated stylus reception; default NORMAL and D15-A unchanged.
+if(WARSHIP_GUI01_TEST_ONLY)
+  if(WARSHIP_D11_NVS_BENCH OR WARSHIP_D13_CYD_SCENARIO OR WARSHIP_T03_DIAGNOSTIC)
+    message(FATAL_ERROR "GUI01-TEST-ONLY cannot combine with other diagnostics")
+  endif()
+  idf_component_register(
+    SRCS "gui01_button_probe.c"
+    PRIV_REQUIRES warship_lcd warship_touch t02_touch_map d15a_g01 gui_button
+                  heap freertos log esp_timer)
+  return()
+endif()
+
 # D15-A #112: test-only standalone app, NO D09 boot, D11 NVS or G03.
 # Dependency-scan note: the normal registration below MUST also list
 # d15a_g01; ESP-IDF expands component dependencies with the option
@@ -40,7 +52,7 @@ idf_component_register(
   SRCS "app_main.c" "d09_probe.c" "d11_runtime.c" ${T03_SRCS}
   PRIV_REQUIRES warship_core warship_fleet warship_battle warship_captain warship_solo warship_lifecycle warship_palmares warship_palmares_nvs warship_event_bridge warship_event_id_nvs warship_deploy_ui warship_combat_ui warship_journey warship_inspection warship_touch t02_touch_map warship_lcd log
                 esp_driver_spi esp_driver_gpio freertos heap esp_timer
-                spi_flash esp_system esp_hw_support t03_decode d15a_g01
+                spi_flash esp_system esp_hw_support t03_decode d15a_g01 gui_button
 )
 
 # An OPT-IN diagnostic build for an explicitly designated test CYD only.
