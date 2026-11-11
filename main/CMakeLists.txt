@@ -1,3 +1,19 @@
+# D15-A #112: test-only standalone app, NO D09 boot, D11 NVS or G03.
+# Dependency-scan note: the normal registration below MUST also list
+# d15a_g01; ESP-IDF expands component dependencies with the option
+# disabled before configuring the dedicated test source. It does not
+# link G01 pixels or alter the normal app when mode=OFF.
+# This branch is based on current main, independent from blocked D14 PR #91.
+if(WARSHIP_D15A_G01_TEST_ONLY)
+  if(WARSHIP_D11_NVS_BENCH OR WARSHIP_D13_CYD_SCENARIO OR WARSHIP_T03_DIAGNOSTIC)
+    message(FATAL_ERROR "D15-A test-only cannot combine with D11/D13/T03 diagnostics")
+  endif()
+  idf_component_register(
+    SRCS "d15a_g01_preview.c"
+    PRIV_REQUIRES warship_lcd d15a_g01 heap freertos log)
+  return()
+endif()
+
 # T03 opt-in startup benchmark ONLY: no alternate boot, NVS, SPI init.
 # Default OFF. Source PNG is never edited; generated C stays in build/.
 option(WARSHIP_T03_DIAGNOSTIC "T03 G03 flash formats vs LCD startup diagnostic" OFF)
@@ -24,7 +40,7 @@ idf_component_register(
   SRCS "app_main.c" "d09_probe.c" "d11_runtime.c" ${T03_SRCS}
   PRIV_REQUIRES warship_core warship_fleet warship_battle warship_captain warship_solo warship_lifecycle warship_palmares warship_palmares_nvs warship_event_bridge warship_event_id_nvs warship_deploy_ui warship_combat_ui warship_journey warship_inspection warship_touch t02_touch_map warship_lcd log
                 esp_driver_spi esp_driver_gpio freertos heap esp_timer
-                spi_flash esp_system esp_hw_support t03_decode
+                spi_flash esp_system esp_hw_support t03_decode d15a_g01
 )
 
 # An OPT-IN diagnostic build for an explicitly designated test CYD only.
