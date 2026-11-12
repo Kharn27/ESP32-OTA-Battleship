@@ -5,22 +5,21 @@
     320,
     240
   ],
-  "assets": [],
-  "preview": "maquettes/accueil/legacy/accueil_cyd_warship_320x240.png",
+  "assets": [
+    "wallpaper.accueil.retenu.cyd",
+    "logo.titre.cyd",
+    "boutons.jouer.cyd",
+    "boutons.palmares.cyd"
+  ],
+  "preview": "maquettes/accueil/accueil_cyd_warship_320x240.png",
   "status": "VALIDATED_PO_PC",
   "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237",
   "device_status": "ON_DEVICE_UNVERIFIED",
-  "migration_state": "LEGACY_UNDECOMPOSED",
-  "legacy_source_ref": "design/ecrans/accueil/",
-  "legacy_import_commit": "87f2608236d9c93f80a0705111af0216cef35ba9",
-  "legacy_files": {
-    "README.md": "42a969c10f0f08ffe572d0961f78d143500d4ef6",
-    "accueil_cyd_warship_320x240.png": "7bd321c6ccbfc230802e20010bfa06e71a9099a9",
-    "accueil_cyd_warship_4_calques.ora": "c1b5db836bb3f6610661721ca7eae10a1874525e",
-    "accueil_cyd_warship_x4.png": "71e8b49b804e82b49b7711e837cff966b0a3804d",
-    "compose_accueil.py": "fe86c6a09e260a08db596fdb3df38ba6afed0c6a",
-    "manifest.json": "c5c71f7761f898f0286d86cde14dc971d9168d8f",
-    "preuves/alpha_clair_sombre_640x720.png": "18fb6eb1737e9075a45a036c813a992f9226225f",
-    "preuves/zones_tactiles_320x240.png": "5ee8d3bbac85a82ff5048b667260dfe1c3d4ce4b"
-  }
+  "proofs": [
+    "maquettes/accueil/accueil_cyd_warship_x4.png",
+    "maquettes/accueil/preuves/alpha_clair_sombre_640x720.png",
+    "maquettes/accueil/preuves/zones_tactiles_320x240.png"
+  ],
+  "source_ref": "maquettes/accueil/accueil_cyd_warship_4_calques.ora",
+  "generator": "maquettes/accueil/compose_accueil.py"
 }
