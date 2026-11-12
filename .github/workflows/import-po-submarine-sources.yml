@@ -37,16 +37,20 @@ jobs:
             '00cbfd8e3358005e5c9f0359d2f78cff32faf9c1f5a3642c55bf985984528994  draft/03_sous_marin_PO_DEGATS_CENTRE_reference.png' \
               | sha256sum --check
           python3 - <<'PY'
-          from PIL import Image
+          from pathlib import Path
+          import struct
           for path in [
             "draft/01_sous_marin_PO_INTACT_reference.png",
             "draft/02_sous_marin_PO_DEGATS_GAUCHE_DROITE_reference.png",
             "draft/03_sous_marin_PO_DEGATS_CENTRE_reference.png",
           ]:
-              with Image.open(path) as im:
-                  assert im.size == (1024, 768), (path, im.size)
-                  assert im.mode == "RGB", (path, im.mode)
-                  print("OK", path, im.size, im.mode)
+              data = Path(path).read_bytes()
+              assert data[:8] == b"\\x89PNG\\r\\n\\x1a\\n".decode("unicode_escape").encode("latin1")
+              assert data[12:16] == b"IHDR"
+              width, height, depth, color, compression, filtering, interlace = struct.unpack(">IIBBBBB", data[16:29])
+              assert (width, height) == (1024, 768), (path, width, height)
+              assert depth == 8 and color == 2, (path, depth, color)
+              print("OK", path, (width, height), "RGB/PNG color type 2")
           PY
       - name: "Commit sur branche de livraison uniquement"
         shell: bash
