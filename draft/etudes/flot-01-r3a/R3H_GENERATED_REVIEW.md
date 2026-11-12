@@ -12,10 +12,10 @@ Livraison additionnelle à la première proposition R3-A de cette PR. Aucun remp
 | r3h_generated_intact_h_54x18.png | 54×18 RGBA | Coque H isolée, proue droite, **candidat** non runtime ; alpha 0/255 |
 | r3h_generated_intact_h_x4.png | 216×72 RGBA | Zoom NEAREST exact de la coque |
 | r3h_generated_sillage_h_66x22.png | 66×22 RGBA | Filet d'écume séparé de la coque |
-| r3h_generated_sillage_h_x4.png | 264×88 RGBA | Zoom NEAREST exact de l'effet |
-| r3h_generated_mer_sombre_320x240.png et r3h_generated_mer_claire_320x240.png | 320×240 RGB | Preuves PC sur deux mers synthétiques contrastées et grille 10×10 |
-| r3h_generated_mer_sombre_x4_1280x960.png et r3h_generated_mer_claire_x4_1280x960.png | 1280×960 RGB | Zooms ×4 NEAREST des preuves plein écran |
-| r3h_generated_detail_sombre_x4.png et r3h_generated_detail_claire_x4.png | 264×88 RGB | Vues de détail H + eau |
+| r3h_generated_sillage_h_x4.png | 264×88 RGBA (opaque)A | Zoom NEAREST exact de l'effet |
+| r3h_generated_mer_sombre_320x240.png et r3h_generated_mer_claire_320x240.png | 320×240 RGBA (opaque) | Preuves PC sur deux mers synthétiques contrastées et grille 10×10 |
+| r3h_generated_mer_sombre_x4_1280x960.png et r3h_generated_mer_claire_x4_1280x960.png | 1280×960 RGBA (opaque) | Zooms ×4 NEAREST des preuves plein écran |
+| r3h_generated_detail_sombre_x4.png et r3h_generated_detail_claire_x4.png | 264×88 RGBA (opaque) | Vues de détail H + eau |
 
 ## Provenance et méthode
 

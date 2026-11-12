@@ -101,13 +101,13 @@ def frame(ship,wake,light):
     d.text((8,10),"FLOT-01 R3-H  |  CANDIDAT",fill="#eacda2")
     d.text((8,24),"REVUE PO / PILOTAGE",fill="#afcdca")
     d.text((210,222),"PC NON CYD",fill="#eacda2")
-    return image.convert("RGB")
+    return image.convert("RGBA")
 
 def detail(ship,wake,light):
     image=sea(light).crop((47,143,47+66,143+22))
     image.alpha_composite(wake)
     image.alpha_composite(ship,ORIGIN)
-    return image.convert("RGB").resize((264,88),Image.Resampling.NEAREST)
+    return image.convert("RGBA").resize((264,88),Image.Resampling.NEAREST)
 
 def generate():
     ship,wake=export_layers()
