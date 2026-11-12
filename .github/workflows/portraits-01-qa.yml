@@ -5,7 +5,7 @@ on:
       - 'draft/portraits/pilote_A_L1_C1/**'
       - '.github/workflows/portraits-01-qa.yml'
 permissions:
-  contents: write
+  contents: read
 jobs:
   reproduce-original:
     runs-on: ubuntu-latest
@@ -80,23 +80,20 @@ jobs:
           print('QA_RESULT',json.dumps(report,ensure_ascii=False))
           (base/'qa_repro_report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')
           PY
-      - name: Commit regenerated pixels from canonical original on the existing PR branch only
+      - name: Emit native and nearest-neighbor pixel review images
         shell: bash
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add draft/portraits/pilote_A_L1_C1/source_HD_coupe.png
-          git add draft/portraits/pilote_A_L1_C1/source_HD_nettoyee.png
-          git add draft/portraits/pilote_A_L1_C1/pilote_32.png
-          git add draft/portraits/pilote_A_L1_C1/pilote_48.png
-          git add draft/portraits/pilote_A_L1_C1/pilote_64.png
-          git add draft/portraits/pilote_A_L1_C1/comparatif_320x240.png
-          git add draft/portraits/pilote_A_L1_C1/comparatif_320x240_x4_nearest.png
-          git add draft/portraits/pilote_A_L1_C1/qa_repro_report.json
-          if ! git diff --cached --quiet; then
-            git commit -m 'fix(graphics): regenerate pilot RGBA from PO original (#124)'
-            git push origin HEAD:refs/heads/design/issue-124-portraits-pilote-a1c1
-          fi
+          python - <<'PY'
+          import base64
+          from pathlib import Path
+          base=Path('draft/portraits/pilote_A_L1_C1')
+          for key, filename in [('NATIVE','comparatif_320x240.png'),('X4','comparatif_320x240_x4_nearest.png')]:
+              value=base64.b64encode((base/filename).read_bytes()).decode('ascii')
+              print(f'PX_BASE64_START_{key}')
+              for i in range(0,len(value),120):
+                  print(value[i:i+120])
+              print(f'PX_BASE64_END_{key}')
+          PY
       - name: Archive regenerated pilot and quantitative QA
         if: always()
         uses: actions/upload-artifact@v4
