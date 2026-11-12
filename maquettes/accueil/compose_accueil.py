@@ -71,8 +71,8 @@ def save_png(image: Image.Image, path: Path):
 
 
 def build(repo: Path, out: Path):
-    if out.resolve() == (repo / "maquettes/accueil/legacy").resolve():
-        raise ValueError("Legacy is frozen: generate into a separate directory or use --check")
+    if out.resolve() == (repo / "maquettes/accueil").resolve():
+        raise ValueError("Current approved screen is immutable: generate elsewhere or use --check")
     assert PIL.__version__ == "12.3.0", "Pillow doit être figé à 12.3.0"
     originals = {}
     images = {}
