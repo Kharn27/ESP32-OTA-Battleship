@@ -2,7 +2,10 @@
 """PORTRAITS-01 #124 : génération d'un candidat, à lancer à la racine du repo."""
 from pathlib import Path
 import hashlib
+import sys
 from PIL import Image
+
+CHECK = '--check' in sys.argv
 
 HERE = Path(__file__).resolve().parent
 ROOT = Path(__file__).resolve().parents[3]
@@ -31,8 +34,19 @@ def hash_file(path):
 
 def save(im, name):
     path = HERE / name
-    im.save(path, "PNG", optimize=True)
-    print(name, im.size, len(path.read_bytes()), hash_file(path))
+    if CHECK:
+        assert path.is_file(), f"Export absent : {path}"
+        with Image.open(path) as existing:
+            assert existing.mode == im.mode and existing.size == im.size, (
+                f"Mode ou dimensions divergents : {name}"
+            )
+            assert existing.tobytes() == im.tobytes(), (
+                f"Pixels RGBA divergents de la source GitHub : {name}"
+            )
+        print("PIXEL_EXACT_PASS", name, im.size, hash_file(path))
+    else:
+        im.save(path, "PNG", optimize=True)
+        print(name, im.size, len(path.read_bytes()), hash_file(path))
 
 def put_label(im, text, x, y, color):
     for c in text.upper():
