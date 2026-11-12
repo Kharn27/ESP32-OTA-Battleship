@@ -44,7 +44,7 @@ jobs:
       - name: Verify G01 native assets, reproducibility and 320x240 pixel differences
         run: |
           python3 scripts/check_graphic_pipeline.py
-          python3 tools/d15a_generate_g01.py --repo . --output build-host/d15a_second.c --report build-host/d15a_g01_metrics.json --preview build-host/d15a_g01_firmware.png --reference maquettes/accueil/legacy/accueil_cyd_warship_320x240.png
+          python3 tools/d15a_generate_g01.py --repo . --output build-host/d15a_second.c --report build-host/d15a_g01_metrics.json --preview build-host/d15a_g01_firmware.png --reference maquettes/accueil/accueil_cyd_warship_320x240.png
           cmp build-host/d15a_g01_data.c build-host/d15a_second.c
           python3 - <<'PY'
           import json
