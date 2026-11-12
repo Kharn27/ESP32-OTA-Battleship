@@ -80,6 +80,11 @@ jobs:
           print('QA_RESULT',json.dumps(report,ensure_ascii=False))
           (base/'qa_repro_report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')
           PY
+      - name: Verify candidate PNGs non-destructively and graphic catalog structure
+        shell: bash
+        run: |
+          python draft/portraits/pilote_A_L1_C1/export.py --check
+          python scripts/check_graphic_pipeline.py
       - name: Emit native and nearest-neighbor pixel review images
         shell: bash
         run: |
