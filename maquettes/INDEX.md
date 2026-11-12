@@ -6,7 +6,7 @@
 
 | Fonction / écran | Statut PO | Référence native courante | Source éditable et dossier | Traçabilité |
 | --- | --- | --- | --- | --- |
-| **Accueil** | **VALIDÉ PO — 09/11/2026 (PC seulement)** | [Accueil modulaire 320×240](accueil/legacy/accueil_cyd_warship_320x240.png) | [Accueil, ORA 4 calques et sprites RGBA](accueil/legacy/) · [zoom ×4 NEAREST](accueil/legacy/accueil_cyd_warship_x4.png) | [PR #90](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90) · [GO artistique PO](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237) ; [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) = version précédemment validée dans Git |
+| **Accueil** | **VALIDÉ PO — 09/11/2026 (PC seulement)** | [Accueil modulaire 320×240](accueil/accueil_cyd_warship_320x240.png) | [Accueil, ORA 4 calques et sprites RGBA](accueil/) · [zoom ×4 NEAREST](accueil/accueil_cyd_warship_x4.png) | [PR #90](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90) · [GO artistique PO](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237) ; [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8) = version précédemment validée dans Git |
 | **Flotte classique (5 coques)** | **VALIDÉ PO** | [Grille et navires G02](flotte/legacy/g02_grille_320x240.png) | [Flotte](flotte/legacy/) (SVG et variantes fonctionnelles d'état) | [Issue #30](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/30), [PR #32](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/32) |
 | **Déploiement** | **VALIDÉ PO** | [DÉPLOIEMENT G03](deploiement/legacy/g03_deploiement_320x240.png) | [Déploiement](deploiement/legacy/) (SVG) | [Issue #37](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/37), [PR #41](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/41) |
 | **ATTAQUE en cours de partie** | **VALIDÉ PO — G04-R2 (04/11/2026), PC seulement** | [ATTAQUE 320×240](attaque/legacy/g04_r2_attaque_320x240.png) | [Sources, états et preuves G04-R2](attaque/legacy/) · [zoom ×4 NEAREST](attaque/legacy/g04_r2_attaque_x4.png) | [Issue #45](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/45) · [PR #64](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/64) · [GO artistique PO](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/64#issuecomment-6626211912) |
@@ -17,7 +17,7 @@
 
 ## Maquettes historiques — non actives
 
-- [**Première composition d’accueil PR #8**](accueil-historique/legacy/README.md) — [PNG CYD 320×240](accueil-historique/legacy/accueil_historique_CYD_320x240.png) et [illustration source 1448×1086](accueil-historique/legacy/accueil_historique_original_1448x1086.png). **VALIDÉE PO sur PC à l’époque, mais désormais remplacée par la PR #90**. Titre et boutons sont incrustés : **maquette complète, jamais un asset de fond**. Classée ici sur [décision PO #107](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/107).
+- [**Première composition d’accueil PR #8 — archive Git figée**](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/55ee8b72a098d3da5e28bac45bb1a2dde7129f4a/maquettes/accueil-historique/legacy) — ancienne composition complète retirée de l'arbre courant sur décision du PO [#120](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/120), non utilisable comme fond runtime.
 
 ## Fondations, statut et limites
 
