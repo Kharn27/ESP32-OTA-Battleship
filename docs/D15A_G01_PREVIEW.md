@@ -20,7 +20,7 @@ et `maquettes/` ne sont jamais dans le binaire :
 | `boutons.palmares.cyd` | `assets/boutons/bouton_palmares_CYD_140x30_RGBA.png` | 140×30 | 166,199 |
 
 L'ordre de composition est **fond → logo → JOUER → PALMARÈS**.
-Le PNG historique `maquettes/accueil/legacy/accueil_cyd_warship_320x240.png`
+Le PNG de composition actuelle validée sur PC `maquettes/accueil/accueil_cyd_warship_320x240.png`
 sert **uniquement** d'oracle de comparaison PC ; il n'est jamais
 utilisé pour générer le C embarqué.
 
@@ -60,7 +60,7 @@ En environnement Python avec Pillow **12.3.0** :
 python3 tools/d15a_generate_g01.py --repo . \
   --output /tmp/d15a_g01.c --report /tmp/d15a_g01.json \
   --preview /tmp/d15a_g01_firmware.png \
-  --reference maquettes/accueil/legacy/accueil_cyd_warship_320x240.png
+  --reference maquettes/accueil/accueil_cyd_warship_320x240.png
 python3 scripts/check_graphic_pipeline.py
 cmake -S tests -B build-host -G Ninja -DWARSHIP_SANITIZERS=ON
 cmake --build build-host
