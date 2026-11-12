@@ -40,3 +40,7 @@ Depuis le dossier de cette étude : `python3 build_r3a.py` puis `python3 build_r
 L'Issue #113 prescrit encore **`design/flotte/navires/sous-marin/` seulement**. Or `AGENTS.md` sur `main` et `docs/GRAPHIC_PIPELINE.md` interdisent toute nouvelle contribution à `design/`. Candidat déposé ici sous **`draft/etudes/flot-01-r3a/`**, sans l'inscrire dans `assets/`, dans l'attente de l'alignement formel de l'Issue et du verdict du PO. **Cette PR ne saurait être fusionnée ni convertie en asset approuvé sans arbitrage Pilotage.**
 
 **Stop R3-A** : PO juge le 1× sur mer claire/sombre ; après GO explicite seulement, le développement des orientations V et de la série H/V R3-B peut commencer. Le PO et Pilotage contrôlent les preuves ; **fusion par Pilotage seul**.
+
+## Ajout — R3-H généré (12/11/2026)
+
+Une **image R3-H supplémentaire** est mise à disposition pour revue PO/Pilotage sans écraser le candidat R3-A existant. Voir [R3H_GENERATED_REVIEW.md](R3H_GENERATED_REVIEW.md) pour le PNG source HD, l'export 54×18, l'écume séparée 66×22, les épreuves 320×240 et leurs zooms ×4. Statut **CANDIDATE / ON_DEVICE_UNVERIFIED**, STOP PO maintenu.
