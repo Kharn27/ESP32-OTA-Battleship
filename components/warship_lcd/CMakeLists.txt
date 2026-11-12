@@ -3,7 +3,7 @@
 # even when normal runtime doesn't reference them (no pixels in normal BIN).
 # Standalone D15-A preview selects the *byte-identical* D14 LCD source,
 # without replacing the existing NORMAL driver at all. PR #91 remains blocked.
-if(WARSHIP_D15A_G01_TEST_ONLY)
+if(WARSHIP_D15A_G01_TEST_ONLY OR WARSHIP_GUI01_TEST_ONLY)
   idf_component_register(
     SRCS "warship_lcd_d15a_preview.c" "warship_lcd_light.c"
     INCLUDE_DIRS "include"

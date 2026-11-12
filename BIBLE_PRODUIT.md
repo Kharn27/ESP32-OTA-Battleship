@@ -743,6 +743,10 @@ Cette section complète la Bible **sans modifier les décisions de gameplay ni l
 
 **À VÉRIFIER si diffusion publique :** disponibilité et usage commercial du nom ; cette question ne bloque pas le cadrage artistique.
 
+### 15.1 bis — Retour visuel des boutons GUI (décision PO du 10/11/2026, GUI-01 #115)
+
+**DÉCIDÉ (PO) :** les commandes GUI, à commencer par JOUER et PALMARÈS, réutilisent leur image normale approuvée ; pendant un appui valide au stylet, un **assombrissement logiciel temporaire de la couleur du sprite**, avant composition alpha, signale l'enfoncement. Au relâchement ou à l'annulation, revenir au visuel normal sans modifier la transparence ni le fond visible. Aucun sprite « pressed » additionnel, aucune inversion des couleurs. Une activation valide s'effectue au relâchement dans le même bouton, une seule fois ; sortie de zone ou geste interrompu n'active rien. Les hitboxes et la luminosité effective restent **À VÉRIFIER sur CYD**. Cette décision ne lance pas l'intégration D15/HOME produit.
+
 ### 15.2 Écran d'accueil : scène, composition et navigation — LOT1-ACC-003 à 010
 
 **DÉCIDÉ (PO) — intentions à représenter :**

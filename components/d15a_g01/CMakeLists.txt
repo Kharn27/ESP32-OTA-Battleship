@@ -1,6 +1,6 @@
 # No RGB assets or Pillow dependency in the default NORMAL image.
 # D15-A is opt-in preview only, independent from blocked D14 G03.
-if(NOT WARSHIP_D15A_G01_TEST_ONLY)
+if(NOT WARSHIP_D15A_G01_TEST_ONLY AND NOT WARSHIP_GUI01_TEST_ONLY)
   idf_component_register(INCLUDE_DIRS "include")
   return()
 endif()
@@ -26,6 +26,6 @@ if(NOT G01_EXIT EQUAL 0)
 endif()
 message(STATUS "D15-A TEST-ONLY Flash G01: ${G01_METRICS}")
 idf_component_register(
-  SRCS "g01_compose.c" "${G01_GENERATED}"
+  SRCS "g01_compose.c" "g01_region.c" "${G01_GENERATED}"
   INCLUDE_DIRS "include")
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Wextra -Werror)
