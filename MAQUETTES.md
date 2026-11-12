@@ -131,7 +131,7 @@ Le [dossier D/E/F au commit figé](https://github.com/Kharn27/ESP32-OTA-Battlesh
 
 **Historique — pistes facultatives du cadrage initial :** avion en feu chutant vers la mer et escadrille en silhouettes près du coucher de soleil. La **composition de l'accueil a ensuite été retenue par le PO** dans la PR #8 et n'est plus « à dessiner » ; cette acceptation ne valide pas le rendu sur CYD physique.
 
-**GRAPH-ACC-001 — LIVRÉE ET FUSIONNÉE :** [maquette d'accueil 320 × 240 retenue par le PO](maquettes/accueil/legacy/accueil_cyd_warship_320x240.png), [PR #8](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/8), fusion `50d9e1dabd71725adba50279929694123fde0fda`. **Statut : DESIGN_PREVIEW accepté / ON_DEVICE_UNVERIFIED** ; les dimensions d'export sont vérifiées, pas la lisibilité tactile sur la vraie CYD, ni l'intégration runtime. Les archives retirées restent consultables dans Git ; aucune exploration rejetée n'est réactivée.
+**ACCUEIL ACTUEL — PR #90 VALIDÉE PO PC :** [composition 320×240 à quatre éléments](maquettes/accueil/accueil_cyd_warship_320x240.png), [GO artistique du 09/11/2026](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237), `ON_DEVICE_UNVERIFIED`. **GRAPH-ACC-001 / PR #8 est une ancienne version**, [archivée dans Git au commit 55ee8b72a098d3da5e28bac45bb1a2dde7129f4a](https://github.com/Kharn27/ESP32-OTA-Battleship/tree/55ee8b72a098d3da5e28bac45bb1a2dde7129f4a/maquettes/accueil-historique/legacy) et retirée de l'arbre actif par décision du PO [#120](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/120). Aucun composite complet n'est un asset embarquable.
 
 **Référence détaillée :** [BIBLE_PRODUIT.md, § 15](BIBLE_PRODUIT.md). Aucun autre écran, thème ou code n'est demandé par ce cadrage.
 
