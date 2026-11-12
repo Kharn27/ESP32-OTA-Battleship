@@ -23,9 +23,12 @@
 | `comparatif_320x240.png` | Planche PC native, trois tailles, fonds clair et sombre | 320 × 240 |
 | `comparatif_320x240_x4_nearest.png` | **PNG réel ×4** : agrandissement par répétition exacte des pixels, sans interpolation | 1280 × 960 |
 | `comparatif_x4_nearest.svg` | Agrandissement ×4 alternatif (natif intégré avec `image-rendering:pixelated`) | 1280 × 960 (affichage SVG) |
-| `export.py` | Recette Python/Pillow de régénération depuis **l'original GitHub contrôlé par SHA-256**, produisant aussi un PNG ×4 NEAREST | Source éditable |
+| `export.py` | Recette Python/Pillow de régénération **ou vérification non destructive `--check`** depuis l'original GitHub contrôlé par SHA-256 | Source éditable |
+| `qa_repro_report.json` | Mesures sur GitHub Actions : comparaison RGBA et octets des exports régénérés versus les exports committés | Preuve de QA |
 
-**Vigilance technique :** le rendu des fichiers proposés a été assemblé sur une représentation PNG Adobe *sans perte* du visuel original pleine résolution ; le PNG transmis par ce service peut avoir une compression différente de l'original archivé. Le script `export.py`, exécuté contre l'original GitHub vérifié par SHA-256, est la recette canonique de reproduction. Les sorties régénérées peuvent avoir d'autres tailles binaires à cause de l'encodeur et différer marginalement aux frontières du filtrage BOX. Ne pas déclarer des PNG Adobe validés sur matériel.
+**Reprise du 12/11/2026 :** la première livraison utilisait pour les réductions une représentation Adobe et une recette de diminution non identique au filtrage Pillow. La vérification directe depuis l'original GitHub a quantifié **717 / 1 563 / 2 785 pixels différents** respectivement en 32/48/64. Les **sept PNG candidats et de comparaison ont été remplacés** par les rendus issus de `export.py` exécuté directement dans GitHub Actions contre le véritable `portrait_A.png` archivé (SHA-256 vérifié). **Deuxième passe : 0 pixel et 0 octet de différence sur les sept PNG** ; preuve [run #43259993102](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/43259993102), rapport `qa_repro_report.json`. Le script permet maintenant un contrôle pixel à pixel non destructif via `--check`.
+
+**Contrôle du détourage / consigne PO :** les **10 pixels vert-lime** ciblés dans la copie de travail ont été inventoriés individuellement sur l'original (alpha = **1 à 3/255**, tous voisins de transparence à 2 px). Ce sont des pixels quasi invisibles de frange, non des aplats ni détails lumineux établis. Aucun autre contour coloré ou reflet artistique du portrait n'a été retouché. Les trois `pilote_*.png` conservent le **mode RGBA et l'alpha transparent**, sans fond incrusté ; fonds clair/sombre exclusivement dans les comparatifs de QA. Les PNG de la PR restent **candidats PC**, sans validation PO ni essai matériel.
 
 ## Contrôle artistique avant choix
 
@@ -42,11 +45,13 @@ Depuis la racine du dépôt (Python 3 + Pillow) :
 
 ```sh
 python3 -m pip install Pillow
+python3 draft/portraits/pilote_A_L1_C1/export.py --check  # compare sans modifier les fichiers
+# Regénération volontaire :
 python3 draft/portraits/pilote_A_L1_C1/export.py
 python3 scripts/check_graphic_pipeline.py
 ```
 
-La recette valide d'abord le SHA-256 de la planche originale, génère le recadrage, la copie nettoyée, les trois hypothèses, la planche native et `comparatif_320x240_x4_nearest.png` (rendu **réel**, sans interpolation). Elle imprime les SHA-256 de chaque sortie régénérée. Le PNG ×4 est également livré dans cette PR ; le SVG reste une variante d'affichage. Le redimensionnement ×4 du PNG livré a été construit par copie des pixels exacts, sans interpolation.
+La recette valide d'abord le SHA-256 de la planche originale, génère (ou, avec `--check`, compare pixel par pixel sans écriture) le recadrage, la copie nettoyée, les trois hypothèses, la planche native et `comparatif_320x240_x4_nearest.png` (rendu **réel**, sans interpolation). Elle imprime les SHA-256 de chaque sortie régénérée. Le PNG ×4 est également livré dans cette PR ; le SVG reste une variante d'affichage. Le redimensionnement ×4 du PNG livré a été construit par copie des pixels exacts, sans interpolation.
 
 ## Gouvernance
 
