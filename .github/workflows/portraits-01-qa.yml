@@ -1,0 +1,96 @@
+name: PORTRAITS-01 temporary pixel QA
+on:
+  pull_request:
+    paths:
+      - 'draft/portraits/pilote_A_L1_C1/**'
+      - '.github/workflows/portraits-01-qa.yml'
+permissions:
+  contents: read
+jobs:
+  reproduce-original:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check 'Pillow==12.0.0'
+      - name: Reproduce from GitHub original and inspect alpha/edge pixels
+        shell: bash
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          import hashlib, io, json, runpy, subprocess, os
+          base=Path('draft/portraits/pilote_A_L1_C1')
+          source=Path('draft/portraits/portrait_A.png')
+          digest=lambda b: hashlib.sha256(b).hexdigest()
+          sha=digest(source.read_bytes())
+          assert sha=='30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc',sha
+          print('ORIGINAL_SHA256',sha,'BYTES',source.stat().st_size)
+          original=Image.open(source).convert('RGBA')
+          assert original.size==(1448,1086)
+          crop=original.crop((0,49,362,411))
+          px=crop.load()
+          green=[]
+          for y in range(362):
+              for x in range(362):
+                  r,g,b,a=px[x,y]
+                  if g>140 and g>r*1.14 and g>b*1.8:
+                      border=any(px[xx,yy][3]==0 for yy in range(max(0,y-2),min(y+3,362)) for xx in range(max(0,x-2),min(x+3,362)))
+                      green.append({'xy':[x,y],'rgba':[r,g,b,a],'near_transparency_2px':border})
+          print('ORIGINAL_GREEN_PIXELS',json.dumps(green))
+          names=['source_HD_coupe.png','source_HD_nettoyee.png','pilote_32.png','pilote_48.png','pilote_64.png','comparatif_320x240.png','comparatif_320x240_x4_nearest.png']
+          committed={n:subprocess.check_output(['git','show','HEAD:'+str(base/n)]) for n in names}
+          runpy.run_path(str(base/'export.py'),run_name='__main__')
+          report={'source_sha256':sha,'green_pixels':green,'exports':{},'all_pixel_equal':True}
+          for n in names:
+              a=Image.open(io.BytesIO(committed[n])).convert('RGBA')
+              b=Image.open(base/n).convert('RGBA')
+              assert a.size==b.size,(n,a.size,b.size)
+              changes=[(i,u,v) for i,(u,v) in enumerate(zip(a.getdata(),b.getdata())) if u!=v]
+              c_alpha=sum(u[3]!=v[3] for i,u,v in changes)
+              first=[{'xy':[i%a.width,i//a.width],'was':list(u),'now':list(v)} for i,u,v in changes[:5]]
+              entry={'size':list(b.size),'committed_sha256':digest(committed[n]),'regenerated_sha256':digest((base/n).read_bytes()),'changed_pixels':len(changes),'changed_alpha':c_alpha,'first':first,'bytes_equal':committed[n]==(base/n).read_bytes()}
+              if n.startswith('pilote_'):
+                  assert b.mode=='RGBA'
+                  alpha=list(b.getchannel('A').getdata())
+                  entry['alpha_zero']=sum(x==0 for x in alpha)
+                  entry['alpha_partial']=sum(0<x<255 for x in alpha)
+                  entry['alpha_opaque']=sum(x==255 for x in alpha)
+                  # Ensure all RGB payload in fully invisible pixels has no visual effect on contrast backgrounds.
+                  normalized=Image.new('RGBA',b.size)
+                  normalized.putdata([(0,0,0,0) if p[3]==0 else p for p in b.getdata()])
+                  for bg_rgb in ((12,30,47,255),(246,237,220,255)):
+                      c1=Image.new('RGBA',b.size,bg_rgb)
+                      c2=c1.copy()
+                      c1.alpha_composite(b);c2.alpha_composite(normalized)
+                      assert c1.tobytes()==c2.tobytes(),n
+              report['exports'][n]=entry
+              report['all_pixel_equal'] &= len(changes)==0
+              print('FILE_COMPARISON',n,'CHANGED_PIXELS',len(changes),'CHANGED_ALPHA',c_alpha,'BYTES_EQUAL',entry['bytes_equal'])
+          native=Image.open(base/'comparatif_320x240.png').convert('RGBA')
+          zoom=Image.open(base/'comparatif_320x240_x4_nearest.png').convert('RGBA')
+          assert native.size==(320,240) and zoom.size==(1280,960)
+          assert native.resize((1280,960),Image.Resampling.NEAREST).tobytes()==zoom.tobytes()
+          report['x4_exact']=True
+          print('QA_RESULT',json.dumps(report,ensure_ascii=False))
+          (base/'qa_repro_report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')
+          PY
+      - name: Archive regenerated pilot and quantitative QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portraits-01-source-reproduction
+          path: |
+            draft/portraits/pilote_A_L1_C1/qa_repro_report.json
+            draft/portraits/pilote_A_L1_C1/source_HD_coupe.png
+            draft/portraits/pilote_A_L1_C1/source_HD_nettoyee.png
+            draft/portraits/pilote_A_L1_C1/pilote_32.png
+            draft/portraits/pilote_A_L1_C1/pilote_48.png
+            draft/portraits/pilote_A_L1_C1/pilote_64.png
+            draft/portraits/pilote_A_L1_C1/comparatif_320x240.png
+            draft/portraits/pilote_A_L1_C1/comparatif_320x240_x4_nearest.png
+          retention-days: 14
