@@ -189,8 +189,8 @@ def main():
         report["recomposed_rgb888_sha256"] = sha256(rgb888.tobytes())
         report["firmware_rgb888_sha256"] = sha256(actual565.tobytes())
         if args.reference:
-            if not str(args.reference).startswith("maquettes/accueil/legacy/"):
-                raise ValueError("Maquette is oracle-only under accueil/legacy/")
+            if not str(args.reference) == "maquettes/accueil/accueil_cyd_warship_320x240.png":
+                raise ValueError("Current accueil composition is oracle-only under maquettes/accueil/")
             oracle = root / args.reference
             with Image.open(oracle) as im:
                 if im.size != (W, H):

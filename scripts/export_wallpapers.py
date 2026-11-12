@@ -17,12 +17,11 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / "assets/wallpaper"
-HISTORICAL_DEST = ROOT / "maquettes/accueil-historique/legacy"
-HISTORICAL_SCREEN = HISTORICAL_DEST.parent / "screen.json"
+# Historical PR8 screen is available from immutable Git history only.
 
 
 def output_path(name: str) -> Path:
-    return (HISTORICAL_DEST if name.startswith("accueil_historique_") else DEST) / name
+    return DEST / name
 MANIFEST = ROOT / "assets/manifest.json"
 OLD_COMMIT = "50d9e1dabd71725adba50279929694123fde0fda"
 OLD_DIR = "design/graph-acc-001/"
@@ -121,6 +120,8 @@ def construct() -> tuple[dict[str, bytes], list[dict]]:
 
 def verify(files: dict[str, bytes], entries: list[dict]) -> None:
     for name, data in files.items():
+        if name.startswith("accueil_historique_"):
+            continue
         path = output_path(name)
         if not path.is_file() or path.read_bytes() != data:
             raise RuntimeError("Export missing or changed: " + str(path))
@@ -129,21 +130,16 @@ def verify(files: dict[str, bytes], entries: list[dict]) -> None:
     for entry in entries:
         if by_id.get(entry["id"]) != entry:
             raise RuntimeError("Manifest mismatch: " + entry["id"])
-    screen = json.loads(HISTORICAL_SCREEN.read_text(encoding="utf-8"))
-    for name, data in files.items():
-        if name.startswith("accueil_historique_"):
-            canonical_blob = hashlib.sha1(f"blob {len(data)}\0".encode("ascii") + data).hexdigest()
-            if screen.get("legacy_files", {}).get(name) != canonical_blob:
-                raise RuntimeError("Historical screen inventory mismatch: " + name)
-    print("ACCUEIL_EXPORT_OK: two runtime wallpaper images and two archived screen images byte-reproducible")
+    print("ACCUEIL_EXPORT_OK: two runtime wallpaper images reproducible; historical PR8 in Git")
     for e in entries:
         print(e["path"], e["dimensions"], e["sha256"])
 
 
 def write(files: dict[str, bytes], entries: list[dict]) -> None:
     DEST.mkdir(parents=True, exist_ok=True)
-    HISTORICAL_DEST.mkdir(parents=True, exist_ok=True)
     for name, data in files.items():
+        if name.startswith("accueil_historique_"):
+            continue
         path = output_path(name)
         if path.exists() and path.read_bytes() != data:
             raise RuntimeError("Refusing to overwrite approved pixels: " + name)
