@@ -1,0 +1,55 @@
+name: One-off PO original portrait ingestion #124
+on:
+  push:
+    branches:
+      - chore/issue-124-po-portrait-sources-20261112
+    paths:
+      - .github/workflows/transfer-po-portraits-124.yml
+permissions:
+  contents: write
+jobs:
+  ingest-originals:
+    if: github.repository == 'Kharn27/ESP32-OTA-Battleship'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout dedicated source-archive branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download five PO originals and verify original-byte SHA256
+        shell: bash
+        env:
+          URL_A: "https://at.adobe.com/8LA40lSILdvB3a7w"
+          URL_B: "https://at.adobe.com/OrdnnIgCHFDrq65i"
+          URL_C: "https://at.adobe.com/ZLmEMwZ9T8GE53eN"
+          URL_D: "https://at.adobe.com/Fb0eD2ZFD2XLzoGF"
+          URL_E: "https://at.adobe.com/nrIvSOEcwOPUIlFT"
+        run: |
+          set -euo pipefail
+          mkdir -p draft/portraits
+          for letter in A B C D E; do
+            variable="URL_$letter"
+            curl --fail --location --silent --show-error --retry 2 --max-time 120 \
+              --output "draft/portraits/portrait_${letter}.png" "${!variable}"
+          done
+          cat > /tmp/expected-portrait-sha256.txt <<'SHAS'
+30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc  draft/portraits/portrait_A.png
+77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea  draft/portraits/portrait_B.png
+b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8  draft/portraits/portrait_C.png
+68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c  draft/portraits/portrait_D.png
+c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975  draft/portraits/portrait_E.png
+SHAS
+          sha256sum --check /tmp/expected-portrait-sha256.txt
+          file draft/portraits/portrait_?.png
+      - name: Commit exact five PNG originals to archive branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add draft/portraits/portrait_A.png draft/portraits/portrait_B.png \
+                  draft/portraits/portrait_C.png draft/portraits/portrait_D.png \
+                  draft/portraits/portrait_E.png
+          git commit -m "chore(draft): preserve exact PO portrait boards A-E (#124)"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
