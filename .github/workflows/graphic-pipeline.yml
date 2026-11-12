@@ -41,7 +41,7 @@ jobs:
         run: |
           python3 -m venv /tmp/cyd-graphics-venv
           /tmp/cyd-graphics-venv/bin/python -m pip install --disable-pip-version-check --no-input "Pillow==12.3.0"
-          /tmp/cyd-graphics-venv/bin/python maquettes/accueil/legacy/compose_accueil.py --repo . --out maquettes/accueil/legacy --check
+          /tmp/cyd-graphics-venv/bin/python maquettes/accueil/compose_accueil.py --repo . --out maquettes/accueil --check
       - name: Verify original/CYD wallpaper exports byte for byte
         run: /tmp/cyd-graphics-venv/bin/python scripts/export_wallpapers.py --check
       - name: Validate FLOT-01 native sprites and 4x pixel-perfect previews
