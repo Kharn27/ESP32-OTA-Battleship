@@ -1,0 +1,60 @@
+name: "Pilotage — import ponctuel des 3 images maîtresses PO dans draft/"
+on:
+  push:
+    branches:
+      - "ci/import-po-submarine-sources-20261112"
+    paths:
+      - ".github/workflows/import-po-submarine-sources.yml"
+permissions:
+  contents: write
+jobs:
+  import-originals:
+    name: "Importer PNG d'origine · vérifier SHA-256 · commit"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout de la branche de livraison (pas main)"
+        uses: actions/checkout@v4
+        with:
+          ref: pilotage/po-submarine-sources-20261112
+          fetch-depth: 1
+      - name: "Télécharger les sources exactes, extraire trois PNG, vérifier SHA-256"
+        shell: bash
+        env:
+          PO_SOURCE_ZIP: "https://at.adobe.com/tQy85xudBdktP32e"
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "99989f94018e20834198a87a78b02f72e2e4cd14"
+          mkdir -p draft
+          curl --fail --location --silent --show-error --retry 2 --max-time 90 "$PO_SOURCE_ZIP" -o /tmp/references-po.zip
+          file /tmp/references-po.zip
+          unzip -t /tmp/references-po.zip
+          unzip -p /tmp/references-po.zip 01_sous_marin_PO_INTACT_reference.png > draft/01_sous_marin_PO_INTACT_reference.png
+          unzip -p /tmp/references-po.zip 02_sous_marin_PO_DEGATS_GAUCHE_DROITE_reference.png > draft/02_sous_marin_PO_DEGATS_GAUCHE_DROITE_reference.png
+          unzip -p /tmp/references-po.zip 03_sous_marin_PO_DEGATS_CENTRE_reference.png > draft/03_sous_marin_PO_DEGATS_CENTRE_reference.png
+          printf '%s\n' \
+            '0dbad511b6e721ea94292189082f9bfb5bcd09f3877dab33f5b5851ee6fad138  draft/01_sous_marin_PO_INTACT_reference.png' \
+            '60c995dce2a1799dd1638d90315dfe78a98485cebb89d25ad10a3f3e5cc48c4d  draft/02_sous_marin_PO_DEGATS_GAUCHE_DROITE_reference.png' \
+            '00cbfd8e3358005e5c9f0359d2f78cff32faf9c1f5a3642c55bf985984528994  draft/03_sous_marin_PO_DEGATS_CENTRE_reference.png' \
+              | sha256sum --check
+          python3 - <<'PY'
+          from PIL import Image
+          for path in [
+            "draft/01_sous_marin_PO_INTACT_reference.png",
+            "draft/02_sous_marin_PO_DEGATS_GAUCHE_DROITE_reference.png",
+            "draft/03_sous_marin_PO_DEGATS_CENTRE_reference.png",
+          ]:
+              with Image.open(path) as im:
+                  assert im.size == (1024, 768), (path, im.size)
+                  assert im.mode == "RGB", (path, im.mode)
+                  print("OK", path, im.size, im.mode)
+          PY
+      - name: "Commit sur branche de livraison uniquement"
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- draft/01_sous_marin_PO_INTACT_reference.png draft/02_sous_marin_PO_DEGATS_GAUCHE_DROITE_reference.png draft/03_sous_marin_PO_DEGATS_CENTRE_reference.png
+          test "$(git diff --cached --name-only | wc -l)" -eq 3
+          git commit -m "design(draft): archiver les 3 masters du sous-marin remis par le PO (#126)"
+          git push origin HEAD:refs/heads/pilotage/po-submarine-sources-20261112
