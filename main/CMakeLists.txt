@@ -1,3 +1,15 @@
+# #128: freeze three CANDIDATE draft PNGs for ONE isolated TFT comparison.
+# Normal runtime, GUI01 and D15-A never compile this screen or access PNGs.
+if(WARSHIP_PORTRAITS01_TEST_ONLY)
+  if(WARSHIP_D11_NVS_BENCH OR WARSHIP_D13_CYD_SCENARIO OR WARSHIP_T03_DIAGNOSTIC)
+    message(FATAL_ERROR "PORTRAITS01 test cannot combine with other diagnostics")
+  endif()
+  idf_component_register(
+    SRCS "portraits01_probe.c"
+    PRIV_REQUIRES portraits01 warship_lcd heap freertos log esp_timer)
+  return()
+endif()
+
 # GUI-01 #115: isolated stylus reception; default NORMAL and D15-A unchanged.
 if(WARSHIP_GUI01_TEST_ONLY)
   if(WARSHIP_D11_NVS_BENCH OR WARSHIP_D13_CYD_SCENARIO OR WARSHIP_T03_DIAGNOSTIC)
@@ -52,7 +64,7 @@ idf_component_register(
   SRCS "app_main.c" "d09_probe.c" "d11_runtime.c" ${T03_SRCS}
   PRIV_REQUIRES warship_core warship_fleet warship_battle warship_captain warship_solo warship_lifecycle warship_palmares warship_palmares_nvs warship_event_bridge warship_event_id_nvs warship_deploy_ui warship_combat_ui warship_journey warship_inspection warship_touch t02_touch_map warship_lcd log
                 esp_driver_spi esp_driver_gpio freertos heap esp_timer
-                spi_flash esp_system esp_hw_support t03_decode d15a_g01 gui_button
+                spi_flash esp_system esp_hw_support t03_decode d15a_g01 gui_button portraits01
 )
 
 # An OPT-IN diagnostic build for an explicitly designated test CYD only.

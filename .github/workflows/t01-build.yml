@@ -62,6 +62,18 @@ jobs:
         run: cmake --build build-host --verbose
       - name: Run tests
         run: ctest --test-dir build-host --output-on-failure -V
+      - name: Check reproducible Portraits01 frozen exports and real alpha
+        run: |
+          python3 tools/portraits01_generate.py --repo . --output build-host/portraits01_second.c --report build-host/portraits01_second.json
+          cmp build-host/portraits01_data.c build-host/portraits01_second.c
+          python3 - <<'PY'
+          import json
+          r=json.load(open("build-host/portraits01_sources.json"))
+          assert r["source_pr_head"] == "dab0a35a1a891ab4d215a55cd16f2fe095a558df"
+          assert r["flash_bytes"] == 22272
+          assert len(r["sprites"]) == 3
+          print("PORTRAITS01_FROZEN_SOURCES_PASS", json.dumps(r,sort_keys=True))
+          PY
       - name: G01 PC proof (not CYD validation)
         uses: actions/upload-artifact@v4
         with:
@@ -69,6 +81,15 @@ jobs:
           path: |
             build-host/d15a_g01_metrics.json
             build-host/d15a_g01_firmware.png
+          if-no-files-found: error
+
+      - name: Portraits01 PC comparison proof (not CYD validation)
+        uses: actions/upload-artifact@v4
+        with:
+          name: portraits01-PC-${{ matrix.cc }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-host/portraits01_sources.json
+            build-host/portraits01_pc_comparison.json
           if-no-files-found: error
 
   esp32:
@@ -113,6 +134,7 @@ jobs:
             sha256sum build/cyd_warship.bin &&
             ! strings build/cyd_warship.elf | grep -Fq 'D15A_G01_TEST_ONLY=ON' &&
             ! strings build/cyd_warship.elf | grep -Fq 'G01_ASSET_LAYERS' &&
+            ! strings build/cyd_warship.elf | grep -Fq 'PORTRAITS01_TFT_TEST_ONLY=ON' &&
             test -s build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'choose_public_target' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
             grep -F 'commit_resolved_pair' build/esp-idf/warship_solo/CMakeFiles/__idf_warship_solo.dir/warship_solo.c.su &&
@@ -251,6 +273,35 @@ jobs:
             build-gui01/partition_table/partition-table.bin
             build-gui01/flasher_args.json
             build-gui01/cyd_warship.map
+            sdkconfig
+          if-no-files-found: error
+      - name: Build Portraits01 native CYD isolated TEST-ONLY
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.5.6
+          target: esp32
+          command: >-
+            python -m pip install --disable-pip-version-check 'Pillow==12.3.0' &&
+            idf.py -B build-portraits01 -D WARSHIP_PORTRAITS01_TEST_ONLY=ON set-target esp32 &&
+            idf.py -B build-portraits01 -D WARSHIP_PORTRAITS01_TEST_ONLY=ON build &&
+            idf.py -B build-portraits01 size &&
+            idf.py -B build-portraits01 size-components &&
+            strings build-portraits01/cyd_warship.elf | grep -Fq 'PORTRAITS01_TFT_TEST_ONLY=ON' &&
+            ! strings build-portraits01/cyd_warship.elf | grep -Fq 'warship_d11lab' &&
+            ! strings build-portraits01/cyd_warship.elf | grep -Fq 'GUI01_ACTIVATE' &&
+            sha256sum build-portraits01/cyd_warship.bin
+      - name: Portraits01 CYD TEST-ONLY BIN (no hardware validation)
+        uses: actions/upload-artifact@v4
+        with:
+          name: portraits01-TEST-ONLY-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            build-portraits01/cyd_warship.bin
+            build-portraits01/cyd_warship.elf
+            build-portraits01/bootloader/bootloader.bin
+            build-portraits01/partition_table/partition-table.bin
+            build-portraits01/flasher_args.json
+            build-portraits01/cyd_warship.map
+            build-portraits01/esp-idf/portraits01/portraits01_sources.json
             sdkconfig
           if-no-files-found: error
       - name: Firmware artifact (no device validation)
