@@ -79,7 +79,7 @@ Au boot, log UART à **115200** : `PORTRAITS01_TFT_TEST_ONLY=ON`, `PORTRAITS01_S
 ```sh
 PORT=/dev/ttyUSB0 # EXEMPLE : remplacer par le port réellement identifié
 python -m esptool --chip esp32 --port "$PORT" flash_id
-python -m esptool --chip esp32 --port "$PORT" read_flash 0x8000 0x1000 cyd_device_partitions.bin
+python -m esptool --chip esp32 --port "$PORT" read_flash 0x8000 0xC00 cyd_device_partitions.bin
 ```
 
 3. **Décoder puis comparer la table réellement lue à la table livrée par le build :** utiliser `gen_esp32part.py` de **ce même ESP-IDF** et `cmp` (comparaison d'octets). Après extraction de l'artefact, placer les fichiers sous le répertoire `build-portraits01/` ou corriger seulement les chemins de fichiers, **jamais les offsets sans revue**.
