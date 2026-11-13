@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.16)
 # D15-A #112 opt-in one-screen TEST-ONLY preview; default NORMAL unchanged.
 option(WARSHIP_D15A_G01_TEST_ONLY "Isolated G01 visual reception firmware (no NVS/UI)" OFF)
 option(WARSHIP_GUI01_TEST_ONLY "Isolated GUI01 interactive G01 button reception, no navigation/NVS" OFF)
+option(WARSHIP_PORTRAITS01_TEST_ONLY "Isolated A-L1-C1 portrait TFT test #128; no production assets/NVS" OFF)
+if(WARSHIP_PORTRAITS01_TEST_ONLY AND
+   (WARSHIP_GUI01_TEST_ONLY OR WARSHIP_D15A_G01_TEST_ONLY))
+  message(FATAL_ERROR "Portraits TFT test cannot combine with GUI01 or D15-A")
+endif()
 if(WARSHIP_GUI01_TEST_ONLY AND WARSHIP_D15A_G01_TEST_ONLY)
   message(FATAL_ERROR "GUI01 tactile and D15-A static test modes are mutually exclusive")
 endif()

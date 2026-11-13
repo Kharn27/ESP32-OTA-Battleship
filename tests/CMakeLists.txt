@@ -350,3 +350,47 @@ foreach(mode nominal init_timer_fail init_channel_fail stop_fail
              set_duty_fail update_fail frequency_fail)
   add_test(NAME d15a_ledc_${mode} COMMAND d15a_backlight_tests ${mode})
 endforeach()
+
+# #128: same frozen individual PNG data and C99 compositor as the Xtensa
+# TEST-ONLY build. No synthetic/re-exported or flattened PC board as asset.
+set(P01_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
+set(P01_SCRIPT "${P01_ROOT}/tools/portraits01_generate.py")
+set(P01_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/portraits01_data.c")
+set(P01_SOURCES
+    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/pilote_32.png"
+    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/pilote_48.png"
+    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/pilote_64.png"
+    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/comparatif_320x240.png")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${P01_SCRIPT}" ${P01_SOURCES})
+execute_process(
+  COMMAND "${Python3_EXECUTABLE}" "${P01_SCRIPT}"
+          --repo "${P01_ROOT}" --output "${P01_GENERATED}"
+          --report "${CMAKE_CURRENT_BINARY_DIR}/portraits01_sources.json"
+  RESULT_VARIABLE P01_EXIT OUTPUT_VARIABLE P01_LOG ERROR_VARIABLE P01_ERR)
+if(NOT P01_EXIT EQUAL 0)
+  message(FATAL_ERROR "Portraits01 source freeze failed: ${P01_ERR}")
+endif()
+message(STATUS "${P01_LOG}")
+add_executable(portraits01_tests
+               test_portraits01.c
+               ../components/portraits01/portraits01_render.c
+               "${P01_GENERATED}")
+target_include_directories(portraits01_tests PRIVATE
+                           ../components/portraits01/include)
+target_compile_options(portraits01_tests PRIVATE -Wall -Wextra -Werror -pedantic)
+if(WARSHIP_SANITIZERS)
+  target_compile_options(portraits01_tests PRIVATE
+                         -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined)
+  target_link_options(portraits01_tests PRIVATE -fsanitize=address,undefined)
+endif()
+add_test(NAME portraits01_C99_real_png_pixels_dma_bands
+         COMMAND portraits01_tests --dump "${CMAKE_CURRENT_BINARY_DIR}/portraits01_board.rgb565")
+add_test(NAME portraits01_C99_vs_frozen_PC_comparison
+         COMMAND "${Python3_EXECUTABLE}"
+                 "${P01_ROOT}/tools/portraits01_compare_pc.py"
+                 --dump "${CMAKE_CURRENT_BINARY_DIR}/portraits01_board.rgb565"
+                 --board "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/comparatif_320x240.png"
+                 --report "${CMAKE_CURRENT_BINARY_DIR}/portraits01_pc_comparison.json")
+set_tests_properties(portraits01_C99_vs_frozen_PC_comparison
+                     PROPERTIES DEPENDS portraits01_C99_real_png_pixels_dma_bands)
