@@ -75,7 +75,7 @@ jobs:
                 assert sum(a==255 for a in alpha)==d["alpha_255"],f
                 assert min(alpha)==0 and max(alpha)>0,f
                 assert all(raw[i:i+3]==b"\x00\x00\x00" for i in range(0,len(raw),4) if raw[i+3]==0),f
-                assert list(im.getbbox())==d["bbox_nonzero"],(id_,im.getbbox(),d["bbox_nonzero"])
+                assert [im.getbbox()[0],im.getbbox()[1],im.getbbox()[2]-1,im.getbbox()[3]-1]==d["bbox_nonzero"],(id_,im.getbbox(),d["bbox_nonzero"])
                 path=ex/"preuves"/f"jalon2_{id_}_{sz}_x4.png"
                 with Image.open(path) as z:
                   assert z.mode=="RGBA" and z.size==(sz*4,sz*4),path
