@@ -1,0 +1,107 @@
+name: "Pilotage QA PR140 — independent J1 checks at exact HEAD"
+on:
+  push:
+    branches:
+      - pilotage/qa-pr140-1fa1c7d
+    paths:
+      - .github/workflows/pilotage-qa-pr140.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout EXACT PR #140 source HEAD
+        uses: actions/checkout@v4
+        with:
+          ref: 1fa1c7ddd64b7e63bceff881372a6ab4eec41ef1
+          fetch-depth: 1
+      - name: Verify immutable reviewed source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "1fa1c7ddd64b7e63bceff881372a6ab4eec41ef1"
+          echo "EXACT_PR_HEAD_OK"
+      - name: Install pinned Pillow version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check Pillow==12.3.0
+          python3 -c "from PIL import __version__; assert __version__ == '12.3.0'; print('Pillow',__version__)"
+      - name: Reproduce J0 baseline byte-for-byte (read only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 draft/portraits/exports/export_jalon0.py --check
+      - name: Reproduce J1 all 24 masters/sprites and 21 proofs byte-for-byte (read only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 draft/portraits/exports/export_jalon1.py --check
+      - name: Independently verify SHA manifests and PNG transparency/NEAREST
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from PIL import Image
+          base = Path("draft/portraits/exports")
+          j0 = json.loads((base/"manifest_jalon0.json").read_text(encoding="utf-8"))
+          j1 = json.loads((base/"manifest_jalon1.json").read_text(encoding="utf-8"))
+          ids0 = {j0["pilot"]["id"]} | {i["id"] for i in j0["items"]}
+          ids1 = [i["id"] for i in j1["items"]]
+          assert len(ids0)==5 and len(ids1)==8 and len(set(ids1))==8, (ids0, ids1)
+          assert ids0.isdisjoint(ids1), (ids0, ids1)
+          assert j1["count"]["stage_completed_if_accepted"]==13
+          assert j1["count"]["remaining_if_accepted"]==55
+          assert j1["device_status"]=="ON_DEVICE_UNVERIFIED"
+          for letter, expected in j1["source_reference_sha256"].items():
+              f=Path("draft/portraits")/("portrait_"+letter+".png")
+              assert hashlib.sha256(f.read_bytes()).hexdigest()==expected,f
+          observed_paths=set()
+          for entry in j1["items"]:
+              id_=entry["id"]
+              assert id_ in ("A-L1-C2","A-L1-C3","B-L1-C1","B-L1-C3",
+                              "C-L1-C1","C-L3-C1","D-L1-C5","E-L1-C4"),id_
+              for key, side in (("master", entry["master_square"]),("p48",48),("p64",64)):
+                  d=entry["files"][key]; f=Path(d["path"])
+                  assert f.is_file() and f not in observed_paths, f
+                  observed_paths.add(f)
+                  assert hashlib.sha256(f.read_bytes()).hexdigest()==d["sha256"],f
+                  assert f.stat().st_size==d["size_bytes"],f
+                  with Image.open(f) as im:
+                      assert im.format=="PNG" and im.mode=="RGBA" and im.size==(side,side),f
+                      if key=="master": continue
+                      pixels=im.tobytes()
+                      alphas=pixels[3::4]
+                      assert alphas.count(0)==d["alpha_0"],f
+                      assert alphas.count(255)==d["alpha_255"],f
+                      assert sum(0<a<255 for a in alphas)==d["alpha_partial"],f
+                      assert min(alphas)==0 and max(alphas)>0, f
+                      assert all(not any(pixels[n:n+3]) for n in range(0,len(pixels),4) if pixels[n+3]==0),f
+                      proof=base/"preuves"/("jalon1_"+id_+"_"+str(side)+"_x4.png")
+                      with Image.open(proof) as z:
+                          assert z.mode=="RGBA" and z.size==(side*4,side*4),proof
+                          assert z.tobytes()==im.resize((side*4,side*4),Image.Resampling.NEAREST).tobytes(),proof
+                      print("QA",id_,side,"alpha_max",max(alphas),"bbox",im.getbbox())
+          proofs=list((base/"preuves").glob("jalon1_*.png"))
+          assert len(proofs)==21,len(proofs)
+          for n in (1,2):
+              for bg in ("clair","sombre"):
+                  f=base/"preuves"/("jalon1_p"+str(n)+"_320x240_"+bg+".png")
+                  with Image.open(f) as im:
+                      assert im.mode=="RGBA" and im.size==(320,240),f
+          with Image.open(base/"preuves"/"jalon1_contact_1120x182.png") as im:
+              assert im.size==(1120,182),im.size
+          assert len(observed_paths)==24
+          print("INDEPENDENT_QA_J1_OK: 8 IDs, 24 master/sprite PNG, 21 proofs, 16 NEAREST zooms, 5 original SHA-256")
+          PY
+      - name: Verify graphic pipeline and clean readonly checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_graphic_pipeline.py
+          test -z "$(git status --porcelain)"
+          echo "CLEAN_TREE_QA_OK"
