@@ -12,7 +12,7 @@
     "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
     "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
   },
-  "source_integrity": "Source SHA-256 documented in main README; complete --check against GitHub checkout remains to be executed. Prior reference J1 A-L1-C2 48px reproduced byte-for-byte from Adobe source.",
+  "source_integrity": "Source SHA-256 PO unchanged; QA indépendante validée sur ancien HEAD abc8f6e, nouveau HEAD correctif à recontrôler.",
   "pipeline": {
     "python": "3.11+",
     "pillow": "12.3.0",
@@ -86,15 +86,15 @@
       "files": {
         "master": {
           "path": "draft/portraits/exports/A-L2-C2/master_HD.png",
-          "sha256": "f906e31b9360c3ed1950d31605a0f49be7528e98edc11a3a3d7ae3fd111cd2a9",
+          "sha256": "7e87035968acc52eaca037ce4fa305c3887edc48472bd4b379fccc74be0f110e",
           "size_bytes": 524646
         },
         "p48": {
           "path": "draft/portraits/exports/A-L2-C2/portrait_48.png",
-          "sha256": "1594509545f0e18a9258aa4ae48ca8d0a753488290e710a5034511d97e66cec0",
+          "sha256": "9d658d7d4ba4e27a63b61e9968d793e7b99f487571c9f33d28444b241c6c9ac1",
           "size_bytes": 9332,
-          "alpha_0": 485,
-          "alpha_partial": 1819,
+          "alpha_0": 488,
+          "alpha_partial": 1816,
           "alpha_255": 0,
           "bbox_nonzero": [
             0,
@@ -105,10 +105,10 @@
         },
         "p64": {
           "path": "draft/portraits/exports/A-L2-C2/portrait_64.png",
-          "sha256": "eeb2c0aae9747468bd800ffc6e456bedd017d48af26f20dc57cc2b74380c3739",
+          "sha256": "e2ee0d70084bb09cb91473f50e26779a9339b69624afa43911d819e5d4949bf4",
           "size_bytes": 16516,
-          "alpha_0": 885,
-          "alpha_partial": 3211,
+          "alpha_0": 891,
+          "alpha_partial": 3205,
           "alpha_255": 0,
           "bbox_nonzero": [
             0,
@@ -118,7 +118,7 @@
           ]
         }
       },
-      "exception": "Moustache, lunettes, frange latérale rouge à contrôler"
+      "exception": "Moustache, lunettes, frange latérale rouge à contrôler ; masque rectangle x<10, y=200..234 supprime la frange rousse de cellule voisine"
     },
     {
       "id": "B-L2-C1",
@@ -331,39 +331,39 @@
       "files": {
         "master": {
           "path": "draft/portraits/exports/D-L2-C2/master_HD.png",
-          "sha256": "d4da1b83ed34e68272e740500972bb1d867201dde102e856317597a62ed6a007",
+          "sha256": "19b6dc65a177411d795e07209be72c147c0c93ee0c4145d16a46659be76978f7",
           "size_bytes": 377396
         },
         "p48": {
           "path": "draft/portraits/exports/D-L2-C2/portrait_48.png",
-          "sha256": "338b9de81fe9a911d84f964c9c11232c2d1918b0fe6d6cbca43f14f13b3ba461",
+          "sha256": "2ebb0e70835ac94428f347366e1bee431ea1a96a21ce263f287357280637305a",
           "size_bytes": 9332,
-          "alpha_0": 938,
-          "alpha_partial": 1366,
+          "alpha_0": 963,
+          "alpha_partial": 1341,
           "alpha_255": 0,
           "bbox_nonzero": [
             0,
             4,
-            47,
+            44,
             43
           ]
         },
         "p64": {
           "path": "draft/portraits/exports/D-L2-C2/portrait_64.png",
-          "sha256": "e46f5de8db760ac9d1ed70f9883d75e7ac61a159718aac41594600f875412175",
+          "sha256": "1004f26ce7d30d4e2b3ce50a55020ecdee61b2950d633395d3f4a53ba0cbfcf6",
           "size_bytes": 16516,
-          "alpha_0": 1697,
-          "alpha_partial": 2399,
+          "alpha_0": 1741,
+          "alpha_partial": 2355,
           "alpha_255": 0,
           "bbox_nonzero": [
             0,
             5,
-            63,
+            59,
             58
           ]
         }
       },
-      "exception": "Tatouages, haut source +4px"
+      "exception": "Tatouages, haut source +4px ; masque rectangle droit x>=292 supprime les fragments detaches"
     },
     {
       "id": "E-L2-C4",
@@ -424,12 +424,46 @@
     "remaining_if_accepted": 47
   },
   "qa": {
-    "expected_preview_count": 21,
-    "committed_preview_count": 21,
-    "script_check": "NOT_EXECUTED_ON_CLEAN_CHECKOUT",
-    "graphic_pipeline": "PENDING_CI",
+    "expected_preview_count": 23,
+    "committed_preview_count": 23,
+    "script_check": "RECHECK_REQUIRED_ON_NEW_HEAD",
+    "graphic_pipeline": "PENDING_NEW_HEAD_CI",
     "device": "NOT_TESTED"
   },
   "po_go": "Candidate production only, no individual artistic PO GO",
-  "promotion": "Blocked until #134 with individual PO approval"
+  "promotion": "Blocked until #134 with individual PO approval",
+  "correction": {
+    "review_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/142#pullrequestreview-5921914474",
+    "reference_head": "abc8f6e028abffa75cae93cf11c7577d4c2e7a3b",
+    "status": "CANDIDATE — ON_DEVICE_UNVERIFIED",
+    "masks": [
+      {
+        "id": "D-L2-C2",
+        "rect_hd": [
+          292,
+          0,
+          307,
+          307
+        ],
+        "removed_nonzero_pixels": 1031,
+        "purpose": "fragments détachés bord droit x47"
+      },
+      {
+        "id": "A-L2-C2",
+        "rect_hd": [
+          0,
+          200,
+          10,
+          235
+        ],
+        "removed_nonzero_pixels": 203,
+        "purpose": "frange rouge de cellule A-L2-C1, alpha très faible"
+      }
+    ],
+    "compare_proofs": [
+      "draft/portraits/exports/preuves/jalon2_correctif_A-L2-C2_avant_apres_320x240.png",
+      "draft/portraits/exports/preuves/jalon2_correctif_D-L2-C2_avant_apres_320x240.png"
+    ],
+    "boundaries": "originals PO / J0 / J1 / six autres IDs J2 inchangés; aucun asset/runtime"
+  }
 }
