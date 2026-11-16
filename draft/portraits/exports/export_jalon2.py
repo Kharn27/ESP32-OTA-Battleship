@@ -49,6 +49,9 @@ GLYPHS = {
  "D":["110","101","101","101","110"], "E":["111","100","110","100","111"],
  "L":["100","100","100","100","111"], "-":["000","000","111","000","000"],
  " ":["000","000","000","000","000"],
+ "V":["101","101","101","101","010"], "N":["101","111","111","111","101"],
+ "T":["111","010","010","010","010"], "P":["110","101","110","100","100"],
+ "R":["110","101","110","101","101"], "S":["011","100","010","001","110"],
 }
 
 def sha256(content: bytes) -> str:
@@ -87,6 +90,26 @@ def master_from_original(sheet: Image.Image, rect: tuple[int,int,int,int],
         if data[p+3] == 0:  # RGB caché derrière alpha nul = 0, anti-halo
             data[p:p+3] = b"\x00\x00\x00"
     return bytes(data)
+
+def apply_local_mask(id_: str, original: bytes, side: int) -> bytes:
+    """Rectangles de nettoyage sur le master dérivé (jamais sur l'original PO).
+
+    D-L2-C2: x=292..306, le corps principal s'arrête à x=286 ;
+    A-L2-C2: x=0..9, y=200..234, frange de la cellule voisine A-L2-C1.
+    """
+    rectangles = {
+        "D-L2-C2": ((292, 0, 307, 307),),
+        "A-L2-C2": ((0, 200, 10, 235),),
+    }
+    output = bytearray(original)
+    for x0, y0, x1, y1 in rectangles.get(id_, ()):
+        if x1 > side or y1 > side:
+            raise ValueError(f"Masque {id_} hors master {side}px")
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                p = (y * side + x) * 4
+                output[p:p+4] = b"\x00\x00\x00\x00"
+    return bytes(output)
 
 def box_alpha_rgba(master: bytes, side: int, target: int) -> bytes:
     """Intégration exacte des surfaces de recouvrement ; alpha prémultiplié.
@@ -160,7 +183,23 @@ def stamp(canvas: bytearray, w: int, sprite: bytes, side: int, x: int, y: int) -
             for c in range(3):
                 canvas[d+c] = (sprite[s+c]*a + canvas[d+c]*(255-a)+127)//255
 
-def previews(data_by_id: dict[str,dict[int,bytes]]) -> dict[Path,bytes]:
+def correction_comparison(before: dict[int, bytes], after: dict[int, bytes]) -> bytes:
+    """Témoin avant/après 320x240 : rangée sombre, rangée claire, 48 et 64."""
+    canvas = new_canvas(320, 240, (17, 31, 46))
+    fill(canvas, 320, 0, 120, 320, 120, (225, 236, 243))
+    for row in (0, 1):
+        y = row * 120
+        ink = (221, 234, 244) if row == 0 else (34, 53, 68)
+        for col, variants in enumerate((before, after)):
+            x = col * 160
+            label(canvas, 320, "AVANT" if col == 0 else "APRES", x+8, y+5, ink)
+            stamp(canvas, 320, variants[48], 48, x+10, y+24)
+            stamp(canvas, 320, variants[64], 64, x+80, y+18)
+            label(canvas, 320, "48", x+24, y+87, ink)
+            label(canvas, 320, "64", x+100, y+87, ink)
+    return png_rgba((320, 240), canvas)
+
+def previews(data_by_id: dict[str,dict[int,bytes]], before_by_id: dict[str,dict[int,bytes]]) -> dict[Path,bytes]:
     generated: dict[Path,bytes] = {}
     for id_, sizes in data_by_id.items():
         for n in (48, 64):
@@ -194,6 +233,8 @@ def previews(data_by_id: dict[str,dict[int,bytes]]) -> dict[Path,bytes]:
         stamp(board,1120,data_by_id[id_][64],64,x+3,101)
         stamp(board,1120,data_by_id[id_][64],64,x+73,101)
     generated[PROOFS/"jalon2_contact_1120x182.png"] = png_rgba((1120,182),board)
+    for id_, previous in before_by_id.items():
+        generated[PROOFS/f"jalon2_correctif_{id_}_avant_apres_320x240.png"] = correction_comparison(previous, data_by_id[id_])
     return generated
 
 def audit(p: Path, generated: bytes, check: bool) -> bool:
@@ -226,19 +267,23 @@ def main() -> int:
             raise RuntimeError(f"Original PO modifié : {p} {actual} != {expected}")
         print(f"SOURCE {p} SHA-256 OK ({actual})")
     data_by_id: dict[str,dict[int,bytes]] = {}
+    before_by_id: dict[str,dict[int,bytes]] = {}
     ok = True
     for id_, p, rect, side, top in CASES:
         with Image.open(SOURCES/f"portrait_{p}.png") as img:
             if img.mode != "RGBA":
                 raise RuntimeError(f"{p}: source non RGBA : {img.mode}")
-            master = master_from_original(img,rect,side,top)
+            uncorrected_master = master_from_original(img,rect,side,top)
+            master = apply_local_mask(id_, uncorrected_master, side)
+        if id_ in ("A-L2-C2", "D-L2-C2"):
+            before_by_id[id_] = {n: box_alpha_rgba(uncorrected_master, side, n) for n in (48, 64)}
         ok &= audit(EXPORTS/id_/"master_HD.png",png_rgba((side,side),master),check)
         data_by_id[id_] = {}
         for n in (48,64):
             data = box_alpha_rgba(master,side,n)
             data_by_id[id_][n] = data
             ok &= audit(EXPORTS/id_/f"portrait_{n}.png",png_rgba((n,n),data),check)
-    for p, content in previews(data_by_id).items():
+    for p, content in previews(data_by_id, before_by_id).items():
         ok &= audit(p,content,check)
     print("CHECK PASS" if ok else "CHECK FAILED", "(sans écriture)" if check else "(régénération)")
     return 0 if ok else 1
