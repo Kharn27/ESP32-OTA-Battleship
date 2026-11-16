@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "issue": 133,
+  "stage": "JALON_2",
+  "status": "CANDIDATE",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "base_main": "965039849944de7fe64d361476884a594e897a21",
+  "source_reference_sha256": {
+    "A": "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc",
+    "B": "77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea",
+    "C": "b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8",
+    "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
+    "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
+  },
+  "source_integrity": "Source SHA-256 PO unchanged; QA indépendante validée sur ancien HEAD abc8f6e, nouveau HEAD correctif à recontrôler.",
+  "pipeline": {
+    "python": "3.11+",
+    "pillow": "12.3.0",
+    "codec": "PNG RGBA 8-bit / zlib stored, no metadata",
+    "resampling": "area-weighted integer BOX with premultiplied alpha",
+    "zoom": "nearest-neighbour x4 exact",
+    "recipe": "draft/portraits/exports/export_jalon2.py"
+  },
+  "items": [
+    {
+      "id": "A-L2-C1",
+      "sheet": "A",
+      "rect": [
+        0,
+        592,
+        362,
+        954
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 362,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/A-L2-C1/master_HD.png",
+          "sha256": "5b6481ff62b7a626386261baeaf60791005e0e27de4364d171c85bcaece2b97b",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/A-L2-C1/portrait_48.png",
+          "sha256": "cf216b90b99005d193311c0ad03aececbce7e32aca14494402518f941d14da02",
+          "size_bytes": 9332,
+          "alpha_0": 397,
+          "alpha_partial": 1907,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/A-L2-C1/portrait_64.png",
+          "sha256": "c463cb93acadd9ab8379befe37096f8d8885fd40ced43029c242d22f53fd92f4",
+          "size_bytes": 16516,
+          "alpha_0": 717,
+          "alpha_partial": 3379,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Tresse rousse, lunettes et fourrure"
+    },
+    {
+      "id": "A-L2-C2",
+      "sheet": "A",
+      "rect": [
+        362,
+        592,
+        724,
+        954
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 362,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/A-L2-C2/master_HD.png",
+          "sha256": "7e87035968acc52eaca037ce4fa305c3887edc48472bd4b379fccc74be0f110e",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/A-L2-C2/portrait_48.png",
+          "sha256": "9d658d7d4ba4e27a63b61e9968d793e7b99f487571c9f33d28444b241c6c9ac1",
+          "size_bytes": 9332,
+          "alpha_0": 488,
+          "alpha_partial": 1816,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/A-L2-C2/portrait_64.png",
+          "sha256": "e2ee0d70084bb09cb91473f50e26779a9339b69624afa43911d819e5d4949bf4",
+          "size_bytes": 16516,
+          "alpha_0": 891,
+          "alpha_partial": 3205,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Moustache, lunettes, frange latérale rouge à contrôler ; masque rectangle x<10, y=200..234 supprime la frange rousse de cellule voisine"
+    },
+    {
+      "id": "B-L2-C1",
+      "sheet": "B",
+      "rect": [
+        0,
+        592,
+        362,
+        954
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L2-C1/master_HD.png",
+          "sha256": "45f040b0712b482ccfbb48db78111d00eac04f40f4760c9620ebad42094093a0",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L2-C1/portrait_48.png",
+          "sha256": "982f2b2088babb5b214e7bbcc317d3df4064b838183df4129dcf2ab1349a8dce",
+          "size_bytes": 9332,
+          "alpha_0": 514,
+          "alpha_partial": 1790,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L2-C1/portrait_64.png",
+          "sha256": "4c2c4bebe1ab04a17516fde4fce774d82adf423fe915a3568ccb61d385e56d66",
+          "size_bytes": 16516,
+          "alpha_0": 925,
+          "alpha_partial": 3171,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Tatouages, cheveux relevés, boucle blanche"
+    },
+    {
+      "id": "B-L2-C4",
+      "sheet": "B",
+      "rect": [
+        1086,
+        592,
+        1448,
+        954
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L2-C4/master_HD.png",
+          "sha256": "1086b7ed9737460e43a9dc147c1669150e2c3364d6bcc3eb510e0967b8a8474c",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L2-C4/portrait_48.png",
+          "sha256": "4f7bdcfb66b5a9a76dbbb35c9cd1cacccdb67f5c3b4415f22ad43da68fab47d3",
+          "size_bytes": 9332,
+          "alpha_0": 634,
+          "alpha_partial": 1670,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L2-C4/portrait_64.png",
+          "sha256": "c9b116aea1a822257f8a4a57d84effe17f536ab9444dcccec42eb81d2cdf8128",
+          "size_bytes": 16516,
+          "alpha_0": 1132,
+          "alpha_partial": 2964,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Insigne ancre, longue-vue au premier plan"
+    },
+    {
+      "id": "C-L2-C2",
+      "sheet": "C",
+      "rect": [
+        362,
+        278,
+        724,
+        543
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 48,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L2-C2/master_HD.png",
+          "sha256": "85d5cbd977b68581c5f1d93d239ff057e88ad5d0e32c49367d1d3317310dfc11",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L2-C2/portrait_48.png",
+          "sha256": "cb180cd170f8361ef07598df5deff84520e7dd5b4c41e25f5b7f8a6805d0ad80",
+          "size_bytes": 9332,
+          "alpha_0": 897,
+          "alpha_partial": 1407,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            41
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L2-C2/portrait_64.png",
+          "sha256": "f81e4823d43fa2cd07687a62cdfe2954185e11b75149f685ae658a75d38bc3c2",
+          "size_bytes": 16516,
+          "alpha_0": 1595,
+          "alpha_partial": 2501,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            63,
+            55
+          ]
+        }
+      },
+      "exception": "Col élevé, haut source +6px contre pollution rangée"
+    },
+    {
+      "id": "C-L2-C3",
+      "sheet": "C",
+      "rect": [
+        724,
+        278,
+        1086,
+        543
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 48,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L2-C3/master_HD.png",
+          "sha256": "56eba1ec523d4a335db302cd2a577f722bff330bc576248ea6ceacd9c98e064a",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L2-C3/portrait_48.png",
+          "sha256": "e467cb17c27bef618621cee54b13fe65c44779cf56112c158c0319e58851e88d",
+          "size_bytes": 9332,
+          "alpha_0": 834,
+          "alpha_partial": 1470,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            41
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L2-C3/portrait_64.png",
+          "sha256": "7a9d8ba19774e5c68a551750f3ee2d8f74f8d6340e5f6758a1b0ae9cbc62dee5",
+          "size_bytes": 16516,
+          "alpha_0": 1476,
+          "alpha_partial": 2620,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            63,
+            55
+          ]
+        }
+      },
+      "exception": "Pipe/fumée, haut source +6px"
+    },
+    {
+      "id": "D-L2-C2",
+      "sheet": "D",
+      "rect": [
+        307,
+        260,
+        614,
+        512
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 27,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L2-C2/master_HD.png",
+          "sha256": "19b6dc65a177411d795e07209be72c147c0c93ee0c4145d16a46659be76978f7",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L2-C2/portrait_48.png",
+          "sha256": "2ebb0e70835ac94428f347366e1bee431ea1a96a21ce263f287357280637305a",
+          "size_bytes": 9332,
+          "alpha_0": 963,
+          "alpha_partial": 1341,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            44,
+            43
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L2-C2/portrait_64.png",
+          "sha256": "1004f26ce7d30d4e2b3ce50a55020ecdee61b2950d633395d3f4a53ba0cbfcf6",
+          "size_bytes": 16516,
+          "alpha_0": 1741,
+          "alpha_partial": 2355,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            59,
+            58
+          ]
+        }
+      },
+      "exception": "Tatouages, haut source +4px ; masque rectangle droit x>=292 supprime les fragments detaches"
+    },
+    {
+      "id": "E-L2-C4",
+      "sheet": "E",
+      "rect": [
+        1086,
+        278,
+        1448,
+        543
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 48,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L2-C4/master_HD.png",
+          "sha256": "9619c5260e64e3914ef6a229d52a61e3344f2201e59e9d00c95b366796abcc05",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L2-C4/portrait_48.png",
+          "sha256": "43cb768332db2ac1fd77382652b4e32e2ea4e61777b374db126898fbae27209a",
+          "size_bytes": 9332,
+          "alpha_0": 983,
+          "alpha_partial": 1321,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            41
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L2-C4/portrait_64.png",
+          "sha256": "1258a3d14e0149e3c9923e362a7bb260b1d7342059924ddc4770b69b9f5b0c2f",
+          "size_bytes": 16516,
+          "alpha_0": 1771,
+          "alpha_partial": 2325,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            63,
+            55
+          ]
+        }
+      },
+      "exception": "Chef, grande toque, haut source +6px"
+    }
+  ],
+  "count": {
+    "positions_total": 68,
+    "baseline_completed": 13,
+    "stage_new": 8,
+    "stage_new_variants": 16,
+    "stage_completed_if_accepted": 21,
+    "remaining_if_accepted": 47
+  },
+  "qa": {
+    "expected_preview_count": 23,
+    "committed_preview_count": 23,
+    "script_check": "RECHECK_REQUIRED_ON_NEW_HEAD",
+    "graphic_pipeline": "PENDING_NEW_HEAD_CI",
+    "device": "NOT_TESTED"
+  },
+  "po_go": "Candidate production only, no individual artistic PO GO",
+  "promotion": "Blocked until #134 with individual PO approval",
+  "correction": {
+    "review_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/142#pullrequestreview-5921914474",
+    "reference_head": "abc8f6e028abffa75cae93cf11c7577d4c2e7a3b",
+    "status": "CANDIDATE — ON_DEVICE_UNVERIFIED",
+    "masks": [
+      {
+        "id": "D-L2-C2",
+        "rect_hd": [
+          292,
+          0,
+          307,
+          307
+        ],
+        "removed_nonzero_pixels": 1031,
+        "purpose": "fragments détachés bord droit x47"
+      },
+      {
+        "id": "A-L2-C2",
+        "rect_hd": [
+          0,
+          200,
+          10,
+          235
+        ],
+        "removed_nonzero_pixels": 203,
+        "purpose": "frange rouge de cellule A-L2-C1, alpha très faible"
+      }
+    ],
+    "compare_proofs": [
+      "draft/portraits/exports/preuves/jalon2_correctif_A-L2-C2_avant_apres_320x240.png",
+      "draft/portraits/exports/preuves/jalon2_correctif_D-L2-C2_avant_apres_320x240.png"
+    ],
+    "boundaries": "originals PO / J0 / J1 / six autres IDs J2 inchangés; aucun asset/runtime"
+  }
+}
