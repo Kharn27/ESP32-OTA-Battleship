@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "issue": 133,
+  "stage": "JALON_0",
+  "status": "CANDIDATE",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "source_reference_sha256": {
+    "A": "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc",
+    "B": "77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea",
+    "C": "b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8",
+    "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
+    "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
+  },
+  "source_integrity": "SHA-256 sources référencés (README main). Non recalculés indépendamment sur checkout entier dans ce tour.",
+  "pipeline": {
+    "python": "3.11+",
+    "pillow": "12.3.0",
+    "codec": "PNG RGBA 8 bits sans metadata; DEFLATE stored",
+    "resampling": "area-weighted BOX with premultiplied alpha integer arithmetic",
+    "alpha": "straight RGBA with zero hidden RGB",
+    "zoom": "nearest-neighbour x4 exact",
+    "recipe": "draft/portraits/exports/export_jalon0.py"
+  },
+  "pilot": {
+    "id": "A-L1-C1",
+    "sheet": "A",
+    "source": "draft/portraits/portrait_A.png",
+    "rect": [
+      0,
+      49,
+      362,
+      411
+    ],
+    "reuse": true,
+    "path48": "draft/portraits/pilote_A_L1_C1/pilote_48.png",
+    "path64": "draft/portraits/pilote_A_L1_C1/pilote_64.png",
+    "hash48": "5abbcacd3981e6b426c93542dcb6289712afc4ca49b7f38dc5c35c9345360dee",
+    "hash64": "2241bf1306772bbca3164356529a4fb8290f9ef33ae89aaa9b29d083572967da",
+    "zero48": 692,
+    "semi48": 1612,
+    "zero64": 1242,
+    "semi64": 2854,
+    "baseline": "PR #125/#127 ; pilotes originaux inchangés sur main; --check du pilote documenté précédemment."
+  },
+  "items": [
+    {
+      "id": "B-L1-C2",
+      "sheet": "B",
+      "rect": [
+        362,
+        49,
+        724,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 2534,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L1-C2/master_HD.png",
+          "sha256": "a51a4127f2c8e6052fa81544f0debbf511951e5411e1147d743ecc7500a803c4"
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L1-C2/portrait_48.png",
+          "sha256": "df2b5b5c024eda68c2707a81898caad75676fb874131212c754af371c2d1e56d",
+          "alpha_0": 630,
+          "alpha_partial": 1674,
+          "alpha_255": 0
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L1-C2/portrait_64.png",
+          "sha256": "b9a4e6521d808d5ba71b40c3960cd18f33152d369a8ee93c6fc9132476fe7dca",
+          "alpha_0": 1128,
+          "alpha_partial": 2968,
+          "alpha_255": 0
+        }
+      },
+      "exception": "Haut des boucles proche du bord du recadrage. Confirmer l'absence de rognage perceptible au PO/Pilotage."
+    },
+    {
+      "id": "C-L2-C1",
+      "sheet": "C",
+      "rect": [
+        0,
+        272,
+        362,
+        543
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L2-C1/master_HD.png",
+          "sha256": "912702761be4f66663b8168865e982c4393f13b2889de2243f9ffe532775b41f"
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L2-C1/portrait_48.png",
+          "sha256": "159e62a3da5d263d270a58d4feb3f5eba244fddac5948757c9118a7f2474ed26",
+          "alpha_0": 882,
+          "alpha_partial": 1422,
+          "alpha_255": 0
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L2-C1/portrait_64.png",
+          "sha256": "bf84eff6d018e17fdf4fd673528a28b2e41273187c6e3b6d89ba153b48dc79d0",
+          "alpha_0": 1560,
+          "alpha_partial": 2536,
+          "alpha_255": 0
+        }
+      },
+      "exception": "Recadrage source non carré 362×271 ; marge transparente haute 45 ; le bas touche la limite de cellule. Vérifier épaulettes/cadre."
+    },
+    {
+      "id": "D-L2-C3",
+      "sheet": "D",
+      "rect": [
+        614,
+        256,
+        922,
+        512
+      ],
+      "master_square": 308,
+      "transparent_pad_top": 22,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L2-C3/master_HD.png",
+          "sha256": "aa14b876272f7096db0962d2a8adf4d4b763c0c05fb1e2f68eb0117bbf078901"
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L2-C3/portrait_48.png",
+          "sha256": "b935298bb7f8e5cbb3dd25ce0508820251a67a30fcf0232c34e706a4eca45f93",
+          "alpha_0": 616,
+          "alpha_partial": 1688,
+          "alpha_255": 0
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L2-C3/portrait_64.png",
+          "sha256": "072bc66c7da0042d5f86a0e8e526351a3d0baec7ce1099cb6380f090755ff3e0",
+          "alpha_0": 1137,
+          "alpha_partial": 2959,
+          "alpha_255": 0
+        }
+      },
+      "exception": "Squelette et tricorne à l'éclat cyan ; extrémités de la coiffe proches des bords du cadre source 308×256. Revue contour cyan nécessaire."
+    },
+    {
+      "id": "E-L4-C4",
+      "sheet": "E",
+      "rect": [
+        1086,
+        815,
+        1448,
+        1086
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L4-C4/master_HD.png",
+          "sha256": "11fee9d2372827a08ea5a90e4d61b9643d980f41d1c5df24e5415fd04c3e9182"
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L4-C4/portrait_48.png",
+          "sha256": "ff587247a24aaeda329732d7d35d40caf683af87d4cf0d210441c3c546b59c58",
+          "alpha_0": 771,
+          "alpha_partial": 1533,
+          "alpha_255": 0
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L4-C4/portrait_64.png",
+          "sha256": "1169a4e3568578b639d76269f0213aa125ec8a627abdcfb19da63d1edff0c3a9",
+          "alpha_0": 1378,
+          "alpha_partial": 2718,
+          "alpha_255": 0
+        }
+      },
+      "exception": "Perroquet coloré au contact du couvre-chef et en bord gauche ; conserver séparation visuelle au 48."
+    }
+  ],
+  "count": {
+    "positions_total": 68,
+    "stage_completed": 5,
+    "reused": 1,
+    "new": 4,
+    "new_exports": 8,
+    "total_variants_stage": 10,
+    "remaining": 63
+  },
+  "qa": {
+    "previews": "draft/portraits/exports/preuves/",
+    "expected_preview_count": 13,
+    "committed_preview_count": 13,
+    "script_check": "NOT_EXECUTED_IN_CLEAN_GITHUB_CHECKOUT",
+    "pixel_reproduction_from_source": "NOT_YET_ASSERTED_IN_CI",
+    "graphic_pipeline": "CI_PENDING_REVIEW",
+    "device": "NOT_TESTED"
+  },
+  "po_go": "GO production de candidats uniquement, aucun GO artistique individuel",
+  "promotion": "blocked until #134 and PO individual approval"
+}
