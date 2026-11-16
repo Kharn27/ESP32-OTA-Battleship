@@ -1,0 +1,78 @@
+name: "Pilotage QA PR138 — reproduction indépendante au HEAD exact"
+on:
+  push:
+    branches:
+      - pilotage/qa-pr138-e6759852
+    paths:
+      - .github/workflows/pilotage-qa-pr138.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout EXACT PR HEAD (not test-branch HEAD)
+        uses: actions/checkout@v4
+        with:
+          ref: e6759852be9728b014d78c22e0738008cefa567b
+          fetch-depth: 1
+      - name: Verify immutable HEAD
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "e6759852be9728b014d78c22e0738008cefa567b"
+      - name: Install exact Pillow dependency
+        run: |
+          python3 -m pip install --disable-pip-version-check Pillow==12.3.0
+          python3 -c "from PIL import __version__; assert __version__ == '12.3.0'; print('Pillow',__version__)"
+      - name: Reproduce 4 masters 8 sprites 13 proofs byte-for-byte READ ONLY
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 draft/portraits/exports/export_jalon0.py --check
+      - name: Independently verify manifest hashes dimensions alpha and 4x NEAREST
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from PIL import Image
+          p = Path("draft/portraits/exports")
+          m = json.loads((p/"manifest_jalon0.json").read_text())
+          assert m["count"]["stage_completed"] == 5
+          assert len(m["items"]) == 4
+          pil = m["pilot"]
+          ids = {pil["id"]}
+          all_ = [(pil["id"], 48, Path(pil["path48"]), pil["hash48"]),(pil["id"], 64, Path(pil["path64"]), pil["hash64"])]
+          count=0
+          for obj in m["items"]:
+              id_ = obj["id"]
+              assert id_ not in ids, id_
+              ids.add(id_)
+              for file_key, size in [("p48",48),("p64",64)]:
+                  ent = obj["files"][file_key]
+                  all_.append((id_,size,Path(ent["path"]),ent["sha256"]))
+              ent=obj["files"]["master"]
+              f=Path(ent["path"])
+              assert hashlib.sha256(f.read_bytes()).hexdigest()==ent["sha256"],f
+              count+=1
+          for id_,size,f,h in all_:
+              assert hashlib.sha256(f.read_bytes()).hexdigest() == h, f
+              im=Image.open(f); assert im.mode=="RGBA" and im.size==(size,size),f
+              alpha=im.getchannel("A")
+              assert min(alpha.getdata()) == 0 and max(alpha.getdata()) > 0, f
+              zoom=p/"preuves"/f"jalon0_{id_}_{size}_x4.png"
+              zm=Image.open(zoom)
+              assert zm.mode=="RGBA" and zm.size==(size*4,size*4),zoom
+              assert zm.tobytes() == im.resize((size*4,size*4), Image.Resampling.NEAREST).tobytes(),zoom
+          proof=list((p/"preuves").glob("*.png"))
+          assert len(proof)==13, len(proof)
+          print(f"INDEPENDENT_QA_OK: {len(all_)} variants, {count} masters, 13 proofs, hashes/dimensions/alpha/NEAREST")
+          PY
+      - name: Verify graphics pipeline & no writes on checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_graphic_pipeline.py
+          test -z "$(git status --porcelain)"
+          echo "CLEAN_TREE_QA_OK"
