@@ -32,7 +32,7 @@ Les images de comparaison (HTML/SVG/PNG générés) peuvent avoir des fonds somb
 | `source_on_cutout_588x148.png` | 588×148 | 155811 | `26e05999b4f1663f42713d31d76b214094b752ac5d17868e4f1d097bc38454d3` |
 | `source_off_cutout_588x148.png` | 588×148 | 151808 | `52dc7fb42aa207c6f7a1f0378fd7d113021d597a84c529d729d9818c862b6759` |
 
-Les six fichiers ont une signature PNG valide et `IHDR color_type=6` (RGBA). **La présence effective d'alpha nul sur les bords doit encore être confirmée par `qa.py`** ; la manipulation de détourage a été réalisée par Adobe. Aucune marge opaque volontaire autour du bouton.
+Les six fichiers ont une signature PNG valide et `IHDR color_type=6` (RGBA). **Contrôle RGBA réalisé en décodant les données PNG et leur filtre scanline** : les quatre exports comportent des pixels alpha=0, des pixels semi-transparents d'anticrénelage et des pixels opaques ; chacun des 4 coins a alpha=0. Comptages (transparent / semi / opaque) : ON 140 = 140 / 345 / 4415 ; OFF 140 = 142 / 460 / 4298 ; ON 112 = 89 / 271 / 2776 ; OFF 112 = 74 / 367 / 2695. Le détourage Adobe a été utilisé. Le script `qa.py` réalise un second contrôle lors du checkout complet.
 
 ## Différences artistiques ON / OFF
 
@@ -48,12 +48,12 @@ La Bible et G04-R2 exigent `FEU` pour verrouiller le tir. Le libellé des source
 
 ## Vérifications et limites
 
-- Ouvrir `comparatif_320x240.svg` et `comparatif_4x_1280x960.svg` (images intégrées, même échelle ON/OFF) ; `comparatif_references.html` juxtapose également les assets existants JOUER et PALMARÈS **sans les modifier**.
-- Dans un clone complet, après installation de Pillow, lancer `python3 draft/etudes/bouton_attaquer/qa.py`. Cela contrôle la présence d'alpha transparent, la taille et le SHA-256 de chaque candidat, calcule le SHA-256 des deux originaux PO, et produit `preuve_320x240.png`, `preuve_x4_1280x960.png` par agrandissement NEAREST. Les comparaisons SVG préexistantes peuvent être vues immédiatement ; les PNG générés ne sont pas encore enregistrés dans cette PR.
+- Ouvrir `comparatif_candidat_320x240.png` (preuve native composée, image non runtime), `comparatif_320x240.svg` et `comparatif_4x_1280x960.svg` (images intégrées, même échelle ON/OFF) ; `comparatif_references.html` juxtapose également les assets existants JOUER et PALMARÈS **sans les modifier**.
+- Dans un clone complet, après installation de Pillow, lancer `python3 draft/etudes/bouton_attaquer/qa.py`. Cela contrôle la présence d'alpha transparent, la taille et le SHA-256 de chaque candidat, calcule le SHA-256 des deux originaux PO, et produit `preuve_320x240.png`, `preuve_x4_1280x960.png` par agrandissement NEAREST. Le PNG natif `comparatif_candidat_320x240.png` est livré dans cette PR. Le zoom ×4 est disponible sous forme SVG avec `image-rendering=pixelated` et sera aussi généré comme PNG par `qa.py` lorsque le checkout complet et Pillow seront disponibles.
 - Lancer `python3 scripts/check_graphic_pipeline.py` depuis la racine du clone. **Non exécuté dans cet environnement** (le dépôt binaire complet n'est pas monté) ; aucune CI/validation matérielle revendiquée.
 - Provenance : originaux graphiques PO, copies Adobe du même espace utilisateur pour préparation ; ne pas supposer droits d'usage tiers. Décision finale PO requise.
 - Les formats, décodage et budgets Flash/RAM seront négociés avec le Développeur après GO PO ; valeurs de fichier PNG **≠** consommation RAM écran.
 
-**Points bloquants à lever pour recette Phase 1 :** contrôle réel des deux fichiers `draft/` en octets via checkout, inspection des PNG générés 320×240 (pas seulement SVG), preuve QA exécutée, retour PO sur la lisibilité et sur le conflit FEU/ATTAQUER. Aucun fichier de `assets/` ou du firmware n'est ajouté.
+**Points bloquants à lever pour recette Phase 1 :** contrôle réel des deux fichiers `draft/` en octets via checkout, inspection/revue PO du PNG 320×240 et du zoom ×4, preuve QA exécutée, retour PO sur la lisibilité et sur le conflit FEU/ATTAQUER. Aucun fichier de `assets/` ou du firmware n'est ajouté.
 
 Refs #139
