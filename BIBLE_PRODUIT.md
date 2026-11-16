@@ -394,6 +394,7 @@ Ces règles d'affichage sont décidées **pour l'interface V1.0**. Leur implanta
 | LOT1-ACC-005 | Commandes **superposées à l'illustration**, préférentiellement dans la zone calme en bas à gauche | **DÉCIDÉ (principe PO) / position exacte À VÉRIFIER** |
 | LOT1-ACC-006 | Conserver coucher de soleil, navire principal et ennemi distant ; représenter une **riposte adverse manquée** par une gerbe d'eau proche du navire principal | **DÉCIDÉ (intention de scène PO) / rendu À CONCEVOIR** |
 | LOT1-ACC-007 | Avion en feu en chute près du navire et escadrille en silhouettes devant le soleil | **PROPOSÉ par le PO / À VÉRIFIER en 320 × 240** |
+| PORTRAITS-02-DECISION | Portrait **48 × 48 px en jeu** et **64 × 64 px sur un futur écran de sélection** ; 32 × 32 px non retenu pour ces usages (§ 18) | **DÉCIDÉ (PO, 13/11/2026)** |
 
 ## 12. Traçabilité et sources
 
@@ -873,3 +874,17 @@ La présence d'un ennemi visible en feu dans une **illustration d'accueil** n'au
 
 **Critères d'acceptation proposés à consolider :** préférence observable pour une zone touchée puis son axe possible ; capacité à retrouver une ancienne piste ; absence de tir répété ou de déduction utilisant une information secrète.
 
+## 18. Portraits des personnages — formats selon l'usage (PORTRAITS-02-DECISION)
+
+**DÉCIDÉ par le PO le 13 novembre 2026, après comparaison du portrait pilote A-L1-C1 sur une CYD physique :**
+- **PORTRAIT_JEU_48px :** affichage des portraits en **48 × 48 pixels pendant la partie**.
+- **PORTRAIT_SELECTION_64px :** affichage des portraits en **64 × 64 pixels sur un futur écran de sélection des portraits**.
+- **32 × 32 pixels non retenus pour ces deux usages.** L'export de test reste conservé comme référence historique ; il ne devient pas un format produit pour ces contextes.
+
+**Portée de la preuve :** la sonde **TEST-ONLY** a permis de comparer **un seul personnage pilote, planche A / ligne 1 / colonne 1 (A-L1-C1)**, en trois tailles sur fonds clair et sombre, **sur une seule ESP32 CYD 320 × 240**. Le succès matériel du pilote n'homologue ni le catalogue complet ni l'affichage définitif des portraits dans les interfaces de jeu.
+
+**Frontières de cette décision :** choisir les tailles d'affichage ne vaut **ni validation artistique individuelle** des autres personnages, expressions ou variantes, **ni affectation automatique** d'un personnage à Capitaine, **ni GO pour développer/intégrer l'écran de sélection**, ni autorisation d'extraction en série. L'ergonomie et la composition du futur écran de sélection restent à concevoir et à valider séparément ; le format 48 × 48 devra être évalué dans la composition réelle de l'écran de jeu.
+
+**Statut des fichiers :** les exports candidats demeurent dans `draft/portraits/pilote_A_L1_C1/`. Leur promotion individuelle dans le catalogue `assets/` requiert une validation explicite du PO, conformément aux règles du dépôt ; aucune ressource n'est promue par ce seul arbitrage.
+
+**Traçabilité :** [décision PO officielle — issue #128, commentaire #6856598977](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/128#issuecomment-6856598977) ; [sonde TFT #128](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/128) et [PR technique #129 fusionnée](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/129) (merge `44e7f99b938247684baabb09c8cb3cfaf163a5a1`). Formalisation documentaire suivie dans [DOC-PO #131](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/131).
