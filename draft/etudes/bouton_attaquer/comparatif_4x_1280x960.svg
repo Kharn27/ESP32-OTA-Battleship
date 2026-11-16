@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="960" viewBox="0 0 320 240" shape-rendering="crispEdges">
-<rect width="320" height="120" fill="#071927"/><rect y="120" width="320" height="120" fill="#eee1d0"/>
-<g font-family="sans-serif" font-size="9" font-weight="bold"><text x="9" y="14" fill="#f3d79b">BTN-ATK-01 · FONCE / 140 PX</text>
-<text x="13" y="34" fill="#eee">ON</text><text x="168" y="34" fill="#eee">OFF</text>
-<text x="9" y="136" fill="#473122">CLAIR / COMPACT 112 PX</text>
-<text x="19" y="159" fill="#473122">ON</text><text x="185" y="159" fill="#473122">OFF</text>
-<text x="10" y="224" fill="#473122">DRAFT · CANDIDATE · ON_DEVICE_UNVERIFIED</text></g>
-<image href="attaquer_on_140x35_RGBA.png" x="12" y="45" width="140" height="35" image-rendering="pixelated"/>
-<image href="attaquer_off_140x35_RGBA.png" x="168" y="45" width="140" height="35" image-rendering="pixelated"/>
-<image href="attaquer_on_112x28_RGBA.png" x="18" y="170" width="112" height="28" image-rendering="pixelated"/>
-<image href="attaquer_off_112x28_RGBA.png" x="184" y="170" width="112" height="28" image-rendering="pixelated"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 320 240" shape-rendering="crispEdges"><title>BTN-ATK-01 preuve x4 plus proche voisin, dérivée du PNG natif</title><image href="comparatif_candidat_320x240.png" x="0" y="0" width="320" height="240" image-rendering="pixelated" style="image-rendering:pixelated"/></svg>
