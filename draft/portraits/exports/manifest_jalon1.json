@@ -1,0 +1,437 @@
+{
+  "schema_version": 1,
+  "issue": 133,
+  "stage": "JALON_1",
+  "status": "CANDIDATE",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "base_main": "6b3c965263408eb7104494a9c6da75e75b11efa2",
+  "source_reference_sha256": {
+    "A": "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc",
+    "B": "77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea",
+    "C": "b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8",
+    "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
+    "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
+  },
+  "source_integrity": "SHA-256 sources attendus dans README main, non recalculés sur checkout complet dans cette session. Recalcul de quatre étalons J0 B/C/D/E depuis les originaux Adobe : hash 48 identique à J0; le --check indépendant reste à lancer.",
+  "pipeline": {
+    "python": "3.11+",
+    "pillow": "12.3.0",
+    "codec": "PNG RGBA 8 bits sans metadata; DEFLATE stored",
+    "resampling": "area-weighted BOX with premultiplied alpha integer arithmetic",
+    "alpha": "straight RGBA with zero hidden RGB",
+    "zoom": "nearest-neighbour x4 exact",
+    "recipe": "draft/portraits/exports/export_jalon1.py"
+  },
+  "items": [
+    {
+      "id": "A-L1-C2",
+      "sheet": "A",
+      "rect": [
+        362,
+        49,
+        724,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/A-L1-C2/master_HD.png",
+          "sha256": "725720e92c70c74d3c5e80fb581d489829a6dbf33fbca7dc927de4825a4b0ea0",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/A-L1-C2/portrait_48.png",
+          "sha256": "0f45b4f1c6f87f37e3b0f6a96689bef6e37aab1fa5e860135b58d9ab0309f877",
+          "size_bytes": 9332,
+          "alpha_0": 701,
+          "alpha_partial": 1603,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            2,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/A-L1-C2/portrait_64.png",
+          "sha256": "017e7c5ba4c07cb43efe3278225f1be8029ce46ac3d04a1616f948195a1ddf80",
+          "size_bytes": 16516,
+          "alpha_0": 1271,
+          "alpha_partial": 2825,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Chapeau marine à ancre, boucles et épaulettes"
+    },
+    {
+      "id": "A-L1-C3",
+      "sheet": "A",
+      "rect": [
+        724,
+        49,
+        1086,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/A-L1-C3/master_HD.png",
+          "sha256": "61225d4d3d45cb371397cee576df2a2e5b4207b574dfb3ee15af353bd876e85e",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/A-L1-C3/portrait_48.png",
+          "sha256": "3535261008ab89454cb029dd91ace6626b5d5212d599d3611633064c1474bae0",
+          "size_bytes": 9332,
+          "alpha_0": 662,
+          "alpha_partial": 1642,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/A-L1-C3/portrait_64.png",
+          "sha256": "bde3b4a7bdaf488a6ddab8845d40c74c35392d5a10dbec4ff5a8eab132fa40f3",
+          "size_bytes": 16516,
+          "alpha_0": 1192,
+          "alpha_partial": 2904,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Bandeau rouge et tresses"
+    },
+    {
+      "id": "B-L1-C1",
+      "sheet": "B",
+      "rect": [
+        0,
+        49,
+        362,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L1-C1/master_HD.png",
+          "sha256": "ae93ae56436f76748431ee34b720b8fc0aa0a25621778017f69c39f4ca9a8369",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L1-C1/portrait_48.png",
+          "sha256": "c8777a810770ddda56ecf005c10c56d341126c8017f67e96812ce56db39adfbf",
+          "size_bytes": 9332,
+          "alpha_0": 689,
+          "alpha_partial": 1615,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            2,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L1-C1/portrait_64.png",
+          "sha256": "52fc7f5b866ecc6da3d5a4281147aad4755ed2f38913baa7acc02d641287abd4",
+          "size_bytes": 16516,
+          "alpha_0": 1242,
+          "alpha_partial": 2854,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            2,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Cheveux argentés, ornements latéraux, drapé violet"
+    },
+    {
+      "id": "B-L1-C3",
+      "sheet": "B",
+      "rect": [
+        724,
+        49,
+        1086,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L1-C3/master_HD.png",
+          "sha256": "5dd58caf29251b7fb496f023f15d6d3e5eea0227ddca350644d839b0b36e0905",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L1-C3/portrait_48.png",
+          "sha256": "147710c6e4cb7f34dfb51a446485e90096ef3bf8ddd046bbd8c6336d1539c1d3",
+          "size_bytes": 9332,
+          "alpha_0": 477,
+          "alpha_partial": 1827,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            2,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L1-C3/portrait_64.png",
+          "sha256": "3ca2aaec75eb2905fd3732526be016faa0331a599555ad1ab19f05c780fd5bd6",
+          "size_bytes": 16516,
+          "alpha_0": 862,
+          "alpha_partial": 3234,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Bandeau bordeaux et grands anneaux"
+    },
+    {
+      "id": "C-L1-C1",
+      "sheet": "C",
+      "rect": [
+        0,
+        0,
+        362,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L1-C1/master_HD.png",
+          "sha256": "037b9c8ac5488545ce67456aad60897c171f4422d03f4cb5edb9964c2ed744cd",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L1-C1/portrait_48.png",
+          "sha256": "a9ac62bb415e928a542d0dde3899f61fa6bcb098d7d554d171667811a20f9b37",
+          "size_bytes": 9332,
+          "alpha_0": 931,
+          "alpha_partial": 1373,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L1-C1/portrait_64.png",
+          "sha256": "132f4b413a5bd785815d11e72f42fb4a3aea282e360e5e981818e58df09cee08",
+          "size_bytes": 16516,
+          "alpha_0": 1644,
+          "alpha_partial": 2452,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Tricorne large et barbe blanche"
+    },
+    {
+      "id": "C-L3-C1",
+      "sheet": "C",
+      "rect": [
+        0,
+        543,
+        362,
+        815
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L3-C1/master_HD.png",
+          "sha256": "66f12259279e057ae7260762300b71ceb3f0c038891b24ce01d6d909f4007287",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L3-C1/portrait_48.png",
+          "sha256": "e1a4a1493dc2c1ffbdd731ab718c16711b5e3b18e006bdd67d73644d145c3667",
+          "size_bytes": 9332,
+          "alpha_0": 699,
+          "alpha_partial": 1605,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L3-C1/portrait_64.png",
+          "sha256": "b830d13421f6a7e849656d864ece87295db218b2259365687ee2639e64eafd42",
+          "size_bytes": 16516,
+          "alpha_0": 1255,
+          "alpha_partial": 2841,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Tricorne et plume rouge"
+    },
+    {
+      "id": "D-L1-C5",
+      "sheet": "D",
+      "rect": [
+        1229,
+        0,
+        1536,
+        256
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L1-C5/master_HD.png",
+          "sha256": "5049e90f126cd089b7f1c6c49c18225f1baae42a4afef08f0753ff37efa9dbb1",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L1-C5/portrait_48.png",
+          "sha256": "38881cc51e83b8d1ba19b4d94216d961b227692495005b2b2b0ea5a2b082abe8",
+          "size_bytes": 9332,
+          "alpha_0": 777,
+          "alpha_partial": 1527,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L1-C5/portrait_64.png",
+          "sha256": "3ea64fdc693d967ad5cf97e5f78e66ad1f54fb545d149e6e654ed60cb000b9ee",
+          "size_bytes": 16516,
+          "alpha_0": 1368,
+          "alpha_partial": 2728,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ]
+        }
+      },
+      "exception": "Bonnet bleu et pipe, fumée"
+    },
+    {
+      "id": "E-L1-C4",
+      "sheet": "E",
+      "rect": [
+        1086,
+        0,
+        1448,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L1-C4/master_HD.png",
+          "sha256": "2c4678ec78428e466599d94986eeb68ad6360c3b67e9e5a29b62562bb59e58d4",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L1-C4/portrait_48.png",
+          "sha256": "4cbb5b76b24ddb79218d1115e2425d22b5ca907ccae793053c82742c7033c1b7",
+          "size_bytes": 9332,
+          "alpha_0": 1026,
+          "alpha_partial": 1278,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            45,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L1-C4/portrait_64.png",
+          "sha256": "b2ad1ff06cae534d3239cdec2ca8a7b175f22f015b9c4b6d1af03286bb7cbb50",
+          "size_bytes": 16516,
+          "alpha_0": 1850,
+          "alpha_partial": 2246,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            60,
+            56
+          ]
+        }
+      },
+      "exception": "Capuche sombre et ancre"
+    }
+  ],
+  "count": {
+    "positions_total": 68,
+    "baseline_completed": 5,
+    "stage_new": 8,
+    "stage_new_variants": 16,
+    "stage_completed_if_accepted": 13,
+    "remaining_if_accepted": 55
+  },
+  "qa": {
+    "previews": "draft/portraits/exports/preuves/",
+    "expected_preview_count": 21,
+    "committed_preview_count": 21,
+    "script_check": "NOT_EXECUTED_IN_CLEAN_GITHUB_CHECKOUT",
+    "graphic_pipeline": "PENDING_CI",
+    "device": "NOT_TESTED"
+  },
+  "po_go": "GO production de candidats uniquement, aucun GO artistique individuel",
+  "promotion": "blocked until #134 and PO individual approval"
+}
