@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>BTN-ATK-01 comparaison PO</title>
+<style>body{font-family:Arial;background:#111b26;color:#faf3e8;margin:20px}h1{font-size:18px}
+.viewer{display:flex;gap:32px;flex-wrap:wrap}.screen{position:relative;width:320px;height:240px;flex:none;box-shadow:0 0 0 2px #a59a7c;overflow:hidden}
+.dark{background:linear-gradient(#061a2d,#20354e)}.light{background:#ece0ce;color:#15283d}
+.screen img{position:absolute;image-rendering:pixelated;object-fit:contain}
+.screen label{position:absolute;font:11px monospace;letter-spacing:.1px}.wrap{height:300px}.zoom{width:1280px;height:960px;transform:scale(1);image-rendering:pixelated}
+p{max-width:750px;font-size:13px;line-height:1.4}code{color:#f9c96a}</style></head>
+<body><h1>Issue #139 — candidats ATTAQUER ON/OFF ; alpha transparent</h1>
+<p>Comparaisons à l'échelle <strong>native 320×240</strong>. Les fonds sont uniquement des fonds de contrôle, jamais des pixels de boutons. Les références JOUER/PALMARÈS restent inchangées.</p>
+<div class="viewer">
+<section><h2>Foncé · 140 px</h2><div class="screen dark">
+<label style="left:14px;top:24px">ON</label><label style="left:170px;top:24px">OFF</label>
+<img src="attaquer_on_140x35_RGBA.png" width="140" height="35" style="left:12px;top:45px">
+<img src="attaquer_off_140x35_RGBA.png" width="140" height="35" style="left:168px;top:45px">
+<label style="left:12px;top:110px">JOUER (référence)</label><label style="left:168px;top:110px">PALMARÈS (référence)</label>
+<img src="../../../assets/boutons/bouton_jouer_CYD_140x32_RGBA.png" width="140" height="32" style="left:12px;top:135px">
+<img src="../../../assets/boutons/bouton_palmares_CYD_140x30_RGBA.png" width="140" height="30" style="left:168px;top:135px">
+</div></section>
+<section><h2>Clair · compact 112 px</h2><div class="screen light">
+<label style="left:22px;top:24px">ON</label><label style="left:184px;top:24px">OFF</label>
+<img src="attaquer_on_112x28_RGBA.png" width="112" height="28" style="left:18px;top:46px">
+<img src="attaquer_off_112x28_RGBA.png" width="112" height="28" style="left:184px;top:46px">
+<label style="left:18px;top:100px">140 PX (réf. taille)</label>
+<img src="attaquer_on_140x35_RGBA.png" width="140" height="35" style="left:12px;top:120px">
+<img src="attaquer_off_140x35_RGBA.png" width="140" height="35" style="left:168px;top:120px">
+<label style="left:17px;top:193px">Comparaison visuelle seulement</label>
+</div></section></div>
+<p>Pour un <strong>×4 strict sans interpolation</strong>, voir <code>comparatif_4x_1280x960.svg</code> ou les PNG générés par <code>qa.py</code>. Pas de validation sur CYD physique.</p></body></html>
