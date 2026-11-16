@@ -1,0 +1,125 @@
+name: "Pilotage QA PR142 - J2 immutable-head independent"
+on:
+  push:
+    branches:
+      - pilotage/qa-pr142-abc8f6e
+    paths:
+      - .github/workflows/pilotage-qa-pr142.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout EXACT PR 142 source HEAD
+        uses: actions/checkout@v4
+        with:
+          ref: abc8f6e028abffa75cae93cf11c7577d4c2e7a3b
+          fetch-depth: 1
+      - name: Verify source identity
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "abc8f6e028abffa75cae93cf11c7577d4c2e7a3b"
+          echo "J2_EXACT_HEAD_OK"
+      - name: Install Pillow==12.3.0
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check Pillow==12.3.0
+          python3 -c "from PIL import __version__; assert __version__=='12.3.0'; print('PILLOW_PIN_OK')"
+      - name: Confirm J0 J1 J2 deterministic readonly pixel reproduction
+        run: |
+          set -euo pipefail
+          python3 draft/portraits/exports/export_jalon0.py --check
+          python3 draft/portraits/exports/export_jalon1.py --check
+          python3 draft/portraits/exports/export_jalon2.py --check
+      - name: Independent J2 QA manifests SHA PNG RGBA NEAREST and isolated source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json, hashlib
+          ex=Path("draft/portraits/exports")
+          ms=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(3)]
+          m=ms[2]
+          expected={"A-L2-C1","A-L2-C2","B-L2-C1","B-L2-C4","C-L2-C2","C-L2-C3","D-L2-C2","E-L2-C4"}
+          ids0={ms[0]["pilot"]["id"]}|{o["id"] for o in ms[0]["items"]}
+          ids1={o["id"] for o in ms[1]["items"]}
+          ids2=[o["id"] for o in m["items"]]
+          assert len(ids0)==5 and len(ids1)==8
+          assert len(ids2)==8 and set(ids2)==expected and len(set(ids2))==8
+          assert not (ids0&ids1 or ids0&set(ids2) or ids1&set(ids2))
+          assert m["count"]=={"positions_total":68,"baseline_completed":13,"stage_new":8,"stage_new_variants":16,"stage_completed_if_accepted":21,"remaining_if_accepted":47}
+          assert m["device_status"]=="ON_DEVICE_UNVERIFIED" and m["status"]=="CANDIDATE"
+          for letter,h in m["source_reference_sha256"].items():
+            f=Path("draft/portraits")/f"portrait_{letter}.png"
+            assert hashlib.sha256(f.read_bytes()).hexdigest()==h, f
+          count=0
+          for obj in m["items"]:
+            id_=obj["id"]
+            r=obj["rect"];side=obj["master_square"];top=obj["transparent_pad_top"]
+            assert r[2]-r[0]==side and r[3]-r[1]+top<=side,(id_,r,side,top)
+            for key,sz in (("master",side),("p48",48),("p64",64)):
+              d=obj["files"][key];f=Path(d["path"])
+              assert f.is_file() and hashlib.sha256(f.read_bytes()).hexdigest()==d["sha256"],f
+              assert f.stat().st_size==d["size_bytes"],f
+              with Image.open(f) as im:
+                assert im.mode=="RGBA" and im.format=="PNG" and im.size==(sz,sz),f
+                raw=im.tobytes()
+                if key=="master":continue
+                alpha=raw[3::4]
+                assert sum(a==0 for a in alpha)==d["alpha_0"],f
+                assert sum(0<a<255 for a in alpha)==d["alpha_partial"],f
+                assert sum(a==255 for a in alpha)==d["alpha_255"],f
+                assert min(alpha)==0 and max(alpha)>0,f
+                assert all(raw[i:i+3]==b"\x00\x00\x00" for i in range(0,len(raw),4) if raw[i+3]==0),f
+                assert list(im.getbbox())==d["bbox_nonzero"],(id_,im.getbbox(),d["bbox_nonzero"])
+                path=ex/"preuves"/f"jalon2_{id_}_{sz}_x4.png"
+                with Image.open(path) as z:
+                  assert z.mode=="RGBA" and z.size==(sz*4,sz*4),path
+                  assert z.tobytes()==im.resize((sz*4,sz*4),Image.Resampling.NEAREST).tobytes(),path
+                count+=1
+          assert count==16
+          previews=list((ex/"preuves").glob("jalon2_*.png"))
+          assert len(previews)==21, len(previews)
+          for p in range(1,3):
+            for bg in ("clair","sombre"):
+              with Image.open(ex/"preuves"/f"jalon2_p{p}_320x240_{bg}.png") as im:
+                assert im.size==(320,240) and im.mode=="RGBA"
+          with Image.open(ex/"preuves"/"jalon2_contact_1120x182.png") as im:
+            assert im.size==(1120,182)
+          print("J2_INDEPENDENT_QA_OK: 8 new IDs, 16 sprite variants, 8 HD masters, 21 proofs, SHA alpha NEAREST 16/16")
+          PY
+      - name: Border contamination diagnostic on all J2 48px sprites
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json
+          m=json.loads(Path("draft/portraits/exports/manifest_jalon2.json").read_text())
+          for o in m["items"]:
+            f=Path(o["files"]["p48"]["path"]);im=Image.open(f).convert("RGBA")
+            a=im.getchannel("A");W,H=im.size
+            threshold=6
+            alive={(x,y) for y in range(H) for x in range(W) if a.getpixel((x,y))>=threshold}
+            comps=[]
+            while alive:
+              seed=alive.pop();stack=[seed];current=[seed]
+              while stack:
+                x,y=stack.pop()
+                for n in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                  if n in alive:alive.remove(n);stack.append(n);current.append(n)
+              comps.append((len(current),(min(x for x,y in current),min(y for x,y in current),max(x for x,y in current),max(y for x,y in current))))
+            comps.sort(reverse=True)
+            print("BORDER_DIAG",o["id"],"threshold",threshold,"components",len(comps),"largest",comps[:12])
+          PY
+      - name: Graphic pipeline and pristine checkout
+        run: |
+          set -euo pipefail
+          python3 scripts/check_graphic_pipeline.py
+          test -z "$(git status --porcelain)"
+          echo "J2_CLEAN_TREE_OK"
