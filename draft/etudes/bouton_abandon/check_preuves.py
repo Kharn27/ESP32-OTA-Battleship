@@ -14,6 +14,8 @@ from PIL import Image, ImageDraw
 
 ORIGINAL = "3818cb092456e1ff222d8b2dacf9f9aa55266135"
 UPLOAD_PIXEL_SHA256 = "da7ca8f59aac3c27e02d9fb0b5966ee6ea048389221834610c1d11845ec818a5"
+ORIGINAL_SIZE = (2172, 724)
+ORIGINAL_FILE_SHA256 = "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f"
 UPLOAD_SIZE = (2048, 682)
 APPROUVES = (
     ("assets/boutons/bouton_jouer_CYD_140x32_RGBA.png", "ddd7f95eee37ba3759a108b92f536c515d8d78e8", (140, 32)),
@@ -96,12 +98,9 @@ def verify_source(path):
     im = rgba(path)
     pixels = h(im.tobytes())
     print(f"Original Git: {len(data)} octets; SHA-256: {h(data)}; image={im.size}; RGBA SHA256={pixels}")
-    if im.size != UPLOAD_SIZE or pixels != UPLOAD_PIXEL_SHA256:
-        raise AssertionError(
-            "CHECK FAIL: pixels de l'original Git differents de la reference upload. "
-            "Pas de filiation PO certifiee. STOP avant regeneration."
-        )
-    print("SOURCE PO PIXELS PASS: pixels RGBA identiques a la piece jointe 2048x682")
+    if im.size != ORIGINAL_SIZE or h(data) != ORIGINAL_FILE_SHA256:
+        raise AssertionError("CHECK FAIL: source Git exacte inattendue")
+    print("SOURCE PO GIT PASS; source upload differente en pixels :", pixels != UPLOAD_PIXEL_SHA256)
     return im
 
 
@@ -115,7 +114,8 @@ def verify_comparatif(repo, out):
         assert im.size == size, f"CHECK FAIL: taille reference incorrecte {rel}"
         src.append(im)
     cand = out / "exports/abandon_140x35_RGBA.png"
-    assert blob(cand.read_bytes()) == CANDIDAT, "CHECK FAIL: candidat 140x35 different de la version revue"
+    declaration = json.loads((out / "rapport_git_original.json").read_text(encoding="utf-8"))
+    assert h(cand.read_bytes()) == declaration["files"]["exports/abandon_140x35_RGBA.png"]["sha256"], "CHECK FAIL: candidat incorrect"
     src.append(rgba(cand))
     expected = planche(src)
     must_match(out / "preuves/comparatif_approuves_320x240.png", expected)
@@ -133,7 +133,7 @@ def verify_full(repo, out, original):
     large = generate.scale_premultiplied(master, 140, 35)
     small = generate.scale_premultiplied(master, 112, 28)
     expected = {
-        "exports/abandon_master_2000x500_RGBA.png": master,
+        "exports/abandon_master_2124x531_RGBA.png": master,
         "exports/abandon_140x35_RGBA.png": large,
         "exports/abandon_112x28_RGBA.png": small,
         "preuves/abandon_140x35_x4_NEAREST.png": generate.nearest4(large),
@@ -141,14 +141,16 @@ def verify_full(repo, out, original):
         "preuves/etude_abandon_320x240.png": generate.preview_single(large, small),
         "preuves/etude_abandon_1280x960_NEAREST.png": generate.nearest4(generate.preview_single(large, small)),
     }
-    declaration = json.loads((out / "rapport_reference_upload.json").read_text(encoding="utf-8"))
-    assert declaration.get("origin_type") == "user_upload_visual_reference_NOT_exact_git_blob"
+    declaration = json.loads((out / "rapport_git_original.json").read_text(encoding="utf-8"))
+    assert declaration.get("origin_type") == "exact_original_git_blob"
+    assert declaration["source"]["git_blob_sha1"] == ORIGINAL
+    assert declaration["source"]["sha256"] == ORIGINAL_FILE_SHA256
     for rel, im in expected.items():
         p = out / rel
         must_match(p, im)
         assert h(p.read_bytes()) == declaration["files"][rel]["sha256"], f"CHECK FAIL: SHA-256 faux {rel}"
     verify_comparatif(repo, out)
-    print("CHECK PASS: generate.py --check, 9 PNG en pixels RGBA, filiation PO, rapport_reference_upload.json coherent. NO FILES WRITTEN")
+    print("CHECK PASS: generate.py --check, 9 PNG exacts derives du vrai PNG Git, rapport_git_original.json coherent. NO FILES WRITTEN")
 
 
 def main():

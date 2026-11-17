@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """BTN-ABD-01 #149. Non-destructive reproducible graphic study.
 
-Source in repo: draft/Bouton_Abandon.png, immutable Git blob 3818cb...
-For off-repo visual reference only: --input file --allow-reference.
+Source in repo: draft/Bouton_Abandon.png, immutable Git blob 3818cb...; 2172x724
+The old upload differs from the Git source; Git source takes precedence.
 Requires Pillow. --check compares exact bytes, never writes.
 """
 from __future__ import annotations
@@ -14,7 +14,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, __version__ as pillow_version
 
 EXPECTED_GIT_SHA1 = "3818cb092456e1ff222d8b2dacf9f9aa55266135"
-CROP_2048 = (24, 90, 2024, 590)
+CROP_GIT = (24, 95, 2148, 626)
 FORMATS = ((140, 35), (112, 28))
 APPROVED = {
     "jouer": "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png",
@@ -46,15 +46,15 @@ def crop_to_master(im: Image.Image) -> tuple[Image.Image, tuple[int,int,int,int]
     bbox = mask.getbbox()
     if bbox is None:
         raise ValueError("Empty image alpha >1")
-    # Exact geometrical framing measured on the user-provided reference:
+    # Exact geometrical framing measured on the original immutable Git PNG:
     # removes empty transparent surrounds but does not alter the design.
     # Refuse unknown shapes rather than force a 4:1 stretch/crop.
-    if im.size != (2048, 682):
+    if im.size != (2172, 724):
         raise ValueError(f"Unknown source dimensions {im.size}; manual framing review required")
-    if not (bbox[0] >= CROP_2048[0] and bbox[1] >= CROP_2048[1]
-            and bbox[2] <= CROP_2048[2] and bbox[3] <= CROP_2048[3]):
+    if not (bbox[0] >= CROP_GIT[0] and bbox[1] >= CROP_GIT[1]
+            and bbox[2] <= CROP_GIT[2] and bbox[3] <= CROP_GIT[3]):
         raise ValueError(f"Graphic protrudes beyond safe crop; alpha bbox: {bbox}")
-    return im.crop(CROP_2048), CROP_2048, bbox
+    return im.crop(CROP_GIT), CROP_GIT, bbox
 
 def scale_premultiplied(im: Image.Image, w: int, h: int) -> Image.Image:
     if im.width * h != im.height * w:
@@ -136,6 +136,8 @@ def main():
         else:
             verify_full(repo, outdir, source)
         return
+    a.input = a.input if a.input.is_absolute() else a.repo / a.input
+    a.out = a.out if a.out.is_absolute() else a.repo / a.out
     d=a.input.read_bytes(); g=git_blob_sha1(d)
     if not a.allow_reference and g!=EXPECTED_GIT_SHA1:
         p.error(f"Source not the exact original Git blob: {g}")
@@ -146,7 +148,7 @@ def main():
     large=scale_premultiplied(master,140,35)
     small=scale_premultiplied(master,112,28)
     files={
-        "exports/abandon_master_2000x500_RGBA.png":master,
+        "exports/abandon_master_2124x531_RGBA.png":master,
         "exports/abandon_140x35_RGBA.png":large,
         "exports/abandon_112x28_RGBA.png":small,
         "preuves/abandon_140x35_x4_NEAREST.png":nearest4(large),
@@ -160,7 +162,7 @@ def main():
         files["preuves/comparatif_approuves_1280x960_NEAREST.png"]=nearest4(approved)
     out={"mission":"BTN-ABD-01 #149","status":"CANDIDATE","on_device":"ON_DEVICE_UNVERIFIED",
          "origin_type":"exact_original_git_blob" if g==EXPECTED_GIT_SHA1 else "user_upload_visual_reference_NOT_exact_git_blob",
-         "source":{"path":str(a.input),"bytes":len(d),"git_blob_sha1":g,"sha256":sha256(d),
+         "source":{"path":"draft/Bouton_Abandon.png" if g==EXPECTED_GIT_SHA1 else str(a.input),"bytes":len(d),"git_blob_sha1":g,"sha256":sha256(d),
                    "metadata":alpha_report(src)},
          "master":{"crop_xyxy":list(crop),"source_bbox_alpha_gt1":list(bbox),"metadata":alpha_report(master)},
          "technique":"RGBA, no imposed runtime format; premultiplied LANCZOS downsizing; NEAREST x4 proof",
@@ -177,14 +179,14 @@ def main():
             path.parent.mkdir(parents=True,exist_ok=True)
             path.write_bytes(b)
     report=json.dumps(out,indent=2,ensure_ascii=False,sort_keys=True)+"\n"
-    rp=a.out/"rapport.json"
+    rp=a.out/"rapport_git_original.json"
     if a.check:
         if not rp.is_file() or rp.read_text(encoding="utf-8")!=report:
             raise SystemExit(f"CHECK FAIL: {rp}")
-        print("CHECK PASS: "+str(len(files))+" PNG + rapport.json; NO FILES WRITTEN")
+        print("CHECK PASS: "+str(len(files))+" PNG + rapport_git_original.json; NO FILES WRITTEN")
     else:
         rp.write_text(report,encoding="utf-8")
-        print("BUILD: "+str(len(files))+" PNG + rapport.json")
+        print("BUILD: "+str(len(files))+" PNG + rapport_git_original.json")
     print("source git blob",g,"pixel source",src.size,"alpha>1 bbox",bbox,
           "approved comps",bool(approved))
 if __name__=="__main__":main()

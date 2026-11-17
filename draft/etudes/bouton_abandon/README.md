@@ -1,107 +1,59 @@
-# BTN-ABD-01 — ABANDON · étude graphique (Issue #149)
+# BTN-ABD-01 — étude graphique ABANDON · Issue #149
 
-**Statut : `CANDIDATE · ART_NOT_REVIEWED · ON_DEVICE_UNVERIFIED`.**
-**PR #150 DRAFT ; GO artistique PO non obtenu. Fusion exclusivement Pilotage.**
+**Statut : `CANDIDATE` · `ART_NOT_REVIEWED` · `ON_DEVICE_UNVERIFIED`.**
+Aucun GO artistique PO n'est déduit de la CI ni de la comparaison. Cette étude n'altère ni l'original PO ni `assets/`, `maquettes/`, la Bible ou le firmware.
 
-## 1. Original PO et filiation à vérifier
+## Filiation du vrai original PO (nouvelle source active)
 
-L'original PO est présent, inchangé, sur `main` : `draft/Bouton_Abandon.png`,
-**1 814 386 octets**, **Git blob SHA-1 `3818cb092456e1ff222d8b2dacf9f9aa55266135`** (restauration PR #152).
-Aucun fichier original n'est ajouté ou modifié ici.
+- **Original immuable** : `draft/Bouton_Abandon.png` de `main` (restauration PR #152).
+- Taille : **1 814 386 octets** ; dimensions **2172 × 724 pixels** ; **RGBA**.
+- SHA-1 **Git blob** : `3818cb092456e1ff222d8b2dacf9f9aa55266135`.
+- SHA-256 **fichier PNG Git exact** : `1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f`.
+- SHA-256 **flux RGBA décodé complet** : `d00d364479fcace09fa4f9339d9d4cf0a184cb0893c1c5f9507d0e8ab5bd1b96`.
+- Limites de l'alpha > 1 du vrai original : **(31, 98) — (2141, 623)** ; obtenu depuis le vrai binaire récupéré dans un artefact d'Actions GitHub.
+- Recadrage **(24, 95) — (2148, 626)** : master RGBA transparent **2124 × 531**, **ratio 4:1 exact**, contenant toute la silhouette alpha > 1 sans étirement ni recoloration.
+- Exports correspondants **140 × 35** (recommandé) et **112 × 28** (compact), LANCZOS alpha prémultiplié ; agrandissements de contrôle x4 sans interpolation (`NEAREST`).
 
-La **pièce jointe réellement utilisée** dans cette étude mesure **2048×682 RGBA**,
-1 870 797 octets, SHA-256 du fichier
-`2637ff5eb00d42f427a07fa0a25baffd7b95c77566578d6e223ac8ecb6533690`.
-Elle a un **encodage différent** de la source Git. Sa comparaison **pixel à pixel n'a pas encore été exécutée contre le Git exact**.
+**Rectification de la provenance antérieure :** l'image jointe au chat avait **2048×682**, 1 870 797 octets et SHA-256 PNG `2637ff5eb00d42f427a07fa0a25baffd7b95c77566578d6e223ac8ecb6533690`. Elle **n'est PAS pixel-identique** à l'original Git : constaté dans le [run d'audit isolé #44156311202](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/44156311202). Les anciens candidats/rapport `rapport_reference_upload.json` ont donc été **supplantés par une régénération complète depuis le vrai original Git** ; conserver ce rapport ancien uniquement comme référence historique de l'erreur et ne pas l'utiliser pour valider la nouvelle production.
 
-La preuve reproductible est `empreinte_pixels_upload.json` :
-l'empreinte SHA-256 des **5 586 944 octets RGBA décodés** de la pièce jointe est
-`da7ca8f59aac3c27e02d9fb0b5966ee6ea048389221834610c1d11845ec818a5`.
-`generate.py --repo . --check-source` exige l'identité du blob Git,
-des dimensions et de tous ces pixels ; en cas de divergence, le processus échoue
-et **aucun export ne doit être considéré comme dérivé de l'original PO**.
-Cette commande **n'a pas encore été exécutée avec succès sur un checkout réel**.
+## Sorties graphiques de l'étude
 
-## 2. Candidats graphiques (sources et exports)
+- `exports/abandon_master_2124x531_RGBA.png` — master détouré grand format.
+- `exports/abandon_140x35_RGBA.png` — proposition prioritaire PO.
+- `exports/abandon_112x28_RGBA.png` — proposition compacte.
+- `preuves/abandon_140x35_x4_NEAREST.png` et `preuves/abandon_112x28_x4_NEAREST.png`.
+- `preuves/etude_abandon_320x240.png` et `preuves/etude_abandon_1280x960_NEAREST.png` : test clair/sombre.
+- `preuves/comparatif_approuves_320x240.png` et `preuves/comparatif_approuves_1280x960_NEAREST.png` : les **vrais** sprites JOUER, PALMARÈS et ATTAQUER de `assets/boutons/` (référencés, jamais copiés dans `draft/`), avec ABANDON issu du Git original.
+- `rapport_git_original.json` : provenance, empreintes SHA-256, dimensions et alpha, pour **neuf fichiers PNG**.
 
-Dérivés **de la pièce jointe**, sans redessin : découpe `(24,90)-(2024,590)`,
-master RGBA **2000×500** ; réduction LANCZOS en alpha prémultiplié,
-exports **140×35** et **112×28** ; zooms ×4 strict **NEAREST**.
+La planche comparative est une **preuve de travail**, pas une maquette du jeu ni un composant runtime. Les touches/enfoncements/désactivations relèvent de GUI-01 ; aucune variante non demandée n'est créée ici. Aucun format mémoire/firmware ni taille tactile n'est imposé.
 
-- `exports/abandon_master_2000x500_RGBA.png`
-- `exports/abandon_140x35_RGBA.png` — préférence de la DA
-- `exports/abandon_112x28_RGBA.png` — taille compacte, moins détaillée
-- `preuves/etude_abandon_320x240.png` et son zoom ×4
-- `preuves/abandon_{140x35,112x28}_x4_NEAREST.png`
-- `rapport_reference_upload.json` — hashes SHA-256 et alpha de **ces 7 PNG seulement**, avec référence **explicite** à l'upload (pas à Git).
+## Contrôle autonome depuis un checkout propre de la PR
 
-Les candidats sont conservés noirs/acier/or, avec drapeau, plaque et rivets.
-Pas de recoloration rouge, pas de variantes d'état `pressed`/`disabled` inventées.
-
-## 3. Comparatif publié avec les vrais boutons approuvés
-
-La **planche native 320×240** et son zoom **1280×960 NEAREST** sont
-désormais publiés :
-
-- `preuves/comparatif_approuves_320x240.png`
-- `preuves/comparatif_approuves_1280x960_NEAREST.png`
-
-Ils assemblent sans redimensionnement ni modification les **vrais blobs de
-`main`** JOUER (140×32), PALMARÈS (140×30) et ATTAQUER ON (140×35)
-avec ABANDON candidat (140×35), sur fonds clair et sombre.
-Les empreintes **Git blob SHA-1 des quatre entrées et des deux planches**,
-ainsi que la disposition, figurent dans `rapport_comparatif_approuves.json`.
-Aucune duplication des sprites approuvés dans la PR.
-
-Le rendu natif a été **effectivement affiché et examiné** :
-le 140×35 est plus lisible et préserve mieux le drapeau et les reliefs que le
-112×28. Cette appréciation n'est **pas** une validation PO ni matérielle.
-
-## 4. Reproductibilité depuis un checkout propre
-
-**Dépendance conseillée : Pillow 12.3.0** (version des exports originaux).
-Depuis la racine du vrai dépôt, après checkout de la HEAD de la PR :
+Utiliser **Pillow 12.3.0** pour reproduire les PNG et vérifier :
 
 ```bash
-python3 -m pip install 'Pillow==12.3.0'
-python3 draft/etudes/bouton_abandon/audit_source.py --check
-python3 draft/etudes/bouton_abandon/generate.py --repo . --check-source
-python3 draft/etudes/bouton_abandon/generate.py --repo . --check-comparatif
-python3 draft/etudes/bouton_abandon/generate.py --repo . --check
+python3 -m venv /tmp/cyd-btnabd
+/tmp/cyd-btnabd/bin/python -m pip install 'Pillow==12.3.0'
+/tmp/cyd-btnabd/bin/python draft/etudes/bouton_abandon/audit_source.py --check
+/tmp/cyd-btnabd/bin/python draft/etudes/bouton_abandon/generate.py --repo . --check-source
+/tmp/cyd-btnabd/bin/python draft/etudes/bouton_abandon/generate.py --repo . --check-comparatif
+/tmp/cyd-btnabd/bin/python draft/etudes/bouton_abandon/generate.py --repo . --check
 python3 scripts/check_graphic_pipeline.py
 ```
 
-**`--check` est strictement en lecture seule.** Il ne réclame **plus un
-`rapport.json` inexistant** dans la PR : il vérifie la provenance Git exacte
-via le SHA-256 des pixels RGBA, les **7 exports par comparaison de pixels avec
-la source Git**, le contenu et les SHA-256 de `rapport_reference_upload.json`,
-et les deux planches via les **vrais blobs approuvés** (9 PNG).
-Les PNG de comparaison peuvent avoir un encodage différent du rendu Pillow,
-sans que leurs **pixels RGBA** soient différents.
+**`--check` n'écrit aucun fichier** : il vérifie le vrai blob Git, SHA-256/tailles, reconstruction des **sept visuels ABANDON** pixel pour pixel depuis le fichier original, les **deux planches de comparaison** depuis les sprites approuvés et la cohérence des SHA-256 consignés dans **`rapport_git_original.json`**. Aucun `rapport.json` absent n'est attendu.
 
-**Résultats réellement obtenus :** fabrication des deux PNG comparatifs et
-inspection à 320×240 sur PC ; cohérence indépendante de la composition
-(bitmap font/compositing) vérifiée localement sur image de test ;
-Git blobs des quatre entrées et deux sorties vérifiés par le connecteur.
-**Résultats non obtenus ici :** `--check-source PASS`, `--check PASS`,
-`scripts/check_graphic_pipeline.py PASS` sur un **checkout complet** ;
-absence d'accès aux octets du PNG Git >1 Mo dans cet environnement.
-La CI build GCC/Clang/ESP-IDF était verte sur **l'ancienne HEAD**
-`b626e0c543124005c5db901274ee64b8e5e2faf4` ; les nouveaux commits
-doivent être contrôlés séparément.
+Pour reconstruire explicitement les exports sur une copie de travail :
 
-**En cas d'échec de `--check-source` : ne pas forcer un PASS, ne pas déclarer la
-filiation prouvée ; analyser les dimensions et pixels réels, puis demander
-l'arbitrage PO ou régénérer depuis l'original avec un nouveau HEAD.**
+```bash
+/tmp/cyd-btnabd/bin/python draft/etudes/bouton_abandon/generate.py --repo .
+```
 
-## 5. Gouvernance
+Un essai local sur le vrai original extrait de GitHub Actions (avec les vrais sprites approuvés) a réussi `--check-source`, `--check-comparatif` et `--check`, en comparant les pixels. **Ce test local n'est pas une preuve de checkout du dépôt complet** : garder les résultats de CI/QA exact-HEAD dans `QA_2026-11-17.md` et la revue Pilotage.
 
-Étude exclusivement dans `draft/etudes/bouton_abandon/` ;
-aucun changement de `draft/Bouton_Abandon.png`, `assets/`, `maquettes/`,
-firmware ou `BIBLE_PRODUIT.md`. `ABANDON` graphique ne remplace pas le
-texte de dialogue `CONTINUER / ABANDONNER` (BN-UX-003, LOT1-ABD-001,
-LOT1-UX-011). Format et budget firmware, taille tactile et rendu sur la vraie
-CYD restent à valider avec le Développeur/Pilotage.
+## Avis artistique sans GO
 
-**La PR #150 reste DRAFT ; aucune fusion sans la revue de Pilotage et aucun
-GO artistique implicite.** Refs #149.
+Le 140×35 favorise la lisibilité du drapeau, des rivets et du texte. Le rendu noir/acier/or respecte la peinture d'origine. Le 112×28 est compact mais moins détaillé.
+
+**Ne rien promouvoir dans `assets/` avant GO explicite du PO. Seul Pilotage peut fusionner la PR.**
