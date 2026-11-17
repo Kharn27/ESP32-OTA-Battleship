@@ -1,0 +1,28 @@
+name: "One-off Pilotage BTN-ATK-01 frozen QA"
+on:
+  push:
+    branches:
+      - pilotage/qa-btn-atk-141-20261117
+    paths:
+      - .github/workflows/pilotage-qa-btn-atk-141.yml
+permissions:
+  contents: read
+jobs:
+  qa-boutons:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned image generation dependencies
+        run: python3 -m pip install 'Pillow==12.0.0' 'numpy==2.1.3'
+      - name: Verify frozen source checksums, pixel-perfect outputs, native and nearest 4x
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 draft/etudes/bouton_attaquer/generate.py --check
+          python3 scripts/check_graphic_pipeline.py
+          sha256sum draft/etudes/bouton_attaquer/attaquer_{on,off}_{140x35,112x28}_RGBA.png
+          git status --short
+          test -z "$(git status --porcelain)" || (echo "QA modified repository" && exit 1)
