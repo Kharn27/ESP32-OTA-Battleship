@@ -1,9 +1,8 @@
 # BTN-ATK-01 — extraction ON / OFF — étude locale sur les pièces jointes
 
-**Issue #139 · PR Draft #141 · CANDIDATE / ON_DEVICE_UNVERIFIED · aucun GO artistique PO**
+**Issue #139 · PR #141 · VALIDATED_PO_PC sur les 4 PNG candidats (GO artistique PO du 16/11/2026) · ON_DEVICE_UNVERIFIED · PAS ENCORE D'ASSET PRODUCTION**
 
-> **Attention provenance : ces fichiers ne sont PAS les binaires originaux du `main` GitHub.**
-> Les deux fichiers joints dans le chat sont des rendus 2048×682, tandis que les références officielles du dépôt sont de dimension 2172×724. La revue de Pilotage exige la régénération à partir de leurs octets exacts. Ce dossier propose des **candidats de comparaison**, mais **ne lève pas** cette réserve. Aucune mise à jour de la PR #141 ne peut être annoncée sur la base de ces fichiers.
+> **Provenance et dérogation PO, 16/11/2026 :** les sprites livrés ont été produits depuis les **deux pièces jointes de travail exactes 2048×682** (conservées et hachées ci-dessous), et NON depuis les binaires 2172×724 de `main` GitHub. Le PO a **explicitement accepté cette différence de résolution et validé artistiquement les quatre rendus**. La demande précédente d'identité avec les originaux GitHub est levée ; ne jamais prétendre que les sources binaires sont identiques. Tous les exports restent **ON_DEVICE_UNVERIFIED** et dans `draft/` : promotion ultérieure vers `assets/` + manifeste à contrôler séparément.
 
 ## Provenance vérifiée
 
@@ -47,12 +46,12 @@ python3 generate.py --check
 
 **Résultat local :** `PIXEL_IDENTITY_OK; x4_NEAREST_OK`, consigné dans `QA_check.log`. Les coins des quatre sprites ont alpha=0 ; chaque sprite comporte des pixels alpha=0 et alpha=255. Les sources livrées et le masque sont également inspectables.
 
-Le contrôle `scripts/check_graphic_pipeline.py` du dépôt complet et la CI **n'ont pas été réexécutés sur cette étude locale**, qui n'est pas encore en PR. Les anciennes CI vertes de #141 concernent le HEAD précédent et ne prouvent pas ces exports.
+La recette, le masque, les deux copies de travail, les 4 sprites, les comparatifs et les logs sont **committés dans la PR #141**. CI et `scripts/check_graphic_pipeline.py` à vérifier au **HEAD de fusion exact** par Pilotage ; les résultats locaux `PIXEL_IDENTITY_OK; x4_NEAREST_OK` ne représentent pas un essai matériel.
 
 ## Réserves et décisions
 
-- **Filiation GitHub** : toujours à régénérer et attester directement des deux originaux de `main` (2172×724), pas de ces copies de pièces jointes. Pour éviter une altération par téléchargement ou par insertion d'image dans le chat, transférer les binaires exacts dans une archive ZIP et contrôler leur SHA-256.
+- **Filiation GitHub** : les 2172×724 PO de `main` restent inchangés. Les **copies de travail 2048×682** sont les sources traçables et régénérables de ce lot ; l'identité avec les originaux `main` **n'est pas revendiquée** et n'est **plus requise** par le PO. Aucun ZIP à transmettre.
 - **Sens ON/OFF** : seulement deux états picturaux PO ; OFF = canon au repos, ON = flamme/fumée. Aucun état logiciel « pressed », « disabled » ou animation validé.
 - **Libellé** : la Bible et G04-R2 utilisent **FEU** ; **ATTAQUER** ne peut le remplacer sans arbitrage PO et Pilotage.
 - **112×28** : largeur compatible avec le panneau droit G04 (112px), mais ni l'intégration dans la maquette ni la lisibilité réelle au stylet ne sont validées.
-- **PO** : pas de validation finale ; **matériel** : `ON_DEVICE_UNVERIFIED`. Les poids PNG ci-dessus ne sont pas des mesures de RAM/Flash embarquée.
+- **PO** : GO artistique explicite du **16/11/2026 sur ces 4 exports aux SHA-256 ci-dessus** ; les fichiers restent en `draft/` avant une PR dédiée de promotion dans `assets/manifest.json`. **Matériel : `ON_DEVICE_UNVERIFIED`**. Les poids PNG ci-dessus ne sont pas des mesures de RAM/Flash embarquée.
