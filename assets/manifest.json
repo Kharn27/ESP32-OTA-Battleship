@@ -180,6 +180,32 @@
       "device_status": "ON_DEVICE_UNVERIFIED"
     },
     {
+      "id": "boutons.attaquer.on.original",
+      "path": "assets/boutons/attaquer_on_original_2000x500_RGBA.png",
+      "sha256": "dee6c78f5a481757dc38a85d3f8c445c398a7f62fbffc48d28d90dac236ea08c",
+      "source_ref": "draft/etudes/bouton_attaquer/source_on_cutout_2000x500_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/147",
+      "dimensions": [
+        2000,
+        500
+      ],
+      "usage": "HD_MASTER_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.attaquer.off.original",
+      "path": "assets/boutons/attaquer_off_original_2000x500_RGBA.png",
+      "sha256": "853354e5dbb1ade7bb4e3605b27ad1073e7416c97537f8a892db8c2f9c7ef4f9",
+      "source_ref": "draft/etudes/bouton_attaquer/source_off_cutout_2000x500_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/147",
+      "dimensions": [
+        2000,
+        500
+      ],
+      "usage": "HD_MASTER_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
       "id": "boutons.attaquer.on.140x35",
       "path": "assets/boutons/attaquer_on_140x35_RGBA.png",
       "sha256": "99d494ceb508f75b8da755fc6ff4016039417b74aba284f56520a09decd73152",
