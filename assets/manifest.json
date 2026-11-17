@@ -178,6 +178,54 @@
       ],
       "usage": "EDITABLE_SOURCE_NOT_RUNTIME",
       "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.attaquer.on.140x35",
+      "path": "assets/boutons/attaquer_on_140x35_RGBA.png",
+      "sha256": "99d494ceb508f75b8da755fc6ff4016039417b74aba284f56520a09decd73152",
+      "source_ref": "draft/etudes/bouton_attaquer/source_upload_on_2048x682.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916",
+      "dimensions": [
+        140,
+        35
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.attaquer.off.140x35",
+      "path": "assets/boutons/attaquer_off_140x35_RGBA.png",
+      "sha256": "5e501830edfe8fcaa0e10d5191ca1a69d0b4dbb71f890dd8d84454f31000413e",
+      "source_ref": "draft/etudes/bouton_attaquer/source_upload_off_2048x682.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916",
+      "dimensions": [
+        140,
+        35
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.attaquer.on.112x28",
+      "path": "assets/boutons/attaquer_on_112x28_RGBA.png",
+      "sha256": "0b6a0330d158487349313b652d4bdaac7e8fbf524190075a1b76768a1accea30",
+      "source_ref": "draft/etudes/bouton_attaquer/source_upload_on_2048x682.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916",
+      "dimensions": [
+        112,
+        28
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.attaquer.off.112x28",
+      "path": "assets/boutons/attaquer_off_112x28_RGBA.png",
+      "sha256": "49ff99ebe3974aec3d9762fc8af7732dddb6b420cb3e57b89c688baafdce1213",
+      "source_ref": "draft/etudes/bouton_attaquer/source_upload_off_2048x682.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916",
+      "dimensions": [
+        112,
+        28
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
     }
   ]
 }
