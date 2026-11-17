@@ -88,26 +88,23 @@ def preview_single(large: Image.Image, small: Image.Image) -> Image.Image:
     return im
 
 def preview_approved(large: Image.Image, repo: Path) -> Image.Image | None:
+    # Render 4 authentic sprites using the same deterministic 5x7 bitmap
+    # lettering and RGBA composition as the published GitHub comparison.
     if not all((repo / p).is_file() for p in APPROVED.values()):
         return None
-    imgs = [Image.open(repo/p).convert("RGBA") for p in APPROVED.values()] + [large]
-    if any(img.width != 140 for img in imgs):
-        raise ValueError("Approved reference assets do not measure 140 px wide")
-    im = Image.new("RGBA", (320, 240), NAVY)
-    dr = ImageDraw.Draw(im)
-    dr.rectangle((160,0,319,239),fill=PALE)
-    dr.line((159,0,159,239),fill=(155,172,174,255),width=1)
-    draw_label(dr,(9,10),"FOND SOMBRE",INK,9)
-    draw_label(dr,(169,10),"FOND CLAIR",DARK_INK,9)
-    y_positions=(33,78,120,169)
-    for b,y in zip(imgs,y_positions):
-        im.alpha_composite(b,(10,y))
-        im.alpha_composite(b,(170,y))
-    dr.line((8,162,150,162),fill=(115,139,149,255),width=1)
-    dr.line((168,162,310,162),fill=(115,139,149,255),width=1)
-    draw_label(dr,(10,214),"ABANDON = PROPOSITION",INK,8)
-    draw_label(dr,(170,214),"ETUDE / NON VALIDE",DARK_INK,8)
-    return im
+    from check_preuves import APPROUVES, blob, planche
+    imgs = []
+    for path, expected_sha1, size in APPROUVES:
+        raw = (repo / path).read_bytes()
+        if blob(raw) != expected_sha1:
+            raise ValueError(f"Approved sprite changed: {path}")
+        with Image.open(io.BytesIO(raw)) as img:
+            sprite = img.convert("RGBA")
+        if sprite.size != size:
+            raise ValueError(f"Invalid approved sprite size: {path}")
+        imgs.append(sprite)
+    imgs.append(large)
+    return planche(imgs)
 
 def alpha_report(im):
     a = im.getchannel("A")
@@ -124,7 +121,21 @@ def main():
     p.add_argument("--out",default="draft/etudes/bouton_abandon",type=Path)
     p.add_argument("--allow-reference",action="store_true",help="off-repo upload: no claim of exact Git blob lineage")
     p.add_argument("--check",action="store_true",help="read-only: verify all expected generated PNG and report bytes")
+    p.add_argument("--check-source", action="store_true", help="audit source Git et comparaison de pixels RGBA avec l'upload PO")
+    p.add_argument("--check-comparatif", action="store_true", help="validation des vrais sprites approuves et du comparatif natif + zoom")
     a=p.parse_args()
+    if (a.check or a.check_source or a.check_comparatif) and not a.allow_reference:
+        from check_preuves import verify_source, verify_comparatif, verify_full
+        repo = a.repo.resolve()
+        outdir = a.out if a.out.is_absolute() else repo / a.out
+        source = a.input if a.input.is_absolute() else repo / a.input
+        if a.check_comparatif:
+            verify_comparatif(repo, outdir)
+        elif a.check_source:
+            verify_source(source)
+        else:
+            verify_full(repo, outdir, source)
+        return
     d=a.input.read_bytes(); g=git_blob_sha1(d)
     if not a.allow_reference and g!=EXPECTED_GIT_SHA1:
         p.error(f"Source not the exact original Git blob: {g}")

@@ -1,71 +1,107 @@
-# BTN-ABD-01 — Étude ABANDON (Issue #149)
+# BTN-ABD-01 — ABANDON · étude graphique (Issue #149)
 
-**Statut : CANDIDATE / ART_NOT_REVIEWED / ON_DEVICE_UNVERIFIED.**
+**Statut : `CANDIDATE · ART_NOT_REVIEWED · ON_DEVICE_UNVERIFIED`.**
+**PR #150 DRAFT ; GO artistique PO non obtenu. Fusion exclusivement Pilotage.**
 
-## Provenance des pixels
+## 1. Original PO et filiation à vérifier
 
-- Original PO immuable sur `main` : `draft/Bouton_Abandon.png`, 1 814 386 octets, SHA-1 Git `3818cb092456e1ff222d8b2dacf9f9aa55266135` (préservé via PR #152). **Il n'a pas été modifié.**
-- Entrée réelle utilisée pour cette prévisualisation locale : fichier image joint à la conversation le 17/11/2026, 2048×682 RGBA, 1 870 797 octets, SHA-256 `2637ff5eb00d42f427a07fa0a25baffd7b95c77566578d6e223ac8ecb6533690`, Git blob `80a68ede2a2ee06656c4cb0bb4aedc6bd4a3fb3d`.
-- **Différence d'octets constatée :** ce fichier joint n'est PAS l'original Git bit pour bit. Il sert de référence visuelle fidèlement cadrée, sans prétention d'égalité pixel à pixel avec l'original Git non lisible via le connecteur. Les exports inclus reflètent cette pièce jointe, et non une version récupérée de force depuis GitHub.
-- Tous les détails de palette, lettrage, rivets, drapeau et relief sont ceux de la pièce jointe ; aucune recoloration ni redessin.
+L'original PO est présent, inchangé, sur `main` : `draft/Bouton_Abandon.png`,
+**1 814 386 octets**, **Git blob SHA-1 `3818cb092456e1ff222d8b2dacf9f9aa55266135`** (restauration PR #152).
+Aucun fichier original n'est ajouté ou modifié ici.
 
-## Construction non destructive
+La **pièce jointe réellement utilisée** dans cette étude mesure **2048×682 RGBA**,
+1 870 797 octets, SHA-256 du fichier
+`2637ff5eb00d42f427a07fa0a25baffd7b95c77566578d6e223ac8ecb6533690`.
+Elle a un **encodage différent** de la source Git. Sa comparaison **pixel à pixel n'a pas encore été exécutée contre le Git exact**.
 
-- Zone opaque significative (alpha > 1) du fichier joint : `(29,94) .. (2019,587)`.
-- Marges d'origine essentiellement transparentes, notamment en haut/bas ; quelques pixels alpha=1 épars à l'extérieur de la silhouette.
-- Découpe de conservation `(24,90,2024,590)` : master **2000×500**, ratio **4:1**. Tous les pixels de la silhouette (alpha > 1) sont conservés ; aucune dilatation/déformation.
-- Exports : **140×35** et **112×28** RGBA, réduction `LANCZOS` sur pixels alpha prémultipliés pour éviter les franges sombres. Les couleurs du drapeau et des lettres ne sont pas retouchées.
-- Zoom ×4 : strict `NEAREST`, sans création de détail ou interpolation.
-- Mini-planche 320×240 : **étude sur fonds clair/sombre**, ce n'est **pas** une maquette d'écran et cela ne vaut pas implantation tactile validée.
+La preuve reproductible est `empreinte_pixels_upload.json` :
+l'empreinte SHA-256 des **5 586 944 octets RGBA décodés** de la pièce jointe est
+`da7ca8f59aac3c27e02d9fb0b5966ee6ea048389221834610c1d11845ec818a5`.
+`generate.py --repo . --check-source` exige l'identité du blob Git,
+des dimensions et de tous ces pixels ; en cas de divergence, le processus échoue
+et **aucun export ne doit être considéré comme dérivé de l'original PO**.
+Cette commande **n'a pas encore été exécutée avec succès sur un checkout réel**.
 
-**Disponibilité sur cette branche GitHub :** le master, les deux exports candidats, les prévisualisations 320×240 et ×4 NEAREST sont désormais déposés sous `draft/etudes/bouton_abandon/` avec leurs Git blob SHA-1 vérifiés. Ils dérivent **de la pièce jointe visuelle réencodée**, pas de la source Git originale bit à bit. L'exécution `--check` sur le vrai binaire Git est encore À VÉRIFIER ; cette PR ne prouve pas cette filiation. Le comparatif PNG avec JOUER / PALMARÈS / ATTAQUER reste à produire après un checkout vérifié.
+## 2. Candidats graphiques (sources et exports)
 
-## Fichiers (sorties locales publiées, à revalider depuis la source Git)
+Dérivés **de la pièce jointe**, sans redessin : découpe `(24,90)-(2024,590)`,
+master RGBA **2000×500** ; réduction LANCZOS en alpha prémultiplié,
+exports **140×35** et **112×28** ; zooms ×4 strict **NEAREST**.
 
 - `exports/abandon_master_2000x500_RGBA.png`
-- `exports/abandon_140x35_RGBA.png`
-- `exports/abandon_112x28_RGBA.png`
-- `preuves/etude_abandon_320x240.png`, `preuves/etude_abandon_1280x960_NEAREST.png`
-- `preuves/abandon_140x35_x4_NEAREST.png`, `preuves/abandon_112x28_x4_NEAREST.png`
-- `generate.py`, script régénérable, `--check` en lecture seule
-- `rapport.json` : SHA-256, poids, dimension, mode et transparence de chaque export
+- `exports/abandon_140x35_RGBA.png` — préférence de la DA
+- `exports/abandon_112x28_RGBA.png` — taille compacte, moins détaillée
+- `preuves/etude_abandon_320x240.png` et son zoom ×4
+- `preuves/abandon_{140x35,112x28}_x4_NEAREST.png`
+- `rapport_reference_upload.json` — hashes SHA-256 et alpha de **ces 7 PNG seulement**, avec référence **explicite** à l'upload (pas à Git).
 
-## Procédures
+Les candidats sont conservés noirs/acier/or, avec drapeau, plaque et rivets.
+Pas de recoloration rouge, pas de variantes d'état `pressed`/`disabled` inventées.
 
-Dépendance : Pillow. **Source Git exacte (après checkout)** :
+## 3. Comparatif publié avec les vrais boutons approuvés
+
+La **planche native 320×240** et son zoom **1280×960 NEAREST** sont
+désormais publiés :
+
+- `preuves/comparatif_approuves_320x240.png`
+- `preuves/comparatif_approuves_1280x960_NEAREST.png`
+
+Ils assemblent sans redimensionnement ni modification les **vrais blobs de
+`main`** JOUER (140×32), PALMARÈS (140×30) et ATTAQUER ON (140×35)
+avec ABANDON candidat (140×35), sur fonds clair et sombre.
+Les empreintes **Git blob SHA-1 des quatre entrées et des deux planches**,
+ainsi que la disposition, figurent dans `rapport_comparatif_approuves.json`.
+Aucune duplication des sprites approuvés dans la PR.
+
+Le rendu natif a été **effectivement affiché et examiné** :
+le 140×35 est plus lisible et préserve mieux le drapeau et les reliefs que le
+112×28. Cette appréciation n'est **pas** une validation PO ni matérielle.
+
+## 4. Reproductibilité depuis un checkout propre
+
+**Dépendance conseillée : Pillow 12.3.0** (version des exports originaux).
+Depuis la racine du vrai dépôt, après checkout de la HEAD de la PR :
 
 ```bash
-python3 -m pip install Pillow
-python3 draft/etudes/bouton_abandon/generate.py --repo . --input draft/Bouton_Abandon.png --out draft/etudes/bouton_abandon
-python3 draft/etudes/bouton_abandon/generate.py --repo . --input draft/Bouton_Abandon.png --out draft/etudes/bouton_abandon --check
+python3 -m pip install 'Pillow==12.3.0'
+python3 draft/etudes/bouton_abandon/audit_source.py --check
+python3 draft/etudes/bouton_abandon/generate.py --repo . --check-source
+python3 draft/etudes/bouton_abandon/generate.py --repo . --check-comparatif
+python3 draft/etudes/bouton_abandon/generate.py --repo . --check
 python3 scripts/check_graphic_pipeline.py
 ```
 
-Le script vérifie le Git blob de l'original ; la recette refuse une source non conforme ou des dimensions inattendues. Sur **la pièce jointe**, la vérification a été réellement exécutée ainsi :
+**`--check` est strictement en lecture seule.** Il ne réclame **plus un
+`rapport.json` inexistant** dans la PR : il vérifie la provenance Git exacte
+via le SHA-256 des pixels RGBA, les **7 exports par comparaison de pixels avec
+la source Git**, le contenu et les SHA-256 de `rapport_reference_upload.json`,
+et les deux planches via les **vrais blobs approuvés** (9 PNG).
+Les PNG de comparaison peuvent avoir un encodage différent du rendu Pillow,
+sans que leurs **pixels RGBA** soient différents.
 
-```bash
-python3 generate.py --input /mnt/data/image.png --allow-reference --repo /mnt/data --out /mnt/data/BTN-ABD-01
-python3 generate.py --input /mnt/data/image.png --allow-reference --repo /mnt/data --out /mnt/data/BTN-ABD-01 --check
-# CHECK PASS: 7 PNG + rapport.json; NO FILES WRITTEN
-```
+**Résultats réellement obtenus :** fabrication des deux PNG comparatifs et
+inspection à 320×240 sur PC ; cohérence indépendante de la composition
+(bitmap font/compositing) vérifiée localement sur image de test ;
+Git blobs des quatre entrées et deux sorties vérifiés par le connecteur.
+**Résultats non obtenus ici :** `--check-source PASS`, `--check PASS`,
+`scripts/check_graphic_pipeline.py PASS` sur un **checkout complet** ;
+absence d'accès aux octets du PNG Git >1 Mo dans cet environnement.
+La CI build GCC/Clang/ESP-IDF était verte sur **l'ancienne HEAD**
+`b626e0c543124005c5db901274ee64b8e5e2faf4` ; les nouveaux commits
+doivent être contrôlés séparément.
 
-**Attention :** l'original Git n'ayant pu être téléchargé ici, le lancement sur les octets Git et son résultat `--check` demeurent **À VÉRIFIER** ; ne pas extrapoler l'exécution réalisée sur l'upload.
+**En cas d'échec de `--check-source` : ne pas forcer un PASS, ne pas déclarer la
+filiation prouvée ; analyser les dimensions et pixels réels, puis demander
+l'arbitrage PO ou régénérer depuis l'original avec un nouveau HEAD.**
 
-## Comparatif avec les boutons approuvés
+## 5. Gouvernance
 
-Le script détecte, dans un checkout réel, les fichiers existants suivants, et produit **en plus** une planche côte à côte 320×240 (fonds clair/sombre) avec les vrais boutons dans le même ordre :
+Étude exclusivement dans `draft/etudes/bouton_abandon/` ;
+aucun changement de `draft/Bouton_Abandon.png`, `assets/`, `maquettes/`,
+firmware ou `BIBLE_PRODUIT.md`. `ABANDON` graphique ne remplace pas le
+texte de dialogue `CONTINUER / ABANDONNER` (BN-UX-003, LOT1-ABD-001,
+LOT1-UX-011). Format et budget firmware, taille tactile et rendu sur la vraie
+CYD restent à valider avec le Développeur/Pilotage.
 
-- `assets/boutons/bouton_jouer_CYD_140x32_RGBA.png`
-- `assets/boutons/bouton_palmares_CYD_140x30_RGBA.png`
-- `assets/boutons/attaquer_on_140x35_RGBA.png`
-- `draft/etudes/bouton_abandon/exports/abandon_140x35_RGBA.png` (candidat)
-
-Les références approuvées ont pu être affichées depuis le connecteur GitHub, mais leurs octets **ne sont pas importés dans ce conteneur local**. En conséquence les planches `comparatif_approuves_*` ne sont **pas** incluses dans le paquet local : leur fabrication est prévue après checkout Git exact et reste **non vérifiée** ici. Aucun visuel approuvé n'a été reconstitué approximativement.
-
-## Avis de direction artistique et gouvernance
-
-À **140×35**, drapeau, rivets et « ABANDON » sont lisibles dans une planche 320×240. À **112×28**, la plaque et le mot restent reconnaissables, mais le détail du tissu et les micro-reflets décroissent. Le 140×35 est la **proposition préférée** pour confrontation à la charte. Le style conserve l'ardoise/acier et l'or du PO : **pas de rouge ajouté sans GO**. La couleur n'est pas un indicateur logiciel d'état ici.
-
-La commande graphique `ABANDON` n'est **pas** le texte obligatoire du dialogue `CONTINUER / ABANDONNER` : aucun changement métier. Le sprite n'impose aucun nouvel état `ON/OFF`, `pressed` ou `disabled`. L'abandon ne fonctionne qu'aux étapes définies par BN-UX-003, LOT1-ABD-001, LOT1-UX-011. Les choix de taille tactile et le budget RAM/Flash restent à valider avec Pilotage/Développeur. Aucun test sur ESP32 CYD n'a eu lieu.
-
-**Aucun déplacement vers `assets/`, aucune approbation artistique implicite, aucun merge.** Le PO décide de l'art, Pilotage examine la PR et fusionne seul. `Refs #149`.
+**La PR #150 reste DRAFT ; aucune fusion sans la revue de Pilotage et aucun
+GO artistique implicite.** Refs #149.
