@@ -60,7 +60,7 @@ jobs:
               data=path.read_bytes()
               assert hashlib.sha256(data).hexdigest()==x['sha256']
               assert len(data)==x['encoded_bytes']
-              assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\\0'+data).hexdigest()==x['git_blob_sha1']
+              assert hashlib.sha1(b'blob '+str(len(data)).encode()+bytes([0])+data).hexdigest()==x['git_blob_sha1']
           print('FINAL_ABANDON_PROOFS_PASS exact HEAD, original Git, RGBA, 9 PNG, two comparatives and reports')
           PY
           test -z "$(git status --porcelain)"
