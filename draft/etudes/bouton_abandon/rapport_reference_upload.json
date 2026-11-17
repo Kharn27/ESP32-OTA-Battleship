@@ -1,0 +1,257 @@
+{
+  "approved_comparison_generated": false,
+  "files": {
+    "exports/abandon_112x28_RGBA.png": {
+      "bytes": 8240,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          112,
+          28
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          112,
+          28
+        ],
+        "alpha_opaque": 229,
+        "alpha_partial": 2854,
+        "alpha_zero": 53,
+        "mode": "RGBA",
+        "size": [
+          112,
+          28
+        ]
+      },
+      "sha256": "883ab46eaa7cda94435f739e3c37e1d7798a7c981b2963665c239cd4dc761b36"
+    },
+    "exports/abandon_140x35_RGBA.png": {
+      "bytes": 12101,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          140,
+          35
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          140,
+          35
+        ],
+        "alpha_opaque": 177,
+        "alpha_partial": 4639,
+        "alpha_zero": 84,
+        "mode": "RGBA",
+        "size": [
+          140,
+          35
+        ]
+      },
+      "sha256": "381bdd3a798486d7a4327bbaa8535ce3a1a3f95d5d3983e7bc8f22223fbc63e7"
+    },
+    "exports/abandon_master_2000x500_RGBA.png": {
+      "bytes": 1331943,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          5,
+          4,
+          1995,
+          497
+        ],
+        "alpha_nonzero_bbox": [
+          1,
+          2,
+          1998,
+          500
+        ],
+        "alpha_opaque": 0,
+        "alpha_partial": 958644,
+        "alpha_zero": 41356,
+        "mode": "RGBA",
+        "size": [
+          2000,
+          500
+        ]
+      },
+      "sha256": "a0a670e30d1f563c5b1f28bc600b7feb0801cf8ef486cedd0d87a2752e21bca8"
+    },
+    "preuves/abandon_112x28_x4_NEAREST.png": {
+      "bytes": 11404,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          448,
+          112
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          448,
+          112
+        ],
+        "alpha_opaque": 3664,
+        "alpha_partial": 45664,
+        "alpha_zero": 848,
+        "mode": "RGBA",
+        "size": [
+          448,
+          112
+        ]
+      },
+      "sha256": "0eff27f488ef1766baa2d5058d3a4ecaf624b21f4ee1458657bce0ffcacd34a4"
+    },
+    "preuves/abandon_140x35_x4_NEAREST.png": {
+      "bytes": 16761,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          560,
+          140
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          560,
+          140
+        ],
+        "alpha_opaque": 2832,
+        "alpha_partial": 74224,
+        "alpha_zero": 1344,
+        "mode": "RGBA",
+        "size": [
+          560,
+          140
+        ]
+      },
+      "sha256": "46057ec807ec83e2717cde775b92ac2a33eedd29b40e7e210fd9527ef68de383"
+    },
+    "preuves/etude_abandon_1280x960_NEAREST.png": {
+      "bytes": 42489,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          1280,
+          960
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          1280,
+          960
+        ],
+        "alpha_opaque": 1228800,
+        "alpha_partial": 0,
+        "alpha_zero": 0,
+        "mode": "RGBA",
+        "size": [
+          1280,
+          960
+        ]
+      },
+      "sha256": "b73cc31053096eaddd7b0861e25fafc70de6e9a3fdd09cd59a13f70cc50412e9"
+    },
+    "preuves/etude_abandon_320x240.png": {
+      "bytes": 26268,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          320,
+          240
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          320,
+          240
+        ],
+        "alpha_opaque": 76800,
+        "alpha_partial": 0,
+        "alpha_zero": 0,
+        "mode": "RGBA",
+        "size": [
+          320,
+          240
+        ]
+      },
+      "sha256": "37abbc0612099f03aa5bc9b3e1a09bb7727b77cb4acfbfecb60afaf597de2786"
+    }
+  },
+  "master": {
+    "crop_xyxy": [
+      24,
+      90,
+      2024,
+      590
+    ],
+    "metadata": {
+      "alpha_gt1_bbox": [
+        5,
+        4,
+        1995,
+        497
+      ],
+      "alpha_nonzero_bbox": [
+        1,
+        2,
+        1998,
+        500
+      ],
+      "alpha_opaque": 0,
+      "alpha_partial": 958644,
+      "alpha_zero": 41356,
+      "mode": "RGBA",
+      "size": [
+        2000,
+        500
+      ]
+    },
+    "source_bbox_alpha_gt1": [
+      29,
+      94,
+      2019,
+      587
+    ]
+  },
+  "mission": "BTN-ABD-01 #149",
+  "on_device": "ON_DEVICE_UNVERIFIED",
+  "origin_type": "user_upload_visual_reference_NOT_exact_git_blob",
+  "pillow_version": "12.3.0",
+  "source": {
+    "bytes": 1870797,
+    "git_blob_sha1": "80a68ede2a2ee06656c4cb0bb4aedc6bd4a3fb3d",
+    "metadata": {
+      "alpha_gt1_bbox": [
+        29,
+        94,
+        2019,
+        587
+      ],
+      "alpha_nonzero_bbox": [
+        20,
+        48,
+        2022,
+        675
+      ],
+      "alpha_opaque": 0,
+      "alpha_partial": 959376,
+      "alpha_zero": 437360,
+      "mode": "RGBA",
+      "size": [
+        2048,
+        682
+      ]
+    },
+    "path": "image.png (user attachment to ChatGPT on 2026-11-17)",
+    "sha256": "2637ff5eb00d42f427a07fa0a25baffd7b95c77566578d6e223ac8ecb6533690"
+  },
+  "status": "CANDIDATE",
+  "technique": "RGBA, no imposed runtime format; premultiplied LANCZOS downsizing; NEAREST x4 proof"
+}

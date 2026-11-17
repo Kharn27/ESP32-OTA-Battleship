@@ -18,9 +18,9 @@
 - Zoom ×4 : strict `NEAREST`, sans création de détail ou interpolation.
 - Mini-planche 320×240 : **étude sur fonds clair/sombre**, ce n'est **pas** une maquette d'écran et cela ne vaut pas implantation tactile validée.
 
-**Disponibilité sur cette branche GitHub :** le script et les notes sont présents ; les PNG ci-dessous ont été produits et contrôlés localement à partir de l'upload, mais les octets binaires ne sont pas encore transférés dans cette PR. Cette PR ne constitue donc pas encore la livraison finale de #149. Les vrais PNG sont disponibles dans le ZIP remis au PO ; la génération depuis l'original Git reste à exécuter et à vérifier. **Ne pas valider cette étude comme terminée.**
+**Disponibilité sur cette branche GitHub :** le master, les deux exports candidats, les prévisualisations 320×240 et ×4 NEAREST sont désormais déposés sous `draft/etudes/bouton_abandon/` avec leurs Git blob SHA-1 vérifiés. Ils dérivent **de la pièce jointe visuelle réencodée**, pas de la source Git originale bit à bit. L'exécution `--check` sur le vrai binaire Git est encore À VÉRIFIER ; cette PR ne prouve pas cette filiation. Le comparatif PNG avec JOUER / PALMARÈS / ATTAQUER reste à produire après un checkout vérifié.
 
-## Fichiers (sorties générables, en attente de publication dans la PR)
+## Fichiers (sorties locales publiées, à revalider depuis la source Git)
 
 - `exports/abandon_master_2000x500_RGBA.png`
 - `exports/abandon_140x35_RGBA.png`
@@ -60,7 +60,7 @@ Le script détecte, dans un checkout réel, les fichiers existants suivants, et 
 - `assets/boutons/attaquer_on_140x35_RGBA.png`
 - `draft/etudes/bouton_abandon/exports/abandon_140x35_RGBA.png` (candidat)
 
-Les autres éléments approuvés **ne sont pas disponibles en bytes dans ce conteneur local**. En conséquence les planches `comparatif_approuves_*` ne sont **pas** incluses dans le paquet local : leur fabrication est prévue après checkout Git exact et reste **non vérifiée** ici. Aucun visuel approuvé n'a été reconstitué approximativement.
+Les références approuvées ont pu être affichées depuis le connecteur GitHub, mais leurs octets **ne sont pas importés dans ce conteneur local**. En conséquence les planches `comparatif_approuves_*` ne sont **pas** incluses dans le paquet local : leur fabrication est prévue après checkout Git exact et reste **non vérifiée** ici. Aucun visuel approuvé n'a été reconstitué approximativement.
 
 ## Avis de direction artistique et gouvernance
 
