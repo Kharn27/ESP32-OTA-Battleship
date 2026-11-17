@@ -134,18 +134,26 @@ jobs:
           proofs=sorted((ex/"preuves").glob("jalon3_*.png"))
           assert len(proofs)==21 and len(m3["proofs"])==21
           assert {str(p) for p in proofs}=={e["path"] for e in m3["proofs"]}
+          mismatches=[]
           for e in m3["proofs"]:
               f=Path(e["path"])
-              assert f.stat().st_size==e["size_bytes"] and hashlib.sha256(f.read_bytes()).hexdigest()==e["sha256"],f
+              observed_size=f.stat().st_size
+              observed_sha=hashlib.sha256(f.read_bytes()).hexdigest()
+              if observed_size!=e["size_bytes"] or observed_sha!=e["sha256"]:
+                  mismatches.append(str(f))
+                  print("J3_PROOF_MANIFEST_MISMATCH",f,"actual_size",observed_size,"declared_size",e["size_bytes"],"actual_sha",observed_sha,"declared_sha",e["sha256"])
+          print("J3_PROOF_MANIFEST_MISMATCH_COUNT",len(mismatches))
           for page in (1,2):
               for bg in ("clair","sombre"):
                   with Image.open(ex/"preuves"/f"jalon3_p{page}_320x240_{bg}.png") as im:
                       assert im.size==(320,240) and im.mode=="RGBA"
           with Image.open(ex/"preuves"/"jalon3_contact_1120x182.png") as im:
               assert im.size==(1120,182)
-          print("J3_INDEPENDENT_QA_OK: 8 IDs, 24 masters/sprites, 21 proofs, 16 exact NEAREST, 3 local masks, 5 originals")
+          print("J3_ALL_OTHER_QA_OK: 8 IDs, 24 masters/sprites, 21 proofs, 16 exact NEAREST, 3 local masks, 5 originals")
+          assert not mismatches,("manifest proofs mismatch",mismatches)
           PY
       - name: J3 connector helper JS codec smoke check
+        if: ${{ always() }}
         shell: bash
         run: |
           set -euo pipefail
@@ -168,6 +176,7 @@ jobs:
           console.log("J3_JS_HELPER_OK: PNG roundtrip, BOX pixel identity, SHA");
           JS
       - name: Verify graphics integrity and untouched working tree
+        if: ${{ always() }}
         shell: bash
         run: |
           set -euo pipefail
