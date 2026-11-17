@@ -99,8 +99,6 @@ def apply_local_mask(id_: str, original: bytes, side: int) -> bytes:
     """
     rectangles = {
         "A-L1-C4": ((0, 80, 31, 258),),
-        "A-L2-C3": ((0, 80, 8, 263),),
-        "B-L1-C4": ((0, 205, 8, 278),),
         "B-L2-C2": ((349, 75, 362, 323),),
         "C-L1-C2": ((0, 50, 10, 210),),
     }
