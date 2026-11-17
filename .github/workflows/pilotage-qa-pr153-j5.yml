@@ -326,7 +326,7 @@ jobs:
                       assert sum(0<x<255 for x in a)==ent["alpha_partial"]
                       bb=im.getbbox()
                       assert [bb[0],bb[1],bb[2]-1,bb[3]-1]==ent["bbox_nonzero"]
-                      with Image.open(ex/"preuves"/f"jalon4_{name}_{n}_x4.png") as z:
+                      with Image.open(ex/"preuves"/f"jalon5_{name}_{n}_x4.png") as z:
                           assert z.mode=="RGBA" and z.size==(n*4,n*4)
                           assert z.tobytes()==im.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes()
                       if n in (48,64):
@@ -341,7 +341,7 @@ jobs:
                                       if neighbor in alive:
                                           alive.remove(neighbor);stack.append(neighbor)
                           assert groups==1,(name,groups)
-          proofs=list((ex/"preuves").glob("jalon4_*.png"))
+          proofs=list((ex/"preuves").glob("jalon5_*.png"))
           assert len(proofs)==len(j["proofs"])==21
           assert {str(p) for p in proofs}=={e["path"] for e in j["proofs"]}
           files.extend((e,None) for e in j["proofs"])
@@ -357,9 +357,9 @@ jobs:
                   if n:assert im.size==(n,n)
           for page in (1,2):
               for theme in ("clair","sombre"):
-                  with Image.open(ex/"preuves"/f"jalon4_p{page}_320x240_{theme}.png") as im:
+                  with Image.open(ex/"preuves"/f"jalon5_p{page}_320x240_{theme}.png") as im:
                       assert im.size==(320,240) and im.mode=="RGBA"
-          with Image.open(ex/"preuves"/"jalon4_contact_1120x182.png") as im:
+          with Image.open(ex/"preuves"/"jalon5_contact_1120x182.png") as im:
               assert im.size==(1120,182) and im.mode=="RGBA"
           print("J5_INDEPENDENT_PASS: 45 SHA+size, 5 sources, 8 exact crops, 1 mask, 16 zooms, 16 components, 4 native, contact")
           PY
