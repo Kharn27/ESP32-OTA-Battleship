@@ -19,8 +19,8 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          test "$(git rev-parse HEAD^)" = "efdc669ef15425c5db342c30de9e07b82ba93dd8"
-          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/qa-abandon-149.yml"
+          git merge-base --is-ancestor "efdc669ef15425c5db342c30de9e07b82ba93dd8" HEAD
+          test "$(git diff --name-only "efdc669ef15425c5db342c30de9e07b82ba93dd8" HEAD)" = ".github/workflows/qa-abandon-149.yml"
       - name: Install Pillow 12.3.0
         shell: bash
         run: |
