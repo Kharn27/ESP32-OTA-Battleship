@@ -4,7 +4,7 @@
   "status": "CANDIDATE",
   "on_device": "ON_DEVICE_UNVERIFIED",
   "art_approved": false,
-  "source": "Actual GitHub PNG blobs, read via GitHub connector, decoded as RGBA8 and composited at their native width (no sprite scaling)",
+  "source": "Verified exact GitHub source blobs read in the full checkout of the isolated QA workflow #44158305962; comparison generated using Pillow 12.3.0 from actual approved binaries plus ABANDON regenerated from exact Git PO original (not user upload).",
   "inputs": [
     {
       "path": "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png",
@@ -35,7 +35,7 @@
     },
     {
       "path": "draft/etudes/bouton_abandon/exports/abandon_140x35_RGBA.png",
-      "git_blob_sha1": "2a2f274fc640266bc4cd05ba9b28e39eb836561e",
+      "git_blob_sha1": "d3c3d3e0da3700cf5d6bf863990e0e460d7d76a9",
       "size": [
         140,
         35
@@ -50,8 +50,9 @@
         320,
         240
       ],
-      "encoded_bytes": 88427,
-      "git_blob_sha1": "120b55adcae7e75fcfdc7e03bd0f4da5b432301a"
+      "encoded_bytes": 58226,
+      "git_blob_sha1": "c07705c65d9e58ca022595c87a53c445a3e95270",
+      "sha256": "4d9db6616d8642c4c0b78cee0035b2ba76035fcf524e8e1f025e4bf4bd433cb6"
     },
     {
       "path": "draft/etudes/bouton_abandon/preuves/comparatif_approuves_1280x960_NEAREST.png",
@@ -59,8 +60,9 @@
         1280,
         960
       ],
-      "encoded_bytes": 629967,
-      "git_blob_sha1": "3eaccc1df8054652e277f2aba6a7178097504cfb"
+      "encoded_bytes": 85774,
+      "git_blob_sha1": "83af6e161287d49b1da412596f9c16504c8f23f3",
+      "sha256": "6b9962d5504b81a4c3e96d69074c98d70e88f5e19ee4df1e6b3fbe156b81b517"
     }
   ],
   "layout": {
@@ -81,5 +83,18 @@
     "pixel_font": "explicit 5x7 reference labels",
     "zoom": "nearest-neighbor exactly 4x"
   },
-  "limitations": "Comparative PNGs published and visibly inspected in GitHub. Full clean-checkout generation check and RGBA comparison with exact Git original still NOT EXECUTED."
+  "limitations": "CI source, 9 PNG regeneration --check, approved comparator and graphic pipeline ALL PASS in isolated Git checkout #44158305962. Artistic PO GO and physical CYD ON_DEVICE_VERIFIED remain NOT obtained.",
+  "validation": {
+    "qa_workflow_run": "https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/44158305962",
+    "conclusion": "success",
+    "source_sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f",
+    "original_dimensions": [
+      2172,
+      724
+    ],
+    "master_dimensions": [
+      2124,
+      531
+    ]
+  }
 }

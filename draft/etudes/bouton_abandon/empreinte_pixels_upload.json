@@ -1,5 +1,5 @@
 {
-  "comparison_result": "NOT_EXECUTED_ON_GIT_ORIGINAL",
+  "comparison_result": "CONFIRMED_DIFFERENT_PIXEL_ARRAYS_AND_DIMENSIONS",
   "criterion": "same image dimensions and same SHA256 of full decoded RGBA bytes => identical pixel arrays",
   "exact_git_original_expected": {
     "path": "draft/Bouton_Abandon.png",
@@ -35,5 +35,31 @@
       2019,
       587
     ]
-  }
+  },
+  "method": "Exact Git original audited via GitHub Actions job using Pillow 12.3.0; decoded RGBA compared with uploaded reference SHA256; Git original is authoritative for new exports.",
+  "exact_git_original_observed": {
+    "path": "draft/Bouton_Abandon.png",
+    "bytes": 1814386,
+    "git_blob_sha1": "3818cb092456e1ff222d8b2dacf9f9aa55266135",
+    "file_sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f",
+    "rgba_pixel_sha256": "d00d364479fcace09fa4f9339d9d4cf0a184cb0893c1c5f9507d0e8ab5bd1b96",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha_gt1_bbox": [
+      31,
+      98,
+      2141,
+      623
+    ],
+    "crop_for_master": [
+      24,
+      95,
+      2148,
+      626
+    ]
+  },
+  "decision": "Regenerate all ABANDON sprites and proof images from original Git exact source; upload visual reference superseded. Do not claim pixel identity.",
+  "proof_url": "https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/44158305962"
 }
