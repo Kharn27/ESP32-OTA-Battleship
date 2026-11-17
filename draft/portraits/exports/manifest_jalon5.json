@@ -1,0 +1,580 @@
+{
+  "schema_version": 1,
+  "issue": 133,
+  "stage": "JALON_5",
+  "status": "CANDIDATE",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "base_main": "10319362ee975658326b78bc689712392093c2ac",
+  "source_reference_sha256": {
+    "A": "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc",
+    "B": "77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea",
+    "C": "b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8",
+    "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
+    "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
+  },
+  "source_integrity": "SHA256 des cinq originaux PO repris de la référence README ; originaux intacts dans le diff. --check sur checkout complet recalcule leurs vrais SHA256. Parité octet à octet des masters J4 C-L2-C4, D-L1-C2, E-L1-C2 confirmée par extraction native Adobe.",
+  "pipeline": {
+    "python": "3.11+",
+    "pillow": "12.3.0",
+    "codec": "PNG RGBA 8-bit, stored zlib, filter 0, no metadata",
+    "resampling": "area-weighted integer BOX, premultiplied alpha; independent 48/64 from same HD master",
+    "zoom": "nearest-neighbour x4 exact",
+    "recipe": "draft/portraits/exports/export_jalon5.py",
+    "connector_helper_reused": "draft/portraits/exports/connector_jalon3.js",
+    "mask": "ROI local unique D-L2-C4 [300,80,307,307) policy all ; 583 pixels alpha>0 supprimés ; 0 changement hors masque",
+    "verification": "--check recomputes ALL output PNG bytes and SHA256/size of every master, export, and proof against actual committed file"
+  },
+  "items": [
+    {
+      "id": "C-L1-C4",
+      "sheet": "C",
+      "rect": [
+        1086,
+        0,
+        1448,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L1-C4/master_HD.png",
+          "sha256": "e491dcb436ec80fead3a3ea978ee493f7cde8bf5c6b9539eb4fccc6a3e91dd05",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L1-C4/portrait_48.png",
+          "sha256": "aaef822525abb7b8085044733e3efa1bca95b1513ab95df2b7ce02b1d892e2c7",
+          "size_bytes": 9332,
+          "alpha_0": 857,
+          "alpha_partial": 1447,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L1-C4/portrait_64.png",
+          "sha256": "36d4066c7dd11711aefb1ef8b63e4652db8205f32fcd8f9327a28bfb15bb48af",
+          "size_bytes": 16516,
+          "alpha_0": 1529,
+          "alpha_partial": 2567,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Tricorne noir et moustache blanche ; grande coiffe préservée",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "C-L3-C3",
+      "sheet": "C",
+      "rect": [
+        724,
+        543,
+        1086,
+        815
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L3-C3/master_HD.png",
+          "sha256": "d36f0c66c587a8d4a05916b6a050352080b89ccb204956917f5597d859a0dc80",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L3-C3/portrait_48.png",
+          "sha256": "642fd0a59c168bf00e9299484c2adf380849750cc20be6ae701b4cd125d6691c",
+          "size_bytes": 9332,
+          "alpha_0": 935,
+          "alpha_partial": 1369,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L3-C3/portrait_64.png",
+          "sha256": "61a92f86b918ba3563b7011d799791222f110ab777fa2082c148005f85f592bb",
+          "size_bytes": 16516,
+          "alpha_0": 1660,
+          "alpha_partial": 2436,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Barbe grise, bandeau rouge, yeux fermés",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "C-L3-C4",
+      "sheet": "C",
+      "rect": [
+        1086,
+        543,
+        1448,
+        815
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L3-C4/master_HD.png",
+          "sha256": "3b55119734bbbf4d75d37399db52e0f016acb8a42480d796f0159712f705f5a0",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L3-C4/portrait_48.png",
+          "sha256": "7aca3a474a64d693624c06241892f76edf7cfce585a28a9b9ca7105749bae2eb",
+          "size_bytes": 9332,
+          "alpha_0": 831,
+          "alpha_partial": 1473,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            46,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L3-C4/portrait_64.png",
+          "sha256": "1a1856c0eb40329564fa91fb4b50e11c6d8cf71e193306c43e860861373b7715",
+          "size_bytes": 16516,
+          "alpha_0": 1449,
+          "alpha_partial": 2647,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Rousse riante, chevelure ébouriffée et mèches préservées",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L1-C4",
+      "sheet": "D",
+      "rect": [
+        922,
+        0,
+        1229,
+        256
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L1-C4/master_HD.png",
+          "sha256": "7c58ffeee2255390fe342cf10b370e64b5148d677e1ac6bc17794ea9563843cf",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L1-C4/portrait_48.png",
+          "sha256": "15f81f2838a834801d1549d1c9a1a9673fb4ae075a5ebb4ba5e686fa523e20c3",
+          "size_bytes": 9332,
+          "alpha_0": 644,
+          "alpha_partial": 1660,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L1-C4/portrait_64.png",
+          "sha256": "7e0d87eab99188d2038c9bea8f150527efce0b30ff1ebe16651832e6ddb9d1af",
+          "size_bytes": 16516,
+          "alpha_0": 1148,
+          "alpha_partial": 2948,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ]
+        }
+      },
+      "exception": "Grand tricorne, mèches et tresses ornées conservées",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L2-C1",
+      "sheet": "D",
+      "rect": [
+        0,
+        256,
+        307,
+        512
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L2-C1/master_HD.png",
+          "sha256": "60a8d6678e5a1b6d6421e823f3579ef90b7a2c45a92d720f959d9df8c259926e",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L2-C1/portrait_48.png",
+          "sha256": "7e90a6315c9001adad6271be3ef78b6a20979dc6efd8a262fa582ca19a870d78",
+          "size_bytes": 9332,
+          "alpha_0": 698,
+          "alpha_partial": 1606,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            47,
+            43
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L2-C1/portrait_64.png",
+          "sha256": "b659996834130f924bd7410cb985676f4c8c26504a0bf2d80859fab80f6abf0a",
+          "size_bytes": 16516,
+          "alpha_0": 1217,
+          "alpha_partial": 2879,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ]
+        }
+      },
+      "exception": "Bandeau vert, bijoux et anneaux ; marges préservées",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L2-C4",
+      "sheet": "D",
+      "rect": [
+        922,
+        256,
+        1229,
+        512
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L2-C4/master_HD.png",
+          "sha256": "f409b492fe7c0ac59dbcb890181d76b70c0adb7f63a0c240fe2438ee61b57023",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L2-C4/portrait_48.png",
+          "sha256": "992409ece898cf779b7578a1ad763170964dcd1de96d886379d47fd954b97af6",
+          "size_bytes": 9332,
+          "alpha_0": 787,
+          "alpha_partial": 1517,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            46,
+            43
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L2-C4/portrait_64.png",
+          "sha256": "0ba2be2bb292884d62b7859e6de3abb1d206a765560ffc372f27aad3decc81d8",
+          "size_bytes": 16516,
+          "alpha_0": 1381,
+          "alpha_partial": 2715,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            62,
+            58
+          ]
+        }
+      },
+      "exception": "Cellule voisine au bord droit nettoyée localement",
+      "local_masks": [
+        {
+          "rect_hd": [
+            300,
+            80,
+            307,
+            307
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero_pixels": 583,
+          "purpose": "fragments issus de la cellule voisine au bord droit ; aucun pixel hors ROI changé"
+        }
+      ],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "E-L1-C3",
+      "sheet": "E",
+      "rect": [
+        724,
+        0,
+        1086,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L1-C3/master_HD.png",
+          "sha256": "ce6003a52ac06bfc5e02f389d1f61dfe6afc8b14dcdae09262335a18500e0de3",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L1-C3/portrait_48.png",
+          "sha256": "6f4c449ccd22e129136e769430df3cf177e3c58e2270832ee1536d85afd8b8f9",
+          "size_bytes": 9332,
+          "alpha_0": 943,
+          "alpha_partial": 1361,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L1-C3/portrait_64.png",
+          "sha256": "ede5e651969268e241b6c22028751bfa2af7e00bd27839b849071141f0d291ab",
+          "size_bytes": 16516,
+          "alpha_0": 1690,
+          "alpha_partial": 2406,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Lunettes dorées et cheveux blonds, grand sourire",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "E-L2-C1",
+      "sheet": "E",
+      "rect": [
+        0,
+        278,
+        362,
+        543
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 48,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L2-C1/master_HD.png",
+          "sha256": "d208eef71ba1a02f0c8a212515e483d5ef3a60d46db04278a3b7f62f742c0bda",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L2-C1/portrait_48.png",
+          "sha256": "e5627d7167f0674709d3f56fb65b94ceae5d09503725872a225176a1cf08035c",
+          "size_bytes": 9332,
+          "alpha_0": 933,
+          "alpha_partial": 1371,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            41
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L2-C1/portrait_64.png",
+          "sha256": "ee82a3b8e07d7f8d670d057b4095407f663db0a4e8816e7c192c05add47fa8e7",
+          "size_bytes": 16516,
+          "alpha_0": 1685,
+          "alpha_partial": 2411,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            63,
+            55
+          ]
+        }
+      },
+      "exception": "Bonnet bleu, pipe et fumée conservés",
+      "local_masks": [],
+      "mask_outside_changed_channels": 0
+    }
+  ],
+  "proofs": [
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_C-L1-C4_48_x4.png",
+      "sha256": "120821840377cccbe0f16996ad8067e147d9547d509abf28227a782e25976621",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_C-L1-C4_64_x4.png",
+      "sha256": "29dcc036802f090b3d537ad5297b0b5b7837b5fa6e6080341bc323596286dd5d",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_C-L3-C3_48_x4.png",
+      "sha256": "917cb0f15e913f7c3d0319600fe8f775b97f5bca1544020177a68ee7b0a4f86d",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_C-L3-C3_64_x4.png",
+      "sha256": "7139033ad2d91c6e993ac47f8b04dd47ebb861b5b534d538e67eb409c71bd01e",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_C-L3-C4_48_x4.png",
+      "sha256": "c1008df5328af48ddf5db75a6d098cb9f70f0de27fcf4a8b5848c046d9e3aec6",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_C-L3-C4_64_x4.png",
+      "sha256": "1f0a9a3ecfe1f9ba68b43182f680bca50ef469b1fed60e33c58d1b1be668ff4c",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_D-L1-C4_48_x4.png",
+      "sha256": "e88e368380a87242e74e5803c41720f5ff38b51a40987be0c1f09f203f55def2",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_D-L1-C4_64_x4.png",
+      "sha256": "aeae1442bce76a1285109e04b4bd151c65d61ca6c66ab15a8eda52cfbe8f2cc3",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_D-L2-C1_48_x4.png",
+      "sha256": "5a9fc7306e188a27c67894e4f1b4fa9a3e89e896a72242fb2e41d543af3c1bcf",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_D-L2-C1_64_x4.png",
+      "sha256": "3eb835e91033c3fc01f5ce1f8b5e834091089ca96c4553306cbc3ace0e17a43c",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_D-L2-C4_48_x4.png",
+      "sha256": "c67d731deb8f23ebd08915a4a962aa70a9eea4ffb8597c8d1d98f92a92774d67",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_D-L2-C4_64_x4.png",
+      "sha256": "3d3a63d01b98cf366b2fe630176283160804d4b63500229fc264e30033f53622",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_E-L1-C3_48_x4.png",
+      "sha256": "2720233c8d7df0cccbac91991872530b376a1f187a53c0310cf51c3ec029897d",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_E-L1-C3_64_x4.png",
+      "sha256": "924c3de1c40204c90f8524d29263b90998095e3311fa813e911f3d6510b4af23",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_E-L2-C1_48_x4.png",
+      "sha256": "8434e5217e568bbe496e27fc1d4870b45e68e7d6fe358d974c28fd0ce64db405",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_E-L2-C1_64_x4.png",
+      "sha256": "74637b2b2102e28d42d51c059b9c0f5873495accdc8c63ca3c624f11f3b0248f",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_p1_320x240_sombre.png",
+      "sha256": "a05c9832dacb1a07ffb06bc801ecda76ed8dc72c9a283c61d2dcb3eb36c41582",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_p1_320x240_clair.png",
+      "sha256": "ff8348f054c52f862683cbce6299b3e7455564b2aa1fb7e704392e7930d690e5",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_p2_320x240_sombre.png",
+      "sha256": "ac200c1ae28378f2dfd2360b5e889420e0973ab29bbb30af7b1bc20741ab7828",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_p2_320x240_clair.png",
+      "sha256": "3faea2d5c118f4cf032b6639a6fde6eccfe397fb1f2861af716cb9b3f1f8f3ae",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon5_contact_1120x182.png",
+      "sha256": "23e7eb8101fc277164a3db89835355135bc9036b6cf4ea613439ccb77b84b7b4",
+      "size_bytes": 815670
+    }
+  ],
+  "count": {
+    "positions_total": 68,
+    "baseline_completed": 37,
+    "stage_new": 8,
+    "stage_new_variants": 16,
+    "stage_completed_if_accepted": 45,
+    "remaining_if_accepted": 23,
+    "zoom_x4_count": 16,
+    "native_320x240_count": 4,
+    "contact_count": 1,
+    "proof_count": 21
+  },
+  "qa": {
+    "visual_review": "8 portraits 48/64; contact, previews 320x240 natifs fonds clair/sombre et zooms x4 NEAREST consultés sur PC",
+    "components_48_alpha_ge_6": "8/8 une seule composante",
+    "components_64_alpha_ge_6": "8/8 une seule composante",
+    "mask_outside_changed_channels": "0 ; 583 pixels alpha non nul supprimés sur D-L2-C4",
+    "source_original_sha_recheck": "PENDING_FULL_CHECKOUT",
+    "script_check": "PENDING_FULL_CHECKOUT",
+    "graphic_pipeline": "PENDING_PR_CI",
+    "on_device": "NOT_TESTED"
+  },
+  "po_go": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/133#issuecomment-6945578715",
+  "promotion": "NONE; no individual PO artistic GO"
+}
