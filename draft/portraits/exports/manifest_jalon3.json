@@ -1,0 +1,590 @@
+{
+  "schema_version": 1,
+  "issue": 133,
+  "stage": "JALON_3",
+  "status": "CANDIDATE",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "base_main": "66fc9ddeae3625206cfc2125223ea72d11175b61",
+  "source_reference_sha256": {
+    "A": "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc",
+    "B": "77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea",
+    "C": "b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8",
+    "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
+    "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
+  },
+  "source_integrity": "Five PO originals not modified in diff; archived source SHA-256 recorded. Recalculation on a complete Git checkout is mandatory for J3 independent QA; Adobe A-L1-C2 known reference crop matched existing approved derivative byte-for-byte after zero-alpha RGB normalization.",
+  "pipeline": {
+    "python": "3.11+",
+    "pillow": "12.3.0",
+    "codec": "PNG RGBA 8-bit / zlib stored / no metadata",
+    "resampling": "area-weighted integer BOX, premultiplied alpha, each size independently from one HD master",
+    "zoom": "nearest-neighbour x4 exact",
+    "recipe": "draft/portraits/exports/export_jalon3.py",
+    "connector_production": "draft/portraits/exports/connector_jalon3.js"
+  },
+  "items": [
+    {
+      "id": "A-L1-C4",
+      "sheet": "A",
+      "rect": [
+        1086,
+        49,
+        1448,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 5430,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/A-L1-C4/master_HD.png",
+          "sha256": "0aca5acc819d32484d4b13c16d03d2b2d7916a25373974d1b2d363121c3ca66c",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/A-L1-C4/portrait_48.png",
+          "sha256": "89dc0a5c5adb73393c1e64263ac4b6fe185bd1abf888ab812adbc049633168a4",
+          "size_bytes": 9332,
+          "alpha_0": 923,
+          "alpha_partial": 1381,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/A-L1-C4/portrait_64.png",
+          "sha256": "4e6e0360737250ff16a264b385b1831a96a0afb8dcf92a7f63efc2d5bd3958a5",
+          "size_bytes": 16516,
+          "alpha_0": 1645,
+          "alpha_partial": 2451,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Profil sombre, cheveux courts et épaulettes ; un pixel étranger en bord gauche",
+      "local_masks": [
+        {
+          "rect_hd": [
+            0,
+            80,
+            31,
+            258
+          ],
+          "removed_alpha_nonzero_pixels": 1,
+          "purpose": "frange latérale étrangère, sujet central préservé"
+        }
+      ]
+    },
+    {
+      "id": "A-L2-C3",
+      "sheet": "A",
+      "rect": [
+        724,
+        592,
+        1086,
+        954
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 1810,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/A-L2-C3/master_HD.png",
+          "sha256": "6c822ce0b8a3b555a2ae0a4f9a6f0da27ddeba657bbea221922ff4f917edafb0",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/A-L2-C3/portrait_48.png",
+          "sha256": "ca4cf367069b586ccffc3bc4e5f951d780bd350812729e664c7995da25fb9c06",
+          "size_bytes": 9332,
+          "alpha_0": 417,
+          "alpha_partial": 1887,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            46,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/A-L2-C3/portrait_64.png",
+          "sha256": "7aba26b481083fce47137e1f035a935a0d02b6b7e667db1721ed433b680b0d55",
+          "size_bytes": 16516,
+          "alpha_0": 751,
+          "alpha_partial": 3345,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            62,
+            63
+          ]
+        }
+      },
+      "exception": "Cheveux gris volumineux et écharpe rouge ; cadrage entier, aucun masque",
+      "local_masks": []
+    },
+    {
+      "id": "B-L1-C4",
+      "sheet": "B",
+      "rect": [
+        1086,
+        49,
+        1448,
+        411
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 362,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L1-C4/master_HD.png",
+          "sha256": "83c8b64d0eadb1626f418e2f0cf3791af44c00cab01faefb3a4aeaf56ef8b385",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L1-C4/portrait_48.png",
+          "sha256": "161b651ef3d0f416c61ab9ef5f561389837538ae19ee885f56c0b0b8b4ea7afa",
+          "size_bytes": 9332,
+          "alpha_0": 624,
+          "alpha_partial": 1680,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L1-C4/portrait_64.png",
+          "sha256": "ac97cbbd4895d164bcdcf0bb8a2a9c81d87ac27f5ae62f504e3d377f7fe683fd",
+          "size_bytes": 16516,
+          "alpha_0": 1122,
+          "alpha_partial": 2974,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Lunettes dorées et manteau clair ; marge gauche intégralement préservée après comparaison masquée/non masquée",
+      "local_masks": []
+    },
+    {
+      "id": "B-L2-C2",
+      "sheet": "B",
+      "rect": [
+        362,
+        592,
+        724,
+        954
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 0,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/B-L2-C2/master_HD.png",
+          "sha256": "c9198890e6230338aedd08111b5e03c65143c56d91ad51a3722879f89e3eb34b",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/B-L2-C2/portrait_48.png",
+          "sha256": "4497816f9e110f0ef41e5d818f6af9a021589fe056b7d31e3d0abaa5593af650",
+          "size_bytes": 9332,
+          "alpha_0": 611,
+          "alpha_partial": 1693,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            47,
+            47
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/B-L2-C2/portrait_64.png",
+          "sha256": "31708f1c48b9f2ffb76c192981f798c9cdd0b2e48fafb181f3e919664e6b1dc0",
+          "size_bytes": 16516,
+          "alpha_0": 1112,
+          "alpha_partial": 2984,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            0,
+            63,
+            63
+          ]
+        }
+      },
+      "exception": "Coiffe blanche, voile et épaulettes ; frange rouge étrangère au bord droit",
+      "local_masks": [
+        {
+          "rect_hd": [
+            349,
+            75,
+            362,
+            323
+          ],
+          "removed_alpha_nonzero_pixels": 204,
+          "purpose": "supprime la pollution de cellule voisine à droite sans couper la coiffe"
+        }
+      ]
+    },
+    {
+      "id": "C-L1-C2",
+      "sheet": "C",
+      "rect": [
+        362,
+        0,
+        724,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L1-C2/master_HD.png",
+          "sha256": "c9f3e07a94e3df4bc01917736c37da6f271ffadb9831cfc1ac3e6f18a2c504cf",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L1-C2/portrait_48.png",
+          "sha256": "062c91b56d49610f86cf24a93f16faeac4fa3a2b98339c5b2e66056ac6a7fcea",
+          "size_bytes": 9332,
+          "alpha_0": 862,
+          "alpha_partial": 1442,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L1-C2/portrait_64.png",
+          "sha256": "58d1c8ecb48a1c065d4482dcad0c3bd0d1ba22e48ae457e03e8fee2099744a06",
+          "size_bytes": 16516,
+          "alpha_0": 1529,
+          "alpha_partial": 2567,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Grand tricorne bordé d'or, visage décentré ; marge haute 45px, nettoyage local à gauche",
+      "local_masks": [
+        {
+          "rect_hd": [
+            0,
+            50,
+            10,
+            210
+          ],
+          "removed_alpha_nonzero_pixels": 137,
+          "purpose": "débordement marginal de la cellule voisine, tricorne préservé"
+        }
+      ]
+    },
+    {
+      "id": "C-L1-C3",
+      "sheet": "C",
+      "rect": [
+        724,
+        0,
+        1086,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/C-L1-C3/master_HD.png",
+          "sha256": "754aae0617c899415cdc03ade0c92f6d52854b271265c29bca68175b04073e5d",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/C-L1-C3/portrait_48.png",
+          "sha256": "1a9193335f116b459b94a78ee4d9548a0bc001915e7e269e38a4250d014c688b",
+          "size_bytes": 9332,
+          "alpha_0": 939,
+          "alpha_partial": 1365,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/C-L1-C3/portrait_64.png",
+          "sha256": "eb072a273e6ee19d3450c9c463e021358004db9d7be716fa1df91f0264cfd4d4",
+          "size_bytes": 16516,
+          "alpha_0": 1668,
+          "alpha_partial": 2428,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Bandeau rouge, cache-œil, perles et dreadlocks ; marge 45px, aucun masque",
+      "local_masks": []
+    },
+    {
+      "id": "D-L1-C1",
+      "sheet": "D",
+      "rect": [
+        0,
+        0,
+        307,
+        256
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L1-C1/master_HD.png",
+          "sha256": "2a9b3e88425a854aa39a450d000949eaff12a538b4491d9c1fca895cfa06c9ca",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L1-C1/portrait_48.png",
+          "sha256": "f1e5ddc347a3a815832a56d80892b55f878304739db82c18876e3438dfb1d956",
+          "size_bytes": 9332,
+          "alpha_0": 715,
+          "alpha_partial": 1589,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L1-C1/portrait_64.png",
+          "sha256": "513580cbce8758e6f51568f037258a381021abee22a31d700772b6779ffb2498",
+          "size_bytes": 16516,
+          "alpha_0": 1279,
+          "alpha_partial": 2817,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ]
+        }
+      },
+      "exception": "Tricorne à ancre, grande barbe blanche, manteau rouge ; cellule D 307x256 et marge 25px",
+      "local_masks": []
+    },
+    {
+      "id": "E-L1-C1",
+      "sheet": "E",
+      "rect": [
+        0,
+        0,
+        362,
+        272
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 3808,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L1-C1/master_HD.png",
+          "sha256": "8cf0223ec5991ecbb308e15883dc27341e12f4b133eadbe9588b1bde1c4d0884",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L1-C1/portrait_48.png",
+          "sha256": "de0943b31b8dd5858f808ac4c26338d7c6828ede2a34d41f2e6ef6e5504d1ea6",
+          "size_bytes": 9332,
+          "alpha_0": 811,
+          "alpha_partial": 1493,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            2,
+            5,
+            47,
+            42
+          ]
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L1-C1/portrait_64.png",
+          "sha256": "e1fd6c37f9b884078315a842255d7f23b29f050ffadd81b654e58851e2ef55ca",
+          "size_bytes": 16516,
+          "alpha_0": 1452,
+          "alpha_partial": 2644,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            2,
+            7,
+            63,
+            56
+          ]
+        }
+      },
+      "exception": "Plume rouge volumineuse, tricorne et longue barbe ; marge haute 45px, aucun masque",
+      "local_masks": []
+    }
+  ],
+  "proofs": [
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_A-L1-C4_48_x4.png",
+      "sha256": "74d3a19168ad968546028e2b40a5ad7c0d62f03f8f8bbb3eda03bae8070de3c3",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_A-L1-C4_64_x4.png",
+      "sha256": "ddf4653a1336c0510308f143af2de4e89a5f3623c47bcd5554dff7061f0a3d3",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_A-L2-C3_48_x4.png",
+      "sha256": "95eeed95c265a66de1f2ecb754bcc18ebfc5f134f3ab9b2641ced7c1a53e8788",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_A-L2-C3_64_x4.png",
+      "sha256": "8b76c09b992ffbd0440bbd6ccaefd01d34e480697526960764c59440ea65d562",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_B-L1-C4_48_x4.png",
+      "sha256": "43ce5f0b7469454ae9acbb07869958eb1cdec9ab0fc085ee515bdc56a8f6edb9",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_B-L1-C4_64_x4.png",
+      "sha256": "75d30f4493d7de90468f5d93ccdc15077a95998d6f7e34a4b0ddef83f22c8195",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_B-L2-C2_48_x4.png",
+      "sha256": "e1a821da703a66a13fbebf43264b39ad56b364d3e907acd909466acf92fe0b0d",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_B-L2-C2_64_x4.png",
+      "sha256": "268fbb0463a3cada7c91f02ecca2e04d30b87ad4f408b7b684a401552ca7c35d",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_C-L1-C2_48_x4.png",
+      "sha256": "5da3f5fd9113a4d13ab097a97ea69921e4262cd9d8b309c251403b56c6037081",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_C-L1-C2_64_x4.png",
+      "sha256": "b72c37142f5ced2c530cd6760c4bc9963022b1df001d00f27c0e1f3d40f65898",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_C-L1-C3_48_x4.png",
+      "sha256": "a66cad013601e830930faea7af215c0544ca1cec50d08b2d75d194892e914e51",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_C-L1-C3_64_x4.png",
+      "sha256": "1eb4829420f1456a1b165a830176fd307a9d31217e9094a1b64c8b8ee209f14d",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_D-L1-C1_48_x4.png",
+      "sha256": "3980b237e3e124261c9dd6fc74eb16f00f93c724edb5b1836f376d0a7eb47b1a",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_D-L1-C1_64_x4.png",
+      "sha256": "938c1c9854c1a4cd5dfefdbbf19270201c8b0cbf677b8ddf26413b9ce8f04e18",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_E-L1-C1_48_x4.png",
+      "sha256": "dfb771e7a88f5f15fec0eed8d1ad05340b388b3eeb67764e06d3d9e1b93d7fc9",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_E-L1-C1_64_x4.png",
+      "sha256": "222c17b857876bc640985103d5ba411b50354bc11a1d7f459992108c2eca4bc2",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_p1_320x240_sombre.png",
+      "sha256": "85f1918555ba30a37cfdb07f334cf33cdbf2b2cf9258272c3b78131b3660333d",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_p1_320x240_clair.png",
+      "sha256": "5251403291087ad7c55fdde75a5df681144517ee7ab57d00b4b4c4d2ebf8a439",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_p2_320x240_sombre.png",
+      "sha256": "c1b7aadf0300665e2e5812eabf4fb511991602f32f20e2ab93535d94b88916f3",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_p2_320x240_clair.png",
+      "sha256": "43d5a652311e998bc2546c0765e8687ea8852e457c2382056c88e7dcb48f9b2f",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon3_contact_1120x182.png",
+      "sha256": "2eac88dec11b42c9c08db02a61549f13e55aeac56c0eb2158cf75d7e2f2c9fae",
+      "size_bytes": 815670
+    }
+  ],
+  "count": {
+    "positions_total": 68,
+    "baseline_completed": 21,
+    "stage_new": 8,
+    "stage_new_variants": 16,
+    "stage_completed_if_accepted": 29,
+    "remaining_if_accepted": 39,
+    "zoom_x4_count": 16,
+    "native_320x240_count": 4,
+    "contact_count": 1,
+    "proof_count": 21
+  },
+  "qa": {
+    "expected_preview_count": 21,
+    "committed_preview_count": 21,
+    "visual_review": "8 crops and 8 zooms inspected; dark/light native pages and contact inspected; final independent QA pending",
+    "components_48_alpha_ge_6": "1 connected component per J3 portrait in initial inspection",
+    "script_check": "NOT_RUN_FULL_CHECKOUT — PILOTAGE_QA_REQUIRED",
+    "graphic_pipeline": "PENDING_PR_CI",
+    "device": "NOT_TESTED"
+  },
+  "po_go": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/133#issuecomment-6923922049",
+  "promotion": "NONE — #134 remains blocked pending individual PO artistic GO"
+}
