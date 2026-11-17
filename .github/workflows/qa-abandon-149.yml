@@ -1,0 +1,66 @@
+name: BTN-ABD-01 exact PR HEAD clean-checkout final graphic QA
+
+on:
+  push:
+    branches: [qa/btn-abd-01-proof-20261117]
+
+permissions:
+  contents: read
+
+jobs:
+  verify-exact-pr-head:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout isolated QA commit with full Git history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Pin PR revision and ensure QA-only workflow diff
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git rev-parse HEAD^)" = "efdc669ef15425c5db342c30de9e07b82ba93dd8"
+          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/qa-abandon-149.yml"
+      - name: Install Pillow 12.3.0
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/btnabd-qa-py"
+          "$RUNNER_TEMP/btnabd-qa-py/bin/python" -m pip install --disable-pip-version-check --no-input Pillow==12.3.0
+      - name: Exact Git source and read-only nine-PNG validation
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euxo pipefail
+          PR_DIR="$RUNNER_TEMP/btnabd-final-pr"
+          git worktree add --detach "$PR_DIR" "efdc669ef15425c5db342c30de9e07b82ba93dd8"
+          cd "$PR_DIR"
+          test "$(git rev-parse HEAD)" = "efdc669ef15425c5db342c30de9e07b82ba93dd8"
+          python3 scripts/check_graphic_pipeline.py
+          PY="$RUNNER_TEMP/btnabd-qa-py/bin/python"
+          "$PY" draft/etudes/bouton_abandon/audit_source.py --check
+          "$PY" draft/etudes/bouton_abandon/generate.py --repo . --check-source
+          "$PY" draft/etudes/bouton_abandon/generate.py --repo . --check-comparatif
+          "$PY" draft/etudes/bouton_abandon/generate.py --repo . --check
+          "$PY" - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('draft/etudes/bouton_abandon')
+          source=Path('draft/Bouton_Abandon.png')
+          r=json.loads((p/'rapport_git_original.json').read_text())
+          q=json.loads((p/'rapport_comparatif_approuves.json').read_text())
+          e=json.loads((p/'empreinte_pixels_upload.json').read_text())
+          assert r['source']['sha256']==hashlib.sha256(source.read_bytes()).hexdigest()
+          assert r['source']['metadata']['size']==[2172,724]
+          assert r['origin_type']=='exact_original_git_blob'
+          assert len(r['files'])==9 and r['approved_comparison_generated']
+          assert e['comparison_result']=='CONFIRMED_DIFFERENT_PIXEL_ARRAYS_AND_DIMENSIONS'
+          for x in q['outputs']:
+              path=Path(x['path'])
+              data=path.read_bytes()
+              assert hashlib.sha256(data).hexdigest()==x['sha256']
+              assert len(data)==x['encoded_bytes']
+              assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\\0'+data).hexdigest()==x['git_blob_sha1']
+          print('FINAL_ABANDON_PROOFS_PASS exact HEAD, original Git, RGBA, 9 PNG, two comparatives and reports')
+          PY
+          test -z "$(git status --porcelain)"
