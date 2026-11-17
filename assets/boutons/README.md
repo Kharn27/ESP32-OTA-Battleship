@@ -26,9 +26,13 @@ Ces sprites proviennent de l'[accueil composé](../../maquettes/accueil/legacy/a
 
 ## ATTAQUER — variantes picturales approuvées (BTN-ATK-02, Issue #144)
 
-Les **quatre PNG RGBA** ci-dessous sont des copies **strictement identiques octet pour octet** aux exports validés du dossier [d'étude BTN-ATK-01](../../draft/etudes/bouton_attaquer/README.md). Ils ont reçu le [GO artistique explicite du PO le 16/11/2026](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916). Aucune retouche, recompression ou régénération n'a été appliquée lors de leur promotion.
+Les **quatre sprites PNG RGBA aux dimensions CYD** ci-dessous sont des copies **strictement identiques octet pour octet** aux exports validés du dossier [d'étude BTN-ATK-01](../../draft/etudes/bouton_attaquer/README.md). Ils ont reçu le [GO artistique explicite du PO le 16/11/2026](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916). Aucune retouche, recompression ou régénération n'a été appliquée lors de leur promotion.
 
 ### ON — canon en tir
+
+**Master HD détouré — 2000 × 500 px (source, non runtime)**
+
+![ATTAQUER ON master HD, 2000 × 500](attaquer_on_original_2000x500_RGBA.png)
 
 **140 × 35 px**
 
@@ -40,6 +44,10 @@ Les **quatre PNG RGBA** ci-dessous sont des copies **strictement identiques octe
 
 ### OFF — canon au repos
 
+**Master HD détouré — 2000 × 500 px (source, non runtime)**
+
+![ATTAQUER OFF master HD, 2000 × 500](attaquer_off_original_2000x500_RGBA.png)
+
 **140 × 35 px**
 
 ![ATTAQUER OFF, canon au repos, 140 × 35](attaquer_off_140x35_RGBA.png)
@@ -49,6 +57,9 @@ Les **quatre PNG RGBA** ci-dessous sont des copies **strictement identiques octe
 ![ATTAQUER OFF, canon au repos, 112 × 28](attaquer_off_112x28_RGBA.png)
 
 ### Provenance, usage et limites
+
+- **Masters HD (demande PO BTN-ATK-03 #147) :** copies strictement identiques, sans retouche, des fichiers détourés `draft/etudes/bouton_attaquer/source_{on,off}_cutout_2000x500_RGBA.png`. Le master OFF possède une vraie transparence grâce au masque de l'étude. Il s'agit des sources de résolution **2000 × 500 px**, non des originaux `draft/Bouton_Attaquer_on/off.png` (2172 × 724 px) ; ils sont catalogués en `HD_MASTER_NOT_RUNTIME` et **ne doivent pas être intégrés tels quels au firmware CYD**. Poids combiné des masters : **2 781 854 octets sur disque** ; cette valeur n'est pas une mesure Flash/RAM de firmware.
+
 
 - **Sources de travail réelles :** `draft/etudes/bouton_attaquer/source_upload_on_2048x682.png` et `source_upload_off_2048x682.png`, avec masque `mask_off_2000x500_L.png`. Elles ne sont **pas** identiques aux originaux PO `draft/Bouton_Attaquer_on/off.png` de 2172 × 724 px ; cette différence a été [acceptée par le PO](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916).
 - **Exports certifiés :** `draft/etudes/bouton_attaquer/attaquer_{on,off}_{140x35,112x28}_RGBA.png`. La recette `draft/etudes/bouton_attaquer/generate.py --check` et les preuves 320 × 240 / zoom ×4 NEAREST restent en `draft/` ; elles ne sont pas dupliquées dans le catalogue.
