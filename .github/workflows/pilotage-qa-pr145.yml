@@ -1,0 +1,176 @@
+name: "Pilotage QA PR145 - J3 immutable source"
+on:
+  push:
+    branches:
+      - pilotage/qa-pr145-e7abcd2
+    paths:
+      - .github/workflows/pilotage-qa-pr145.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout EXACT submitted PR145 source HEAD
+        uses: actions/checkout@v4
+        with:
+          ref: e7abcd258f610c1dbfd3e37c6d2ac649afff5069
+          fetch-depth: 1
+      - name: Assert immutable reviewed SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "e7abcd258f610c1dbfd3e37c6d2ac649afff5069"
+          echo "J3_EXACT_HEAD_OK"
+      - name: Install pinned Pillow
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check Pillow==12.3.0
+          python3 -c "from PIL import __version__; assert __version__=='12.3.0'; print('PILLOW_PIN_OK')"
+      - name: Reproduce all historic and J3 files byte-for-byte, read only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 draft/portraits/exports/export_jalon0.py --check
+          python3 draft/portraits/exports/export_jalon1.py --check
+          python3 draft/portraits/exports/export_jalon2.py --check
+          python3 draft/portraits/exports/export_jalon3.py --check
+      - name: Independent manifest, SHA, RGBA, zoom and connected-components checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from PIL import Image
+          root=Path("draft/portraits")
+          ex=root/"exports"
+          m0,m1,m2,m3=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(4)]
+          prev=[{m0["pilot"]["id"]}|{r["id"] for r in m0["items"]},
+                {r["id"] for r in m1["items"]},
+                {r["id"] for r in m2["items"]}]
+          current=[r["id"] for r in m3["items"]]
+          expected={"A-L1-C4","A-L2-C3","B-L1-C4","B-L2-C2","C-L1-C2","C-L1-C3","D-L1-C1","E-L1-C1"}
+          assert [len(p) for p in prev]==[5,8,8] and len(current)==8 and set(current)==expected
+          assert len(set.union(*prev,set(current)))==29
+          assert m3["status"]=="CANDIDATE" and m3["device_status"]=="ON_DEVICE_UNVERIFIED"
+          counts=m3["count"]
+          assert counts["positions_total"]==68 and counts["baseline_completed"]==21 and counts["stage_new"]==8
+          assert counts["stage_completed_if_accepted"]==29 and counts["remaining_if_accepted"]==39
+          assert counts["proof_count"]==21
+          for sheet,h in m3["source_reference_sha256"].items():
+              p=root/f"portrait_{sheet}.png"
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==h,p
+          masks={"A-L1-C4":([0,80,31,258],1),
+                 "B-L2-C2":([349,75,362,323],204),
+                 "C-L1-C2":([0,50,10,210],137)}
+          for r in m3["items"]:
+              id_=r["id"];side=r["master_square"];rect=r["rect"];pad=r["transparent_pad_top"]
+              assert rect[2]-rect[0]==side and rect[3]-rect[1]+pad<=side
+              sheet=r["sheet"]
+              with Image.open(root/f"portrait_{sheet}.png") as source:
+                  assert source.mode=="RGBA"
+                  crop=source.crop(tuple(rect))
+              before=Image.new("RGBA",(side,side),(0,0,0,0))
+              before.paste(crop,(0,pad))
+              selected=r["local_masks"]
+              if id_ in masks:
+                  box,number=masks[id_]
+                  assert len(selected)==1 and selected[0]["rect_hd"]==box
+                  assert selected[0]["removed_alpha_nonzero_pixels"]==number
+              else:
+                  assert selected==[],id_
+                  box=None;number=0
+              for key,n in [("master",side),("p48",48),("p64",64)]:
+                  ent=r["files"][key]
+                  file=Path(ent["path"])
+                  assert file.is_file() and file.stat().st_size==ent["size_bytes"],file
+                  assert hashlib.sha256(file.read_bytes()).hexdigest()==ent["sha256"],file
+                  with Image.open(file) as im:
+                      assert im.format=="PNG" and im.mode=="RGBA" and im.size==(n,n),file
+                      if key=="master":
+                          old=before.tobytes();new=im.tobytes()
+                          rem=0
+                          for y in range(side):
+                              for x in range(side):
+                                  p=(y*side+x)*4
+                                  original=old[p:p+4]
+                                  clean=b"\0\0\0\0" if original[3]==0 else original
+                                  if box and box[0]<=x<box[2] and box[1]<=y<box[3]:
+                                      rem+=clean[3]!=0
+                                      assert new[p:p+4]==b"\0\0\0\0",(id_,x,y)
+                                  else:
+                                      assert new[p:p+4]==clean,(id_,x,y)
+                          assert rem==number,(id_,rem,number)
+                          print("MASTER_MASK_OK",id_,"removed",rem)
+                          continue
+                      raw=im.tobytes();alphas=raw[3::4]
+                      assert alphas.count(0)==ent["alpha_0"],file
+                      assert alphas.count(255)==ent["alpha_255"],file
+                      assert sum(0<a<255 for a in alphas)==ent["alpha_partial"],file
+                      assert all(raw[i:i+3]==b"\0\0\0" for i in range(0,len(raw),4) if raw[i+3]==0),file
+                      bounds=im.getbbox()
+                      assert [bounds[0],bounds[1],bounds[2]-1,bounds[3]-1]==ent["bbox_nonzero"],file
+                      zoom=ex/"preuves"/f"jalon3_{id_}_{n}_x4.png"
+                      with Image.open(zoom) as z:
+                          assert z.format=="PNG" and z.mode=="RGBA" and z.size==(n*4,n*4)
+                          assert z.tobytes()==im.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes(),zoom
+                      if n==48:
+                          seen=set()
+                          alive={(x,y) for y in range(n) for x in range(n) if alphas[y*n+x]>=6}
+                          groups=[]
+                          while alive:
+                              p=alive.pop();group={p};todo=[p]
+                              while todo:
+                                  x,y=todo.pop()
+                                  for neighbor in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                                      if neighbor in alive:
+                                          alive.remove(neighbor);group.add(neighbor);todo.append(neighbor)
+                              groups.append(len(group))
+                          assert len(groups)==1,(id_,groups)
+                          print("CONNECTED_48_OK",id_,groups)
+          proofs=sorted((ex/"preuves").glob("jalon3_*.png"))
+          assert len(proofs)==21 and len(m3["proofs"])==21
+          assert {str(p) for p in proofs}=={e["path"] for e in m3["proofs"]}
+          for e in m3["proofs"]:
+              f=Path(e["path"])
+              assert f.stat().st_size==e["size_bytes"] and hashlib.sha256(f.read_bytes()).hexdigest()==e["sha256"],f
+          for page in (1,2):
+              for bg in ("clair","sombre"):
+                  with Image.open(ex/"preuves"/f"jalon3_p{page}_320x240_{bg}.png") as im:
+                      assert im.size==(320,240) and im.mode=="RGBA"
+          with Image.open(ex/"preuves"/"jalon3_contact_1120x182.png") as im:
+              assert im.size==(1120,182)
+          print("J3_INDEPENDENT_QA_OK: 8 IDs, 24 masters/sprites, 21 proofs, 16 exact NEAREST, 3 local masks, 5 originals")
+          PY
+      - name: J3 connector helper JS codec smoke check
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'JS'
+          const fs=require("fs"),crypto=require("crypto");
+          const code=fs.readFileSync("draft/portraits/exports/connector_jalon3.js","utf8");
+          const api=new Function(code)();
+          if(!api || !api.decodePng || !api.pngRGBA || !api.boxAlpha || !api.sha256)throw Error("JS helper invalid");
+          if(api.sha256(new TextEncoder().encode("abc"))!=="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")throw Error("JS SHA-256 invalid");
+          const base="draft/portraits/exports/A-L1-C4";
+          const expected=new Uint8Array(fs.readFileSync(base+"/portrait_48.png"));
+          const decoded=api.decodePng(expected);
+          if(decoded.w!==48 || decoded.h!==48)throw Error("JS PNG decoding dimensions");
+          const bytes=api.pngRGBA(48,48,decoded.pixels);
+          if(!Buffer.from(bytes).equals(Buffer.from(expected)))throw Error("JS PNG codec does not reproduce expected bytes");
+          const master=api.decodePng(new Uint8Array(fs.readFileSync(base+"/master_HD.png")));
+          const generated=api.boxAlpha(master.pixels,master.w,48);
+          if(!Buffer.from(generated).equals(Buffer.from(decoded.pixels)))throw Error("JS and Python BOX disagreement");
+          if(api.sha256(expected)!==crypto.createHash("sha256").update(expected).digest("hex"))throw Error("JS SHA mismatch");
+          console.log("J3_JS_HELPER_OK: PNG roundtrip, BOX pixel identity, SHA");
+          JS
+      - name: Verify graphics integrity and untouched working tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_graphic_pipeline.py
+          test -z "$(git status --porcelain)"
+          echo "J3_CLEAN_TREE_OK"
