@@ -470,6 +470,7 @@ jobs:
           print("J6_INDEPENDENT_PASS: 45 SHA+size, 5 sources, 8 exact crops, 1 mask, 16 zooms, 16 components, 4 native, contact")
           PY
       - name: J7 independent 68 IDs, 91 SHA+size, crops, masks, RGBA, 30 zooms and components
+        if: ${{ always() }}
         shell: bash
         run: |
           set -euo pipefail
