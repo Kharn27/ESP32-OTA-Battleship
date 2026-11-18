@@ -1,0 +1,33 @@
+name: BTN-TYPO-01 regenerate and QA #157
+on:
+  push:
+    branches: [design/issue-157-boutons-typographie]
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned graphics dependencies
+        run: python -m pip install -r draft/etudes/boutons_typographie/requirements.txt
+      - name: Regenerate the targeted typography without modifying original assets
+        run: python draft/etudes/boutons_typographie/generate.py --repo .
+      - name: Reproducibility test, read-only
+        run: python draft/etudes/boutons_typographie/generate.py --repo . --check
+      - name: Graphic pipeline
+        run: python scripts/check_graphic_pipeline.py
+      - name: Commit only graphic study, and remove the temporary workflow
+        run: |
+          rm -f .github/workflows/qa-btn-typo-157.yml
+          git add -A draft/etudes/boutons_typographie .github/workflows/qa-btn-typo-157.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "fix(graphics): eliminate PALMARES HD shadow ghost and refresh #157 proofs"
+          git push origin HEAD:design/issue-157-boutons-typographie
