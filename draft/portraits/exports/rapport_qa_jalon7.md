@@ -42,3 +42,26 @@ git status --short
 Vérifier 91/91 SHA/taille réels du J7, 30 zooms nearest, les 8 natifs, deux contacts et six avant/après, les 30 connexités, l'intégrité des cinq sources PO, le diff 94 ajouts uniquement, la CI et l'exactitude des pixels. **Ces commandes sur checkout, la CI du nouveau HEAD et le test CYD physique ne sont PAS revendiqués comme exécutés dans cet environnement Graphiste.**
 
 **Statut : `CANDIDATE — ON_DEVICE_UNVERIFIED`.** Aucun GO individuel PO, aucune promotion dans `assets/`, aucun regroupement canonique G/Q, aucune preuve matérielle. Seul Pilotage revoit et fusionne.
+
+## Addendum correctif — six libellés de preuves (18/11/2026)
+
+**Déclencheur :** revue bloquante Pilotage PR #156, [review #5959784211](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/156#pullrequestreview-5959784211), QA indépendante [run #44337253445](https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/44337253445). Le `--check` J7 comparait correctement les vrais fichiers : les six témoins avant/après différaient du rendu canonique.
+
+**Cause démontrée :** pendant la livraison initiale, les six comparatifs 320×240 ont été composés avec les glyphes 3×5 du helper JavaScript `connector_jalon3.js`, qui ne définit pas les lettres **V, N, T, P, R et S** utilisées par les mots `AVANT` et `APRES`. Le `export_jalon7.py` versionné, lui, définit ces six glyphes et les peint. Ce sont donc **les preuves soumises**, pas le générateur Python ni les sprites, qui étaient incorrectes. Le générateur versionné reste volontairement **inchangé**.
+
+**Réparation exacte et bornée :** dans chacun des six témoins RGBA 320×240, restauration du fond puis tracé des quatre libellés 3×5 conformément à `correction_comparison()` du script J7 : `AVANT` et `APRES` aux x=8/168, y=5/125, sur les rangées sombre et claire. **108 pixels RGBA modifiés par PNG, 0 pixel hors des quatre rectangles [8,5,28,10), [168,5,188,10), [8,125,28,130), [168,125,188,130)**. Aucune modification des portraits, de l'avant/après 48/64, des masques, des originaux PO ni de J0–J6. Les six PNG restent RGBA 320×240, 307528 octets chacun, avec l'encodeur déterministe PNG filter=0 / zlib DEFLATE stocké déjà contracté.
+
+Nouvelles empreintes SHA-256 des **six seuls PNG modifiés**, inscrites dans `manifest_jalon7.json` :
+
+| ID | SHA-256 révisé | Taille octets |
+| --- | --- | ---: |
+| `D-L3-C3` | `0ab55b931e7884eff50351031627ad08cb216aad8eb1fbb3d60a981a07c10af1` | 307528 |
+| `D-L3-C4` | `f07a0cd71eea96ef0da4ad99e0f18290a2a0bc0ba7df0d3a3e4bc2bcdefae823` | 307528 |
+| `D-L4-C4` | `fd5c68f86f7155442d5a24053c2b327c75ca6cd6129199633c3dbf2a37fdf319` | 307528 |
+| `E-L4-C1` | `5974063f7c0e598391b8c625bdc1526040e567db4570ad4039761a27ac30e8a8` | 307528 |
+| `E-L4-C2` | `dbc1e04d2971ae7c3ef8cea35bc5ea4889cbe4439a6a31712582c4246b30fbd6` | 307528 |
+| `E-L4-C3` | `1df31e352a13c40953b1e3889b30f3cdf2d661686915aa4a81c7d18a157e77f8` | 307528 |
+
+**Contrôle ciblé effectivement obtenu dans les connecteurs GitHub :** PNG binaires existants lus en base64, reconstruction PNG lossless aller/retour **identique à l'octet**, comparaison canal par canal avant/après, **108 pixels de glyphes uniquement** par preuve, dimensions/alpha préservés. Le SHA-256 corrigé de `D-L3-C3` (`0ab55b931e7884eff50351031627ad08cb216aad8eb1fbb3d60a981a07c10af1`) reproduit **exactement** la valeur attendue remontée dans la revue indépendante Pilotage. Tous les SHA-256 révisés ont été calculés sur les octets corrigés (SHA-256 du helper versionné, auto-vérifié sur `abc`).
+
+**Reste à contrôler par Pilotage sur le nouveau HEAD :** exécuter réellement les huit scripts `export_jalon0.py` à `export_jalon7.py --check`, `scripts/check_graphic_pipeline.py`, le contrôle manifeste **91/91**, `git status --short`, et vérifier la CI **3/3** du nouveau HEAD. **Aucun de ces contrôles sur checkout complet ni test CYD physique ne doit être considéré comme exécuté du seul fait de cet addendum.** Statut toujours `CANDIDATE — ON_DEVICE_UNVERIFIED`, aucune validation artistique individuelle PO ni promotion `assets/` ; revue et fusion exclusivement par Pilotage.
