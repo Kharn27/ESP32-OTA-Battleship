@@ -1,6 +1,6 @@
 # BTN-TYPO-01 · Issue #157 — Harmonisation des lettrages
 
-**Statuts : `CANDIDATE · ART_NOT_REVIEWED · ON_DEVICE_UNVERIFIED`.** Étude artistique seulement. Aucun GO PO, aucune ressource runtime promue. Travail exclusivement dans `draft/etudes/boutons_typographie/`.
+**Statut au 18/11/2026 : `VALIDATED_PO_PC` pour les deux variantes B uniquement (JOUER 140×32, PALMARÈS 140×30).** Les variantes A ne sont pas retenues. `ON_DEVICE_UNVERIFIED` : aucune validation sur CYD physique. Le GO artistique est tracé dans [Issue #157, commentaire PO](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/157#issuecomment-6983850624). Étude exclusivement dans `draft/etudes/boutons_typographie/`, **sans promotion `assets/` ni intégration firmware**.
 
 ## Motivation et références authentiques
 
@@ -53,10 +53,10 @@ python3 -m venv /tmp/cyd-typo-157
 python3 scripts/check_graphic_pipeline.py
 ```
 
-`--check` reconstruit les quatre masters HD, les quatre exports, les sept vues de contrôle et `rapport.json` ; compare tous les octets aux fichiers publiés et **n'écrit rien**. Pour régénérer sur un *checkout de travail* uniquement, omettre `--check`. Si une source canonique ou le candidat ABANDON épinglé change, le script refuse la ressource. Le ZIP local ou un rendu d'écran ne remplace pas cette filiation.
+`--check` reconstruit les quatre masters HD, les quatre exports, les sept vues de contrôle et `rapport.json` ; compare tous les octets aux fichiers publiés et **n'écrit rien**. Le champ `status: CANDIDATE / ART_NOT_REVIEWED / ON_DEVICE_UNVERIFIED` de `rapport.json` est le **statut historique imprimé par la recette lors de la génération avant le GO** ; la décision PO ultérieure est tracée dans l'Issue #157 et ci-dessus. La recette et le rapport de reproductibilité restent donc byte-identiques. Pour régénérer sur un *checkout de travail* uniquement, omettre `--check`. Si une source canonique ou le candidat ABANDON épinglé change, le script refuse la ressource. Le ZIP local ou un rendu d'écran ne remplace pas cette filiation.
 
-## Recommandation artistique du Graphiste — **proposée, pas validée**
+## Validation artistique du PO — variantes B uniquement
 
-**Préférence : B (agrandissement affirmé) pour JOUER et PALMARÈS**, à vérifier par le PO sur l'écran natif. Leurs mots se rapprochent des hauteurs apparentes d'ATTAQUER et ABANDON sans agrandir les cadres ; A reste une alternative plus conservatrice avec davantage d'air autour des lettres. Le trompe-l'œil du métal/ombre et les marges sont à juger sur le **zoom ×4** en plus de l'échelle réelle. Aucun état tactile ni comportement nouveau.
+**GO artistique du PO donné le 18/11/2026** pour **JOUER B 140×32 et PALMARÈS B 140×30** ; les variantes A restent de simples essais archivés, non retenus. Le choix B renforce la présence des mots tout en préservant les ornements et dimensions. Aucun état tactile ni comportement nouveau n'est validé.
 
 **Aucune modification dans `assets/` ni `maquettes/`, ni `draft/Bouton_*.jpeg`. Pas de statut `ON_DEVICE_VERIFIED` sans essai matériel.** Le PO donne le GO artistique ; seul Pilotage décide et effectue la fusion, puis une promotion éventuelle fera l'objet d'une autre mission. Refs #157 ; liée contextuellement à PR #150, non modifiée.
