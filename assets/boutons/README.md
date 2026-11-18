@@ -24,6 +24,40 @@ Pour l'accueil, deux boutons **JOUER** et **PALMARÈS**, chacun décliné en ver
 
 Ces sprites proviennent de l'[accueil composé](../../maquettes/accueil/legacy/accueil_cyd_warship_320x240.png). JPEG originaux PO : [JOUER](../../draft/Bouton_jouer.jpeg) et [PALMARÈS](../../draft/Bouton_palmares.jpeg). [GO sur PC — PR #90](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90#issuecomment-6740684237) ; [mandat de classement — Issue #103](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/103). Les états **appuyé/enfoncé** restent à créer et les zones tactiles à valider ; **aucun test physique CYD** n'est revendiqué.
 
+## Variantes B — lettrages harmonisés (BTN-TYPO-02, Issue #159)
+
+**Versions B retenues pour les futurs usages** : GO artistique PO du [18 novembre 2026 (Issue #157)](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/157#issuecomment-6983850624), statut `VALIDATED_PO_PC` **pour JOUER B et PALMARÈS B seulement**. Les variantes A restent archivées uniquement en `draft/`.
+
+Les quatre fichiers ci-dessous ont été publiés par **référence aux blobs Git exacts de l'étude PR #158**, sans édition, recompression, redimensionnement ou modification de pixels.
+
+### JOUER B
+
+**Master HD — 1107 × 252 px, source non runtime**
+
+![JOUER B master HD](bouton_jouer_B_original_1107x252_RGBA.png)
+
+**Sprite CYD — 140 × 32 px, non intégré au firmware**
+
+![JOUER B 140 × 32](bouton_jouer_B_CYD_140x32_RGBA.png)
+
+### PALMARÈS B
+
+**Master HD — 1163 × 250 px, source non runtime**
+
+![PALMARÈS B master HD](bouton_palmares_B_original_1163x250_RGBA.png)
+
+**Sprite CYD — 140 × 30 px, non intégré au firmware**
+
+![PALMARÈS B 140 × 30](bouton_palmares_B_CYD_140x30_RGBA.png)
+
+### Règle de compatibilité et traçabilité
+
+Les versions **historiques** de JOUER et PALMARÈS ci-dessus sont **conservées**, avec leur GO artistique initial en [PR #90](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/90). Elles restent référencées par la recette figée de l'accueil `maquettes/accueil/legacy/compose_accueil.py`. **Aucune substitution silencieuse** dans la maquette historique ou le firmware : choisir B pour une nouvelle intégration fera l'objet d'un mandat ultérieur.
+
+[Étude/source reproductible et preuves natives 320 × 240 / ×4 NEAREST](../../draft/etudes/boutons_typographie/README.md) ; [manifest d'assets (IDs, SHA-256, provenance, GO)](../manifest.json) ; [Issue de publication #159](https://github.com/Kharn27/ESP32-OTA-Battleship/issues/159).
+
+**Statut : `VALIDATED_PO_PC` / `ON_DEVICE_UNVERIFIED`.** La validation PC et le stockage des PNG ne constituent pas un test CYD, une caractérisation de la Flash/RAM ou une intégration tactile.
+
 ## ATTAQUER — variantes picturales approuvées (BTN-ATK-02, Issue #144)
 
 Les **quatre sprites PNG RGBA aux dimensions CYD** ci-dessous sont des copies **strictement identiques octet pour octet** aux exports validés du dossier [d'étude BTN-ATK-01](../../draft/etudes/bouton_attaquer/README.md). Ils ont reçu le [GO artistique explicite du PO le 16/11/2026](https://github.com/Kharn27/ESP32-OTA-Battleship/pull/141#issuecomment-6924527916). Aucune retouche, recompression ou régénération n'a été appliquée lors de leur promotion.
