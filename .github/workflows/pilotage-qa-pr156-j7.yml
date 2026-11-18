@@ -1,0 +1,606 @@
+name: "Pilotage QA PR156 J7 - immutable source"
+on:
+  push:
+    branches:
+      - pilotage/qa-pr156-bc234a
+    paths:
+      - .github/workflows/pilotage-qa-pr156-j7.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout EXACT submitted PR154 source HEAD
+        uses: actions/checkout@v4
+        with:
+          ref: bc234a6240cd531e293701af6e4333154a99cb18
+          fetch-depth: 1
+      - name: Assert immutable reviewed SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "bc234a6240cd531e293701af6e4333154a99cb18"
+          echo "J3_EXACT_HEAD_OK"
+      - name: Install pinned Pillow
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check Pillow==12.3.0
+          python3 -c "from PIL import __version__; assert __version__=='12.3.0'; print('PILLOW_PIN_OK')"
+      - name: Reproduce all historic and J3 files byte-for-byte, read only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 draft/portraits/exports/export_jalon0.py --check
+          python3 draft/portraits/exports/export_jalon1.py --check
+          python3 draft/portraits/exports/export_jalon2.py --check
+          python3 draft/portraits/exports/export_jalon3.py --check
+          python3 draft/portraits/exports/export_jalon4.py --check
+          python3 draft/portraits/exports/export_jalon5.py --check
+          python3 draft/portraits/exports/export_jalon6.py --check
+          python3 draft/portraits/exports/export_jalon7.py --check
+      - name: Independent manifest, SHA, RGBA, zoom and connected-components checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from PIL import Image
+          root=Path("draft/portraits")
+          ex=root/"exports"
+          m0,m1,m2,m3=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(4)]
+          prev=[{m0["pilot"]["id"]}|{r["id"] for r in m0["items"]},
+                {r["id"] for r in m1["items"]},
+                {r["id"] for r in m2["items"]}]
+          current=[r["id"] for r in m3["items"]]
+          expected={"A-L1-C4","A-L2-C3","B-L1-C4","B-L2-C2","C-L1-C2","C-L1-C3","D-L1-C1","E-L1-C1"}
+          assert [len(p) for p in prev]==[5,8,8] and len(current)==8 and set(current)==expected
+          assert len(set.union(*prev,set(current)))==29
+          assert m3["status"]=="CANDIDATE" and m3["device_status"]=="ON_DEVICE_UNVERIFIED"
+          counts=m3["count"]
+          assert counts["positions_total"]==68 and counts["baseline_completed"]==21 and counts["stage_new"]==8
+          assert counts["stage_completed_if_accepted"]==29 and counts["remaining_if_accepted"]==39
+          assert counts["proof_count"]==21
+          for sheet,h in m3["source_reference_sha256"].items():
+              p=root/f"portrait_{sheet}.png"
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==h,p
+          masks={"A-L1-C4":([0,80,31,258],1),
+                 "B-L2-C2":([349,75,362,323],204),
+                 "C-L1-C2":([0,50,10,210],137)}
+          for r in m3["items"]:
+              id_=r["id"];side=r["master_square"];rect=r["rect"];pad=r["transparent_pad_top"]
+              assert rect[2]-rect[0]==side and rect[3]-rect[1]+pad<=side
+              sheet=r["sheet"]
+              with Image.open(root/f"portrait_{sheet}.png") as source:
+                  assert source.mode=="RGBA"
+                  crop=source.crop(tuple(rect))
+              before=Image.new("RGBA",(side,side),(0,0,0,0))
+              before.paste(crop,(0,pad))
+              selected=r["local_masks"]
+              if id_ in masks:
+                  box,number=masks[id_]
+                  assert len(selected)==1 and selected[0]["rect_hd"]==box
+                  assert selected[0]["removed_alpha_nonzero_pixels"]==number
+              else:
+                  assert selected==[],id_
+                  box=None;number=0
+              for key,n in [("master",side),("p48",48),("p64",64)]:
+                  ent=r["files"][key]
+                  file=Path(ent["path"])
+                  assert file.is_file() and file.stat().st_size==ent["size_bytes"],file
+                  assert hashlib.sha256(file.read_bytes()).hexdigest()==ent["sha256"],file
+                  with Image.open(file) as im:
+                      assert im.format=="PNG" and im.mode=="RGBA" and im.size==(n,n),file
+                      if key=="master":
+                          old=before.tobytes();new=im.tobytes()
+                          rem=0
+                          for y in range(side):
+                              for x in range(side):
+                                  p=(y*side+x)*4
+                                  original=old[p:p+4]
+                                  clean=b"\0\0\0\0" if original[3]==0 else original
+                                  if box and box[0]<=x<box[2] and box[1]<=y<box[3]:
+                                      rem+=clean[3]!=0
+                                      assert new[p:p+4]==b"\0\0\0\0",(id_,x,y)
+                                  else:
+                                      assert new[p:p+4]==clean,(id_,x,y)
+                          assert rem==number,(id_,rem,number)
+                          print("MASTER_MASK_OK",id_,"removed",rem)
+                          continue
+                      raw=im.tobytes();alphas=raw[3::4]
+                      assert alphas.count(0)==ent["alpha_0"],file
+                      assert alphas.count(255)==ent["alpha_255"],file
+                      assert sum(0<a<255 for a in alphas)==ent["alpha_partial"],file
+                      assert all(raw[i:i+3]==b"\0\0\0" for i in range(0,len(raw),4) if raw[i+3]==0),file
+                      bounds=im.getbbox()
+                      assert [bounds[0],bounds[1],bounds[2]-1,bounds[3]-1]==ent["bbox_nonzero"],file
+                      zoom=ex/"preuves"/f"jalon3_{id_}_{n}_x4.png"
+                      with Image.open(zoom) as z:
+                          assert z.format=="PNG" and z.mode=="RGBA" and z.size==(n*4,n*4)
+                          assert z.tobytes()==im.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes(),zoom
+                      if n==48:
+                          seen=set()
+                          alive={(x,y) for y in range(n) for x in range(n) if alphas[y*n+x]>=6}
+                          groups=[]
+                          while alive:
+                              p=alive.pop();group={p};todo=[p]
+                              while todo:
+                                  x,y=todo.pop()
+                                  for neighbor in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                                      if neighbor in alive:
+                                          alive.remove(neighbor);group.add(neighbor);todo.append(neighbor)
+                              groups.append(len(group))
+                          assert len(groups)==1,(id_,groups)
+                          print("CONNECTED_48_OK",id_,groups)
+          proofs=sorted((ex/"preuves").glob("jalon3_*.png"))
+          assert len(proofs)==21 and len(m3["proofs"])==21
+          assert {str(p) for p in proofs}=={e["path"] for e in m3["proofs"]}
+          assert all(len(e["sha256"])==64 for e in m3["proofs"])
+          mismatches=[]
+          for e in m3["proofs"]:
+              f=Path(e["path"])
+              observed_size=f.stat().st_size
+              observed_sha=hashlib.sha256(f.read_bytes()).hexdigest()
+              if observed_size!=e["size_bytes"] or observed_sha!=e["sha256"]:
+                  mismatches.append(str(f))
+                  print("J3_PROOF_MANIFEST_MISMATCH",f,"actual_size",observed_size,"declared_size",e["size_bytes"],"actual_sha",observed_sha,"declared_sha",e["sha256"])
+          print("J3_PROOF_MANIFEST_MISMATCH_COUNT",len(mismatches))
+          for page in (1,2):
+              for bg in ("clair","sombre"):
+                  with Image.open(ex/"preuves"/f"jalon3_p{page}_320x240_{bg}.png") as im:
+                      assert im.size==(320,240) and im.mode=="RGBA"
+          with Image.open(ex/"preuves"/"jalon3_contact_1120x182.png") as im:
+              assert im.size==(1120,182)
+          print("J3_ALL_OTHER_QA_OK: 8 IDs, 24 masters/sprites, 21 proofs, 16 exact NEAREST, 3 local masks, 5 originals")
+          assert not mismatches,("manifest proofs mismatch",mismatches)
+          PY
+      - name: Independent J4 SHA, source crop and alpha QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,re
+          from PIL import Image
+          root=Path("draft/portraits"); ex=root/"exports"
+          m=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(5)]
+          old={m[0]["pilot"]["id"]}
+          for s in range(5):
+              if s!=4:
+                  for entry in m[s]["items"]:
+                      old.add(entry["id"])
+          j=m[4]; rows=j["items"]
+          expected={"A-L2-C4","B-L2-C3","C-L2-C4","C-L3-C2","D-L1-C2","D-L1-C3","E-L1-C2","E-L2-C2"}
+          ids={entry["id"] for entry in rows}
+          assert len(old)==29 and len(rows)==len(ids)==8 and ids==expected and not old&ids
+          assert j["status"]=="CANDIDATE" and j["device_status"]=="ON_DEVICE_UNVERIFIED"
+          assert j["count"]["stage_completed_if_accepted"]==37 and j["count"]["remaining_if_accepted"]==31
+          for letter,expected_sha in j["source_reference_sha256"].items():
+              assert hashlib.sha256((root/f"portrait_{letter}.png").read_bytes()).hexdigest()==expected_sha,letter
+          mask={"A-L2-C4":((0,180,130,300),"red",856),"C-L3-C2":((0,45,145,130),"red",740),"D-L1-C3":((300,108,307,240),"all",581)}
+          files=[]
+          for row in rows:
+              name=row["id"];side=row["master_square"];box=row["rect"];top=row["transparent_pad_top"]
+              assert box[2]-box[0]==side and box[3]-box[1]+top<=side,name
+              with Image.open(root/f"portrait_{row['sheet']}.png") as original:
+                  assert original.mode=="RGBA"
+                  crop=original.crop(tuple(box))
+              base=Image.new("RGBA",(side,side),(0,0,0,0));base.paste(crop,(0,top))
+              before=base.tobytes()
+              master=row["files"]["master"];files.append((master,side))
+              with Image.open(master["path"]) as im:
+                  assert im.mode=="RGBA" and im.size==(side,side)
+                  after=im.tobytes()
+              roi,policy,removed_expected=mask.get(name,(None,None,0))
+              if roi:
+                  assert len(row["local_masks"])==1 and tuple(row["local_masks"][0]["rect_hd"])==roi
+                  assert row["local_masks"][0]["policy"]==policy
+                  assert row["local_masks"][0]["removed_alpha_nonzero_pixels"]==removed_expected
+              else:
+                  assert row["local_masks"]==[]
+              removed=0
+              for y in range(side):
+                  for x in range(side):
+                      offset=4*(y*side+x);px=before[offset:offset+4]
+                      px=b"\x00\x00\x00\x00" if px[3]==0 else px
+                      hit=False
+                      if roi and roi[0]<=x<roi[2] and roi[1]<=y<roi[3]:
+                          r,g,b,a=px
+                          hit=policy=="all" or (r>=110 and g<75 and b<85 and 2*r>3*g and 2*r>3*b)
+                      if hit:
+                          removed+=bool(px[3])
+                      assert after[offset:offset+4]==(b"\x00\x00\x00\x00" if hit else px),(name,x,y)
+              assert removed==removed_expected,(name,removed,removed_expected)
+              print("J4_CROP_AND_MASK_OK",name,removed)
+              for key,n in (("p48",48),("p64",64)):
+                  ent=row["files"][key];files.append((ent,n))
+                  with Image.open(ent["path"]) as im:
+                      assert im.mode=="RGBA" and im.size==(n,n)
+                      a=im.tobytes()[3::4]
+                      assert a.count(0)==ent["alpha_0"] and a.count(255)==ent["alpha_255"]
+                      assert sum(0<x<255 for x in a)==ent["alpha_partial"]
+                      bb=im.getbbox()
+                      assert [bb[0],bb[1],bb[2]-1,bb[3]-1]==ent["bbox_nonzero"]
+                      with Image.open(ex/"preuves"/f"jalon4_{name}_{n}_x4.png") as z:
+                          assert z.mode=="RGBA" and z.size==(n*4,n*4)
+                          assert z.tobytes()==im.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes()
+                      if n==48:
+                          alive={(x,y) for y in range(n) for x in range(n) if a[y*n+x]>=6}
+                          groups=0
+                          while alive:
+                              groups+=1
+                              stack=[alive.pop()]
+                              while stack:
+                                  x,y=stack.pop()
+                                  for neighbor in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                                      if neighbor in alive:
+                                          alive.remove(neighbor);stack.append(neighbor)
+                          assert groups==1,(name,groups)
+          proofs=list((ex/"preuves").glob("jalon4_*.png"))
+          assert len(proofs)==len(j["proofs"])==21
+          assert {str(p) for p in proofs}=={e["path"] for e in j["proofs"]}
+          files.extend((e,None) for e in j["proofs"])
+          assert len(files)==45
+          seen=set()
+          for e,n in files:
+              path=Path(e["path"]);assert str(path) not in seen;seen.add(str(path))
+              assert re.fullmatch("[0-9a-f]{64}",e["sha256"])
+              buf=path.read_bytes()
+              assert len(buf)==e["size_bytes"] and hashlib.sha256(buf).hexdigest()==e["sha256"],path
+              with Image.open(path) as im:
+                  assert im.mode=="RGBA" and im.format=="PNG"
+                  if n:assert im.size==(n,n)
+          for page in (1,2):
+              for theme in ("clair","sombre"):
+                  with Image.open(ex/"preuves"/f"jalon4_p{page}_320x240_{theme}.png") as im:
+                      assert im.size==(320,240) and im.mode=="RGBA"
+          with Image.open(ex/"preuves"/"jalon4_contact_1120x182.png") as im:
+              assert im.size==(1120,182) and im.mode=="RGBA"
+          print("J4_INDEPENDENT_PASS: 45 SHA+size, 5 sources, 8 exact crops, 3 masks, 16 zooms, 8 components, 4 native, contact")
+          PY
+      - name: Independent J5 SHA, source crop and alpha QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,re
+          from PIL import Image
+          root=Path("draft/portraits"); ex=root/"exports"
+          m=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(6)]
+          old={m[0]["pilot"]["id"]}
+          for s in range(6):
+              if s!=5:
+                  for entry in m[s]["items"]:
+                      old.add(entry["id"])
+          j=m[5]; rows=j["items"]
+          expected={"C-L1-C4","C-L3-C3","C-L3-C4","D-L1-C4","D-L2-C1","D-L2-C4","E-L1-C3","E-L2-C1"}
+          ids={entry["id"] for entry in rows}
+          assert len(old)==37 and len(rows)==len(ids)==8 and ids==expected and not old&ids
+          assert j["status"]=="CANDIDATE" and j["device_status"]=="ON_DEVICE_UNVERIFIED"
+          assert j["count"]["stage_completed_if_accepted"]==45 and j["count"]["remaining_if_accepted"]==23
+          for letter,expected_sha in j["source_reference_sha256"].items():
+              assert hashlib.sha256((root/f"portrait_{letter}.png").read_bytes()).hexdigest()==expected_sha,letter
+          mask={"D-L2-C4":((300,80,307,307),"all",583)}
+          files=[]
+          for row in rows:
+              name=row["id"];side=row["master_square"];box=row["rect"];top=row["transparent_pad_top"]
+              assert box[2]-box[0]==side and box[3]-box[1]+top<=side,name
+              with Image.open(root/f"portrait_{row['sheet']}.png") as original:
+                  assert original.mode=="RGBA"
+                  crop=original.crop(tuple(box))
+              base=Image.new("RGBA",(side,side),(0,0,0,0));base.paste(crop,(0,top))
+              before=base.tobytes()
+              master=row["files"]["master"];files.append((master,side))
+              with Image.open(master["path"]) as im:
+                  assert im.mode=="RGBA" and im.size==(side,side)
+                  after=im.tobytes()
+              roi,policy,removed_expected=mask.get(name,(None,None,0))
+              if roi:
+                  assert len(row["local_masks"])==1 and tuple(row["local_masks"][0]["rect_hd"])==roi
+                  assert row["local_masks"][0]["policy"]==policy
+                  assert row["local_masks"][0]["removed_alpha_nonzero_pixels"]==removed_expected
+              else:
+                  assert row["local_masks"]==[]
+              removed=0
+              for y in range(side):
+                  for x in range(side):
+                      offset=4*(y*side+x);px=before[offset:offset+4]
+                      px=b"\x00\x00\x00\x00" if px[3]==0 else px
+                      hit=False
+                      if roi and roi[0]<=x<roi[2] and roi[1]<=y<roi[3]:
+                          r,g,b,a=px
+                          hit=policy=="all" or (r>=110 and g<75 and b<85 and 2*r>3*g and 2*r>3*b)
+                      if hit:
+                          removed+=bool(px[3])
+                      assert after[offset:offset+4]==(b"\x00\x00\x00\x00" if hit else px),(name,x,y)
+              assert removed==removed_expected,(name,removed,removed_expected)
+              print("J5_CROP_AND_MASK_OK",name,removed)
+              for key,n in (("p48",48),("p64",64)):
+                  ent=row["files"][key];files.append((ent,n))
+                  with Image.open(ent["path"]) as im:
+                      assert im.mode=="RGBA" and im.size==(n,n)
+                      a=im.tobytes()[3::4]
+                      assert a.count(0)==ent["alpha_0"] and a.count(255)==ent["alpha_255"]
+                      assert sum(0<x<255 for x in a)==ent["alpha_partial"]
+                      bb=im.getbbox()
+                      assert [bb[0],bb[1],bb[2]-1,bb[3]-1]==ent["bbox_nonzero"]
+                      with Image.open(ex/"preuves"/f"jalon5_{name}_{n}_x4.png") as z:
+                          assert z.mode=="RGBA" and z.size==(n*4,n*4)
+                          assert z.tobytes()==im.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes()
+                      if n in (48,64):
+                          alive={(x,y) for y in range(n) for x in range(n) if a[y*n+x]>=6}
+                          groups=0
+                          while alive:
+                              groups+=1
+                              stack=[alive.pop()]
+                              while stack:
+                                  x,y=stack.pop()
+                                  for neighbor in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                                      if neighbor in alive:
+                                          alive.remove(neighbor);stack.append(neighbor)
+                          assert groups==1,(name,groups)
+          proofs=list((ex/"preuves").glob("jalon5_*.png"))
+          assert len(proofs)==len(j["proofs"])==21
+          assert {str(p) for p in proofs}=={e["path"] for e in j["proofs"]}
+          files.extend((e,None) for e in j["proofs"])
+          assert len(files)==45
+          seen=set()
+          for e,n in files:
+              path=Path(e["path"]);assert str(path) not in seen;seen.add(str(path))
+              assert re.fullmatch("[0-9a-f]{64}",e["sha256"])
+              buf=path.read_bytes()
+              assert len(buf)==e["size_bytes"] and hashlib.sha256(buf).hexdigest()==e["sha256"],path
+              with Image.open(path) as im:
+                  assert im.mode=="RGBA" and im.format=="PNG"
+                  if n:assert im.size==(n,n)
+          for page in (1,2):
+              for theme in ("clair","sombre"):
+                  with Image.open(ex/"preuves"/f"jalon5_p{page}_320x240_{theme}.png") as im:
+                      assert im.size==(320,240) and im.mode=="RGBA"
+          with Image.open(ex/"preuves"/"jalon5_contact_1120x182.png") as im:
+              assert im.size==(1120,182) and im.mode=="RGBA"
+          print("J5_INDEPENDENT_PASS: 45 SHA+size, 5 sources, 8 exact crops, 1 mask, 16 zooms, 16 components, 4 native, contact")
+          PY
+      - name: Independent J6 SHA, source crop and alpha QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,re
+          from PIL import Image
+          root=Path("draft/portraits"); ex=root/"exports"
+          m=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(7)]
+          old={m[0]["pilot"]["id"]}
+          for s in range(7):
+              if s!=6:
+                  for entry in m[s]["items"]:
+                      old.add(entry["id"])
+          j=m[6]; rows=j["items"]
+          expected={"C-L4-C1","C-L4-C2","C-L4-C3","C-L4-C4","E-L3-C1","E-L3-C2","E-L3-C3","E-L3-C4"}
+          ids={entry["id"] for entry in rows}
+          assert len(old)==45 and len(rows)==len(ids)==8 and ids==expected and not old&ids
+          assert j["status"]=="CANDIDATE" and j["device_status"]=="ON_DEVICE_UNVERIFIED"
+          assert j["count"]["stage_completed_if_accepted"]==53 and j["count"]["remaining_if_accepted"]==15
+          for letter,expected_sha in j["source_reference_sha256"].items():
+              assert hashlib.sha256((root/f"portrait_{letter}.png").read_bytes()).hexdigest()==expected_sha,letter
+          mask={"E-L3-C2":((348,0,362,362),"all",1259)}
+          files=[]
+          for row in rows:
+              name=row["id"];side=row["master_square"];box=row["rect"];top=row["transparent_pad_top"]
+              assert box[2]-box[0]==side and box[3]-box[1]+top<=side,name
+              with Image.open(root/f"portrait_{row['sheet']}.png") as original:
+                  assert original.mode=="RGBA"
+                  crop=original.crop(tuple(box))
+              base=Image.new("RGBA",(side,side),(0,0,0,0));base.paste(crop,(0,top))
+              before=base.tobytes()
+              master=row["files"]["master"];files.append((master,side))
+              with Image.open(master["path"]) as im:
+                  assert im.mode=="RGBA" and im.size==(side,side)
+                  after=im.tobytes()
+              roi,policy,removed_expected=mask.get(name,(None,None,0))
+              if roi:
+                  assert len(row["local_masks"])==1 and tuple(row["local_masks"][0]["roi_master_half_open"])==roi
+                  assert row["local_masks"][0]["policy"]==policy
+                  assert row["local_masks"][0]["removed_nonzero_alpha_pixels"]==removed_expected
+              else:
+                  assert row["local_masks"]==[]
+              removed=0
+              for y in range(side):
+                  for x in range(side):
+                      offset=4*(y*side+x);px=before[offset:offset+4]
+                      px=b"\x00\x00\x00\x00" if px[3]==0 else px
+                      hit=False
+                      if roi and roi[0]<=x<roi[2] and roi[1]<=y<roi[3]:
+                          r,g,b,a=px
+                          hit=policy=="all" or (r>=110 and g<75 and b<85 and 2*r>3*g and 2*r>3*b)
+                      if hit:
+                          removed+=bool(px[3])
+                      assert after[offset:offset+4]==(b"\x00\x00\x00\x00" if hit else px),(name,x,y)
+              assert removed==removed_expected,(name,removed,removed_expected)
+              print("J6_CROP_AND_MASK_OK",name,removed)
+              for key,n in (("p48",48),("p64",64)):
+                  ent=row["files"][key];files.append((ent,n))
+                  with Image.open(ent["path"]) as im:
+                      assert im.mode=="RGBA" and im.size==(n,n)
+                      a=im.tobytes()[3::4]
+                      assert a.count(0)==ent["alpha_0"] and a.count(255)==ent["alpha_255"]
+                      assert sum(0<x<255 for x in a)==ent["alpha_partial"]
+                      bb=im.getbbox()
+                      assert [bb[0],bb[1],bb[2]-1,bb[3]-1]==ent["bbox_nonzero"]
+                      with Image.open(ex/"preuves"/f"jalon6_{name}_{n}_x4.png") as z:
+                          assert z.mode=="RGBA" and z.size==(n*4,n*4)
+                          assert z.tobytes()==im.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes()
+                      if n in (48,64):
+                          alive={(x,y) for y in range(n) for x in range(n) if a[y*n+x]>=6}
+                          groups=0
+                          while alive:
+                              groups+=1
+                              stack=[alive.pop()]
+                              while stack:
+                                  x,y=stack.pop()
+                                  for neighbor in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                                      if neighbor in alive:
+                                          alive.remove(neighbor);stack.append(neighbor)
+                          assert groups==1,(name,groups)
+          proofs=list((ex/"preuves").glob("jalon6_*.png"))
+          assert len(proofs)==len(j["proofs"])==21
+          assert {str(p) for p in proofs}=={e["path"] for e in j["proofs"]}
+          files.extend((e,None) for e in j["proofs"])
+          assert len(files)==45
+          seen=set()
+          for e,n in files:
+              path=Path(e["path"]);assert str(path) not in seen;seen.add(str(path))
+              assert re.fullmatch("[0-9a-f]{64}",e["sha256"])
+              buf=path.read_bytes()
+              assert len(buf)==e["size_bytes"] and hashlib.sha256(buf).hexdigest()==e["sha256"],path
+              with Image.open(path) as im:
+                  assert im.mode=="RGBA" and im.format=="PNG"
+                  if n:assert im.size==(n,n)
+          for page in (1,2):
+              for theme in ("clair","sombre"):
+                  with Image.open(ex/"preuves"/f"jalon6_p{page}_320x240_{theme}.png") as im:
+                      assert im.size==(320,240) and im.mode=="RGBA"
+          with Image.open(ex/"preuves"/"jalon6_contact_1120x182.png") as im:
+              assert im.size==(1120,182) and im.mode=="RGBA"
+          print("J6_INDEPENDENT_PASS: 45 SHA+size, 5 sources, 8 exact crops, 1 mask, 16 zooms, 16 components, 4 native, contact")
+          PY
+      - name: J7 independent 68 IDs, 91 SHA+size, crops, masks, RGBA, 30 zooms and components
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,re
+          from pathlib import Path
+          from PIL import Image
+          root=Path("draft/portraits");ex=root/"exports"
+          manifests=[json.loads((ex/f"manifest_jalon{i}.json").read_text()) for i in range(8)]
+          j=manifests[7]
+          expected={"D-L2-C5",*[f"D-L3-C{k}" for k in range(1,6)],*[f"D-L4-C{k}" for k in range(1,6)],"E-L2-C3","E-L4-C1","E-L4-C2","E-L4-C3"}
+          ids=[r["id"] for r in j["items"]]
+          assert len(ids)==15 and len(set(ids))==15 and set(ids)==expected
+          prior={manifests[0]["pilot"]["id"]}
+          for i in range(7):
+              new=[r["id"] for r in manifests[i]["items"]]
+              assert len(new)==len(set(new)) and not prior.intersection(new),i
+              prior.update(new)
+          assert len(prior)==53 and not prior.intersection(expected)
+          complete=prior|expected
+          assert len(complete)==68
+          assert {s:sum(p.startswith(s+"-") for p in complete) for s in "ABCDE"}==dict(A=8,B=8,C=16,D=20,E=16)
+          assert j["status"]=="CANDIDATE" and j["device_status"]=="ON_DEVICE_UNVERIFIED"
+          for letter,h in j["source_reference_sha256"].items():
+              p=root/f"portrait_{letter}.png"
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==h,p
+              print("ORIGINAL_PO_SHA_OK",letter)
+          records=[]
+          for row in j["items"]:
+              name=row["id"];side=row["master_square"];x0,y0,x1,y1=row["rect"];top=row["transparent_pad_top"]
+              assert x1-x0==side and y1-y0+top<=side,name
+              with Image.open(root/f"portrait_{row['sheet']}.png") as original:
+                  assert original.mode=="RGBA"
+                  crop=original.crop((x0,y0,x1,y1))
+              base=Image.new("RGBA",(side,side),(0,0,0,0));base.paste(crop,(0,top))
+              old=bytearray(base.tobytes())
+              for i in range(0,len(old),4):
+                  if old[i+3]==0:old[i:i+3]=b"\0\0\0"
+              removed_total=0
+              for mask in row["local_masks"]:
+                  assert mask["policy"]=="all"
+                  a,b,c,d=mask["rect"]
+                  assert 0<=a<c<=side and 0<=b<d<=side
+                  removed=0
+                  for y in range(b,d):
+                      for x in range(a,c):
+                          k=(y*side+x)*4
+                          removed+=bool(old[k+3])
+                          old[k:k+4]=b"\0\0\0\0"
+                  assert removed==mask["removed_alpha_nonzero"],name
+                  removed_total+=removed
+              assert removed_total==row["mask_removed_alpha_nonzero"]
+              assert row["mask_outside_changed_channels"]==0
+              master=row["files"]["master"]
+              with Image.open(master["path"]) as img:
+                  assert img.mode=="RGBA" and img.size==(side,side)
+                  assert img.tobytes()==bytes(old),("master source/mask mismatch",name)
+              records.append((master,(side,side)))
+              for key,n in (("p48",48),("p64",64)):
+                  f=row["files"][key]
+                  with Image.open(f["path"]) as img:
+                      assert img.mode=="RGBA" and img.size==(n,n)
+                      raw=img.tobytes();alpha=raw[3::4]
+                      assert alpha.count(0)==f["alpha_0"] and alpha.count(255)==f["alpha_255"]
+                      assert sum(0<a<255 for a in alpha)==f["alpha_partial"]
+                      bb=img.getbbox()
+                      assert [bb[0],bb[1],bb[2]-1,bb[3]-1]==f["bbox_nonzero"],name
+                      assert all(raw[k:k+3]==b"\0\0\0" for k in range(0,len(raw),4) if raw[k+3]==0),name
+                      with Image.open(ex/"preuves"/f"jalon7_{name}_{n}_x4.png") as zoom:
+                          assert zoom.mode=="RGBA" and zoom.size==(n*4,n*4)
+                          assert zoom.tobytes()==img.resize((n*4,n*4),Image.Resampling.NEAREST).tobytes(),name
+                      remaining={(x,y) for y in range(n) for x in range(n) if alpha[y*n+x]>=6}
+                      groups=0
+                      while remaining:
+                          groups+=1;stack=[remaining.pop()]
+                          while stack:
+                              x,y=stack.pop()
+                              for nbr in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                                  if nbr in remaining:remaining.remove(nbr);stack.append(nbr)
+                      assert groups==1,(name,n,groups)
+                  records.append((f,(n,n)))
+              print("J7_MASKS_AND_SPRITES_PASS",name,removed_total)
+          proofs=list((ex/"preuves").glob("jalon7_*.png"))
+          assert len(proofs)==len(j["proofs"])==46
+          assert {str(x) for x in proofs}=={x["path"] for x in j["proofs"]}
+          for r in j["proofs"]:
+              name=Path(r["path"]).name
+              mo=re.search(r"_(48|64)_x4\.png$",name)
+              wh=(int(mo.group(1))*4,)*2 if mo else (1120,182) if "contact_" in name else (320,240)
+              records.append((r,wh))
+          assert len(records)==91
+          seen=set()
+          for entry,wh in records:
+              p=Path(entry["path"])
+              assert str(p) not in seen;seen.add(str(p))
+              assert re.fullmatch("[0-9a-f]{64}",entry["sha256"])
+              b=p.read_bytes()
+              assert len(b)==entry["size_bytes"] and hashlib.sha256(b).hexdigest()==entry["sha256"],p
+              with Image.open(p) as img:
+                  assert img.format=="PNG" and img.mode=="RGBA" and img.size==wh,(p,img.mode,img.size,wh)
+                  img.verify()
+          print("J7_INDEPENDENT_PASS: 68 unique IDs, 5 immutable PO originals, 91 SHA/size/RGBA/dimensions, 15 exact masters, 7 mask ROIs, 30 zooms nearest and 30 connected-components")
+          PY
+      - name: J3 connector helper JS codec smoke check
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'JS'
+          const fs=require("fs"),crypto=require("crypto");
+          const code=fs.readFileSync("draft/portraits/exports/connector_jalon3.js","utf8");
+          const api=new Function(code)();
+          if(!api || !api.decodePng || !api.pngRGBA || !api.boxAlpha || !api.sha256)throw Error("JS helper invalid");
+          if(api.sha256(new TextEncoder().encode("abc"))!=="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")throw Error("JS SHA-256 invalid");
+          const base="draft/portraits/exports/A-L1-C4";
+          const expected=new Uint8Array(fs.readFileSync(base+"/portrait_48.png"));
+          const decoded=api.decodePng(expected);
+          if(decoded.w!==48 || decoded.h!==48)throw Error("JS PNG decoding dimensions");
+          const bytes=api.pngRGBA(48,48,decoded.pixels);
+          if(!Buffer.from(bytes).equals(Buffer.from(expected)))throw Error("JS PNG codec does not reproduce expected bytes");
+          const master=api.decodePng(new Uint8Array(fs.readFileSync(base+"/master_HD.png")));
+          const generated=api.boxAlpha(master.pixels,master.w,48);
+          if(!Buffer.from(generated).equals(Buffer.from(decoded.pixels)))throw Error("JS and Python BOX disagreement");
+          if(api.sha256(expected)!==crypto.createHash("sha256").update(expected).digest("hex"))throw Error("JS SHA mismatch");
+          console.log("J3_JS_HELPER_OK: PNG roundtrip, BOX pixel identity, SHA");
+          JS
+      - name: Verify graphics integrity and untouched working tree
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_graphic_pipeline.py
+          test -z "$(git status --porcelain)"
+          echo "J3_CLEAN_TREE_OK"
