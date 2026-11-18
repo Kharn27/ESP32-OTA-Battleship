@@ -57,10 +57,10 @@
     "palmares_a_modere": {
       "changed_in_protected_regions": 0,
       "crop": [
-        398,
-        37,
-        981,
-        178
+        396,
+        35,
+        983,
+        180
       ],
       "gold_bbox": [
         407,
@@ -69,25 +69,25 @@
         169
       ],
       "new_size": [
-        627,
-        159
+        631,
+        164
       ],
       "scales": [
         1.075,
         1.13
       ],
       "xy": [
-        372,
-        44
+        370,
+        41
       ]
     },
     "palmares_b_affirme": {
       "changed_in_protected_regions": 0,
       "crop": [
-        398,
-        37,
-        981,
-        178
+        396,
+        35,
+        983,
+        180
       ],
       "gold_bbox": [
         407,
@@ -96,16 +96,16 @@
         169
       ],
       "new_size": [
-        662,
-        175
+        666,
+        180
       ],
       "scales": [
         1.135,
         1.24
       ],
       "xy": [
-        354,
-        36
+        352,
+        33
       ]
     }
   },
@@ -145,88 +145,88 @@
     "exports/jouer_a_modere_140x32_RGBA.png": {
       "bytes": 9833,
       "mode": "RGBA",
-      "sha256": "0790133dd39e6679509985a9f33e427e46de0f13792aae124248dd4859f18072",
+      "sha256": "d3723d36b0eb6841123fb9494aa8ed628a6af30a95f87ffd2d5281c93b8fa522",
       "size": [
         140,
         32
       ]
     },
     "exports/jouer_b_affirme_140x32_RGBA.png": {
-      "bytes": 9960,
+      "bytes": 9964,
       "mode": "RGBA",
-      "sha256": "19a06bc373c7a0d2aa62d04056ec5ba6a8871e653ebda3f00e7900e5f26d0a00",
+      "sha256": "f9f9a940a24fcb3ebe3283a0e6a9f3b8aa76833284a81e5d3361cad6347be43c",
       "size": [
         140,
         32
       ]
     },
     "exports/palmares_a_modere_140x30_RGBA.png": {
-      "bytes": 9362,
+      "bytes": 9332,
       "mode": "RGBA",
-      "sha256": "e659a03887eb15e010d86d4c22f60a03b246214935ad968ca8a5648a5f48b286",
+      "sha256": "0679150408d0105e99cc721896146362ab040cdd86452dc0ebd4b2c0888a6aee",
       "size": [
         140,
         30
       ]
     },
     "exports/palmares_b_affirme_140x30_RGBA.png": {
-      "bytes": 9419,
+      "bytes": 9380,
       "mode": "RGBA",
-      "sha256": "e6399958a3c887e5c3d65fcfec86b928d7223575b46f05e7c9d4e3fe2504b301",
+      "sha256": "a5b5e78216c0fb17e6b797886544295bb3fd57ec3e8eb529df5708f5bc306cfd",
       "size": [
         140,
         30
       ]
     },
     "maitres/jouer_a_modere_HD_RGBA.png": {
-      "bytes": 374943,
+      "bytes": 375096,
       "mode": "RGBA",
-      "sha256": "8846a5c70f8aee9dfa0cede56d90d3460d9c8c860e18c912835fd20f46fc1925",
+      "sha256": "6e35bcb208959fea833847b53edfb53b0127dbeb354ff43d1282bc0b01fd6cbd",
       "size": [
         1107,
         252
       ]
     },
     "maitres/jouer_b_affirme_HD_RGBA.png": {
-      "bytes": 375189,
+      "bytes": 375270,
       "mode": "RGBA",
-      "sha256": "f1641e0d0aa4d32883754f2bb3b873322e36c0231937e0587745dfcaf7522da5",
+      "sha256": "921c17a3c40a294705262ee9b8ffbbd75fb25200fabd2ec7a9f83d455afb5cb7",
       "size": [
         1107,
         252
       ]
     },
     "maitres/palmares_a_modere_HD_RGBA.png": {
-      "bytes": 327143,
+      "bytes": 327905,
       "mode": "RGBA",
-      "sha256": "e6639ab619f8e0daa43893a0e0d8932f5ab0be276156a5527dca0ab8cb0e70bc",
+      "sha256": "8385d86c8eda6cb4a6f10ccb768aba110f4292ab760c0c3c340a2b640997b7ae",
       "size": [
         1163,
         250
       ]
     },
     "maitres/palmares_b_affirme_HD_RGBA.png": {
-      "bytes": 325993,
+      "bytes": 326452,
       "mode": "RGBA",
-      "sha256": "1ad6e4517cfe87dae1019ea4c11bfb55976ff53cc2418647674271c101d06cc3",
+      "sha256": "7ab0562b26766c67a7ab1ee8d83f6984c0640c9d4ac8ba58e7fbcfbeba5afd8c",
       "size": [
         1163,
         250
       ]
     },
     "preuves/a_modere_1280x960_NEAREST.png": {
-      "bytes": 89731,
+      "bytes": 89705,
       "mode": "RGBA",
-      "sha256": "9d74151ca302197414ca3f77e2e611a0d25a571fe39f4c192299bf598e07c6ea",
+      "sha256": "89eded59a1bd2703d02e27d8db9a7348fe8f32b3b7015041835c8cc7e741a83e",
       "size": [
         1280,
         960
       ]
     },
     "preuves/a_modere_320x240.png": {
-      "bytes": 61310,
+      "bytes": 61327,
       "mode": "RGBA",
-      "sha256": "19b11dd06a9a03a8627e8f9aeaa5acf225019aaf6b610f0223a6c08addd5ccc0",
+      "sha256": "58e3afa5e667054b749b8882a6a2c48b7496f35c1643199c915fe63c8598f4a3",
       "size": [
         320,
         240
@@ -251,27 +251,27 @@
       ]
     },
     "preuves/b_affirme_1280x960_NEAREST.png": {
-      "bytes": 89809,
+      "bytes": 89767,
       "mode": "RGBA",
-      "sha256": "efb7651916baec3638b6517657f3e6324efa0723caf2773561aa187b13fa885e",
+      "sha256": "de88701bf124e9cfcf6e7c4e36e71ff3b0504f4c8e0952646ee1cadb47a1a8ad",
       "size": [
         1280,
         960
       ]
     },
     "preuves/b_affirme_320x240.png": {
-      "bytes": 61286,
+      "bytes": 61214,
       "mode": "RGBA",
-      "sha256": "68c6e9f7ecb743f016ad72a7dd08e3e612ed86fb022fe8ab21af741fe563bc78",
+      "sha256": "168a80cd3abfa97da6856e4e8d052edeff983c17fc2d98f67a321f14807a86b6",
       "size": [
         320,
         240
       ]
     },
     "preuves/contact_3_etats_960x240.png": {
-      "bytes": 82518,
+      "bytes": 82689,
       "mode": "RGBA",
-      "sha256": "2de179ab918b2fcd6cd922b401ca5b7b8d0b601e1f5c131c8a492ed32b3d3af9",
+      "sha256": "a21c7d411fecb753b6867cc69d00217633a2c114165083af23e10f96df526fa2",
       "size": [
         960,
         240
