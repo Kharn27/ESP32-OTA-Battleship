@@ -20,6 +20,18 @@ jobs:
         run: python -m pip install Pillow==12.3.0 numpy==2.2.6 opencv-python-headless==4.12.0.88
       - name: Restore human-readable source
         run: python draft/etudes/boutons_typographie/bootstrap.py
+      - name: Protect isolated HD lettering margins
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('draft/etudes/boutons_typographie/generate.py')
+          s=p.read_text()
+          s=s.replace('roi=(408,52,832,198)','roi=(390,35,865,214)')
+          s=s.replace('roi=(384,39,990,197)','roi=(356,23,1022,211)')
+          s=s.replace("raise RuntimeError('Mask touches ROI edge')",
+                      "raise RuntimeError('Mask touches ROI edge in '+spec['hd']+' border='+str([int(hard[0].max()),int(hard[-1].max()),int(hard[:,0].max()),int(hard[:,-1].max())]))")
+          p.write_text(s)
+          PY
       - name: Generate four variants and proofs from real approved images
         run: python draft/etudes/boutons_typographie/generate.py --repo .
       - name: Reproducibility check (no writes)
