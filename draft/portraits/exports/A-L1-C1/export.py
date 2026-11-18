@@ -8,7 +8,7 @@ from PIL import Image
 CHECK = '--check' in sys.argv
 
 HERE = Path(__file__).resolve().parent
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 SRC = ROOT / "draft/portraits/portrait_A.png"
 SHA = "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc"
 RECT = (0, 49, 362, 411)

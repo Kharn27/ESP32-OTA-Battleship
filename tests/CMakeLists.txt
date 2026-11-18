@@ -357,10 +357,10 @@ set(P01_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
 set(P01_SCRIPT "${P01_ROOT}/tools/portraits01_generate.py")
 set(P01_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/portraits01_data.c")
 set(P01_SOURCES
-    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/pilote_32.png"
-    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/pilote_48.png"
-    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/pilote_64.png"
-    "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/comparatif_320x240.png")
+    "${P01_ROOT}/draft/portraits/exports/A-L1-C1/pilote_32.png"
+    "${P01_ROOT}/draft/portraits/exports/A-L1-C1/pilote_48.png"
+    "${P01_ROOT}/draft/portraits/exports/A-L1-C1/pilote_64.png"
+    "${P01_ROOT}/draft/portraits/exports/A-L1-C1/comparatif_320x240.png")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
              "${P01_SCRIPT}" ${P01_SOURCES})
 execute_process(
@@ -390,7 +390,7 @@ add_test(NAME portraits01_C99_vs_frozen_PC_comparison
          COMMAND "${Python3_EXECUTABLE}"
                  "${P01_ROOT}/tools/portraits01_compare_pc.py"
                  --dump "${CMAKE_CURRENT_BINARY_DIR}/portraits01_board.rgb565"
-                 --board "${P01_ROOT}/draft/portraits/pilote_A_L1_C1/comparatif_320x240.png"
+                 --board "${P01_ROOT}/draft/portraits/exports/A-L1-C1/comparatif_320x240.png"
                  --report "${CMAKE_CURRENT_BINARY_DIR}/portraits01_pc_comparison.json")
 set_tests_properties(portraits01_C99_vs_frozen_PC_comparison
                      PROPERTIES DEPENDS portraits01_C99_real_png_pixels_dma_bands)

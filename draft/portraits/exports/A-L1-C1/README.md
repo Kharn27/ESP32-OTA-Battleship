@@ -2,9 +2,11 @@
 
 **Issue :** #124 · **statut artistique : CANDIDATE, en attente du PO** · **matériel : ON_DEVICE_UNVERIFIED**.
 
+**Dossier réorganisé le 18/11/2026 vers `draft/portraits/exports/A-L1-C1/` sans réencodage des PNG historiques.**
+
 ## Sélection et provenance
 
-- Origine PO : [`draft/portraits/portrait_A.png`](../portrait_A.png), 1448 × 1086, RGBA.
+- Origine PO : [`draft/portraits/portrait_A.png`](../../portrait_A.png), 1448 × 1086, RGBA.
 - SHA-256 original selon l'archive contrôlée de la PR #125 : `30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc`.
 - Emplacement pilote : **A-L1-C1**, haut gauche de la planche A (casquette marine, barbe blanche, uniforme rouge/or).
 - Rect exact en pixels source : `x=0, y=49, largeur=362, hauteur=362`, soit la zone `[0,49,362,411)`.
@@ -45,9 +47,9 @@ Depuis la racine du dépôt (Python 3 + Pillow) :
 
 ```sh
 python3 -m pip install Pillow
-python3 draft/portraits/pilote_A_L1_C1/export.py --check  # compare sans modifier les fichiers
+python3 draft/portraits/exports/A-L1-C1/export.py --check  # compare sans modifier les fichiers
 # Regénération volontaire :
-python3 draft/portraits/pilote_A_L1_C1/export.py
+python3 draft/portraits/exports/A-L1-C1/export.py
 python3 scripts/check_graphic_pipeline.py
 ```
 
@@ -59,6 +61,6 @@ La recette valide d'abord le SHA-256 de la planche originale, génère (ou, avec
 - **PO :** doit valider le candidat et la lisibilité artistique ; aucun GO n'est présumé.
 - **Pilotage :** contrôle le HEAD, la preuve et la PR Draft ; fusion exclusivement par Pilotage.
 - **Développeur :** essai ultérieur `TEST-ONLY` sur ESP32-2432S028R, écran 320 × 240, sans PSRAM/microSD, puis photo, logs et mesures.
-- **Statut :** `ON_DEVICE_UNVERIFIED` jusqu'à preuve physique. Aucun export en série ni intégration runtime.
+- **Statut :** `ON_DEVICE_UNVERIFIED` jusqu'à preuve physique. Aucune intégration runtime des candidats ; les 67 autres positions sont désormais extraites séparément dans `exports/`.
 
 Refs #124.

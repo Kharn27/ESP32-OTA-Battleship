@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from PIL import Image
 
-DIR = "draft/portraits/pilote_A_L1_C1"
+DIR = "draft/portraits/exports/A-L1-C1"
 HEAD = "dab0a35a1a891ab4d215a55cd16f2fe095a558df"
 SOURCES = (
     (32, "2d17cc05d8bfb64a0c01b5f4ad125979dc7c5de64d304ec52fafa992217f86e7"),
