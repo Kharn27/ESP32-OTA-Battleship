@@ -1,0 +1,1147 @@
+{
+  "schema_version": 1,
+  "issue": 133,
+  "stage": "JALON_7",
+  "status": "CANDIDATE",
+  "device_status": "ON_DEVICE_UNVERIFIED",
+  "base_main": "afe8f44443d965a081bb075dcc20bc0f2fc31fa4",
+  "source_reference_sha256": {
+    "A": "30e92fa1eed23733d812a521c6910390860620f906a0f3529e8410abe0bd9acc",
+    "B": "77a81a05009dd8ee7f5af6cda2d13ce7d9282ef0aebbf39db10cad9c1ff6b9ea",
+    "C": "b24d39572a54d464e1692cb76967e9d98463fa9a9e8b1589693ef88795ef7ad8",
+    "D": "68f1e1811a3370fa7249d70fd3bd3e9d21481511c1401ed994ecb6ef6cee111c",
+    "E": "c9620a0a1fad7c15e82c4ab1f7ac1debf07c2ed19b75f498c40e0597bd95f975"
+  },
+  "source_integrity": "Originaux PO préservés sur main, le --check recalcule leurs SHA-256. Deux sources Adobe D/E pleine résolution contrôlées par parité octet à octet de masters D-L1-C4 (J5) et E-L3-C1 (J6) par rapport aux exports fusionnés.",
+  "pipeline": {
+    "python": "3.11+",
+    "pillow": "12.3.0",
+    "codec": "PNG 8-bit RGBA, scanlines filter 0, DEFLATE stored, no metadata",
+    "resampling": "BOX integer area weighted with premultiplied alpha; 48/64 separately from same HD master",
+    "zoom": "NEAREST x4 exact RGBA",
+    "recipe": "draft/portraits/exports/export_jalon7.py",
+    "connector_helper_reused": "draft/portraits/exports/connector_jalon3.js",
+    "mask": "Six positions avec masques policy all sur sept rectangles, zéros hors ROI.",
+    "verification": "--check recrée octet à octet les 91 PNG, vérifie leurs SHA-256 hex de 64 caractères, tailles réelles, RGBA/dimensions et connexité alpha>=6 des 30 sprites."
+  },
+  "items": [
+    {
+      "id": "D-L2-C5",
+      "sheet": "D",
+      "rect": [
+        1229,
+        256,
+        1536,
+        512
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L2-C5/master_HD.png",
+          "sha256": "cdb28921f45aa84475f2739ca08e92ce57f4c09e3801ae787c824591910a79ee",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L2-C5/portrait_48.png",
+          "sha256": "a994fadb05c1353305fc9c29ea7962f47884bf797125eb1609673fe39bba7fc5",
+          "size_bytes": 9332,
+          "alpha_0": 683,
+          "alpha_partial": 1621,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L2-C5/portrait_64.png",
+          "sha256": "8acd918790fcc7f5632c822303a153e754bdf4ee6232c71639820e7b6d2f9f4b",
+          "size_bytes": 16516,
+          "alpha_0": 1199,
+          "alpha_partial": 2897,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Coiffe et silhouette préservées, sans masque local.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L3-C1",
+      "sheet": "D",
+      "rect": [
+        0,
+        512,
+        307,
+        768
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L3-C1/master_HD.png",
+          "sha256": "69188732fbf6519a2d9d182f478f72b9db5cccc07fa5cf77206f85bafc1b9d2a",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L3-C1/portrait_48.png",
+          "sha256": "c03f7db8b0fbf29286a2d31852b144728e42133541f99d41e7dfa631835838cd",
+          "size_bytes": 9332,
+          "alpha_0": 631,
+          "alpha_partial": 1673,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L3-C1/portrait_64.png",
+          "sha256": "4914cd2b0579a7e221d9342318b0735d6199bafe951cb5a1fdbc9d4e3bec3875",
+          "size_bytes": 16516,
+          "alpha_0": 1136,
+          "alpha_partial": 2960,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Coiffe et silhouette préservées, sans masque local.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L3-C2",
+      "sheet": "D",
+      "rect": [
+        307,
+        512,
+        614,
+        768
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L3-C2/master_HD.png",
+          "sha256": "34d005d4bab33a18d24596961148e4d3a750ab2d398cb333d2e537f1bbaff7c7",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L3-C2/portrait_48.png",
+          "sha256": "312408bcefa1bcc8a85b36c7ca47ca2c230e79b1dbca2ebc74d14524fc729844",
+          "size_bytes": 9332,
+          "alpha_0": 744,
+          "alpha_partial": 1560,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L3-C2/portrait_64.png",
+          "sha256": "83e400add28c5119e817ef1f46715841b288fe12fae4ce7d65c6ff3cdd716ddd",
+          "size_bytes": 16516,
+          "alpha_0": 1321,
+          "alpha_partial": 2775,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L3-C3",
+      "sheet": "D",
+      "rect": [
+        614,
+        512,
+        922,
+        768
+      ],
+      "master_square": 308,
+      "transparent_pad_top": 22,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L3-C3/master_HD.png",
+          "sha256": "c712d096ec4d8269195509666c7a2406788b4ab9b3f6a8d5d7d251e19c48ffc5",
+          "size_bytes": 379857
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L3-C3/portrait_48.png",
+          "sha256": "b3976785b497c321f9c057d61db99c505b763b55ebc5fbe94a98defbf89158a4",
+          "size_bytes": 9332,
+          "alpha_0": 700,
+          "alpha_partial": 1604,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            1,
+            3,
+            45,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L3-C3/portrait_64.png",
+          "sha256": "18450611ef899940a518d3cb4f605ca64ee9619c542d2717d93a56d5900a773d",
+          "size_bytes": 16516,
+          "alpha_0": 1257,
+          "alpha_partial": 2839,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            1,
+            4,
+            60,
+            57
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Fragments de la cellule voisine supprimés sur la lisière localisée, sans effacer les traits du sujet.",
+      "local_masks": [
+        {
+          "rect": [
+            294,
+            0,
+            308,
+            308
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 1467
+        },
+        {
+          "rect": [
+            0,
+            230,
+            9,
+            308
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 426
+        }
+      ],
+      "mask_removed_alpha_nonzero": 1893,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L3-C4",
+      "sheet": "D",
+      "rect": [
+        922,
+        512,
+        1229,
+        768
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L3-C4/master_HD.png",
+          "sha256": "2fa14f183744be4946d16f9b57df5ffda5abb2ad1b913acdf40d3edc2d30fe5f",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L3-C4/portrait_48.png",
+          "sha256": "ae9a57f6943727a4a19181e09978825713622be7ef02c900890d4b819bccc590",
+          "size_bytes": 9332,
+          "alpha_0": 914,
+          "alpha_partial": 1390,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            43,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L3-C4/portrait_64.png",
+          "sha256": "18881a8079531bb7a392ae6725135697a8a1bd6ebf1c9a7df5e1eefdbf4b4391",
+          "size_bytes": 16516,
+          "alpha_0": 1609,
+          "alpha_partial": 2487,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            57,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Fragments de la cellule voisine supprimés sur la lisière localisée, sans effacer les traits du sujet.",
+      "local_masks": [
+        {
+          "rect": [
+            278,
+            0,
+            307,
+            307
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 2950
+        }
+      ],
+      "mask_removed_alpha_nonzero": 2950,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L3-C5",
+      "sheet": "D",
+      "rect": [
+        1229,
+        512,
+        1536,
+        768
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L3-C5/master_HD.png",
+          "sha256": "a4fe88d262d8408e400234d9631dc453e1e4d6a8a3b1540520ed0f87c729431d",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L3-C5/portrait_48.png",
+          "sha256": "e7007bd3a733c338538e02365481fda06acd7a58489aefa7ef1adeb6d79925bb",
+          "size_bytes": 9332,
+          "alpha_0": 586,
+          "alpha_partial": 1718,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L3-C5/portrait_64.png",
+          "sha256": "4a9270ff1cbf2e213e5d3eeb4a178fbf6adeb756e3ec17e7d3643d89ad1060b8",
+          "size_bytes": 16516,
+          "alpha_0": 1041,
+          "alpha_partial": 3055,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L4-C1",
+      "sheet": "D",
+      "rect": [
+        0,
+        768,
+        307,
+        1024
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L4-C1/master_HD.png",
+          "sha256": "22717bf3342a163ccbbe5252c6ab4d5135dae509691bc2ebc95e6eae35b2aca0",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L4-C1/portrait_48.png",
+          "sha256": "484100357c92797168bb026cc84fd297d720b221c5944b4ccccb0974af907d4c",
+          "size_bytes": 9332,
+          "alpha_0": 697,
+          "alpha_partial": 1607,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L4-C1/portrait_64.png",
+          "sha256": "e16684a7fd59c3e6a67f6b266a6d101ef1aeb348e2d3fe9f753e65c8de9ce87e",
+          "size_bytes": 16516,
+          "alpha_0": 1227,
+          "alpha_partial": 2869,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L4-C2",
+      "sheet": "D",
+      "rect": [
+        307,
+        768,
+        614,
+        1024
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L4-C2/master_HD.png",
+          "sha256": "7c76b17dec66c23f02b404fc5b9c44de811710bed01cdeed69eaa16b76e6405b",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L4-C2/portrait_48.png",
+          "sha256": "a7e2106596a5c981841145236e4bb4dbfb846a7379a3d22ae51916d9407054e9",
+          "size_bytes": 9332,
+          "alpha_0": 578,
+          "alpha_partial": 1726,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L4-C2/portrait_64.png",
+          "sha256": "4fb9327c992b5b91118e202100f9f47a88f8a81051bad2a34c69e564f1b90461",
+          "size_bytes": 16516,
+          "alpha_0": 999,
+          "alpha_partial": 3097,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            63,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L4-C3",
+      "sheet": "D",
+      "rect": [
+        614,
+        768,
+        922,
+        1024
+      ],
+      "master_square": 308,
+      "transparent_pad_top": 22,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L4-C3/master_HD.png",
+          "sha256": "a5a2f2e09d627d67a4985d115985b887e94b2a3ce4e2a0b71f19d0e2a3e559ed",
+          "size_bytes": 379857
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L4-C3/portrait_48.png",
+          "sha256": "947f6effedbdd7151b5bc2092ba26a6e4476bb29d4ce8808bee0443ca38beebb",
+          "size_bytes": 9332,
+          "alpha_0": 609,
+          "alpha_partial": 1695,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            47,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L4-C3/portrait_64.png",
+          "sha256": "db3efb234810e2193008624822eadbce17fb662eb1b14f53df29aa2ce070a2c3",
+          "size_bytes": 16516,
+          "alpha_0": 1122,
+          "alpha_partial": 2974,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            63,
+            57
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L4-C4",
+      "sheet": "D",
+      "rect": [
+        922,
+        768,
+        1229,
+        1024
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L4-C4/master_HD.png",
+          "sha256": "e552278eed24dc5b1ae422eb84349b58f5d14d72f8021c5165f9981ef59bd182",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L4-C4/portrait_48.png",
+          "sha256": "65d63990b0660e1d417f2a2aef806ef382fdf02878f86c292116d2ff2cd39859",
+          "size_bytes": 9332,
+          "alpha_0": 929,
+          "alpha_partial": 1375,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            4,
+            43,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L4-C4/portrait_64.png",
+          "sha256": "426135988b25762410d44de7bcb461b179c3b874aa3f69e7d33ac3d76228c8c1",
+          "size_bytes": 16516,
+          "alpha_0": 1632,
+          "alpha_partial": 2464,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            57,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Fragments de la cellule voisine supprimés sur la lisière localisée, sans effacer les traits du sujet.",
+      "local_masks": [
+        {
+          "rect": [
+            277,
+            0,
+            307,
+            307
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 5127
+        }
+      ],
+      "mask_removed_alpha_nonzero": 5127,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "D-L4-C5",
+      "sheet": "D",
+      "rect": [
+        1229,
+        768,
+        1536,
+        1024
+      ],
+      "master_square": 307,
+      "transparent_pad_top": 25,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/D-L4-C5/master_HD.png",
+          "sha256": "394ea7563bba2aeee84476be098b3c539946c827f89afe74ccac9a667cfba74b",
+          "size_bytes": 377396
+        },
+        "p48": {
+          "path": "draft/portraits/exports/D-L4-C5/portrait_48.png",
+          "sha256": "7154b2525bbea9d783f666822069b55995179e6cc4848028ce782e8b33c53d31",
+          "size_bytes": 9332,
+          "alpha_0": 555,
+          "alpha_partial": 1749,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            3,
+            45,
+            43
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/D-L4-C5/portrait_64.png",
+          "sha256": "aac71ffe0cdacb5694326164c3f95b9c0ad6f54f29e5567ed6d6a40627f7ca6f",
+          "size_bytes": 16516,
+          "alpha_0": 968,
+          "alpha_partial": 3128,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            61,
+            58
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "E-L2-C3",
+      "sheet": "E",
+      "rect": [
+        724,
+        278,
+        1086,
+        543
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 48,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L2-C3/master_HD.png",
+          "sha256": "54a0549af16880b6379566fc09a97b357fbd9992036e1bfcd6d8feb2e37b574d",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L2-C3/portrait_48.png",
+          "sha256": "e8e618e2c706561c1fdf0a6344dfb37758b753ed0717c844c3aed40dfcde05cd",
+          "size_bytes": 9332,
+          "alpha_0": 1057,
+          "alpha_partial": 1247,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            47,
+            41
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L2-C3/portrait_64.png",
+          "sha256": "5e66f067e01533ae25613ef4ba6ef758c07956a7024ace787d849c894734f3c0",
+          "size_bytes": 16516,
+          "alpha_0": 1890,
+          "alpha_partial": 2206,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            63,
+            55
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Recadrage individuel sans correction ni attribution canonique.",
+      "local_masks": [],
+      "mask_removed_alpha_nonzero": 0,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "E-L4-C1",
+      "sheet": "E",
+      "rect": [
+        0,
+        815,
+        362,
+        1086
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L4-C1/master_HD.png",
+          "sha256": "cde9a3bc796d64764fb36baa442e2d6fdc7e0bcc0a66397a0d8750265c255af3",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L4-C1/portrait_48.png",
+          "sha256": "ee46da37bac2e852300704a25cda4c2aaf52be8670210b3634b0f16d16ef0426",
+          "size_bytes": 9332,
+          "alpha_0": 1020,
+          "alpha_partial": 1284,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            43,
+            41
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L4-C1/portrait_64.png",
+          "sha256": "ed390707f95f0e512d3d6e6f138787b92a9297f12b7fa0ee79534f69f82ba868",
+          "size_bytes": 16516,
+          "alpha_0": 1834,
+          "alpha_partial": 2262,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            58,
+            55
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Fragments de la cellule voisine supprimés sur la lisière localisée, sans effacer les traits du sujet.",
+      "local_masks": [
+        {
+          "rect": [
+            344,
+            0,
+            362,
+            362
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 1060
+        }
+      ],
+      "mask_removed_alpha_nonzero": 1060,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "E-L4-C2",
+      "sheet": "E",
+      "rect": [
+        362,
+        815,
+        724,
+        1086
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L4-C2/master_HD.png",
+          "sha256": "3d71c3ad238d2f79ca35017e9415668df20c4df6b281058c602b9f571006f6e4",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L4-C2/portrait_48.png",
+          "sha256": "41c0da13d85fa65925d3785ca918a43b771fcc28905920b7164654d5649156a0",
+          "size_bytes": 9332,
+          "alpha_0": 763,
+          "alpha_partial": 1541,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            5,
+            45,
+            41
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L4-C2/portrait_64.png",
+          "sha256": "d584eacf8b2434c357b30ef6b0c0c85bc889926d503d58b22d81bd9f191f5d59",
+          "size_bytes": 16516,
+          "alpha_0": 1365,
+          "alpha_partial": 2731,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            7,
+            61,
+            55
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Fragments de la cellule voisine supprimés sur la lisière localisée, sans effacer les traits du sujet.",
+      "local_masks": [
+        {
+          "rect": [
+            348,
+            0,
+            362,
+            362
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 984
+        }
+      ],
+      "mask_removed_alpha_nonzero": 984,
+      "mask_outside_changed_channels": 0
+    },
+    {
+      "id": "E-L4-C3",
+      "sheet": "E",
+      "rect": [
+        724,
+        815,
+        1086,
+        1086
+      ],
+      "master_square": 362,
+      "transparent_pad_top": 45,
+      "cleaned_hidden_rgb_pixels": 0,
+      "files": {
+        "master": {
+          "path": "draft/portraits/exports/E-L4-C3/master_HD.png",
+          "sha256": "0a5c0221e0e0a74757a9095981ed6f656bc2cb29ccaeba27bd9fdba8a8d5f02a",
+          "size_bytes": 524646
+        },
+        "p48": {
+          "path": "draft/portraits/exports/E-L4-C3/portrait_48.png",
+          "sha256": "edfd157a652868a011ada00eee597a6bf4125d1e285914b505735bec8636949b",
+          "size_bytes": 9332,
+          "alpha_0": 1049,
+          "alpha_partial": 1255,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            6,
+            45,
+            41
+          ],
+          "components_alpha_ge_6": 1
+        },
+        "p64": {
+          "path": "draft/portraits/exports/E-L4-C3/portrait_64.png",
+          "sha256": "5b258fce82d4531e884ffd13a3c4bde096cdc459da6a528209b047d452fe261c",
+          "size_bytes": 16516,
+          "alpha_0": 1880,
+          "alpha_partial": 2216,
+          "alpha_255": 0,
+          "bbox_nonzero": [
+            0,
+            8,
+            60,
+            55
+          ],
+          "components_alpha_ge_6": 1
+        }
+      },
+      "exception": "Fragments de la cellule voisine supprimés sur la lisière localisée, sans effacer les traits du sujet.",
+      "local_masks": [
+        {
+          "rect": [
+            344,
+            0,
+            362,
+            362
+          ],
+          "policy": "all",
+          "removed_alpha_nonzero": 2120
+        }
+      ],
+      "mask_removed_alpha_nonzero": 2120,
+      "mask_outside_changed_channels": 0
+    }
+  ],
+  "proofs": [
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L2-C5_48_x4.png",
+      "sha256": "9e2a7b76f4ab6fd2affeae4d7bbc4b51b095e354982444311bad07116622cf13",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L2-C5_64_x4.png",
+      "sha256": "6d5bdf0b86ded9d9ebfcefa2d2d6f5cf754543a0e36cab9f0c390b2f84a3d125",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C1_48_x4.png",
+      "sha256": "01e8086af355ee3c1ffad89e98f1d492da95328b986d757033b4a7a60977f8f0",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C1_64_x4.png",
+      "sha256": "2ded8cbe53e5d491b282ec4ae10073690f61e3f24a53fef4bb4a4056a8367349",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C2_48_x4.png",
+      "sha256": "c75cca4b830e37047da08e2882b06b74c758c7c6ae478a1db6a3fd550372eb02",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C2_64_x4.png",
+      "sha256": "12679ccc82fda76069d28b56f4e3cdd87d3ed5a99c38b25e9e0edf99db718c4a",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C3_48_x4.png",
+      "sha256": "6792caf8479a157c6a1b3fd1ca8cc3304b94a9e0aaf6f623b4da06ef1a230faf",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C3_64_x4.png",
+      "sha256": "45a7c5408e2e50072c5fc290d52c4e15135bde902be964138750c906a4316a26",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C4_48_x4.png",
+      "sha256": "78f274c2fb54e32a03860daae58206f5f410dc559e7a6c224bc7d1349f8578e4",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C4_64_x4.png",
+      "sha256": "e34359a5b1012eaa211a2b50f99a77a690103869d93640ce8b358bb9bbef93b4",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C5_48_x4.png",
+      "sha256": "db3921388075a4d0c5bf2ca6e46c70747a5201036f5ee80a6b1de557ce71b169",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L3-C5_64_x4.png",
+      "sha256": "3d1097844e990341da1068d287251a4416c169cb2e434852f5c059c0bfbaf0e3",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C1_48_x4.png",
+      "sha256": "24a5cee602e76e965f949e0b44121b00f0697c16974573c32ffa6589d43d013f",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C1_64_x4.png",
+      "sha256": "a4e16580fc3cd01a4de1830806345ed223250e0fa63d37bcb3840dafa07dbb0a",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C2_48_x4.png",
+      "sha256": "7c9ab516708c0ff77ac226accdc6f229a958f36235796302071cd4f099974018",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C2_64_x4.png",
+      "sha256": "ee9d73ed3a24d05811aed9afdbf9f68be1065e24a1297cc2cc07dac5df19916f",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C3_48_x4.png",
+      "sha256": "09ae93f174cb9b198b019098d86e55a6a840d1448c79377572793f1788b9f275",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C3_64_x4.png",
+      "sha256": "88ba6e3ade0e842986451783751516448f11e1c9a2e604aa1cabe013151e2ee5",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C4_48_x4.png",
+      "sha256": "8cad59d848c50a91761968bb41ba8c21c64c3649b4e708e811074d1b1ae5c5c1",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C4_64_x4.png",
+      "sha256": "d4c114ff8ec4e97fa029d2ccd35e3f5c6021de324aa29e041be2d33631ff49a3",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C5_48_x4.png",
+      "sha256": "b1196f7eb41f22813d7decb38f1adf3e9b42fb9e3685dc5fe98603fe214480c5",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_D-L4-C5_64_x4.png",
+      "sha256": "c3c0328e9e0b80b5264db0a97ddd01c99cbf2600a5754503e97005d14943bc20",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L2-C3_48_x4.png",
+      "sha256": "121b1fd467b072f9d06e41ab04a11a260080dd5de63ca2e6840f0217cf66c213",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L2-C3_64_x4.png",
+      "sha256": "844621768261856eed5836a158d10a880a1e6ebacb9a2150d9c9b6c594070ac4",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L4-C1_48_x4.png",
+      "sha256": "b3b94d43131e6e4a10dce2fc2899786e146fa4db253284e900fb856f863ca003",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L4-C1_64_x4.png",
+      "sha256": "46e5741fc641929ded6a135353187a47356bfc9b8310c9cc039a7f2bbf2d1ed4",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L4-C2_48_x4.png",
+      "sha256": "3686e1d39e1ea43baf6e1ca56ac28abcee0efa0627017c15e7c4c6c91f1f5a27",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L4-C2_64_x4.png",
+      "sha256": "cd8fe712d33de3aced0a933fb43bad9acde384b2e8f48e07f791046cd87a49fd",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L4-C3_48_x4.png",
+      "sha256": "897aa56c465ab9d468cf5111e6b12d2b79ef35ef47bdaae844ff95f093ff6c79",
+      "size_bytes": 147726
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_E-L4-C3_64_x4.png",
+      "sha256": "c83f1a4300f181151e663977f76ddb3df35b24260a083c7fd8ceaf12cd5c03d5",
+      "size_bytes": 262488
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p1_320x240_sombre.png",
+      "sha256": "fb92f8a1c5756ec8ce30abc2b8b1540af9ecb58acfd1b591ef3db44229110952",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p1_320x240_clair.png",
+      "sha256": "81559e94c217a5d8d3482a9d62ce93adc27d2f6bdf670242c0bf527bee4722e3",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p2_320x240_sombre.png",
+      "sha256": "d2b91ba0c511c436f3df49b15ed5ed6eede23fef37e0a02f076243cff7cf8c0f",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p2_320x240_clair.png",
+      "sha256": "286e5ab709422fde614b6adef911f883407766a51e490aab99af3919673934d8",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p3_320x240_sombre.png",
+      "sha256": "3cbf4860f3049b6fd96ddd367f03dccb92ccd2fd0fef3d4786f1390559c7a150",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p3_320x240_clair.png",
+      "sha256": "edc8eaeb0b648ca47d14999bea37c17828efd9cb2c97b0059f81b1a2a79210de",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p4_320x240_sombre.png",
+      "sha256": "bbe001056c590d18f89ddedf6554ccb84264f4239f43f27eb4d8d526d5c759fc",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_p4_320x240_clair.png",
+      "sha256": "ce2839bcaadf87a3a13ddc26cd1cd436e6c97a259c1511cb39b432f0b86d5ed7",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_contact_p1_1120x182.png",
+      "sha256": "74b3c2bb0c8452d89b46308af0e2be5deec95f200cc88d4a0f495771aaf83afb",
+      "size_bytes": 815670
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_contact_p2_1120x182.png",
+      "sha256": "4abbb1e2fc99e10c61409658678ade71a6dd810f3541f1e6d96c35a380d45997",
+      "size_bytes": 815670
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_correctif_D-L3-C3_avant_apres_320x240.png",
+      "sha256": "0ab55b931e7884eff50351031627ad08cb216aad8eb1fbb3d60a981a07c10af1",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_correctif_D-L3-C4_avant_apres_320x240.png",
+      "sha256": "f07a0cd71eea96ef0da4ad99e0f18290a2a0bc0ba7df0d3a3e4bc2bcdefae823",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_correctif_D-L4-C4_avant_apres_320x240.png",
+      "sha256": "fd5c68f86f7155442d5a24053c2b327c75ca6cd6129199633c3dbf2a37fdf319",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_correctif_E-L4-C1_avant_apres_320x240.png",
+      "sha256": "5974063f7c0e598391b8c625bdc1526040e567db4570ad4039761a27ac30e8a8",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_correctif_E-L4-C2_avant_apres_320x240.png",
+      "sha256": "dbc1e04d2971ae7c3ef8cea35bc5ea4889cbe4439a6a31712582c4246b30fbd6",
+      "size_bytes": 307528
+    },
+    {
+      "path": "draft/portraits/exports/preuves/jalon7_correctif_E-L4-C3_avant_apres_320x240.png",
+      "sha256": "1df31e352a13c40953b1e3889b30f3cdf2d661686915aa4a81c7d18a157e77f8",
+      "size_bytes": 307528
+    }
+  ]
+}
