@@ -232,7 +232,7 @@ def main() -> int:
             data = box_alpha_rgba(master,side,n)
             data_by_id[id_][n] = data
             ok &= audit(EXPORTS/id_/f"portrait_{n}.png",png_rgba((n,n),data),check)
-    pilot = SOURCES/"pilote_A_L1_C1"
+    pilot = EXPORTS/"A-L1-C1"
     data_by_id["A-L1-C1"] = {}
     for n in (48,64):
         p = pilot/f"pilote_{n}.png"

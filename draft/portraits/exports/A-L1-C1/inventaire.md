@@ -1,4 +1,6 @@
-# Inventaire visuel PO — PORTRAITS-01
+# Inventaire visuel PO — PORTRAITS-01 (photographie historique)
+
+**Note du 18/11/2026 :** cette fiche décrit la phase pilote. Depuis, les 68 positions ont été extraites comme **candidates** dans [`draft/portraits/exports/`](../) ; aucun GO artistique ni promotion firmware n'en découle.
 
 Inventaire de **positions visuelles**, sans conclusion sur le nombre de personnages distincts. Originales archivées inchangées dans `draft/portraits/`.
 

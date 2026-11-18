@@ -4,7 +4,7 @@
 
 ## Contenu
 
-- **5 positions A–E**, avec **10 variantes en 48 et 64** : le pilote A-L1-C1 réutilise les deux PNG déjà présents dans `draft/portraits/pilote_A_L1_C1/` (aucun doublon), tandis que B/C/D/E ont **8 sprites nouveaux** et **4 masters HD carrés** sous `draft/portraits/exports/<ID>/`.
+- **5 positions A–E**, avec **10 variantes en 48 et 64** : le pilote A-L1-C1 réutilise les deux PNG déjà présents dans `draft/portraits/exports/A-L1-C1/` (aucun doublon), tandis que B/C/D/E ont **8 sprites nouveaux** et **4 masters HD carrés** sous `draft/portraits/exports/<ID>/`.
 - **13 preuves PNG** dans [preuves/](preuves/) : **10 zooms NEAREST ×4** (incluant le pilote), **2 planches PC natives 320×240** avec fond clair/sombre et une **planche-contact 700×182** regroupant 5 IDs, 48/64, clair/sombre.
 - Recette de régénération et `--check` non destructif : [export_jalon0.py](export_jalon0.py) ; manifeste de suivi [manifest_jalon0.json](manifest_jalon0.json).
 - **Aucun fichier modifié** parmi les cinq originaux PO `draft/portraits/portrait_{A..E}.png`, le pilote, `assets/`, `maquettes/`, la Bible, ou le firmware.

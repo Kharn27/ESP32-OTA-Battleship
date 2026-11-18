@@ -21,7 +21,7 @@ Provenance : cinq PNG RGBA remis par le PO le 12/11/2026, archivés par [Issue #
 - Identifiant **provisoire stable de position** : `<planche>-L<ligne>-C<colonne>`, balayage de haut en bas, gauche à droite ; n'exprime **ni identité ni nom de personnage**.
 - La zone `[x0,y0,x1,y1)` est la **cellule de localisation** en pixels de la planche originale (origine haut-gauche, borne finale exclue). **Ce n'est ni un détourage, ni un recadrage d'export validé.** Les zones se touchent aux limites, et les ornements peuvent frôler ou déborder d'une cellule.
 - Grilles de repérage : A/B `4 colonnes × 2 lignes` (x = 0/362/724/1086/1448 ; y = 0/543/1086) ; C/E `4 × 4` (mêmes x ; y = 0/272/543/815/1086) ; D `5 × 4` (x = 0/307/614/922/1229/1536 ; y = 0/256/512/768/1024).
-- **Pilote déjà traité : `A-L1-C1`.** Recadrage antérieur réel : `[0,49,362,411)` de `portrait_A.png` ([dossier pilote](pilote_A_L1_C1/README.md)). Cette région de **production pilote** est distincte de la cellule de repérage plus large `[0,0,362,543)` du tableau ci-dessous ; ne pas l'extraire à nouveau automatiquement.
+- **Pilote déjà traité : `A-L1-C1`.** Recadrage antérieur réel : `[0,49,362,411)` de `portrait_A.png` ([dossier pilote](exports/A-L1-C1/README.md)). Cette région de **production pilote** est distincte de la cellule de repérage plus large `[0,0,362,543)` du tableau ci-dessous ; ne pas l'extraire à nouveau automatiquement.
 - Les colonnes de regroupement **Gxx = ressemblances structurées pour revue**, **Qxx ? = rapprochement faible à investiguer**, `—` = pas de regroupement proposé à ce stade ; **aucune colonne n'est une décision d'équivalence**.
 
 ## 3. Registre exhaustif — 68 positions
