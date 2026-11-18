@@ -39,13 +39,20 @@ def retouch(src,spec,magnitude):
  if xy is None:raise RuntimeError('Cannot isolate original gold lettering')
  fx,fy,fw,fh=cv2.boundingRect(xy)
  if fw<(240 if src.width<1110 else 390) or fh<65:raise RuntimeError(f'Letter segmentation suspicious {fw}x{fh}')
- radius=8 if src.width<1110 else 7
+ # Retain the genuine gold + black relief around the scaled HD characters.
+ # Use a broader *separate* cleanup mask to erase the OLD drop-shadow
+ # under PALMARES. A single, narrow mask leaves black ghosts over copper.
+ radius=8 if src.width<1110 else 9
  hard=cv2.dilate(face,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(2*radius+1,2*radius+1)))
- if max(hard[0].max(),hard[-1].max(),hard[:,0].max(),hard[:,-1].max())>6:raise RuntimeError('Mask touches ROI edge in '+spec['hd']+' border='+str([int(hard[0].max()),int(hard[-1].max()),int(hard[:,0].max()),int(hard[:,-1].max())]))
+ if max(hard[0].max(),hard[-1].max(),hard[:,0].max(),hard[:,-1].max())>6:raise RuntimeError('Text cutout touches ROI boundary')
  full=np.zeros(arr.shape[:2],np.uint8);full[t:b,l:r]=hard
  soft=cv2.GaussianBlur(full,(0,0),1.1)
  ys,xs=np.where(soft>2);box=(xs.min(),ys.min(),xs.max()+1,ys.max()+1)
- plate=np.array(src);plate[:,:,:3]=cv2.inpaint(arr[:,:,:3],full,5,cv2.INPAINT_TELEA)
+ erase_radius=10 if src.width<1110 else 17
+ erase=cv2.dilate(face,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(2*erase_radius+1,2*erase_radius+1)))
+ erase_full=np.zeros(arr.shape[:2],np.uint8);erase_full[t:b,l:r]=erase
+ if max(erase[0].max(),erase[-1].max(),erase[:,0].max(),erase[:,-1].max())>6:raise RuntimeError('Erasure mask touches ROI boundary')
+ plate=np.array(src);plate[:,:,:3]=cv2.inpaint(arr[:,:,:3],erase_full,5,cv2.INPAINT_TELEA)
  glyph=src.crop(tuple(map(int,box)));glyph.putalpha(Image.fromarray(soft).crop(tuple(map(int,box))))
  sx,sy=spec['levels'][magnitude];w=round(glyph.width*sx);h=round(glyph.height*sy)
  glyph=glyph.resize((w,h),Image.Resampling.LANCZOS)
