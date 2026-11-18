@@ -2,7 +2,7 @@
 if(WARSHIP_PORTRAITS01_TEST_ONLY)
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
   set(P01_SCRIPT "${PROJECT_DIR}/tools/portraits01_generate.py")
-  set(P01_ROOT "${PROJECT_DIR}/draft/portraits/pilote_A_L1_C1")
+  set(P01_ROOT "${PROJECT_DIR}/draft/portraits/exports/A-L1-C1")
   set(P01_DATA "${CMAKE_CURRENT_BINARY_DIR}/portraits01_data.c")
   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
        "${P01_SCRIPT}" "${P01_ROOT}/pilote_32.png"

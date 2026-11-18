@@ -6,7 +6,7 @@
 
 **Source graphique disponible dans main :** PR #127 **FUSIONNÉE par Pilotage le 13/11/2026**, HEAD graphique `dab0a35a1a891ab4d215a55cd16f2fe095a558df`, commit de fusion squash sur `main` **`5c59d6f4ed038981bf5d78a56d6abd55ab5b086d`**. La branche technique `feat/issue-128-portraits01-tft-test` est rebasée **directement sur ce commit de main** ; la PR Draft #129 cible `main` et porte exclusivement 13 fichiers techniques. Aucun fichier `draft/`, `maquettes/`, `assets/`, aucune image PO, aucun manifeste ne sont modifiés. **Fusion des sources candidates ≠ validation artistique PO ou matérielle.**
 
-| Entrée PNG `draft/portraits/pilote_A_L1_C1/` | SHA-256 source exact | Conversion Flash |
+| Entrée PNG `draft/portraits/exports/A-L1-C1/` | SHA-256 source exact | Conversion Flash |
 |---|---|---:|
 | `pilote_32.png` | `2d17cc05d8bfb64a0c01b5f4ad125979dc7c5de64d304ec52fafa992217f86e7` | 32×32×3 = **3 072 o** |
 | `pilote_48.png` | `5abbcacd3981e6b426c93542dcb6289712afc4ca49b7f38dc5c35c9345360dee` | 48×48×3 = **6 912 o** |
@@ -20,7 +20,7 @@
 
 - **Sélection explicite** : `-D WARSHIP_PORTRAITS01_TEST_ONLY=ON`, option CMake OFF par défaut, incompatible GUI-01, D15-A, D11 bench, D13, T03. Cette configuration utilise **uniquement** `main/portraits01_probe.c`, `components/portraits01/`, `warship_lcd_d15a_preview.c` (profil D14 ILI9341/TFT_eSPI native 320×240, LEDC GPIO21), et **aucun** `d11_runtime_init`, NVS, touche, HOME, ESP-NOW ou jeu.
 - **Génération hôte uniquement** : `tools/portraits01_generate.py` lit trois PNG en `RGBA` 32/48/64, vérifie chaque empreinte/dimension, génère des tableaux `static const uint8_t` avec pas **RGB565BE, alpha8 droit**, et trois métadonnées SHA. Le firmware n'embarque ni PNG/JPEG ni bibliothèque de décodage, ni copies d'exports `draft/` ailleurs dans Git.
-- **Rendu** : `portraits01_render.c` recompose **la même disposition** que [`export.py`](../draft/portraits/pilote_A_L1_C1/export.py) à partir de couleurs/rectangles et de l'alphabet 3×5 du script, puis compose les 3 sprites individuellement (pas de source plein écran). Transparent alpha0 = fond strictement inchangé, alpha255 = couleur source quantifiée, alpha 1..254 = interpolation entière dans les canaux RGB565 avec arrondi. Aucun « halo correctif » ni multiplication de l'alpha deux fois.
+- **Rendu** : `portraits01_render.c` recompose **la même disposition** que [`export.py`](../draft/portraits/exports/A-L1-C1/export.py) à partir de couleurs/rectangles et de l'alphabet 3×5 du script, puis compose les 3 sprites individuellement (pas de source plein écran). Transparent alpha0 = fond strictement inchangé, alpha255 = couleur source quantifiée, alpha 1..254 = interpolation entière dans les canaux RGB565 avec arrondi. Aucun « halo correctif » ni multiplication de l'alpha deux fois.
 - **Bande unique** : `portrait01_compose_band(y,rows,dma,5120)` écrase entièrement **320×8×2** octets, et rejette les bornes invalides **avant écriture**. Le seul tampon LCD DMA est emprunté de `warship_lcd_band()`, alloué par le driver et réutilisé après `warship_lcd_send()` **synchrone**. Pas de framebuffer 153 600 o en RAM, ni buffer portrait persistant. Pile locale de quelques variables, 3 descripteurs const, tables de glyphes const.
 - **Affichage** : la planche PC native **320×240**, avec **fond sombre et fond clair simultanés**, sans interaction. Le rendu des contours n'est pas déclaré identique bit-à-bit au PNG PC en RGB888 : la quantification RGB565 introduit une erreur de couleur bornée mesurée par test hôte.
 
