@@ -1,0 +1,284 @@
+{
+  "audit": {
+    "jouer_a_modere": {
+      "changed_in_protected_regions": 0,
+      "crop": [
+        423,
+        65,
+        821,
+        184
+      ],
+      "gold_bbox": [
+        433,
+        75,
+        811,
+        174
+      ],
+      "new_size": [
+        450,
+        137
+      ],
+      "scales": [
+        1.13,
+        1.15
+      ],
+      "xy": [
+        400,
+        56
+      ]
+    },
+    "jouer_b_affirme": {
+      "changed_in_protected_regions": 0,
+      "crop": [
+        423,
+        65,
+        821,
+        184
+      ],
+      "gold_bbox": [
+        433,
+        75,
+        811,
+        174
+      ],
+      "new_size": [
+        490,
+        154
+      ],
+      "scales": [
+        1.23,
+        1.29
+      ],
+      "xy": [
+        380,
+        48
+      ]
+    },
+    "palmares_a_modere": {
+      "changed_in_protected_regions": 0,
+      "crop": [
+        396,
+        35,
+        983,
+        180
+      ],
+      "gold_bbox": [
+        407,
+        46,
+        972,
+        169
+      ],
+      "new_size": [
+        631,
+        164
+      ],
+      "scales": [
+        1.075,
+        1.13
+      ],
+      "xy": [
+        370,
+        41
+      ]
+    },
+    "palmares_b_affirme": {
+      "changed_in_protected_regions": 0,
+      "crop": [
+        396,
+        35,
+        983,
+        180
+      ],
+      "gold_bbox": [
+        407,
+        46,
+        972,
+        169
+      ],
+      "new_size": [
+        666,
+        180
+      ],
+      "scales": [
+        1.135,
+        1.24
+      ],
+      "xy": [
+        352,
+        33
+      ]
+    }
+  },
+  "dependencies": {
+    "assets/boutons/attaquer_on_140x35_RGBA.png": {
+      "bytes": 11750,
+      "gitblob": "7ac6667492a96e4a2ad6d7445ab68a504576324b",
+      "sha256": "99d494ceb508f75b8da755fc6ff4016039417b74aba284f56520a09decd73152"
+    },
+    "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png": {
+      "bytes": 9730,
+      "gitblob": "ddd7f95eee37ba3759a108b92f536c515d8d78e8",
+      "sha256": "e01df0c989bfd7f15e6fa649b245d7f3d702f1f51c33e756786c568cc199b9fc"
+    },
+    "assets/boutons/bouton_jouer_original_1107x252_RGBA.png": {
+      "bytes": 370652,
+      "gitblob": "f81c510060af5aeee231bea50df420d04db7b320",
+      "sha256": "eb57258fc56d98904b1b97d033dbc40e932570807b6660eb50c565201196ac37"
+    },
+    "assets/boutons/bouton_palmares_CYD_140x30_RGBA.png": {
+      "bytes": 9240,
+      "gitblob": "0c3ac936ebc0c9cbe20d3e9e0c5fe29be289985d",
+      "sha256": "a90b0b581253365b128367196c7e5fc1e25ec811db579b856f41e73c5a8c69ca"
+    },
+    "assets/boutons/bouton_palmares_original_1163x250_RGBA.png": {
+      "bytes": 329233,
+      "gitblob": "06a53829d508ae7366338b14a187a655edd6505c",
+      "sha256": "bab67a47213e856c2f66f1af9c59759ff9ebec7ee5de1aad91758a7fda4e716d"
+    },
+    "efdc669ef15425c5db342c30de9e07b82ba93dd8:draft/etudes/bouton_abandon/exports/abandon_140x35_RGBA.png": {
+      "bytes": 12006,
+      "gitblob": "d3c3d3e0da3700cf5d6bf863990e0e460d7d76a9",
+      "sha256": "0dce9cd693069cf5902902e116ad8bf6cdfb4d3a3a707c112190df8e760b46c8"
+    }
+  },
+  "files": {
+    "exports/jouer_a_modere_140x32_RGBA.png": {
+      "bytes": 9833,
+      "mode": "RGBA",
+      "sha256": "d3723d36b0eb6841123fb9494aa8ed628a6af30a95f87ffd2d5281c93b8fa522",
+      "size": [
+        140,
+        32
+      ]
+    },
+    "exports/jouer_b_affirme_140x32_RGBA.png": {
+      "bytes": 9964,
+      "mode": "RGBA",
+      "sha256": "f9f9a940a24fcb3ebe3283a0e6a9f3b8aa76833284a81e5d3361cad6347be43c",
+      "size": [
+        140,
+        32
+      ]
+    },
+    "exports/palmares_a_modere_140x30_RGBA.png": {
+      "bytes": 9332,
+      "mode": "RGBA",
+      "sha256": "0679150408d0105e99cc721896146362ab040cdd86452dc0ebd4b2c0888a6aee",
+      "size": [
+        140,
+        30
+      ]
+    },
+    "exports/palmares_b_affirme_140x30_RGBA.png": {
+      "bytes": 9380,
+      "mode": "RGBA",
+      "sha256": "a5b5e78216c0fb17e6b797886544295bb3fd57ec3e8eb529df5708f5bc306cfd",
+      "size": [
+        140,
+        30
+      ]
+    },
+    "maitres/jouer_a_modere_HD_RGBA.png": {
+      "bytes": 375096,
+      "mode": "RGBA",
+      "sha256": "6e35bcb208959fea833847b53edfb53b0127dbeb354ff43d1282bc0b01fd6cbd",
+      "size": [
+        1107,
+        252
+      ]
+    },
+    "maitres/jouer_b_affirme_HD_RGBA.png": {
+      "bytes": 375270,
+      "mode": "RGBA",
+      "sha256": "921c17a3c40a294705262ee9b8ffbbd75fb25200fabd2ec7a9f83d455afb5cb7",
+      "size": [
+        1107,
+        252
+      ]
+    },
+    "maitres/palmares_a_modere_HD_RGBA.png": {
+      "bytes": 327905,
+      "mode": "RGBA",
+      "sha256": "8385d86c8eda6cb4a6f10ccb768aba110f4292ab760c0c3c340a2b640997b7ae",
+      "size": [
+        1163,
+        250
+      ]
+    },
+    "maitres/palmares_b_affirme_HD_RGBA.png": {
+      "bytes": 326452,
+      "mode": "RGBA",
+      "sha256": "7ab0562b26766c67a7ab1ee8d83f6984c0640c9d4ac8ba58e7fbcfbeba5afd8c",
+      "size": [
+        1163,
+        250
+      ]
+    },
+    "preuves/a_modere_1280x960_NEAREST.png": {
+      "bytes": 89705,
+      "mode": "RGBA",
+      "sha256": "89eded59a1bd2703d02e27d8db9a7348fe8f32b3b7015041835c8cc7e741a83e",
+      "size": [
+        1280,
+        960
+      ]
+    },
+    "preuves/a_modere_320x240.png": {
+      "bytes": 61327,
+      "mode": "RGBA",
+      "sha256": "58e3afa5e667054b749b8882a6a2c48b7496f35c1643199c915fe63c8598f4a3",
+      "size": [
+        320,
+        240
+      ]
+    },
+    "preuves/actuel_1280x960_NEAREST.png": {
+      "bytes": 89091,
+      "mode": "RGBA",
+      "sha256": "9464161060a227eda57131bc8c2059d87fc40a8054e9ee09ffe998d24fecfa3d",
+      "size": [
+        1280,
+        960
+      ]
+    },
+    "preuves/actuel_320x240.png": {
+      "bytes": 60929,
+      "mode": "RGBA",
+      "sha256": "7aa513909ba3306b3e0c31846b25e923e6765d49be343b3e4b9e341940f3ac6b",
+      "size": [
+        320,
+        240
+      ]
+    },
+    "preuves/b_affirme_1280x960_NEAREST.png": {
+      "bytes": 89767,
+      "mode": "RGBA",
+      "sha256": "de88701bf124e9cfcf6e7c4e36e71ff3b0504f4c8e0952646ee1cadb47a1a8ad",
+      "size": [
+        1280,
+        960
+      ]
+    },
+    "preuves/b_affirme_320x240.png": {
+      "bytes": 61214,
+      "mode": "RGBA",
+      "sha256": "168a80cd3abfa97da6856e4e8d052edeff983c17fc2d98f67a321f14807a86b6",
+      "size": [
+        320,
+        240
+      ]
+    },
+    "preuves/contact_3_etats_960x240.png": {
+      "bytes": 82689,
+      "mode": "RGBA",
+      "sha256": "a21c7d411fecb753b6867cc69d00217633a2c114165083af23e10f96df526fa2",
+      "size": [
+        960,
+        240
+      ]
+    }
+  },
+  "method": "Exact approved HD lettering masked and enlarged, original gold and relief retained; only text area inpainted",
+  "mission": "BTN-TYPO-01 #157",
+  "status": "CANDIDATE / ART_NOT_REVIEWED / ON_DEVICE_UNVERIFIED"
+}
