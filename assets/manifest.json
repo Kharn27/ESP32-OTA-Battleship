@@ -252,6 +252,56 @@
         28
       ],
       "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.jouer.b.original",
+      "path": "assets/boutons/bouton_jouer_B_original_1107x252_RGBA.png",
+      "sha256": "921c17a3c40a294705262ee9b8ffbbd75fb25200fabd2ec7a9f83d455afb5cb7",
+      "source_ref": "draft/etudes/boutons_typographie/maitres/jouer_b_affirme_HD_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/157#issuecomment-6983850624",
+      "dimensions": [
+        1107,
+        252
+      ],
+      "usage": "HD_MASTER_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.jouer.b.cyd",
+      "path": "assets/boutons/bouton_jouer_B_CYD_140x32_RGBA.png",
+      "sha256": "f9f9a940a24fcb3ebe3283a0e6a9f3b8aa76833284a81e5d3361cad6347be43c",
+      "source_ref": "draft/etudes/boutons_typographie/exports/jouer_b_affirme_140x32_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/157#issuecomment-6983850624",
+      "dimensions": [
+        140,
+        32
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.palmares.b.original",
+      "path": "assets/boutons/bouton_palmares_B_original_1163x250_RGBA.png",
+      "sha256": "7ab0562b26766c67a7ab1ee8d83f6984c0640c9d4ac8ba58e7fbcfbeba5afd8c",
+      "source_ref": "draft/etudes/boutons_typographie/maitres/palmares_b_affirme_HD_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/157#issuecomment-6983850624",
+      "dimensions": [
+        1163,
+        250
+      ],
+      "usage": "HD_MASTER_NOT_RUNTIME",
+      "device_status": "ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "id": "boutons.palmares.b.cyd",
+      "path": "assets/boutons/bouton_palmares_B_CYD_140x30_RGBA.png",
+      "sha256": "a5b5e78216c0fb17e6b797886544295bb3fd57ec3e8eb529df5708f5bc306cfd",
+      "source_ref": "draft/etudes/boutons_typographie/exports/palmares_b_affirme_140x30_RGBA.png",
+      "po_validation_ref": "https://github.com/Kharn27/ESP32-OTA-Battleship/issues/157#issuecomment-6983850624",
+      "dimensions": [
+        140,
+        30
+      ],
+      "device_status": "ON_DEVICE_UNVERIFIED"
     }
   ]
 }
