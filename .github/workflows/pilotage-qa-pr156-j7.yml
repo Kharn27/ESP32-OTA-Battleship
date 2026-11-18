@@ -1,4 +1,4 @@
-name: "Pilotage QA PR156 J7 - immutable source"
+name: "Pilotage QA PR156 J7 R1 - immutable source"
 on:
   push:
     branches:
@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Checkout EXACT submitted PR154 source HEAD
+      - name: Checkout EXACT corrected PR156 source HEAD
         uses: actions/checkout@v4
         with:
-          ref: bc234a6240cd531e293701af6e4333154a99cb18
+          ref: 397c87bf29fe5fad2b84e6ce4f865569fa9baf45
           fetch-depth: 1
       - name: Assert immutable reviewed SHA
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "bc234a6240cd531e293701af6e4333154a99cb18"
+          test "$(git rev-parse HEAD)" = "397c87bf29fe5fad2b84e6ce4f865569fa9baf45"
           echo "J3_EXACT_HEAD_OK"
       - name: Install pinned Pillow
         shell: bash
