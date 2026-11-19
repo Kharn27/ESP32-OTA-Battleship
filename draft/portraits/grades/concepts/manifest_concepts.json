@@ -1,0 +1,168 @@
+{
+  "issue": 162,
+  "phase": "PR 1 - DA",
+  "schema_version": 1,
+  "toolchain": {
+    "source": "node build_concepts.mjs",
+    "svg_raster_test": "CairoSVG 2.8.2",
+    "zoom": "Pillow 12.3.0 / Image.Resampling.NEAREST"
+  },
+  "files": [
+    {
+      "path": "draft/portraits/grades/concepts/README.md",
+      "sha256": "441795827cc17935590c0cda9ff22fe1975c7a64104d6b5b60f0fd0c6425cad3",
+      "size_bytes": 5439,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/apercu_clair_320x240.png",
+      "sha256": "c917bbe4c7755f9201bc3f929afe5fc1f7da5699b56ed88b052e6b8492e4e591",
+      "size_bytes": 14207,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/apercu_clair_320x240.svg",
+      "sha256": "2fb506b5213b40e135e9f458f78ea50ad980a2622bad391e8598a1000733ff5b",
+      "size_bytes": 32591,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/apercu_clair_320x240_x4_NEAREST.png",
+      "sha256": "f360f8fdf8d7f865d25aa098710dd6665ca93df1fe77ead86c7e16b01d6eeb69",
+      "size_bytes": 24090,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/apercu_sombre_320x240.png",
+      "sha256": "348dbec870b9d980ce8af1c6133a3b702ebbee593170beabce6f546db24e3869",
+      "size_bytes": 14353,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/apercu_sombre_320x240.svg",
+      "sha256": "637840ac296c0b046b4f1568b50f140326a3f9357b6c39ed75d86a573309ae42",
+      "size_bytes": 32592,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/apercu_sombre_320x240_x4_NEAREST.png",
+      "sha256": "314f7c8f80562a24a0d20e3fe7a7f5904094c728e32afd0466386d967274343d",
+      "size_bytes": 24296,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/build_concepts.mjs",
+      "sha256": "c8ee9666336906c6d58b7fb0d085a79695baa1c7d7f602c88b806427a87e3cae",
+      "size_bytes": 17230,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/check_concepts.py",
+      "sha256": "808cc4555113c7afdc5eb0412a565030013a62e60731361b330217a128218505",
+      "size_bytes": 2527,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/deux_visages_references.png",
+      "sha256": "56634e9b9b351b47c46a32e6f81225c7e6dfb83c5d110d67f7cdfd037ebad619",
+      "size_bytes": 32308,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/deux_visages_references.svg",
+      "sha256": "ee2067f98ac4b4a280668975c913bdb217448ee3e7a459fb4e75821296360a10",
+      "size_bytes": 8962,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_femme_amiral_etude.png",
+      "sha256": "61ce2ef560c5acce21a445608c141e481f2912253f3a1c9a9a1662ec4bd105b1",
+      "size_bytes": 3293,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_femme_amiral_etude.svg",
+      "sha256": "dfb74705b8c893adb80df1c9b76d6443d1579bb749c4b3cc9f4069e454376a72",
+      "size_bytes": 5816,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_femme_capitaine_etude.png",
+      "sha256": "fa9672b78edecaa71db28fd87741dca191e49065b6e8ca375615afff5abd1a51",
+      "size_bytes": 2829,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_femme_capitaine_etude.svg",
+      "sha256": "cad50ec843160a63115ee6903e3cffdb1700b99f9f7dd72cc4aaa5560ce2146a",
+      "size_bytes": 4636,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_femme_mousse_etude.png",
+      "sha256": "bd8e839d98c9d41aa5141973b8419e8423c2d78cdda70c947e48e176aabe7642",
+      "size_bytes": 2850,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_femme_mousse_etude.svg",
+      "sha256": "a974d9786b378d8012b7d9f03bc518d6b6cee72eae98cc47d6cc0042f905411d",
+      "size_bytes": 4426,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_homme_amiral_etude.png",
+      "sha256": "0d8daf764812d625631224350c6f152708b544468ff633275fd42ca45348a609",
+      "size_bytes": 3201,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_homme_amiral_etude.svg",
+      "sha256": "af88438e6715371345ada4202f79cc9b0a94d45221993fe7737cb5671df6529b",
+      "size_bytes": 5852,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_homme_capitaine_etude.png",
+      "sha256": "240d7daea273a357a7bc5aa4bbd857e1aeb2c121b4a4af680a229896f035be32",
+      "size_bytes": 2631,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_homme_capitaine_etude.svg",
+      "sha256": "ba183a26fb9c35ae02ebc8ef42f961d9b89554325c52a21634f3b29397521111",
+      "size_bytes": 4672,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_homme_mousse_etude.png",
+      "sha256": "529f05eab0bdc419a77af3a09c9f54518ce95954c7a440c4b1ccdf192d197e2c",
+      "size_bytes": 2688,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/grade_homme_mousse_etude.svg",
+      "sha256": "e8fb430d537cd27e6098a7291945dca00d2c71a21644327ada0a575ebca5e530",
+      "size_bytes": 4462,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/planche_six_concepts.png",
+      "sha256": "9adb660830c1f1a1ee6a096b73df3a1e5654aeb5715cf03cd7c4311fcb52d636",
+      "size_bytes": 92002,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/planche_six_concepts.svg",
+      "sha256": "c49e26919f90f1c3a0307cd0f6f507d64f4492b38d62ee52e58851f67681f0a6",
+      "size_bytes": 37187,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    },
+    {
+      "path": "draft/portraits/grades/concepts/rapport_qa.md",
+      "sha256": "d63b84fe9a975acb213f64f9559a980931afbdfed1c67530e843e69a75f7025d",
+      "size_bytes": 2280,
+      "status": "CANDIDATE — ON_DEVICE_UNVERIFIED"
+    }
+  ]
+}
