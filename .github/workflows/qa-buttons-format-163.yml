@@ -1,0 +1,39 @@
+name: QA isolated BTN-FMT-01 exact inputs
+on:
+  push:
+    branches:
+      - design/issue-163-boutons-format-uniforme
+  workflow_dispatch:
+jobs:
+  sources:
+    if: startsWith(github.event.head_commit.message, 'qa(163):')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm canonical Git blobs and source sizes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,subprocess
+          p=Path("draft/Bouton_Abandon.png")
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f"
+          assert subprocess.check_output(["git","hash-object",str(p)],text=True).strip()=="3818cb092456e1ff222d8b2dacf9f9aa55266135"
+          print("ABANDON exact source: PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: btn-fmt-01-canonical-sources
+          retention-days: 3
+          if-no-files-found: error
+          path: |
+            draft/Bouton_Abandon.png
+            assets/boutons/bouton_jouer_B_original_1107x252_RGBA.png
+            assets/boutons/bouton_palmares_B_original_1163x250_RGBA.png
+            assets/boutons/bouton_jouer_B_CYD_140x32_RGBA.png
+            assets/boutons/bouton_palmares_B_CYD_140x30_RGBA.png
+            assets/boutons/attaquer_on_original_2000x500_RGBA.png
+            assets/boutons/attaquer_off_original_2000x500_RGBA.png
+            assets/boutons/attaquer_on_140x35_RGBA.png
+            assets/boutons/attaquer_off_140x35_RGBA.png
