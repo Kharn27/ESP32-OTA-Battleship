@@ -1,0 +1,585 @@
+{
+  "artistic_status": {
+    "abandon": "ART_NOT_REVIEWED",
+    "attaquer": "VALIDATED_PO_PC source / reused unchanged; family F still subject to PO review",
+    "jouer_palmares_B": "VALIDATED_PO_PC only for historical 140x32 / 140x30 versions; format-F redraw requires new GO"
+  },
+  "files": {
+    "exports/abandon_f_140x35_RGBA.png": {
+      "alpha_gt64_bbox": [
+        1,
+        0,
+        139,
+        34
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        140,
+        35
+      ],
+      "alpha_opaque": 224,
+      "alpha_partial": 4588,
+      "alpha_zero": 88,
+      "bytes": 12006,
+      "dimensions": [
+        140,
+        35
+      ],
+      "mode": "RGBA",
+      "sha256": "0dce9cd693069cf5902902e116ad8bf6cdfb4d3a3a707c112190df8e760b46c8"
+    },
+    "exports/attaquer_off_f_140x35_RGBA.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        140,
+        35
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        140,
+        35
+      ],
+      "alpha_opaque": 4139,
+      "alpha_partial": 685,
+      "alpha_zero": 76,
+      "bytes": 11280,
+      "dimensions": [
+        140,
+        35
+      ],
+      "mode": "RGBA",
+      "sha256": "5e501830edfe8fcaa0e10d5191ca1a69d0b4dbb71f890dd8d84454f31000413e"
+    },
+    "exports/attaquer_on_f_140x35_RGBA.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        140,
+        35
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        140,
+        35
+      ],
+      "alpha_opaque": 3750,
+      "alpha_partial": 1062,
+      "alpha_zero": 88,
+      "bytes": 11750,
+      "dimensions": [
+        140,
+        35
+      ],
+      "mode": "RGBA",
+      "sha256": "99d494ceb508f75b8da755fc6ff4016039417b74aba284f56520a09decd73152"
+    },
+    "exports/jouer_f_140x35_RGBA.png": {
+      "alpha_gt64_bbox": [
+        1,
+        1,
+        139,
+        34
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        139,
+        35
+      ],
+      "alpha_opaque": 3820,
+      "alpha_partial": 953,
+      "alpha_zero": 127,
+      "bytes": 11189,
+      "dimensions": [
+        140,
+        35
+      ],
+      "mode": "RGBA",
+      "sha256": "bb8c788b29481c80b8ec09552410e539ba5a5d0a642f514f5cdf6e32d285fbea"
+    },
+    "exports/palmares_f_140x35_RGBA.png": {
+      "alpha_gt64_bbox": [
+        1,
+        1,
+        139,
+        34
+      ],
+      "alpha_gt8_bbox": [
+        1,
+        0,
+        139,
+        35
+      ],
+      "alpha_opaque": 3882,
+      "alpha_partial": 862,
+      "alpha_zero": 156,
+      "bytes": 11127,
+      "dimensions": [
+        140,
+        35
+      ],
+      "mode": "RGBA",
+      "sha256": "b2684eb5cb9527371656f9cb0c68cd995b1a55deac0378f533deb0cbb89a1c1a"
+    },
+    "maitres/jouer_f_recompose_HD_1108x277_RGBA.png": {
+      "alpha_gt64_bbox": [
+        8,
+        7,
+        1099,
+        269
+      ],
+      "alpha_gt8_bbox": [
+        7,
+        7,
+        1099,
+        270
+      ],
+      "alpha_opaque": 275592,
+      "alpha_partial": 5081,
+      "alpha_zero": 26243,
+      "bytes": 430513,
+      "dimensions": [
+        1108,
+        277
+      ],
+      "mode": "RGBA",
+      "sha256": "cdb0754e83c9f8b253f9e0ee4ca82bd8e9174fdfe424ddb0afec397f0326ed0c"
+    },
+    "maitres/palmares_f_recompose_HD_1164x291_RGBA.png": {
+      "alpha_gt64_bbox": [
+        10,
+        8,
+        1154,
+        284
+      ],
+      "alpha_gt8_bbox": [
+        10,
+        7,
+        1155,
+        284
+      ],
+      "alpha_opaque": 294101,
+      "alpha_partial": 15765,
+      "alpha_zero": 28858,
+      "bytes": 381570,
+      "dimensions": [
+        1164,
+        291
+      ],
+      "mode": "RGBA",
+      "sha256": "853e38bea5c50dcff423b46482b553f065788572ace2c36c4edf4b908eaf2c87"
+    },
+    "preuves/abandon_f_560x140_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        4,
+        0,
+        556,
+        136
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        560,
+        140
+      ],
+      "alpha_opaque": 3584,
+      "alpha_partial": 73408,
+      "alpha_zero": 1408,
+      "bytes": 16606,
+      "dimensions": [
+        560,
+        140
+      ],
+      "mode": "RGBA",
+      "sha256": "e720dbf5b4a26d8c6e53449bf9194fe9a167382769f5e286c42b8d2cf936940f"
+    },
+    "preuves/attaquer_off_f_560x140_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        560,
+        140
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        560,
+        140
+      ],
+      "alpha_opaque": 66224,
+      "alpha_partial": 10960,
+      "alpha_zero": 1216,
+      "bytes": 15799,
+      "dimensions": [
+        560,
+        140
+      ],
+      "mode": "RGBA",
+      "sha256": "7b882b97b4b6db74da56d4017a4f59891cd4916e43634f2862ffc301ef452193"
+    },
+    "preuves/attaquer_on_f_560x140_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        560,
+        140
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        560,
+        140
+      ],
+      "alpha_opaque": 60000,
+      "alpha_partial": 16992,
+      "alpha_zero": 1408,
+      "bytes": 16665,
+      "dimensions": [
+        560,
+        140
+      ],
+      "mode": "RGBA",
+      "sha256": "601edbf630b287c1798112439c79822f18b479fe273938007cab3fa40245b762"
+    },
+    "preuves/comparatif_clair_1280x960_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_opaque": 1228800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 116390,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "mode": "RGBA",
+      "sha256": "3aee8b1052372ed99df29a6d659ee1f404d5e5fdda4ecdc25a37641a0ad98b3f"
+    },
+    "preuves/comparatif_clair_320x240.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_opaque": 76800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 80213,
+      "dimensions": [
+        320,
+        240
+      ],
+      "mode": "RGBA",
+      "sha256": "3a92c5d922a76ee38f9ed553ac274eb9e8b753e19eb80b490ebe34511755dae5"
+    },
+    "preuves/comparatif_sombre_1280x960_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_opaque": 1228800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 114568,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "mode": "RGBA",
+      "sha256": "0e350bc508c0797abbe4b9a2f6695939efa9614003b3171aa49b72a340e2041f"
+    },
+    "preuves/comparatif_sombre_320x240.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_opaque": 76800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 78667,
+      "dimensions": [
+        320,
+        240
+      ],
+      "mode": "RGBA",
+      "sha256": "ae293514278291d8c3324a6f5491eb5c69a116ced8085cb6dfd5c203b1094887"
+    },
+    "preuves/famille_f_sombre_clair_1280x960_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_opaque": 1228800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 112332,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "mode": "RGBA",
+      "sha256": "982689247e40b6467721f06244ae100b0e96f0c30dedac9cf262dcc4c55e7dec"
+    },
+    "preuves/famille_f_sombre_clair_320x240.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_opaque": 76800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 77644,
+      "dimensions": [
+        320,
+        240
+      ],
+      "mode": "RGBA",
+      "sha256": "9abafe4115914cb5f6268008c725364362bb4269a2d966380fbd9e010ac65c26"
+    },
+    "preuves/gabarit_contexte_1280x960_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        1280,
+        960
+      ],
+      "alpha_opaque": 1228800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 88433,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "mode": "RGBA",
+      "sha256": "64782e325a9f57ae26a8d5a209982250d782e83db8c92d7d1b587772754f9752"
+    },
+    "preuves/gabarit_contexte_320x240.png": {
+      "alpha_gt64_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        320,
+        240
+      ],
+      "alpha_opaque": 76800,
+      "alpha_partial": 0,
+      "alpha_zero": 0,
+      "bytes": 60315,
+      "dimensions": [
+        320,
+        240
+      ],
+      "mode": "RGBA",
+      "sha256": "a61f21c9679afc5d306e1195c543072f0f1a13fde16c759ae080dd1092c59851"
+    },
+    "preuves/jouer_f_560x140_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        4,
+        4,
+        556,
+        136
+      ],
+      "alpha_gt8_bbox": [
+        0,
+        0,
+        556,
+        140
+      ],
+      "alpha_opaque": 61120,
+      "alpha_partial": 15248,
+      "alpha_zero": 2032,
+      "bytes": 15690,
+      "dimensions": [
+        560,
+        140
+      ],
+      "mode": "RGBA",
+      "sha256": "fcc9092f56593005a23610beb6880f39d63ee47b75473219c275d72483232320"
+    },
+    "preuves/palmares_f_560x140_NEAREST.png": {
+      "alpha_gt64_bbox": [
+        4,
+        4,
+        556,
+        136
+      ],
+      "alpha_gt8_bbox": [
+        4,
+        0,
+        556,
+        140
+      ],
+      "alpha_opaque": 62112,
+      "alpha_partial": 13792,
+      "alpha_zero": 2496,
+      "bytes": 15647,
+      "dimensions": [
+        560,
+        140
+      ],
+      "mode": "RGBA",
+      "sha256": "9c82f71dfd450db15cabd79aaa35af25a5e60399cb38341f10aecda097c98469"
+    }
+  },
+  "filiation": {
+    "abandon": "Exact Git PO original 2172x724; safe crop [24,95,2148,626] -> 2124x531 (4:1), premult LANCZOS 140x35; PR #150 is a reference only",
+    "attaquer_on_off": "Exact byte copies of approved 140x35 sprites, including PNG packing; 2000x500 approved HD masters checked as provenance",
+    "jouer": "JOUER B approved HD source immutable; stretch 2 bare-metal horizontal strips +13/+12 rows; move caps 24 HD pixels outward and stretch 2 empty vertical metal gutters; icon, text and rivets moved intact with no letter stretching; iso 140x35",
+    "palmares": "PALMARES B approved HD immutable; stretch bare-metal horizontal strips +21/+20 rows; move side caps outward by 24 HD pixels and stretch only blank metal gutters; preserve trophy, text including accent and rivets without scaling; iso 140x35"
+  },
+  "font": "DejaVuSans-Bold or LiberationSans-Bold for proof captions only, never inside sprites",
+  "git_original_abandon_sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f",
+  "mission": "BTN-FMT-01 #163",
+  "numpy_version": "2.3.5",
+  "pillow_version": "12.3.0",
+  "sources": {
+    "assets/boutons/attaquer_off_140x35_RGBA.png": {
+      "bytes": 11280,
+      "dimensions": [
+        140,
+        35
+      ],
+      "git_blob_sha1": "4a9adb3b3e1e1822cd0598a9c273093a66373983",
+      "sha256": "5e501830edfe8fcaa0e10d5191ca1a69d0b4dbb71f890dd8d84454f31000413e"
+    },
+    "assets/boutons/attaquer_off_original_2000x500_RGBA.png": {
+      "bytes": 1286987,
+      "dimensions": [
+        2000,
+        500
+      ],
+      "git_blob_sha1": "a24dfa0bcb46cdf768ffc342bf2e49a4410aba3f",
+      "sha256": "853354e5dbb1ade7bb4e3605b27ad1073e7416c97537f8a892db8c2f9c7ef4f9"
+    },
+    "assets/boutons/attaquer_on_140x35_RGBA.png": {
+      "bytes": 11750,
+      "dimensions": [
+        140,
+        35
+      ],
+      "git_blob_sha1": "7ac6667492a96e4a2ad6d7445ab68a504576324b",
+      "sha256": "99d494ceb508f75b8da755fc6ff4016039417b74aba284f56520a09decd73152"
+    },
+    "assets/boutons/attaquer_on_original_2000x500_RGBA.png": {
+      "bytes": 1494867,
+      "dimensions": [
+        2000,
+        500
+      ],
+      "git_blob_sha1": "1d5a28e344360c626de2b4a3820b0fdb0432c27b",
+      "sha256": "dee6c78f5a481757dc38a85d3f8c445c398a7f62fbffc48d28d90dac236ea08c"
+    },
+    "assets/boutons/bouton_jouer_B_CYD_140x32_RGBA.png": {
+      "bytes": 9964,
+      "dimensions": [
+        140,
+        32
+      ],
+      "git_blob_sha1": "7980e48307992a79bc9c4a9cdb6697a0f1c1ab9f",
+      "sha256": "f9f9a940a24fcb3ebe3283a0e6a9f3b8aa76833284a81e5d3361cad6347be43c"
+    },
+    "assets/boutons/bouton_jouer_B_original_1107x252_RGBA.png": {
+      "bytes": 375270,
+      "dimensions": [
+        1107,
+        252
+      ],
+      "git_blob_sha1": "17be0804509cc038e8a684f59ccb7c21473b5289",
+      "sha256": "921c17a3c40a294705262ee9b8ffbbd75fb25200fabd2ec7a9f83d455afb5cb7"
+    },
+    "assets/boutons/bouton_palmares_B_CYD_140x30_RGBA.png": {
+      "bytes": 9380,
+      "dimensions": [
+        140,
+        30
+      ],
+      "git_blob_sha1": "35d66002043eb04d3dc1f4d3465629c302d87c65",
+      "sha256": "a5b5e78216c0fb17e6b797886544295bb3fd57ec3e8eb529df5708f5bc306cfd"
+    },
+    "assets/boutons/bouton_palmares_B_original_1163x250_RGBA.png": {
+      "bytes": 326452,
+      "dimensions": [
+        1163,
+        250
+      ],
+      "git_blob_sha1": "e36a6a4c6872549a03e755674045634e1df4cbe4",
+      "sha256": "7ab0562b26766c67a7ab1ee8d83f6984c0640c9d4ac8ba58e7fbcfbeba5afd8c"
+    },
+    "draft/Bouton_Abandon.png": {
+      "bytes": 1814386,
+      "dimensions": [
+        2172,
+        724
+      ],
+      "git_blob_sha1": "3818cb092456e1ff222d8b2dacf9f9aa55266135",
+      "sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f"
+    }
+  },
+  "standard": "140x35 RGBA transparent, ratio 4:1, five visual states",
+  "status": "CANDIDATE / ART_NOT_REVIEWED / ON_DEVICE_UNVERIFIED"
+}
