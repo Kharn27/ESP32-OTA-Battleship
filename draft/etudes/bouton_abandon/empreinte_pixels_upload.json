@@ -1,0 +1,65 @@
+{
+  "comparison_result": "CONFIRMED_DIFFERENT_PIXEL_ARRAYS_AND_DIMENSIONS",
+  "criterion": "same image dimensions and same SHA256 of full decoded RGBA bytes => identical pixel arrays",
+  "exact_git_original_expected": {
+    "path": "draft/Bouton_Abandon.png",
+    "bytes": 1814386,
+    "git_blob_sha1": "3818cb092456e1ff222d8b2dacf9f9aa55266135"
+  },
+  "mission": "BTN-ABD-01 #149",
+  "purpose": "fingerprint of user-uploaded image to verify source-image pixel identity in a real Git checkout",
+  "user_upload_reference": {
+    "filename": "image.png (piece jointe chat 2026-11-17)",
+    "encoded_bytes": 1870797,
+    "encoded_sha256": "2637ff5eb00d42f427a07fa0a25baffd7b95c77566578d6e223ac8ecb6533690",
+    "size": [
+      2048,
+      682
+    ],
+    "mode": "RGBA",
+    "rgba_bytes": 5586944,
+    "rgba_pixels_sha256": "da7ca8f59aac3c27e02d9fb0b5966ee6ea048389221834610c1d11845ec818a5",
+    "crop_xyxy": [
+      24,
+      90,
+      2024,
+      590
+    ],
+    "crop_rgba_pixels_sha256": "4207dce175ae2602021831b10a083afa791147dafc5d43a5481ddc61d6a8e858",
+    "alpha_zero": 437360,
+    "alpha_partial": 959376,
+    "alpha_opaque": 0,
+    "alpha_gt1_bbox": [
+      29,
+      94,
+      2019,
+      587
+    ]
+  },
+  "method": "Exact Git original audited via GitHub Actions job using Pillow 12.3.0; decoded RGBA compared with uploaded reference SHA256; Git original is authoritative for new exports.",
+  "exact_git_original_observed": {
+    "path": "draft/Bouton_Abandon.png",
+    "bytes": 1814386,
+    "git_blob_sha1": "3818cb092456e1ff222d8b2dacf9f9aa55266135",
+    "file_sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f",
+    "rgba_pixel_sha256": "d00d364479fcace09fa4f9339d9d4cf0a184cb0893c1c5f9507d0e8ab5bd1b96",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha_gt1_bbox": [
+      31,
+      98,
+      2141,
+      623
+    ],
+    "crop_for_master": [
+      24,
+      95,
+      2148,
+      626
+    ]
+  },
+  "decision": "Regenerate all ABANDON sprites and proof images from original Git exact source; upload visual reference superseded. Do not claim pixel identity.",
+  "proof_url": "https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/44158305962"
+}

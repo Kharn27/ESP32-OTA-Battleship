@@ -1,0 +1,309 @@
+{
+  "approved_comparison_generated": true,
+  "files": {
+    "exports/abandon_112x28_RGBA.png": {
+      "bytes": 8236,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          112,
+          28
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          112,
+          28
+        ],
+        "alpha_opaque": 208,
+        "alpha_partial": 2869,
+        "alpha_zero": 59,
+        "mode": "RGBA",
+        "size": [
+          112,
+          28
+        ]
+      },
+      "sha256": "e6ba6883f036396e28297fec363de121c87f9ec0dbf99acd2f411caae94b83c3"
+    },
+    "exports/abandon_140x35_RGBA.png": {
+      "bytes": 12006,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          140,
+          35
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          140,
+          35
+        ],
+        "alpha_opaque": 224,
+        "alpha_partial": 4588,
+        "alpha_zero": 88,
+        "mode": "RGBA",
+        "size": [
+          140,
+          35
+        ]
+      },
+      "sha256": "0dce9cd693069cf5902902e116ad8bf6cdfb4d3a3a707c112190df8e760b46c8"
+    },
+    "exports/abandon_master_2124x531_RGBA.png": {
+      "bytes": 1610342,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          7,
+          3,
+          2117,
+          528
+        ],
+        "alpha_nonzero_bbox": [
+          3,
+          2,
+          2120,
+          531
+        ],
+        "alpha_opaque": 0,
+        "alpha_partial": 1077331,
+        "alpha_zero": 50513,
+        "mode": "RGBA",
+        "size": [
+          2124,
+          531
+        ]
+      },
+      "sha256": "cc09fc6f605236657aae5b282bdea1f4c8b6bd2b8617b52f7545b77b50239bc7"
+    },
+    "preuves/abandon_112x28_x4_NEAREST.png": {
+      "bytes": 11436,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          448,
+          112
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          448,
+          112
+        ],
+        "alpha_opaque": 3328,
+        "alpha_partial": 45904,
+        "alpha_zero": 944,
+        "mode": "RGBA",
+        "size": [
+          448,
+          112
+        ]
+      },
+      "sha256": "37771c3b6807c3200ff99135db3b3d8623007148f2e64298fdc8cb5ed1d0cbcf"
+    },
+    "preuves/abandon_140x35_x4_NEAREST.png": {
+      "bytes": 16606,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          560,
+          140
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          560,
+          140
+        ],
+        "alpha_opaque": 3584,
+        "alpha_partial": 73408,
+        "alpha_zero": 1408,
+        "mode": "RGBA",
+        "size": [
+          560,
+          140
+        ]
+      },
+      "sha256": "e720dbf5b4a26d8c6e53449bf9194fe9a167382769f5e286c42b8d2cf936940f"
+    },
+    "preuves/comparatif_approuves_1280x960_NEAREST.png": {
+      "bytes": 85774,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          1280,
+          960
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          1280,
+          960
+        ],
+        "alpha_opaque": 1228800,
+        "alpha_partial": 0,
+        "alpha_zero": 0,
+        "mode": "RGBA",
+        "size": [
+          1280,
+          960
+        ]
+      },
+      "sha256": "6b9962d5504b81a4c3e96d69074c98d70e88f5e19ee4df1e6b3fbe156b81b517"
+    },
+    "preuves/comparatif_approuves_320x240.png": {
+      "bytes": 58226,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          320,
+          240
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          320,
+          240
+        ],
+        "alpha_opaque": 76800,
+        "alpha_partial": 0,
+        "alpha_zero": 0,
+        "mode": "RGBA",
+        "size": [
+          320,
+          240
+        ]
+      },
+      "sha256": "4d9db6616d8642c4c0b78cee0035b2ba76035fcf524e8e1f025e4bf4bd433cb6"
+    },
+    "preuves/etude_abandon_1280x960_NEAREST.png": {
+      "bytes": 42346,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          1280,
+          960
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          1280,
+          960
+        ],
+        "alpha_opaque": 1228800,
+        "alpha_partial": 0,
+        "alpha_zero": 0,
+        "mode": "RGBA",
+        "size": [
+          1280,
+          960
+        ]
+      },
+      "sha256": "3e5269188a4a3a14eff705acaab13f6428bca379a0a266592304efb293699ee0"
+    },
+    "preuves/etude_abandon_320x240.png": {
+      "bytes": 26188,
+      "metadata": {
+        "alpha_gt1_bbox": [
+          0,
+          0,
+          320,
+          240
+        ],
+        "alpha_nonzero_bbox": [
+          0,
+          0,
+          320,
+          240
+        ],
+        "alpha_opaque": 76800,
+        "alpha_partial": 0,
+        "alpha_zero": 0,
+        "mode": "RGBA",
+        "size": [
+          320,
+          240
+        ]
+      },
+      "sha256": "233ddbbc271bd83aff027c41d092bd5adc56fcef8694d9b41bf61f26e36a0c2c"
+    }
+  },
+  "master": {
+    "crop_xyxy": [
+      24,
+      95,
+      2148,
+      626
+    ],
+    "metadata": {
+      "alpha_gt1_bbox": [
+        7,
+        3,
+        2117,
+        528
+      ],
+      "alpha_nonzero_bbox": [
+        3,
+        2,
+        2120,
+        531
+      ],
+      "alpha_opaque": 0,
+      "alpha_partial": 1077331,
+      "alpha_zero": 50513,
+      "mode": "RGBA",
+      "size": [
+        2124,
+        531
+      ]
+    },
+    "source_bbox_alpha_gt1": [
+      31,
+      98,
+      2141,
+      623
+    ]
+  },
+  "mission": "BTN-ABD-01 #149",
+  "on_device": "ON_DEVICE_UNVERIFIED",
+  "origin_type": "exact_original_git_blob",
+  "pillow_version": "12.3.0",
+  "source": {
+    "bytes": 1814386,
+    "git_blob_sha1": "3818cb092456e1ff222d8b2dacf9f9aa55266135",
+    "metadata": {
+      "alpha_gt1_bbox": [
+        31,
+        98,
+        2141,
+        623
+      ],
+      "alpha_nonzero_bbox": [
+        21,
+        43,
+        2144,
+        724
+      ],
+      "alpha_opaque": 0,
+      "alpha_partial": 1078258,
+      "alpha_zero": 494270,
+      "mode": "RGBA",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "path": "draft/Bouton_Abandon.png",
+    "sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f"
+  },
+  "status": "CANDIDATE",
+  "technique": "RGBA, no imposed runtime format; premultiplied LANCZOS downsizing; NEAREST x4 proof"
+}

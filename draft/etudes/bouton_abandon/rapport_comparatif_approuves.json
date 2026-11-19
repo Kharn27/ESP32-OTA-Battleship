@@ -1,0 +1,100 @@
+{
+  "mission": "BTN-ABD-01 #149",
+  "date": "2026-11-17",
+  "status": "CANDIDATE",
+  "on_device": "ON_DEVICE_UNVERIFIED",
+  "art_approved": false,
+  "source": "Verified exact GitHub source blobs read in the full checkout of the isolated QA workflow #44158305962; comparison generated using Pillow 12.3.0 from actual approved binaries plus ABANDON regenerated from exact Git PO original (not user upload).",
+  "inputs": [
+    {
+      "path": "assets/boutons/bouton_jouer_CYD_140x32_RGBA.png",
+      "git_blob_sha1": "ddd7f95eee37ba3759a108b92f536c515d8d78e8",
+      "size": [
+        140,
+        32
+      ],
+      "status": "VALIDATED_PO_PC"
+    },
+    {
+      "path": "assets/boutons/bouton_palmares_CYD_140x30_RGBA.png",
+      "git_blob_sha1": "0c3ac936ebc0c9cbe20d3e9e0c5fe29be289985d",
+      "size": [
+        140,
+        30
+      ],
+      "status": "VALIDATED_PO_PC"
+    },
+    {
+      "path": "assets/boutons/attaquer_on_140x35_RGBA.png",
+      "git_blob_sha1": "7ac6667492a96e4a2ad6d7445ab68a504576324b",
+      "size": [
+        140,
+        35
+      ],
+      "status": "VALIDATED_PO_PC"
+    },
+    {
+      "path": "draft/etudes/bouton_abandon/exports/abandon_140x35_RGBA.png",
+      "git_blob_sha1": "d3c3d3e0da3700cf5d6bf863990e0e460d7d76a9",
+      "size": [
+        140,
+        35
+      ],
+      "status": "CANDIDATE"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "draft/etudes/bouton_abandon/preuves/comparatif_approuves_320x240.png",
+      "size": [
+        320,
+        240
+      ],
+      "encoded_bytes": 58226,
+      "git_blob_sha1": "c07705c65d9e58ca022595c87a53c445a3e95270",
+      "sha256": "4d9db6616d8642c4c0b78cee0035b2ba76035fcf524e8e1f025e4bf4bd433cb6"
+    },
+    {
+      "path": "draft/etudes/bouton_abandon/preuves/comparatif_approuves_1280x960_NEAREST.png",
+      "size": [
+        1280,
+        960
+      ],
+      "encoded_bytes": 85774,
+      "git_blob_sha1": "83af6e161287d49b1da412596f9c16504c8f23f3",
+      "sha256": "6b9962d5504b81a4c3e96d69074c98d70e88f5e19ee4df1e6b3fbe156b81b517"
+    }
+  ],
+  "layout": {
+    "columns": [
+      "navy_dark",
+      "pale_light"
+    ],
+    "button_x": [
+      10,
+      170
+    ],
+    "button_y": [
+      34,
+      78,
+      121,
+      169
+    ],
+    "pixel_font": "explicit 5x7 reference labels",
+    "zoom": "nearest-neighbor exactly 4x"
+  },
+  "limitations": "CI source, 9 PNG regeneration --check, approved comparator and graphic pipeline ALL PASS in isolated Git checkout #44158305962. Artistic PO GO and physical CYD ON_DEVICE_VERIFIED remain NOT obtained.",
+  "validation": {
+    "qa_workflow_run": "https://github.com/Kharn27/ESP32-OTA-Battleship/actions/runs/44158305962",
+    "conclusion": "success",
+    "source_sha256": "1b7c026a5ebcf7283de9ce93bf740fab350aa4aaf22da80641c34fe421c8719f",
+    "original_dimensions": [
+      2172,
+      724
+    ],
+    "master_dimensions": [
+      2124,
+      531
+    ]
+  }
+}
